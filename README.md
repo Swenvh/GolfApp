@@ -1,4 +1,4 @@
-# GolfApp — ledenapp & clubbeheer voor Nederlandse golfclubs
+# Greenside — ledenapp & clubbeheer voor Nederlandse golfclubs
 
 Eén platform voor alle golfclubs in Nederland:
 
@@ -13,6 +13,22 @@ apps/admin       Next.js-beheeromgeving voor de club
 packages/shared  TypeScript-domeinlogica + types (met unit tests)
 supabase/        migraties, seed, RLS-tests, edge functions, e-mailtemplates
 ```
+
+## Merk: Greenside
+
+Eén vast thema voor app, beheeromgeving en e-mails.
+
+| Rol | Kleur | Gebruik |
+|---|---|---|
+| Dennengroen | `#0B2A21` / `#174A3A` | Headers, knoppen, lidmaatschapskaart |
+| Messing | `#B8924A` / `#D9BC82` | Accenten, vlag in het logo, birdies op de scorekaart |
+| Krijtwit | `#F4F5F0` | Achtergrond |
+| Inkt | `#12201A` | Tekst |
+
+- **Typografie:** Fraunces (koppen, cijfers) en Manrope (tekst), via Google Fonts.
+- **Beeldtaal:** hoogtelijnen zoals op een baankaart, procedureel getekend (`apps/mobile/src/components/brand.tsx`).
+- **Details uit de golfwereld:** starttijd als ticket, bezetting als tee-pegs, scorekaart met cirkel voor birdie en vierkant voor bogey, digitale lidmaatschapskaart.
+- Tokens: `apps/mobile/src/lib/theme.ts` en `apps/admin/src/app/globals.css`. De merknaam staat in `app.config.ts`.
 
 ## Functionaliteit
 

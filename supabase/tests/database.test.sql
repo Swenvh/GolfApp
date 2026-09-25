@@ -96,20 +96,20 @@ select pg_temp.assert((select count(*) from club_directory('00000000-0000-0000-0
 select pg_temp.assert((select count(*) from invoices) = 1, 'lid ziet alleen eigen facturen');
 select pg_temp.assert((select count(*) from journal_lines) = 0, 'lid ziet geen grootboek');
 select pg_temp.assert((select count(*) from ledger_balances) = 0, 'lid ziet geen grootboeksaldi');
-select pg_temp.assert((select count(*) from news_posts) = 2, 'lid ziet nieuws');
+select pg_temp.assert((select count(*) from news_posts) = 3, 'lid ziet nieuws');
 
 -- Starttijd boeken en flight-limiet
 insert into tee_bookings (club_id, course_id, starts_at, created_by)
 values ('00000000-0000-0000-0000-0000000c0001', '00000000-0000-0000-0000-0000000f0001',
         date_trunc('day', now()) + interval '2 days 10 hours', auth.uid());
 insert into tee_booking_players (booking_id, member_id, guest_name)
-select b.id, m, g from tee_bookings b,
+select b.id, m, g from (select id from tee_bookings where created_by = auth.uid()) b,
   (values ('00000000-0000-0000-0000-0000000e0001'::uuid, null::text),
           ('00000000-0000-0000-0000-0000000e0002', null),
           (null, 'Gast 1'), (null, 'Gast 2')) as p(m, g);
 do $$ begin
   begin
-    insert into tee_booking_players (booking_id, guest_name) select id, 'Vijfde speler' from tee_bookings;
+    insert into tee_booking_players (booking_id, guest_name) select id, 'Vijfde speler' from tee_bookings where created_by = auth.uid();
     raise exception 'expected failure';
   exception when others then
     if sqlerrm = 'expected failure' then raise; end if;

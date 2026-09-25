@@ -82,6 +82,60 @@ insert into competitions (club_id, course_id, name, description, starts_at, regi
    'Wekelijkse qualifying stableford.', date_trunc('day', now()) + interval '5 days 13 hours',
    now() + interval '4 days', 'stableford', 40, 500, 'open');
 
+-- Extra demodata: rondes van Jan (voor scoreverloop en handicapindicatie)
+insert into rounds (club_id, member_id, course_tee_id, played_on, hole_scores, course_handicap, stableford_points, score_differential, qualifying)
+select '00000000-0000-0000-0000-0000000c0001', '00000000-0000-0000-0000-0000000e0001',
+       (select id from course_tees where name = 'Geel'), r.d, r.s, 16, r.p, r.diff, true
+from (values
+  (current_date - 8, array[4, 5, 3, 6, 5, 4, 4, 7, 4, 5, 3, 5, 6, 4, 6, 3, 6, 5], 38, 11.9),
+  (current_date - 19, array[5, 4, 4, 6, 6, 5, 3, 6, 5, 4, 4, 5, 5, 5, 5, 4, 7, 4], 36, 13.7),
+  (current_date - 33, array[4, 4, 4, 6, 4, 5, 3, 6, 5, 5, 3, 4, 6, 5, 4, 3, 6, 5], 41, 9.3),
+  (current_date - 47, array[5, 5, 3, 7, 5, 4, 4, 6, 4, 5, 4, 6, 6, 4, 5, 4, 6, 5], 35, 14.5),
+  (current_date - 62, array[4, 5, 3, 5, 5, 5, 3, 6, 4, 5, 3, 5, 5, 5, 5, 3, 5, 5], 42, 8.4),
+  (current_date - 80, array[5, 4, 2, 6, 5, 4, 4, 6, 5, 4, 4, 5, 6, 4, 5, 4, 6, 4], 40, 10.2),
+  (current_date - 101, array[4, 5, 4, 6, 4, 5, 3, 7, 5, 5, 3, 5, 6, 5, 4, 4, 6, 5], 37, 12.8)
+) as r(d, s, p, diff);
+
+-- Een afgelopen wedstrijd met klassement
+with c as (
+  insert into competitions (club_id, course_id, name, description, starts_at, format, max_participants, entry_fee_cents, status)
+  values ('00000000-0000-0000-0000-0000000c0001', '00000000-0000-0000-0000-0000000f0001', 'Septembermedal',
+          'Maandelijkse medal, individueel stableford.', ((current_date - 12) + time '09:00')::timestamp at time zone 'Europe/Amsterdam', 'stableford', 60, 500, 'finished')
+  returning id
+)
+insert into competition_entries (competition_id, member_id, stableford_points, position)
+select c.id, m, p, pos from c, (values
+  ('00000000-0000-0000-0000-0000000e0002'::uuid, 39, 1),
+  ('00000000-0000-0000-0000-0000000e0001', 37, 2),
+  ('00000000-0000-0000-0000-0000000e0005', 35, 3),
+  ('00000000-0000-0000-0000-0000000e0003', 31, 4),
+  ('00000000-0000-0000-0000-0000000e0004', 28, 5)) as e(m, p, pos);
+
+-- Drukte op de baan morgen
+with b as (
+  insert into tee_bookings (club_id, course_id, starts_at, created_by)
+  select '00000000-0000-0000-0000-0000000c0001', '00000000-0000-0000-0000-0000000f0001',
+         ((current_date + 1) + t)::timestamp at time zone 'Europe/Amsterdam', null
+  from unnest(array[time '08:00', time '08:30', time '09:10', time '10:20']) t
+  returning id, starts_at
+)
+insert into tee_booking_players (booking_id, member_id, guest_name)
+select b.id, p.m, p.g from b join (values
+  (time '08:00', '00000000-0000-0000-0000-0000000e0002'::uuid, null::text),
+  (time '08:00', '00000000-0000-0000-0000-0000000e0005', null),
+  (time '08:30', '00000000-0000-0000-0000-0000000e0003', null),
+  (time '08:30', null, 'Henk Visser'),
+  (time '09:10', '00000000-0000-0000-0000-0000000e0004', null),
+  (time '10:20', '00000000-0000-0000-0000-0000000e0002', null),
+  (time '10:20', '00000000-0000-0000-0000-0000000e0003', null),
+  (time '10:20', '00000000-0000-0000-0000-0000000e0005', null),
+  (time '10:20', null, 'Anouk de Boer')
+) as p(t, m, g) on (b.starts_at at time zone 'Europe/Amsterdam')::time = p.t;
+
+insert into news_posts (club_id, title, body, published_at) values
+  ('00000000-0000-0000-0000-0000000c0001', 'Nieuwe openingstijden restaurant',
+   'Vanaf oktober is het restaurant op maandag gesloten. De bar op het terras blijft dagelijks open tot zonsondergang.', now() - interval '6 days');
+
 -- Een paar facturen: contributie via incasso en een losse factuur
 select set_config('request.jwt.claim.sub', '00000000-0000-0000-0000-00000000a001', false);
 select generate_contribution_invoices('00000000-0000-0000-0000-0000000c0001', extract(year from now())::int);

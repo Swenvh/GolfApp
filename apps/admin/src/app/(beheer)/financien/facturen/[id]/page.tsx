@@ -56,7 +56,7 @@ export default async function FactuurDetail({ params, searchParams }: {
           <article className="space-y-8 p-8 text-sm">
             <header className="flex justify-between gap-6">
               <div>
-                <div className="text-xl font-semibold" style={{ color: club.primary_color }}>{club.name}</div>
+                <div className="font-display text-2xl font-semibold" style={{ color: 'var(--color-brand-600)' }}>{club.name}</div>
                 <div className="text-stone-600">
                   {club.street} {club.house_number}<br />{club.postal_code} {club.city}<br />
                   {club.email}{club.phone && ` · ${club.phone}`}

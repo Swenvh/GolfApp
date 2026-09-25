@@ -7,17 +7,19 @@ import type { ExpoConfig } from 'expo/config';
  *     de app is dan vast gekoppeld aan die club en draagt de naam/icoon van de club.
  */
 const clubSlug = process.env.CLUB_SLUG ?? '';
-const name = process.env.APP_NAME ?? 'GolfApp';
+const name = process.env.APP_NAME ?? 'Greenside';
 const bundleId = process.env.BUNDLE_ID ?? 'nl.golfapp.leden';
 
 const config: ExpoConfig = {
   name,
-  slug: 'golfapp',
-  scheme: 'golfapp',
+  slug: 'greenside',
+  scheme: 'greenside',
   version: '1.0.0',
   orientation: 'portrait',
   icon: './assets/icon.png',
-  userInterfaceStyle: 'automatic',
+  userInterfaceStyle: 'light',
+  primaryColor: '#174A3A',
+  backgroundColor: '#F4F5F0',
   ios: {
     supportsTablet: true,
     bundleIdentifier: bundleId,
@@ -26,7 +28,7 @@ const config: ExpoConfig = {
   android: {
     package: bundleId,
     adaptiveIcon: {
-      backgroundColor: '#E8F5E9',
+      backgroundColor: '#0B2A21',
       foregroundImage: './assets/android-icon-foreground.png',
       backgroundImage: './assets/android-icon-background.png',
       monochromeImage: './assets/android-icon-monochrome.png',
@@ -36,7 +38,7 @@ const config: ExpoConfig = {
   web: { favicon: './assets/favicon.png' },
   plugins: [
     'expo-router',
-    ['expo-splash-screen', { image: './assets/splash-icon.png', backgroundColor: '#1B5E20', imageWidth: 160 }],
+    ['expo-splash-screen', { image: './assets/splash-icon.png', backgroundColor: '#0B2A21', imageWidth: 180 }],
   ],
   experiments: { typedRoutes: false },
   extra: { clubSlug },

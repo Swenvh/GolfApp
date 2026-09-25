@@ -1,50 +1,41 @@
 import { router } from 'expo-router';
 import { Linking } from 'react-native';
-import { formatIban, fullName } from '@golfapp/shared';
-import { Body, Button, Card, Row, Screen, SectionHeader, Title } from '@/components/ui';
-import { formatDate, formatHandicap } from '@/lib/format';
+import { formatIban } from '@golfapp/shared';
+import { MemberCard } from '@/components/member-card';
+import { Group, ListRow, Screen, T } from '@/components/ui';
 import { useMember, useSession } from '@/lib/session';
-import { useTheme } from '@/lib/theme';
+import { colors, space } from '@/lib/theme';
 
-export default function Profiel() {
+export default function Lidmaatschap() {
   const member = useMember();
   const { memberships, signOut } = useSession();
-  const t = useTheme();
   const club = member.club;
 
-  const link = (label: string, onPress: () => void) => (
-    <Card onPress={onPress}>
-      <Row style={{ justifyContent: 'space-between' }}>
-        <Body>{label}</Body>
-        <Body style={{ color: t.primary }}>›</Body>
-      </Row>
-    </Card>
-  );
-
   return (
-    <Screen>
-      <Card>
-        <Title style={{ fontSize: 22 }}>{fullName(member)}</Title>
-        <Body muted>Lidnummer {member.member_number}{member.ngf_number ? ` · NGF ${member.ngf_number}` : ''}</Body>
-        <Body muted>Lid sinds {formatDate(member.join_date, { month: 'long', year: 'numeric' })} · hcp {formatHandicap(member.handicap_index)}</Body>
-      </Card>
+    <Screen title="Lidmaatschap" eyebrow={club.name}>
+      <MemberCard member={member} />
+      <T variant="small" color={colors.mist} style={{ textAlign: 'center', marginBottom: space.sm }}>Laat deze kaart zien bij de caddiemaster of in het clubhuis.</T>
 
-      <SectionHeader>Mijn lidmaatschap</SectionHeader>
-      {link('Facturen & betalingen', () => router.push('/facturen'))}
-      {link('Mijn gegevens', () => router.push('/gegevens'))}
-      {link('Ledenlijst', () => router.push('/ledenlijst'))}
-      {memberships.length > 1 && link('Wissel van club', () => router.push('/kies-club'))}
+      <Group>
+        <ListRow icon="receipt-outline" title="Facturen & betalingen" subtitle="Contributie, lessen en greenfees" onPress={() => router.push('/facturen')} />
+        <ListRow icon="person-outline" title="Mijn gegevens" subtitle="Adres, telefoon en privacy" onPress={() => router.push('/gegevens')} />
+        <ListRow icon="people-outline" title="Ledenlijst" subtitle="Zoek een clubgenoot" onPress={() => router.push('/ledenlijst')} last={memberships.length < 2} />
+        {memberships.length > 1 && <ListRow icon="swap-horizontal-outline" title="Andere club" subtitle={`${memberships.length} lidmaatschappen`} onPress={() => router.push('/kies-club')} last />}
+      </Group>
 
-      <SectionHeader>{club.name}</SectionHeader>
-      <Card>
-        {club.street && <Body>{club.street} {club.house_number}, {club.postal_code} {club.city}</Body>}
-        {club.phone && <Body style={{ color: t.primary }} onPress={() => Linking.openURL(`tel:${club.phone}`)}>📞 {club.phone}</Body>}
-        {club.email && <Body style={{ color: t.primary }} onPress={() => Linking.openURL(`mailto:${club.email}`)}>✉️ {club.email}</Body>}
-        {club.website && <Body style={{ color: t.primary }} onPress={() => Linking.openURL(club.website!)}>🌐 {club.website.replace(/^https?:\/\//, '')}</Body>}
-        {club.iban && <Body muted>IBAN {formatIban(club.iban)}</Body>}
-      </Card>
+      <T variant="heading" style={{ marginTop: space.md }}>De club</T>
+      <Group>
+        {club.street && <ListRow icon="location-outline" title={`${club.street} ${club.house_number ?? ''}`} subtitle={`${club.postal_code ?? ''} ${club.city ?? ''}`} />}
+        {club.phone && <ListRow icon="call-outline" title={club.phone} subtitle="Bellen" onPress={() => Linking.openURL(`tel:${club.phone}`)} />}
+        {club.email && <ListRow icon="mail-outline" title={club.email} subtitle="E-mailen" onPress={() => Linking.openURL(`mailto:${club.email}`)} />}
+        {club.website && <ListRow icon="globe-outline" title={club.website.replace(/^https?:\/\//, '')} subtitle="Website" onPress={() => Linking.openURL(club.website!)} />}
+        {club.iban && <ListRow icon="card-outline" title={formatIban(club.iban)} subtitle={`t.n.v. ${club.name}`} last />}
+      </Group>
 
-      <Button title="Uitloggen" variant="danger" onPress={signOut} style={{ marginTop: 16 }} />
+      <Group style={{ marginTop: space.md }}>
+        <ListRow icon="log-out-outline" title="Uitloggen" destructive onPress={signOut} last />
+      </Group>
+      <T variant="small" color={colors.mist} style={{ textAlign: 'center', marginTop: space.md }}>Greenside · versie 1.0</T>
     </Screen>
   );
 }

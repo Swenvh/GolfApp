@@ -27,7 +27,7 @@ Deno.serve(async (req) => {
       amount: { currency: 'EUR', value: (amount / 100).toFixed(2) },
       description: `${(invoice.club as unknown as { name: string }).name} factuur ${invoice.invoice_number}`,
       method: 'ideal',
-      redirectUrl: Deno.env.get('PAYMENT_RETURN_URL') ?? 'golfapp://facturen',
+      redirectUrl: Deno.env.get('PAYMENT_RETURN_URL') ?? 'greenside://facturen',
       webhookUrl: `${functionsUrl}/mollie-webhook`,
       metadata: { invoice_id: invoice.id, club_id: invoice.club_id },
     }),

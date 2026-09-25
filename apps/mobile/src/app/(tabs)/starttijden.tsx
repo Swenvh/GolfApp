@@ -1,17 +1,20 @@
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { router } from 'expo-router';
 import { useMemo, useState } from 'react';
-import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Alert, Platform, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { addDays, generateTeeSlots, localDate, localTime, type Course, type TeeSheetRow } from '@golfapp/shared';
-import { Body, Card, Chip, ErrorText, Loading, Row, Screen, SectionHeader } from '@/components/ui';
-import { formatDate } from '@/lib/format';
+import { Avatar, Empty, ErrorText, Eyebrow, Loading, Row, Screen, Segmented, T } from '@/components/ui';
+import { haptic } from '@/lib/haptics';
 import { useMember } from '@/lib/session';
 import { supabase } from '@/lib/supabase';
-import { useTheme } from '@/lib/theme';
+import { colors, fonts, radius, space } from '@/lib/theme';
 import { unwrap, useQuery } from '@/lib/useQuery';
+
+const weekday = new Intl.DateTimeFormat('nl-NL', { weekday: 'short', timeZone: 'UTC' });
+const monthFmt = new Intl.DateTimeFormat('nl-NL', { month: 'long', timeZone: 'UTC' });
 
 export default function Starttijden() {
   const member = useMember();
-  const t = useTheme();
   const today = localDate();
   const [day, setDay] = useState(today);
   const [courseId, setCourseId] = useState<string>();
@@ -43,86 +46,150 @@ export default function Starttijden() {
   }, [sheet.data]);
 
   if (courses.loading) return <Loading />;
-  if (!course) return <Screen><Body muted>Er zijn nog geen banen beschikbaar.</Body></Screen>;
+  if (!course) return <Screen title="Starttijden"><Empty icon="map-outline" title="Nog geen banen">De club heeft nog geen baan opengesteld voor boekingen.</Empty></Screen>;
 
   const now = Date.now();
   const slots = generateTeeSlots(day, course).filter((s) => new Date(s.startsAt).getTime() > now);
+  const parts = [
+    { label: 'Ochtend', slots: slots.filter((s) => s.time < '12:00') },
+    { label: 'Middag', slots: slots.filter((s) => s.time >= '12:00' && s.time < '17:00') },
+    { label: 'Avond', slots: slots.filter((s) => s.time >= '17:00') },
+  ].filter((p) => p.slots.length);
 
-  const leave = (row: TeeSheetRow) =>
+  const leave = (row: TeeSheetRow) => {
+    const doLeave = async () => {
+      const { error } = await supabase.from('tee_booking_players').delete().eq('id', row.player_id!);
+      if (error) Alert.alert('Afmelden mislukt', error.message);
+      else haptic.success();
+      sheet.reload();
+    };
+    if (Platform.OS === 'web') return doLeave();
     Alert.alert('Afmelden', `Wil je je afmelden voor ${localTime(row.starts_at)}?`, [
-      { text: 'Nee', style: 'cancel' },
-      {
-        text: 'Afmelden', style: 'destructive', onPress: async () => {
-          const { error } = await supabase.from('tee_booking_players').delete().eq('id', row.player_id!);
-          if (error) Alert.alert('Mislukt', error.message);
-          sheet.reload();
-        },
-      },
+      { text: 'Blijven', style: 'cancel' },
+      { text: 'Afmelden', style: 'destructive', onPress: doLeave },
     ]);
+  };
 
   return (
-    <View style={{ flex: 1, backgroundColor: t.bg }}>
-      <View style={{ backgroundColor: t.card, borderBottomColor: t.border, borderBottomWidth: StyleSheet.hairlineWidth, paddingVertical: 10, gap: 8 }}>
+    <Screen
+      title="Starttijden"
+      eyebrow={monthFmt.format(new Date(`${day}T12:00:00Z`))}
+      refreshing={sheet.refreshing}
+      onRefresh={sheet.refresh}
+      padded={false}
+    >
+      <View style={{ gap: space.md }}>
         {(courses.data?.length ?? 0) > 1 && (
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 8, paddingHorizontal: 16 }}>
-            {courses.data!.map((c) => <Chip key={c.id} label={c.name} active={c.id === course.id} onPress={() => setCourseId(c.id)} />)}
-          </ScrollView>
+          <View style={{ paddingHorizontal: space.lg }}>
+            <Segmented
+              options={courses.data!.map((c) => ({ key: c.id, label: c.name.replace(/\s*\(.*\)/, '') }))}
+              value={course.id}
+              onChange={setCourseId}
+            />
+          </View>
         )}
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 8, paddingHorizontal: 16 }}>
-          {days.map((d) => (
-            <Chip key={d} active={d === day} onPress={() => setDay(d)}
-              label={d === today ? 'Vandaag' : formatDate(d, { weekday: 'short', day: 'numeric', month: 'short' })} />
-          ))}
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.dates}>
+          {days.map((d) => {
+            const active = d === day;
+            const date = new Date(`${d}T12:00:00Z`);
+            return (
+              <Pressable key={d} onPress={() => { haptic.tap(); setDay(d); }} style={[styles.date, active && styles.dateActive]}>
+                <Text style={[styles.dateDay, active && { color: colors.brassLight }]}>{d === today ? 'Vandaag' : weekday.format(date).replace('.', '')}</Text>
+                <Text style={[styles.dateNum, active && { color: colors.onDark }]}>{date.getUTCDate()}</Text>
+              </Pressable>
+            );
+          })}
         </ScrollView>
       </View>
 
-      <Screen refreshing={sheet.refreshing} onRefresh={sheet.refresh}>
+      <View style={{ paddingHorizontal: space.lg, gap: space.sm, marginTop: space.md }}>
         <ErrorText message={sheet.error} />
-        <SectionHeader>{formatDate(day, { weekday: 'long', day: 'numeric', month: 'long' })}</SectionHeader>
-        {slots.length === 0 && <Body muted>Geen starttijden meer beschikbaar op deze dag.</Body>}
-        {slots.map((slot) => {
-          const players = flights.get(slot.time) ?? [];
-          const mine = players.find((p) => p.member_id === member.id);
-          const free = course.max_players - players.length;
-          return (
-            <Card
-              key={slot.time}
-              style={[styles.slot, mine && { borderColor: t.primary, borderWidth: 1.5 }]}
-              onPress={mine ? () => leave(mine) : free > 0
-                ? () => router.push({ pathname: '/boeken', params: { course: course.id, startsAt: slot.startsAt, bookingId: bookingIds.get(slot.time) ?? '' } })
-                : undefined}
-            >
-              <Row style={{ alignItems: 'flex-start' }}>
-                <Text style={[styles.time, { color: free > 0 || mine ? t.text : t.muted }]}>{slot.time}</Text>
-                <View style={{ flex: 1, gap: 2 }}>
-                  {players.map((p) => (
-                    <Body key={p.player_id} style={p.member_id === member.id ? { fontWeight: '700', color: t.primary } : undefined}>
-                      {p.player_name}
-                    </Body>
-                  ))}
-                  {free > 0 && !mine && (
-                    <Text style={{ color: t.primary, fontWeight: '600' }}>{free === course.max_players ? 'Vrij — boek' : `${free} plek${free > 1 ? 'ken' : ''} vrij — aansluiten`}</Text>
-                  )}
-                  {mine && <Text style={{ color: t.muted, fontSize: 12 }}>Tik om je af te melden</Text>}
-                  {free === 0 && !mine && <Text style={{ color: t.muted }}>Vol</Text>}
-                </View>
-                <View style={styles.dots}>
-                  {Array.from({ length: course.max_players }, (_, i) => (
-                    <View key={i} style={[styles.dot, { backgroundColor: i < players.length ? t.primary : t.border }]} />
-                  ))}
-                </View>
-              </Row>
-            </Card>
-          );
-        })}
-      </Screen>
-    </View>
+        {slots.length === 0 && <Empty icon="moon-outline" title="Geen starttijden meer vandaag">Kies een andere dag in de strip hierboven.</Empty>}
+        {parts.map((part) => (
+          <View key={part.label} style={{ gap: space.sm }}>
+            <Row style={{ marginTop: space.md, justifyContent: 'space-between' }}>
+              <Eyebrow color={colors.slate}>{part.label}</Eyebrow>
+              <T variant="small" color={colors.mist}>{part.slots[0]!.time} – {part.slots[part.slots.length - 1]!.time}</T>
+            </Row>
+            {part.slots.map((slot) => {
+              const players = flights.get(slot.time) ?? [];
+              const mine = players.find((p) => p.member_id === member.id);
+              const free = course.max_players - players.length;
+              const full = free <= 0;
+              const onPress = mine ? () => leave(mine) : !full
+                ? () => router.push({ pathname: '/boeken', params: { course: course.id, courseName: course.name, startsAt: slot.startsAt, bookingId: bookingIds.get(slot.time) ?? '' } })
+                : undefined;
+              return (
+                <Pressable
+                  key={slot.time}
+                  disabled={!onPress}
+                  onPress={() => { haptic.tap(); onPress?.(); }}
+                  style={({ pressed }) => [styles.slot, mine && styles.slotMine, full && !mine && styles.slotFull, pressed && { transform: [{ scale: 0.985 }] }]}
+                >
+                  <Text style={[styles.time, mine && { color: colors.onDark }, full && !mine && { color: colors.mist }]}>{slot.time}</Text>
+                  <View style={{ flex: 1, gap: 6 }}>
+                    {players.length === 0 ? (
+                      <T variant="bodyStrong" color={colors.pine600}>Vrij</T>
+                    ) : (
+                      <Row gap={6} style={{ flexWrap: 'wrap' }}>
+                        {players.map((p) => (
+                          <Row key={p.player_id} gap={5} style={[styles.player, mine && { backgroundColor: colors.onDarkLine }]}>
+                            <Avatar name={p.player_name ?? ''} size={20} tone={p.member_id === member.id ? 'brass' : p.member_id ? 'pine' : 'brass'} />
+                            <Text numberOfLines={1} style={[styles.playerName, mine && { color: colors.onDark }]}>
+                              {p.member_id === member.id ? 'Jij' : (p.player_name ?? '').replace(' (gast)', '').split(' ')[0]}
+                            </Text>
+                          </Row>
+                        ))}
+                      </Row>
+                    )}
+                    {mine && <T variant="small" color={colors.onDarkMuted}>Tik om je af te melden</T>}
+                  </View>
+                  <View style={{ alignItems: 'flex-end', gap: 6 }}>
+                    <Pegs taken={players.length} max={course.max_players} dark={!!mine} />
+                    {!mine && !full && <View style={styles.add}><Ionicons name="add" size={16} color={colors.pine700} /></View>}
+                    {full && !mine && <T variant="small" color={colors.mist}>Vol</T>}
+                  </View>
+                </Pressable>
+              );
+            })}
+          </View>
+        ))}
+      </View>
+    </Screen>
+  );
+}
+
+/** Bezetting als vier tee-pegs: gevuld = bezet. */
+function Pegs({ taken, max, dark }: { taken: number; max: number; dark: boolean }) {
+  return (
+    <Row gap={3}>
+      {Array.from({ length: max }, (_, i) => (
+        <View key={i} style={{ alignItems: 'center' }}>
+          <View style={{ width: 8, height: 3, borderRadius: 2, backgroundColor: i < taken ? (dark ? colors.brassLight : colors.pine700) : (dark ? colors.onDarkLine : colors.lineStrong) }} />
+          <View style={{ width: 2, height: 7, backgroundColor: i < taken ? (dark ? colors.brassLight : colors.pine700) : (dark ? colors.onDarkLine : colors.lineStrong) }} />
+        </View>
+      ))}
+    </Row>
   );
 }
 
 const styles = StyleSheet.create({
-  slot: { paddingVertical: 12 },
-  time: { fontSize: 18, fontWeight: '700', width: 64, fontVariant: ['tabular-nums'] },
-  dots: { flexDirection: 'row', gap: 4, paddingTop: 6 },
-  dot: { width: 8, height: 8, borderRadius: 4 },
+  dates: { gap: space.sm, paddingHorizontal: space.lg },
+  date: {
+    width: 62, paddingVertical: 10, borderRadius: radius.md, alignItems: 'center', gap: 2,
+    backgroundColor: colors.paper, borderWidth: StyleSheet.hairlineWidth, borderColor: colors.line,
+  },
+  dateActive: { backgroundColor: colors.pine800, borderColor: colors.pine800 },
+  dateDay: { fontFamily: fonts.bodyHeavy, fontSize: 10, letterSpacing: 1, textTransform: 'uppercase', color: colors.slate },
+  dateNum: { fontFamily: fonts.display, fontSize: 22, color: colors.ink },
+  slot: {
+    flexDirection: 'row', alignItems: 'center', gap: space.md, paddingHorizontal: space.lg, paddingVertical: 14,
+    backgroundColor: colors.paper, borderRadius: radius.md, borderWidth: StyleSheet.hairlineWidth, borderColor: colors.line,
+  },
+  slotMine: { backgroundColor: colors.pine800, borderColor: colors.pine800 },
+  slotFull: { backgroundColor: 'transparent' },
+  time: { fontFamily: fonts.display, fontSize: 21, color: colors.ink, width: 62, fontVariant: ['tabular-nums'] },
+  add: { width: 26, height: 26, borderRadius: 13, backgroundColor: colors.pine50, alignItems: 'center', justifyContent: 'center' },
+  player: { backgroundColor: colors.chalk, borderRadius: radius.pill, paddingRight: 9, paddingLeft: 2, paddingVertical: 2 },
+  playerName: { fontFamily: fonts.bodySemibold, fontSize: 12.5, color: colors.ink, maxWidth: 90 },
 });

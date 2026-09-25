@@ -1,25 +1,30 @@
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
-import { Alert, Pressable, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { fullName, localTime } from '@golfapp/shared';
-import { Body, Button, Card, Input, Row, Screen, SectionHeader, Title } from '@/components/ui';
-import { formatDate, formatHandicap } from '@/lib/format';
+import { Contours } from '@/components/brand';
+import { Avatar, Button, ErrorText, Eyebrow, Group, Input, ListRow, Row, Screen, T } from '@/components/ui';
+import { capitalize, formatDate, formatHandicap } from '@/lib/format';
+import { haptic } from '@/lib/haptics';
 import { useMember } from '@/lib/session';
 import { supabase } from '@/lib/supabase';
-import { useTheme } from '@/lib/theme';
+import { colors, fonts, space } from '@/lib/theme';
 import { unwrap, useQuery } from '@/lib/useQuery';
 
 type DirectoryEntry = { id: string; first_name: string; infix: string | null; last_name: string; handicap_index: number | null };
-type Player = { memberId?: string; guestName?: string; label: string };
+type Player = { memberId?: string; guestName?: string; label: string; hcp?: number | null };
 
 export default function Boeken() {
-  const { course, startsAt, bookingId } = useLocalSearchParams<{ course: string; startsAt: string; bookingId?: string }>();
+  const { course, courseName, startsAt, bookingId } = useLocalSearchParams<{ course: string; courseName?: string; startsAt: string; bookingId?: string }>();
   const member = useMember();
-  const t = useTheme();
-  const [players, setPlayers] = useState<Player[]>([{ memberId: member.id, label: `${fullName(member)} (jij)` }]);
+  const insets = useSafeAreaInsets();
+  const [players, setPlayers] = useState<Player[]>([{ memberId: member.id, label: fullName(member), hcp: member.handicap_index }]);
   const [search, setSearch] = useState('');
   const [guest, setGuest] = useState('');
   const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string>();
 
   const existing = useQuery(async () => {
     if (!bookingId) return 0;
@@ -38,6 +43,7 @@ export default function Boeken() {
 
   const book = async () => {
     setBusy(true);
+    setError(undefined);
     try {
       let id = bookingId || null;
       if (!id) {
@@ -45,7 +51,6 @@ export default function Boeken() {
           .insert({ club_id: member.club_id, course_id: course, starts_at: startsAt, created_by: member.user_id })
           .select('id').single();
         if (res.error?.code === '23505') {
-          // Iemand anders was net eerder: sluit aan bij die flight
           const found = await supabase.from('tee_bookings').select('id').eq('course_id', course).eq('starts_at', startsAt).single();
           id = unwrap(found).id;
         } else {
@@ -55,57 +60,98 @@ export default function Boeken() {
       unwrap(await supabase.from('tee_booking_players').insert(
         players.map((p) => ({ booking_id: id, member_id: p.memberId ?? null, guest_name: p.guestName ?? null })),
       ).select());
+      haptic.success();
       router.back();
     } catch (e) {
-      Alert.alert('Boeken mislukt', e instanceof Error ? e.message : String(e));
+      haptic.warn();
+      setError(e instanceof Error ? e.message : String(e));
     } finally {
       setBusy(false);
     }
   };
 
-  return (
-    <Screen>
-      <Card>
-        <Body muted>{formatDate(startsAt, { weekday: 'long', day: 'numeric', month: 'long' })}</Body>
-        <Title style={{ fontSize: 32, color: t.primary }}>{localTime(startsAt)}</Title>
-        {!!existing.data && <Body muted>Er staan al {existing.data} speler(s) in deze flight.</Body>}
-      </Card>
+  const header = (
+    <View style={[styles.header, { paddingTop: insets.top + space.lg }]}>
+      <Contours seed={5} />
+      <Row style={{ justifyContent: 'space-between' }}>
+        <Eyebrow color={colors.brassLight}>Starttijd boeken</Eyebrow>
+        <Pressable hitSlop={12} onPress={() => router.back()} style={styles.close}>
+          <Ionicons name="close" size={20} color={colors.onDark} />
+        </Pressable>
+      </Row>
+      <Text style={styles.time}>{localTime(startsAt)}</Text>
+      <T color={colors.onDarkMuted}>
+        {capitalize(formatDate(startsAt, { weekday: 'long', day: 'numeric', month: 'long' }))}{courseName ? ` · ${courseName}` : ''}
+      </T>
+    </View>
+  );
 
-      <SectionHeader>Spelers ({players.length}/{maxPlayers})</SectionHeader>
-      {players.map((p, i) => (
-        <Card key={i}>
-          <Row style={{ justifyContent: 'space-between' }}>
-            <Body>{p.label}</Body>
-            {i > 0 && (
-              <Pressable onPress={() => setPlayers(players.filter((_, j) => j !== i))}>
-                <Body style={{ color: t.danger }}>Verwijder</Body>
-              </Pressable>
-            )}
-          </Row>
-        </Card>
-      ))}
+  return (
+    <Screen
+      header={header}
+      footer={<Button title={`Bevestig voor ${players.length} ${players.length === 1 ? 'speler' : 'spelers'}`} icon="checkmark" onPress={book} loading={busy} />}
+    >
+      <View style={{ height: space.lg }} />
+      <Row style={{ justifyContent: 'space-between' }}>
+        <T variant="heading">Jouw flight</T>
+        <T variant="small" color={colors.slate}>{players.length} van {maxPlayers}{existing.data ? ` · al ${existing.data} ingeschreven` : ''}</T>
+      </Row>
+      <Group>
+        {players.map((p, i) => (
+          <ListRow
+            key={i}
+            title={i === 0 ? `${p.label} (jij)` : p.label}
+            subtitle={p.guestName ? 'Gast · greenfee via de club' : `Handicap ${formatHandicap(p.hcp)}`}
+            last={i === players.length - 1}
+            right={
+              <Row gap={space.md}>
+                {i > 0 && (
+                  <Pressable hitSlop={10} onPress={() => { haptic.tap(); setPlayers(players.filter((_, j) => j !== i)); }}>
+                    <Ionicons name="remove-circle-outline" size={22} color={colors.flag} />
+                  </Pressable>
+                )}
+              </Row>
+            }
+          />
+        ))}
+      </Group>
 
       {canAdd && (
         <>
-          <SectionHeader>Medespeler toevoegen</SectionHeader>
-          <Input placeholder="Zoek clubgenoot…" value={search} onChangeText={setSearch} />
-          {matches.map((d) => (
-            <Card key={d.id} onPress={() => { setPlayers([...players, { memberId: d.id, label: fullName(d) }]); setSearch(''); }}>
-              <Row style={{ justifyContent: 'space-between' }}>
-                <Body>{fullName(d)}</Body>
-                <Body muted>hcp {formatHandicap(d.handicap_index)}</Body>
-              </Row>
-            </Card>
-          ))}
+          <T variant="heading" style={{ marginTop: space.lg }}>Medespeler toevoegen</T>
+          <Input placeholder="Zoek een clubgenoot" value={search} onChangeText={setSearch} />
+          {matches.length > 0 && (
+            <Group>
+              {matches.map((d, i) => (
+                <Pressable key={d.id} onPress={() => { haptic.tap(); setPlayers([...players, { memberId: d.id, label: fullName(d), hcp: d.handicap_index }]); setSearch(''); }}>
+                  <Row style={[styles.match, i < matches.length - 1 && styles.matchDivider]} gap={space.md}>
+                    <Avatar name={fullName(d)} size={34} />
+                    <View style={{ flex: 1 }}>
+                      <T variant="bodyStrong">{fullName(d)}</T>
+                      <T variant="small" color={colors.slate}>Handicap {formatHandicap(d.handicap_index)}</T>
+                    </View>
+                    <Ionicons name="add-circle" size={24} color={colors.pine700} />
+                  </Row>
+                </Pressable>
+              ))}
+            </Group>
+          )}
           <Row>
-            <View style={{ flex: 1 }}><Input placeholder="Naam gast (greenfee)" value={guest} onChangeText={setGuest} /></View>
-            <Button title="+ Gast" variant="secondary" disabled={!guest.trim()}
-              onPress={() => { setPlayers([...players, { guestName: guest.trim(), label: `${guest.trim()} (gast)` }]); setGuest(''); }} />
+            <View style={{ flex: 1 }}><Input placeholder="Of voeg een gast toe" value={guest} onChangeText={setGuest} /></View>
+            <Button title="Gast" icon="person-add-outline" variant="secondary" compact disabled={!guest.trim()}
+              onPress={() => { setPlayers([...players, { guestName: guest.trim(), label: guest.trim() }]); setGuest(''); }} />
           </Row>
         </>
       )}
-
-      <Button title="Bevestig boeking" onPress={book} loading={busy} style={{ marginTop: 12 }} />
+      <ErrorText message={error} />
     </Screen>
   );
 }
+
+const styles = StyleSheet.create({
+  header: { backgroundColor: colors.pine900, paddingHorizontal: space.xl, paddingBottom: space.xxl, gap: 4 },
+  close: { width: 34, height: 34, borderRadius: 17, backgroundColor: colors.onDarkLine, alignItems: 'center', justifyContent: 'center' },
+  time: { fontFamily: fonts.display, fontSize: 64, lineHeight: 70, color: colors.onDark, letterSpacing: -2, marginTop: space.md, fontVariant: ['tabular-nums'] },
+  match: { paddingHorizontal: space.lg, paddingVertical: 12 },
+  matchDivider: { borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: colors.line },
+});

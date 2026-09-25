@@ -15,7 +15,7 @@ sql_paths = ["./seed.sql"]
 
 [auth]
 site_url = "http://localhost:3000"
-additional_redirect_urls = ["golfapp://"]
+additional_redirect_urls = ["greenside://"]
 enable_signup = false   # accounts worden door de club uitgenodigd
 
 [auth.email]
@@ -29,9 +29,9 @@ verify_jwt = false   # Mollie stuurt geen Supabase-JWT; status wordt bij Mollie 
 # E-mails met een 6-cijferige code (de app logt in met een code, niet met een link).
 # Op het gehoste Supabase-project dezelfde teksten instellen via Authentication → Email Templates.
 [auth.email.template.magic_link]
-subject = "Je inlogcode voor de golfapp"
+subject = "Je inlogcode voor Greenside"
 content_path = "./supabase/templates/magic_link.html"
 
 [auth.email.template.invite]
-subject = "Je bent uitgenodigd voor de ledenapp van je golfclub"
+subject = "Welkom bij Greenside, de ledenapp van je club"
 content_path = "./supabase/templates/invite.html"

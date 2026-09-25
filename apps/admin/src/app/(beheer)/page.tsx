@@ -5,6 +5,11 @@ import { createClient } from '@/lib/supabase/server';
 import { Card, Empty, Notice, PageHeader, Stat } from '@/components/ui';
 import { formatDateTime } from '@/lib/format';
 
+function greeting() {
+  const h = Number(new Intl.DateTimeFormat('nl-NL', { hour: 'numeric', hour12: false, timeZone: 'Europe/Amsterdam' }).format(new Date()));
+  return h < 12 ? 'Goedemorgen' : h < 18 ? 'Goedemiddag' : 'Goedenavond';
+}
+
 export default async function Dashboard({ searchParams }: { searchParams: Promise<{ error?: string }> }) {
   const { error } = await searchParams;
   const ctx = await getStaffContext();
@@ -37,7 +42,7 @@ export default async function Dashboard({ searchParams }: { searchParams: Promis
 
   return (
     <>
-      <PageHeader title={`Goedendag`} subtitle={`${ctx.club.name} — overzicht van vandaag`} />
+      <PageHeader title={greeting()} subtitle={`${ctx.club.name} · ${new Date().toLocaleDateString('nl-NL', { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'Europe/Amsterdam' })}`} />
       {error === 'geen-rechten' && <Notice tone="error">Je hebt geen rechten voor die pagina.</Notice>}
 
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">

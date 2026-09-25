@@ -1,24 +1,31 @@
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { router } from 'expo-router';
 import { useMemo, useState } from 'react';
-import { Alert, Pressable, ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
 import {
   courseHandicap, localDate, playingHandicap, scoreDifferential, scoreRound,
   type Course, type CourseHole, type CourseTee,
 } from '@golfapp/shared';
-import { Body, Button, Card, Chip, Loading, Row, Screen, SectionHeader, Title } from '@/components/ui';
+import { Button, Empty, ErrorText, Eyebrow, Loading, Row, Screen, Segmented, T } from '@/components/ui';
+import { haptic } from '@/lib/haptics';
 import { useMember } from '@/lib/session';
 import { supabase } from '@/lib/supabase';
-import { useTheme } from '@/lib/theme';
+import { colors, fonts, radius, space } from '@/lib/theme';
 import { unwrap, useQuery } from '@/lib/useQuery';
+
+/** Kleur van de teemarker, zodat 'Geel' er ook geel uitziet. */
+const teeColor: Record<string, string> = {
+  wit: '#FFFFFF', geel: '#E8C33A', blauw: '#2F6FB5', rood: '#C2412D', oranje: '#E07B2E', zwart: '#1D1D1D', groen: '#2E7D32',
+};
 
 export default function Scorekaart() {
   const member = useMember();
-  const t = useTheme();
   const [courseId, setCourseId] = useState<string>();
   const [teeId, setTeeId] = useState<string>();
   const [scores, setScores] = useState<(number | null)[]>([]);
   const [qualifying, setQualifying] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string>();
 
   const { data, loading } = useQuery(async () => {
     const courses = unwrap(await supabase.from('courses').select('*').eq('club_id', member.club_id).eq('active', true)) as Course[];
@@ -32,10 +39,10 @@ export default function Scorekaart() {
 
   const withHoles = (data?.courses ?? []).filter((c) => data?.holes.some((h) => h.course_id === c.id));
   const course = withHoles.find((c) => c.id === courseId) ?? withHoles[0];
-  const tees = (data?.tees ?? []).filter((x) => x.course_id === course?.id && (!member.gender || x.gender === member.gender || member.gender === 'other'));
+  const tees = (data?.tees ?? []).filter((x) => x.course_id === course?.id && (!member.gender || member.gender === 'other' || x.gender === member.gender));
   const tee = tees.find((x) => x.id === teeId) ?? tees[0];
-  const holes = (data?.holes ?? []).filter((h) => h.course_id === course?.id)
-    .map((h) => ({ number: h.number, par: h.par, strokeIndex: h.stroke_index }));
+  const holes = useMemo(() => (data?.holes ?? []).filter((h) => h.course_id === course?.id)
+    .map((h) => ({ number: h.number, par: h.par, strokeIndex: h.stroke_index })), [data?.holes, course?.id]);
 
   const ch = tee && member.handicap_index != null
     ? courseHandicap(Number(member.handicap_index), { courseRating: Number(tee.course_rating), slopeRating: tee.slope_rating, par: tee.par })
@@ -43,19 +50,23 @@ export default function Scorekaart() {
   const ph = playingHandicap(ch, 95);
   const result = useMemo(() => scoreRound(holes.map((_, i) => scores[i] ?? null), holes, ph), [holes, scores, ph]);
 
-  const setScore = (i: number, delta: number) => setScores((prev) => {
-    const next = [...prev];
-    const current = next[i] ?? holes[i]!.par;
-    next[i] = Math.max(1, Math.min(15, (prev[i] == null ? current : current + delta)));
-    return next;
-  });
+  const setScore = (i: number, delta: number) => {
+    haptic.tap();
+    setScores((prev) => {
+      const next = [...prev];
+      next[i] = prev[i] == null ? holes[i]!.par : Math.max(1, Math.min(15, prev[i]! + delta));
+      return next;
+    });
+  };
 
   if (loading) return <Loading />;
-  if (!course || !tee) return <Screen><Body muted>Voor deze club zijn nog geen baangegevens (holes/tees) ingevoerd.</Body></Screen>;
+  if (!course || !tee) return <Screen><Empty icon="map-outline" title="Geen baangegevens">De club heeft voor deze baan nog geen holes en tees ingevoerd.</Empty></Screen>;
 
-  const complete = holes.every((_, i) => scores[i] != null);
+  const done = holes.filter((_, i) => scores[i] != null).length;
+  const complete = done === holes.length;
   const save = async () => {
     setSaving(true);
+    setError(undefined);
     const { error } = await supabase.from('rounds').insert({
       club_id: member.club_id,
       member_id: member.id,
@@ -70,66 +81,176 @@ export default function Scorekaart() {
       qualifying,
     });
     setSaving(false);
-    if (error) Alert.alert('Opslaan mislukt', error.message);
-    else router.back();
+    if (error) { haptic.warn(); setError(error.message); }
+    else { haptic.success(); router.back(); }
   };
 
+  const nines = holes.length > 9 ? [{ label: 'Uit', from: 0, to: 9 }, { label: 'In', from: 9, to: 18 }] : [{ label: 'Totaal', from: 0, to: holes.length }];
+
   return (
-    <Screen>
+    <Screen footer={
+      <View style={{ gap: space.md }}>
+        <Row style={{ justifyContent: 'space-between' }}>
+          <T variant="bodyStrong">Qualifying kaart (met marker)</T>
+          <Switch value={qualifying} onValueChange={setQualifying} trackColor={{ true: colors.pine700, false: colors.lineStrong }} thumbColor={colors.paper} />
+        </Row>
+        <Button title={complete ? `Kaart opslaan · ${result.stableford} punten` : `Nog ${holes.length - done} holes invullen`} onPress={save} loading={saving} disabled={!complete} />
+      </View>
+    }>
       {withHoles.length > 1 && (
-        <ScrollView horizontal contentContainerStyle={{ gap: 8 }}>
-          {withHoles.map((c) => <Chip key={c.id} label={c.name} active={c.id === course.id} onPress={() => { setCourseId(c.id); setScores([]); }} />)}
-        </ScrollView>
+        <Segmented options={withHoles.map((c) => ({ key: c.id, label: c.name.replace(/\s*\(.*\)/, '') }))} value={course.id} onChange={(k) => { setCourseId(k); setScores([]); }} />
       )}
-      <ScrollView horizontal contentContainerStyle={{ gap: 8 }}>
-        {tees.map((x) => <Chip key={x.id} label={x.name} active={x.id === tee.id} onPress={() => setTeeId(x.id)} />)}
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: space.sm }}>
+        {tees.map((x) => {
+          const active = x.id === tee.id;
+          return (
+            <Pressable key={x.id} onPress={() => { haptic.tap(); setTeeId(x.id); }} style={[styles.tee, active && styles.teeActive]}>
+              <View style={[styles.teeDot, { backgroundColor: teeColor[x.name.toLowerCase()] ?? colors.mist }]} />
+              <Text style={[styles.teeText, active && { color: colors.onDark }]}>{x.name}</Text>
+              <Text style={[styles.teeMeta, active && { color: colors.onDarkMuted }]}>{Number(x.course_rating).toFixed(1)}/{x.slope_rating}</Text>
+            </Pressable>
+          );
+        })}
       </ScrollView>
 
-      <Card>
-        <Row style={{ justifyContent: 'space-around' }}>
-          <Stat label="Playing hcp" value={String(ph)} />
-          <Stat label="Bruto" value={String(result.gross)} />
-          <Stat label="Stableford" value={String(result.stableford)} highlight={t.primary} />
-        </Row>
-      </Card>
+      <View style={styles.summary}>
+        <Summary label="Playing hcp" value={String(ph)} />
+        <View style={styles.summaryDivider} />
+        <Summary label="Slagen" value={done ? String(result.gross) : '–'} />
+        <View style={styles.summaryDivider} />
+        <Summary label="Punten" value={String(result.stableford)} accent />
+      </View>
 
-      <SectionHeader>Per hole: eerste tik = par, daarna − / +</SectionHeader>
-      {result.perHole.map((h, i) => (
-        <View key={h.hole} style={[styles.hole, { backgroundColor: t.card, borderColor: t.border }]}>
-          <View style={{ width: 70 }}>
-            <Text style={[styles.holeNo, { color: t.text }]}>Hole {h.hole}</Text>
-            <Text style={{ color: t.muted, fontSize: 12 }}>Par {holes[i]!.par} · SI {holes[i]!.strokeIndex}{h.strokes !== 0 ? ` · ${h.strokes > 0 ? '+' : ''}${h.strokes}` : ''}</Text>
-          </View>
-          <Pressable style={[styles.step, { borderColor: t.border }]} onPress={() => setScore(i, -1)}><Text style={[styles.stepText, { color: t.text }]}>−</Text></Pressable>
-          <Text style={[styles.score, { color: h.gross == null ? t.muted : t.text }]}>{h.gross ?? holes[i]!.par}</Text>
-          <Pressable style={[styles.step, { borderColor: t.border }]} onPress={() => setScore(i, +1)}><Text style={[styles.stepText, { color: t.text }]}>+</Text></Pressable>
-          <Text style={[styles.points, { color: h.gross == null ? t.muted : t.primary }]}>{h.gross == null ? '' : `${h.points} p`}</Text>
-        </View>
-      ))}
-
-      <Row style={{ justifyContent: 'space-between', paddingVertical: 8 }}>
-        <Body>Qualifying kaart (met marker)</Body>
-        <Switch value={qualifying} onValueChange={setQualifying} trackColor={{ true: t.primary }} />
+      <Row gap={space.lg} style={{ justifyContent: 'center', marginTop: -4 }}>
+        <Legend shape="circle" label="Birdie" />
+        <Legend shape="plain" label="Par" />
+        <Legend shape="square" label="Bogey" />
+        <Row gap={4}><View style={styles.strokeDot} /><T variant="small" color={colors.slate}>Extra slag</T></Row>
       </Row>
-      <Button title={complete ? 'Scorekaart opslaan' : 'Vul alle holes in'} onPress={save} loading={saving} disabled={!complete} />
+
+      {nines.map((nine) => {
+        const part = result.perHole.slice(nine.from, nine.to);
+        return (
+          <View key={nine.label} style={styles.card}>
+            <View style={styles.cardHead}>
+              <Text style={[styles.colHole, styles.headText]}>Hole</Text>
+              <Text style={[styles.colPar, styles.headText]}>Par</Text>
+              <Text style={[styles.colSi, styles.headText]}>SI</Text>
+              <Text style={[{ flex: 1, textAlign: 'center' }, styles.headText]}>Slagen</Text>
+              <Text style={[styles.colPts, styles.headText]}>Pnt</Text>
+            </View>
+            {part.map((h, k) => {
+              const i = nine.from + k;
+              const hole = holes[i]!;
+              return (
+                <View key={h.hole} style={[styles.hole, k < part.length - 1 && styles.holeDivider]}>
+                  <View style={styles.colHole}><View style={styles.holeNo}><Text style={styles.holeNoText}>{h.hole}</Text></View></View>
+                  <Text style={[styles.colPar, styles.cell]}>{hole.par}</Text>
+                  <View style={styles.colSi}>
+                    <Text style={styles.cellMuted}>{hole.strokeIndex}</Text>
+                    <Row gap={2}>{Array.from({ length: Math.max(0, h.strokes) }, (_, d) => <View key={d} style={styles.strokeDot} />)}</Row>
+                  </View>
+                  <Row style={{ flex: 1, justifyContent: 'center' }} gap={space.sm}>
+                    <Step icon="remove" label={`Hole ${h.hole} een slag minder`} onPress={() => setScore(i, -1)} />
+                    <ScoreMark gross={h.gross} par={hole.par} />
+                    <Step icon="add" label={`Hole ${h.hole} een slag meer`} onPress={() => setScore(i, +1)} />
+                  </Row>
+                  <Text style={[styles.colPts, styles.points, h.gross == null && { color: colors.lineStrong }]}>{h.gross == null ? '·' : h.points}</Text>
+                </View>
+              );
+            })}
+            <View style={styles.subtotal}>
+              <Text style={[styles.colHole, styles.subLabel]}>{nine.label}</Text>
+              <Text style={[styles.colPar, styles.subValue]}>{holes.slice(nine.from, nine.to).reduce((s, x) => s + x.par, 0)}</Text>
+              <View style={styles.colSi} />
+              <Text style={[{ flex: 1, textAlign: 'center' }, styles.subValue]}>{part.reduce((s, x) => s + (x.gross ?? 0), 0) || '–'}</Text>
+              <Text style={[styles.colPts, styles.subValue, { color: colors.brassLight }]}>{part.reduce((s, x) => s + x.points, 0)}</Text>
+            </View>
+          </View>
+        );
+      })}
+      <ErrorText message={error} />
+      <T variant="small" color={colors.mist} style={{ textAlign: 'center' }}>Eerste tik zet de hole op par · handicapallowance 95%</T>
     </Screen>
   );
 }
 
-function Stat({ label, value, highlight }: { label: string; value: string; highlight?: string }) {
+/** Klassieke scorekaart-notatie: cirkel(s) onder par, vierkant(en) boven par. */
+function ScoreMark({ gross, par }: { gross: number | null; par: number }) {
+  if (gross == null) return <View style={styles.mark}><Text style={[styles.markText, { color: colors.lineStrong }]}>{par}</Text></View>;
+  const diff = gross - par;
+  const shape = diff <= -1 ? 'circle' : diff >= 1 ? 'square' : 'plain';
+  const double = Math.abs(diff) >= 2;
+  const color = diff < 0 ? colors.brass : diff > 0 ? colors.ink : colors.pine700;
+  const outer = shape === 'plain' ? undefined : { borderWidth: 1.5, borderColor: color, borderRadius: shape === 'circle' ? 22 : 5 };
+  const inner = double ? { borderWidth: 1.5, borderColor: color, borderRadius: shape === 'circle' ? 16 : 3 } : undefined;
   return (
-    <View style={{ alignItems: 'center' }}>
-      <Body muted style={{ fontSize: 12 }}>{label}</Body>
-      <Title style={{ fontSize: 26, color: highlight }}>{value}</Title>
+    <View style={[styles.mark, outer]}>
+      <View style={[styles.markInner, inner]}>
+        <Text style={[styles.markText, { color }]}>{gross}</Text>
+      </View>
+    </View>
+  );
+}
+
+function Legend({ shape, label }: { shape: 'circle' | 'square' | 'plain'; label: string }) {
+  return (
+    <Row gap={5}>
+      <View style={{ width: 12, height: 12, borderWidth: shape === 'plain' ? 0 : 1.5, borderColor: shape === 'circle' ? colors.brass : colors.ink, borderRadius: shape === 'circle' ? 6 : 2, backgroundColor: shape === 'plain' ? colors.pine100 : 'transparent' }} />
+      <T variant="small" color={colors.slate}>{label}</T>
+    </Row>
+  );
+}
+
+function Step({ icon, label, onPress }: { icon: 'add' | 'remove'; label: string; onPress: () => void }) {
+  return (
+    <Pressable onPress={onPress} hitSlop={6} accessibilityRole="button" accessibilityLabel={label} style={({ pressed }) => [styles.step, pressed && { backgroundColor: colors.pine100 }]}>
+      <Ionicons name={icon} size={18} color={colors.pine800} />
+    </Pressable>
+  );
+}
+
+function Summary({ label, value, accent }: { label: string; value: string; accent?: boolean }) {
+  return (
+    <View style={{ flex: 1, alignItems: 'center', gap: 2 }}>
+      <Eyebrow color={accent ? colors.brassLight : colors.onDarkMuted}>{label}</Eyebrow>
+      <Text style={[styles.summaryValue, accent && { color: colors.brassLight }]}>{value}</Text>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  hole: { flexDirection: 'row', alignItems: 'center', gap: 10, padding: 10, borderRadius: 12, borderWidth: StyleSheet.hairlineWidth },
-  holeNo: { fontWeight: '700', fontSize: 15 },
-  step: { width: 40, height: 40, borderRadius: 20, borderWidth: 1, alignItems: 'center', justifyContent: 'center' },
-  stepText: { fontSize: 22, fontWeight: '600' },
-  score: { fontSize: 24, fontWeight: '800', width: 36, textAlign: 'center', fontVariant: ['tabular-nums'] },
-  points: { marginLeft: 'auto', fontWeight: '700', fontSize: 15 },
+  tee: {
+    flexDirection: 'row', alignItems: 'center', gap: 8, paddingHorizontal: 14, paddingVertical: 10,
+    borderRadius: radius.pill, backgroundColor: colors.paper, borderWidth: StyleSheet.hairlineWidth, borderColor: colors.line,
+  },
+  teeActive: { backgroundColor: colors.pine800, borderColor: colors.pine800 },
+  teeDot: { width: 12, height: 12, borderRadius: 6, borderWidth: 1, borderColor: 'rgba(0,0,0,0.15)' },
+  teeText: { fontFamily: fonts.bodyBold, fontSize: 14, color: colors.ink },
+  teeMeta: { fontFamily: fonts.body, fontSize: 12, color: colors.slate },
+  summary: { flexDirection: 'row', backgroundColor: colors.pine900, borderRadius: radius.lg, paddingVertical: space.lg },
+  summaryDivider: { width: StyleSheet.hairlineWidth, backgroundColor: colors.onDarkLine },
+  summaryValue: { fontFamily: fonts.display, fontSize: 30, color: colors.onDark, fontVariant: ['tabular-nums'] },
+  card: { backgroundColor: colors.paper, borderRadius: radius.lg, borderWidth: StyleSheet.hairlineWidth, borderColor: colors.line, overflow: 'hidden' },
+  cardHead: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: space.md, paddingVertical: 10, backgroundColor: colors.pine50 },
+  headText: { fontFamily: fonts.bodyHeavy, fontSize: 10, letterSpacing: 1.2, textTransform: 'uppercase', color: colors.pine600 },
+  colHole: { width: 44 },
+  colPar: { width: 30, textAlign: 'center' },
+  colSi: { width: 34, alignItems: 'center', gap: 3 },
+  colPts: { width: 34, textAlign: 'right' },
+  hole: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: space.md, paddingVertical: 9 },
+  holeDivider: { borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: colors.line },
+  holeNo: { width: 30, height: 30, borderRadius: 15, backgroundColor: colors.pine800, alignItems: 'center', justifyContent: 'center' },
+  holeNoText: { fontFamily: fonts.bodyHeavy, fontSize: 13, color: colors.onDark },
+  cell: { fontFamily: fonts.bodyBold, fontSize: 15, color: colors.ink },
+  cellMuted: { fontFamily: fonts.body, fontSize: 13, color: colors.slate, textAlign: 'center' },
+  strokeDot: { width: 5, height: 5, borderRadius: 3, backgroundColor: colors.brass },
+  step: { width: 34, height: 34, borderRadius: 17, borderWidth: 1, borderColor: colors.line, alignItems: 'center', justifyContent: 'center' },
+  mark: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center' },
+  markInner: { width: 34, height: 34, alignItems: 'center', justifyContent: 'center' },
+  markText: { fontFamily: fonts.display, fontSize: 21, fontVariant: ['tabular-nums'] },
+  points: { fontFamily: fonts.display, fontSize: 18, color: colors.pine700 },
+  subtotal: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: space.md, paddingVertical: 12, backgroundColor: colors.pine800 },
+  subLabel: { fontFamily: fonts.bodyHeavy, fontSize: 11, letterSpacing: 1.2, textTransform: 'uppercase', color: colors.brassLight },
+  subValue: { fontFamily: fonts.display, fontSize: 17, color: colors.onDark },
 });

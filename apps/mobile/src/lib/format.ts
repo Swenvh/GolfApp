@@ -5,6 +5,11 @@ export function formatDate(d: string | Date, opts: Intl.DateTimeFormatOptions = 
   return new Intl.DateTimeFormat('nl-NL', { ...opts, timeZone: tz }).format(date);
 }
 
+/** Eerste letter hoofdletter: 'zaterdag 26 september' → 'Zaterdag 26 september'. */
+export function capitalize(s: string) {
+  return s.charAt(0).toUpperCase() + s.slice(1);
+}
+
 export function formatDateTime(d: string | Date) {
   return formatDate(d, { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
 }

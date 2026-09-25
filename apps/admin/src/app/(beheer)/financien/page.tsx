@@ -97,7 +97,7 @@ export default async function FinancienPage({ searchParams }: {
         </Card>
 
         <Card title="Grootste achterstanden">
-          {topDebtors.length === 0 ? <Empty>Geen achterstallige betalingen 🎉</Empty> : (
+          {topDebtors.length === 0 ? <Empty>Geen achterstallige betalingen. Alles is bij.</Empty> : (
             <table>
               <tbody>
                 {topDebtors.map((d) => (
