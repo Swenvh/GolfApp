@@ -37,7 +37,7 @@ Eén vast thema voor app, beheeromgeving en e-mails.
 |---|---|
 | Inloggen | E-mailadres + 6-cijferige code (geen wachtwoord); alleen door de club uitgenodigde leden |
 | Home | Handicap, openstaand bedrag, eigen starttijden, clubnieuws |
-| Starttijden | Tee sheet per baan/dag, boeken, aansluiten bij flight, clubgenoten en gasten toevoegen, afmelden |
+| Starttijden | Tee sheet per baan/dag, boeken, aansluiten bij flight, clubgenoten en gasten toevoegen, afmelden. Een lid kan niet in twee flights staan waarvan de rondes overlappen (rondeduur per baan) |
 | Wedstrijden | Kalender, in-/uitschrijven, deelnemerslijst, uitslagen |
 | Scores | Scorekaart invoeren met live Stableford (WHS: course/playing handicap, net double bogey), handicapindicatie |
 | Profiel | Facturen bekijken en betalen met iDEAL, contactgegevens wijzigen, privacy (ledenlijst opt-out), ledenlijst |

@@ -160,3 +160,73 @@ select pg_temp.assert(
   'niet-lid ziet geen starttijden');
 select pg_temp.assert((select count(*) from clubs) = 0, 'niet-lid ziet geen club');
 reset role;
+
+-- 7. Geen dubbele boekingen: rondes van hetzelfde lid mogen niet overlappen -------------
+select set_config('request.jwt.claim.sub', '00000000-0000-0000-0000-00000000a002', false);
+set role authenticated;
+
+-- Sanne staat om T+10:00 op de Duinbaan (ronde van 4 uur). Om T+12:00 kan niet.
+do $$ begin
+  begin
+    perform book_tee_time('00000000-0000-0000-0000-0000000f0001',
+      date_trunc('day', now()) + interval '2 days 12 hours',
+      array['00000000-0000-0000-0000-0000000e0002'::uuid]);
+    raise exception 'expected failure';
+  exception when others then
+    if sqlerrm = 'expected failure' then raise; end if;
+    if sqlerrm not like 'Sanne Jansen staat al ingeschreven om %' then raise exception 'onverwachte fout: %', sqlerrm; end if;
+  end;
+end $$;
+-- Mislukte boeking laat geen lege flight achter (alles in één transactie)
+select pg_temp.assert(
+  not exists (select 1 from tee_bookings where starts_at = date_trunc('day', now()) + interval '2 days 12 hours'),
+  'mislukte boeking laat geen lege flight achter');
+
+-- Ook op een andere baan telt de overlap (par-3 om 13:00 valt binnen de ronde van 10:00)
+do $$ begin
+  begin
+    perform book_tee_time('00000000-0000-0000-0000-0000000f0002',
+      date_trunc('day', now()) + interval '2 days 13 hours',
+      array['00000000-0000-0000-0000-0000000e0002'::uuid]);
+    raise exception 'expected failure';
+  exception when others then
+    if sqlerrm = 'expected failure' then raise; end if;
+  end;
+end $$;
+
+-- Na afloop van de ronde (14:00) mag het wel, met een gast erbij
+select pg_temp.assert(
+  book_tee_time('00000000-0000-0000-0000-0000000f0001',
+    date_trunc('day', now()) + interval '2 days 14 hours',
+    array['00000000-0000-0000-0000-0000000e0002'::uuid, '00000000-0000-0000-0000-0000000e0003'::uuid],
+    array['Gast Middag']) is not null,
+  'boeking na afloop van de vorige ronde lukt');
+select pg_temp.assert(
+  (select count(*) from tee_booking_players p join tee_bookings b on b.id = p.booking_id
+   where b.starts_at = date_trunc('day', now()) + interval '2 days 14 hours') = 3,
+  'flight met twee leden en een gast');
+
+-- Aansluiten bij een bestaande flight via dezelfde functie
+select book_tee_time('00000000-0000-0000-0000-0000000f0001',
+  date_trunc('day', now()) + interval '2 days 14 hours', array['00000000-0000-0000-0000-0000000e0005'::uuid]);
+select pg_temp.assert(
+  (select count(*) from tee_bookings where starts_at = date_trunc('day', now()) + interval '2 days 14 hours') = 1,
+  'aansluiten maakt geen tweede flight');
+
+-- Vijfde speler via de functie: flight vol
+do $$ begin
+  begin
+    perform book_tee_time('00000000-0000-0000-0000-0000000f0001',
+      date_trunc('day', now()) + interval '2 days 14 hours', '{}', array['Te veel']);
+    raise exception 'expected failure';
+  exception when others then
+    if sqlerrm = 'expected failure' then raise; end if;
+    if sqlerrm not like 'Deze flight is vol%' then raise exception 'onverwachte fout: %', sqlerrm; end if;
+  end;
+end $$;
+reset role;
+
+-- Clubkleur bestaat niet meer
+select pg_temp.assert(
+  not exists (select 1 from information_schema.columns where table_name = 'clubs' and column_name = 'primary_color'),
+  'clubkleur is verwijderd');

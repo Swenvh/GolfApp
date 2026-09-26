@@ -45,21 +45,13 @@ export default function Boeken() {
     setBusy(true);
     setError(undefined);
     try {
-      let id = bookingId || null;
-      if (!id) {
-        const res = await supabase.from('tee_bookings')
-          .insert({ club_id: member.club_id, course_id: course, starts_at: startsAt, created_by: member.user_id })
-          .select('id').single();
-        if (res.error?.code === '23505') {
-          const found = await supabase.from('tee_bookings').select('id').eq('course_id', course).eq('starts_at', startsAt).single();
-          id = unwrap(found).id;
-        } else {
-          id = unwrap(res).id;
-        }
-      }
-      unwrap(await supabase.from('tee_booking_players').insert(
-        players.map((p) => ({ booking_id: id, member_id: p.memberId ?? null, guest_name: p.guestName ?? null })),
-      ).select());
+      // Eén transactie: lukt het voor één speler niet (vol, al elders ingeschreven), dan wordt er niets geboekt
+      unwrap(await supabase.rpc('book_tee_time', {
+        p_course: course,
+        p_starts_at: startsAt,
+        p_member_ids: players.flatMap((p) => (p.memberId ? [p.memberId] : [])),
+        p_guest_names: players.flatMap((p) => (p.guestName ? [p.guestName] : [])),
+      }));
       haptic.success();
       router.back();
     } catch (e) {
@@ -106,7 +98,8 @@ export default function Boeken() {
             right={
               <Row gap={space.md}>
                 {i > 0 && (
-                  <Pressable hitSlop={10} onPress={() => { haptic.tap(); setPlayers(players.filter((_, j) => j !== i)); }}>
+                  <Pressable hitSlop={10} accessibilityRole="button" accessibilityLabel={`Verwijder ${p.label}`}
+                    onPress={() => { haptic.tap(); setError(undefined); setPlayers(players.filter((_, j) => j !== i)); }}>
                     <Ionicons name="remove-circle-outline" size={22} color={colors.flag} />
                   </Pressable>
                 )}

@@ -29,7 +29,6 @@ async function saveClub(formData: FormData) {
     iban: iban ? normalizeIban(iban) : null,
     bic: str(formData.get('bic')),
     sepa_creditor_id: str(formData.get('sepa_creditor_id')),
-    primary_color: str(formData.get('primary_color')) ?? '#1B5E20',
     payment_term_days: Number(formData.get('payment_term_days')) || 14,
   }).eq('id', ctx.club.id);
   if (error) redirect(`/instellingen?error=${encodeURIComponent(error.message)}`);
@@ -87,7 +86,6 @@ export default async function InstellingenPage({ searchParams }: { searchParams:
             <Field label="Postcode"><input name="postal_code" defaultValue={c.postal_code ?? ''} /></Field>
             <Field label="Plaats"><input name="city" defaultValue={c.city ?? ''} /></Field>
             <Field label="Website"><input name="website" defaultValue={c.website ?? ''} /></Field>
-            <Field label="Huisstijlkleur (app)"><input name="primary_color" type="color" defaultValue={c.primary_color} className="h-10" /></Field>
             <Field label="KvK-nummer"><input name="kvk_number" defaultValue={c.kvk_number ?? ''} /></Field>
             <Field label="BTW-nummer"><input name="vat_number" defaultValue={c.vat_number ?? ''} /></Field>
             <Field label="IBAN"><input name="iban" defaultValue={c.iban ?? ''} /></Field>

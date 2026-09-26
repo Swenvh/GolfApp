@@ -14,10 +14,10 @@ select gen_random_uuid(), id, id::text, 'email', jsonb_build_object('sub', id::t
 from auth.users where email in ('beheer@deduinen.test', 'jan@example.test');
 
 insert into clubs (id, slug, name, ngf_club_code, email, phone, website, street, house_number, postal_code, city,
-                   kvk_number, iban, bic, sepa_creditor_id, primary_color)
+                   kvk_number, iban, bic, sepa_creditor_id)
 values ('00000000-0000-0000-0000-0000000c0001', 'de-duinen', 'Golfclub De Duinen', '0123',
         'info@deduinen.test', '071-1234567', 'https://deduinen.test', 'Duinweg', '1', '2201 AA', 'Noordwijk',
-        '40123456', 'NL91ABNA0417164300', 'ABNANL2A', 'NL00ZZZ401234560000', '#1B5E20');
+        '40123456', 'NL91ABNA0417164300', 'ABNANL2A', 'NL00ZZZ401234560000');
 
 insert into club_staff (club_id, user_id, role) values
   ('00000000-0000-0000-0000-0000000c0001', '00000000-0000-0000-0000-00000000a001', 'admin');
@@ -52,9 +52,9 @@ insert into sepa_mandates (club_id, member_id, mandate_reference, account_holder
   ('00000000-0000-0000-0000-0000000c0001', '00000000-0000-0000-0000-0000000e0002', 'DD-1002', 'S. Jansen',      'NL44RABO0123456788', 'RABONL2U', '2019-01-15'),
   ('00000000-0000-0000-0000-0000000c0001', '00000000-0000-0000-0000-0000000e0005', 'DD-1005', 'M. el Amrani',   'NL20INGB0001234567', 'INGBNL2A', '2021-01-01');
 
-insert into courses (id, club_id, name, holes, first_tee_time, last_tee_time, interval_minutes) values
-  ('00000000-0000-0000-0000-0000000f0001', '00000000-0000-0000-0000-0000000c0001', 'Duinbaan (18 holes)', 18, '07:30', '17:00', 10),
-  ('00000000-0000-0000-0000-0000000f0002', '00000000-0000-0000-0000-0000000c0001', 'Par-3 baan', 9, '08:00', '18:00', 8);
+insert into courses (id, club_id, name, holes, first_tee_time, last_tee_time, interval_minutes, round_minutes) values
+  ('00000000-0000-0000-0000-0000000f0001', '00000000-0000-0000-0000-0000000c0001', 'Duinbaan (18 holes)', 18, '07:30', '17:00', 10, 240),
+  ('00000000-0000-0000-0000-0000000f0002', '00000000-0000-0000-0000-0000000c0001', 'Par-3 baan', 9, '08:00', '18:00', 8, 90);
 
 insert into course_tees (course_id, name, gender, course_rating, slope_rating, par) values
   ('00000000-0000-0000-0000-0000000f0001', 'Wit',   'male',   73.1, 135, 72),
@@ -116,7 +116,7 @@ with b as (
   insert into tee_bookings (club_id, course_id, starts_at, created_by)
   select '00000000-0000-0000-0000-0000000c0001', '00000000-0000-0000-0000-0000000f0001',
          ((current_date + 1) + t)::timestamp at time zone 'Europe/Amsterdam', null
-  from unnest(array[time '08:00', time '08:30', time '09:10', time '10:20']) t
+  from unnest(array[time '08:00', time '08:30', time '09:10', time '13:30']) t
   returning id, starts_at
 )
 insert into tee_booking_players (booking_id, member_id, guest_name)
@@ -126,10 +126,10 @@ select b.id, p.m, p.g from b join (values
   (time '08:30', '00000000-0000-0000-0000-0000000e0003', null),
   (time '08:30', null, 'Henk Visser'),
   (time '09:10', '00000000-0000-0000-0000-0000000e0004', null),
-  (time '10:20', '00000000-0000-0000-0000-0000000e0002', null),
-  (time '10:20', '00000000-0000-0000-0000-0000000e0003', null),
-  (time '10:20', '00000000-0000-0000-0000-0000000e0005', null),
-  (time '10:20', null, 'Anouk de Boer')
+  (time '13:30', '00000000-0000-0000-0000-0000000e0002', null),
+  (time '13:30', '00000000-0000-0000-0000-0000000e0003', null),
+  (time '13:30', '00000000-0000-0000-0000-0000000e0005', null),
+  (time '13:30', null, 'Anouk de Boer')
 ) as p(t, m, g) on (b.starts_at at time zone 'Europe/Amsterdam')::time = p.t;
 
 insert into news_posts (club_id, title, body, published_at) values

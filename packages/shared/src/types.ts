@@ -25,7 +25,6 @@ export interface Club {
   iban: string | null;
   bic: string | null;
   sepa_creditor_id: string | null;
-  primary_color: string;
   logo_url: string | null;
   payment_term_days: number;
 }
@@ -86,6 +85,8 @@ export interface Course {
   interval_minutes: number;
   max_players: number;
   booking_days_ahead: number;
+  /** Duur van een ronde; twee boekingen van hetzelfde lid mogen niet overlappen */
+  round_minutes: number;
   active: boolean;
 }
 
