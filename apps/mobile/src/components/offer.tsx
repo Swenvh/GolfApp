@@ -38,8 +38,10 @@ export function OfferCard({ eyebrow, title, subtitle, price, icon, onPress, tone
 }
 
 /** Regel met − / + om een extra aan een boeking toe te voegen. */
-export function AddOnRow({ product, quantity, onChange, remaining, max = 4, locked, handicart }: {
+export function AddOnRow({ product, quantity, onChange, remaining, max = 4, locked, handicart, free }: {
   product: Product; quantity: number; onChange: (q: number) => void; remaining?: number; max?: number; locked?: string;
+  /** Al betaald (bijv. van een introductiekaart) */
+  free?: boolean;
   /** Lid heeft een geldige Handicart-pas: toon het Handicart-tarief */
   handicart?: boolean;
 }) {
@@ -57,7 +59,7 @@ export function AddOnRow({ product, quantity, onChange, remaining, max = 4, lock
       <View style={{ flex: 1, gap: 2 }}>
         <Text style={styles.addOnTitle}>{product.name}</Text>
         <Text style={[styles.addOnMeta, soldOut && { color: colors.flag }]}>
-          {special != null ? (
+          {free ? <Text style={styles.special}>Al betaald</Text> : special != null ? (
             <>
               <Text style={styles.strike}>{formatEuro(regular)}</Text>{' '}
               <Text style={styles.special}>{formatEuro(special)} met je Handicart-pas</Text>

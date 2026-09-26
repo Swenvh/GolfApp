@@ -39,8 +39,17 @@ function ProductFields({ p }: { p?: Product }) {
           </select>
         </Field>
       </div>
-      <div className="md:col-span-6"><Field label="Omschrijving in de app"><input name="description" defaultValue={p?.description ?? ''} /></Field></div>
-      <div className="md:col-span-6"><Field label="Na bestellen tonen" hint="Bv. waar de sleutel ligt"><input name="pickup_note" defaultValue={p?.pickup_note ?? ''} /></Field></div>
+      <div className="md:col-span-8"><Field label="Omschrijving in de app"><input name="description" defaultValue={p?.description ?? ''} /></Field></div>
+      <div className="md:col-span-2">
+        <Field label="Geeft speelrecht" hint="Introductiekaart of weekend">
+          <select name="grants_kind" defaultValue={p?.grants_kind ?? ''}>
+            <option value="">Nee</option><option value="intro">Introducés</option><option value="weekend">Weekend spelen</option>
+          </select>
+        </Field>
+      </div>
+      <div className="md:col-span-1"><Field label="Keer"><input name="grants_uses" type="number" min={1} defaultValue={p?.grants_uses ?? ''} placeholder="∞" /></Field></div>
+      <div className="md:col-span-1"><Field label="Dagen geldig"><input name="grants_days" type="number" min={1} defaultValue={p?.grants_days ?? 365} /></Field></div>
+      <div className="md:col-span-12"><Field label="Na bestellen tonen" hint="Bv. waar de sleutel ligt"><input name="pickup_note" defaultValue={p?.pickup_note ?? ''} /></Field></div>
     </>
   );
 }

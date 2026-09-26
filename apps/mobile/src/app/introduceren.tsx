@@ -1,5 +1,5 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
 import { View } from 'react-native';
 import { Button, Card, ErrorText, Eyebrow, Input, Row, Screen, T } from '@/components/ui';
@@ -11,7 +11,8 @@ import { colors, space } from '@/lib/theme';
 /** Lid introduceert een vriend: de ledenadministratie krijgt een lead. */
 export default function Introduceren() {
   const member = useMember();
-  const [form, setForm] = useState({ name: '', email: '', phone: '', note: '' });
+  const params = useLocalSearchParams<{ name?: string; rounds?: string }>();
+  const [form, setForm] = useState({ name: params.name ?? '', email: '', phone: '', note: params.rounds ? `Speelde het afgelopen jaar ${params.rounds}× met mij mee als introducé` : '' });
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string>();
   const [sent, setSent] = useState(false);

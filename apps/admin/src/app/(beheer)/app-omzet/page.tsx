@@ -26,7 +26,7 @@ export default async function AppOmzet({ searchParams }: { searchParams: Promise
   const from30 = addDays(today, -29);
   const from42 = addDays(today, -41);
 
-  const [revenue, bookings, open, leads] = await Promise.all([
+  const [revenue, bookings, open, leads, changes, sponsors, types] = await Promise.all([
     supabase.from('app_revenue').select('*').eq('club_id', ctx.club.id).gte('fulfil_on', from42).lte('fulfil_on', addDays(today, 14)),
     supabase.from('tee_bookings').select('id', { count: 'exact', head: true }).eq('club_id', ctx.club.id)
       .gte('starts_at', `${from30}T00:00:00Z`).lte('starts_at', `${today}T23:59:59Z`),
@@ -36,7 +36,16 @@ export default async function AppOmzet({ searchParams }: { searchParams: Promise
       .order('fulfil_on'),
     supabase.from('leads').select('*, member:members(first_name, infix, last_name)').eq('club_id', ctx.club.id)
       .order('created_at', { ascending: false }).limit(20),
+    supabase.from('membership_changes').select('kind, target_membership_type_id').eq('club_id', ctx.club.id)
+      .eq('from_cancel_flow', true).neq('status', 'rejected').neq('kind', 'cancel').gte('created_at', `${today.slice(0, 4)}-01-01`),
+    supabase.from('sponsors').select('fee_cents, clicks').eq('club_id', ctx.club.id).eq('active', true),
+    supabase.from('membership_types').select('id, annual_fee_cents').eq('club_id', ctx.club.id),
   ]);
+  const feeByType = new Map((types.data ?? []).map((t) => [t.id as string, Number(t.annual_fee_cents)]));
+  const kept = (changes.data ?? []) as { target_membership_type_id: string | null }[];
+  const keptValue = kept.reduce((s, c) => s + (feeByType.get(c.target_membership_type_id ?? '') ?? 0), 0);
+  const sponsorIncome = (sponsors.data ?? []).reduce((s, x) => s + Number(x.fee_cents), 0);
+  const sponsorClicks = (sponsors.data ?? []).reduce((s, x) => s + Number(x.clicks), 0);
 
   const rows = (revenue.data ?? []) as Row[];
   const last30 = rows.filter((r) => r.fulfil_on >= from30 && r.fulfil_on <= today);
@@ -74,16 +83,22 @@ export default async function AppOmzet({ searchParams }: { searchParams: Promise
       <PageHeader
         title="App-omzet"
         subtitle="Wat leden via Greenside bestellen. Alles is direct gefactureerd en geboekt."
-        actions={<ButtonLink href="/app-omzet/aanbod" variant="secondary">Aanbod beheren</ButtonLink>}
+        actions={<>
+          <ButtonLink href="/app-omzet/sponsors" variant="secondary">Sponsors</ButtonLink>
+          <ButtonLink href="/app-omzet/aanbod" variant="secondary">Aanbod beheren</ButtonLink>
+        </>}
       />
       {error && <Notice tone="error">{error}</Notice>}
 
-      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+      <div className="grid grid-cols-2 gap-4 lg:grid-cols-3">
         <Stat label="Omzet via de app (30 dagen)" value={formatEuro(total30)} hint={`${orders30} bestellingen`} tone="good" />
         <Stat label="Extra per geboekte flight" value={formatEuro(perRound)} hint={`${bookings.count ?? 0} flights in 30 dagen`} />
         <Stat label="Terugverdiend" value={multiple ? `${multiple.toFixed(1).replace('.', ',')}×` : '—'}
           hint={fee ? `alle omzet via de app ÷ licentie van ${formatEuro(fee)} p/m` : 'Vul het abonnementsbedrag in bij Instellingen'} tone={multiple && multiple >= 1 ? 'good' : 'default'} />
-        <Stat label="Leads in behandeling" value={formatEuro(pipeline)} hint="Verwachte jaarwaarde van upgrades en nieuwe leden" />
+        <Stat label="Leads in behandeling" value={formatEuro(pipeline)} hint="Verwachte jaarwaarde van upgrades, gezinsleden en nieuwe leden" />
+        <Stat label="Behouden via de app" value={formatEuro(keptValue).replace(/,\d\d$/, '')}
+          hint={`${kept.length} ${kept.length === 1 ? 'lid' : 'leden'} pauzeerden of zetten om in plaats van op te zeggen (contributie per jaar)`} tone={kept.length ? 'good' : 'default'} />
+        <Stat label="Sponsorplekken in de app" value={formatEuro(sponsorIncome).replace(/,\d\d$/, '')} hint={`per jaar · ${sponsorClicks} kliks`} />
       </div>
 
       <div className="mt-6 grid gap-6 xl:grid-cols-5">
@@ -166,7 +181,7 @@ export default async function AppOmzet({ searchParams }: { searchParams: Promise
                     <div className="min-w-0">
                       <div className="font-semibold">{l.name}</div>
                       <div className="text-xs text-stone-500">
-                        {leadTypeLabel[l.type]}{l.member && l.type === 'referral' ? ` · via ${fullName(l.member)}` : ''}
+                        {leadTypeLabel[l.type]}{l.member && (l.type === 'referral' || l.type === 'family') ? ` · via ${fullName(l.member)}` : ''}
                       </div>
                     </div>
                     {l.value_cents ? <span className="shrink-0 font-display text-lg tabular">{formatEuro(Number(l.value_cents)).replace(/,\d\d$/, '')}</span> : null}
@@ -185,7 +200,7 @@ export default async function AppOmzet({ searchParams }: { searchParams: Promise
             </ul>
           )}
           <p className="border-t border-stone-200/70 px-5 py-3 text-xs text-stone-500">
-            Waarde = verwacht extra bedrag per jaar: contributie + entree bij nieuwe leden, het verschil bij upgrades.
+            Waarde = verwacht extra bedrag per jaar: contributie + entree bij nieuwe leden en gezinsleden, het verschil bij upgrades.
           </p>
         </Card>
       </div>

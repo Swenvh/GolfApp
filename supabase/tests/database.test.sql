@@ -440,3 +440,110 @@ select pg_temp.assert(
    where product_id = (select id from products where name = 'Buggy')) = 8,
   'geannuleerde buggy telt niet mee: 8 beschikbaar');
 reset role;
+
+-- 11. Weekendrecht voor weekdagleden -----------------------------------------------------
+select set_config('request.jwt.claim.sub', '00000000-0000-0000-0000-00000000a003', false);
+set role authenticated;
+-- Pieter koopt een losse weekendronde en kan dan op zaterdag boeken
+select place_order('00000000-0000-0000-0000-0000000e0003',
+  jsonb_build_array(jsonb_build_object('product_id', (select id from products where name = 'Weekendronde'))));
+select pg_temp.assert((select uses_left from member_entitlements where member_id = '00000000-0000-0000-0000-0000000e0003' and kind = 'weekend') = 1,
+  'weekendronde geeft 1 tegoed');
+select pg_temp.assert(
+  book_tee_time('00000000-0000-0000-0000-0000000f0001', pg_temp.at('16:02', pg_temp.test_day() + 3),
+    array['00000000-0000-0000-0000-0000000e0003'::uuid]) is not null,
+  'met weekendronde mag weekdaglid op zaterdag');
+select pg_temp.assert((select uses_left from member_entitlements where member_id = '00000000-0000-0000-0000-0000000e0003' and kind = 'weekend') = 0,
+  'weekendronde is verbruikt');
+-- Tweede weekendboeking lukt niet meer
+do $$ begin
+  begin
+    perform book_tee_time('00000000-0000-0000-0000-0000000f0001', pg_temp.at('08:02', pg_temp.test_day() + 4),
+      array['00000000-0000-0000-0000-0000000e0003'::uuid]);
+    raise exception 'expected failure';
+  exception when others then
+    if sqlerrm = 'expected failure' then raise; end if;
+  end;
+end $$;
+-- Afmelden: de weekendronde komt terug
+delete from tee_booking_players where member_id = '00000000-0000-0000-0000-0000000e0003'
+  and booking_id = (select id from tee_bookings where starts_at = pg_temp.at('16:02', pg_temp.test_day() + 3));
+select pg_temp.assert((select uses_left from member_entitlements where member_id = '00000000-0000-0000-0000-0000000e0003' and kind = 'weekend') = 1,
+  'afmelden geeft de weekendronde terug');
+reset role;
+
+-- 12. Introductiekaart, introductielimiet en frequente gasten ---------------------------------
+select set_config('request.jwt.claim.sub', '00000000-0000-0000-0000-00000000a002', false);
+set role authenticated;
+select place_order('00000000-0000-0000-0000-0000000e0001',
+  jsonb_build_array(jsonb_build_object('product_id', (select id from products where name = 'Introductiekaart (5 introducés)'))));
+select book_tee_time('00000000-0000-0000-0000-0000000f0001', pg_temp.at('08:02'),
+  array['00000000-0000-0000-0000-0000000e0001'::uuid], array['Gast Alfa', 'Gast Beta']);
+select pg_temp.assert(
+  redeem_intro('00000000-0000-0000-0000-0000000e0001', (select id from tee_bookings where starts_at = pg_temp.at('08:02')), 2) = 2,
+  'twee gasten van de introductiekaart afgeboekt');
+select pg_temp.assert((select uses_left from member_entitlements where member_id = '00000000-0000-0000-0000-0000000e0001' and kind = 'intro') = 3,
+  'nog 3 introducés op de kaart');
+select pg_temp.assert((select rounds from guest_intro_counts('00000000-0000-0000-0000-0000000c0001', array['gast  alfa'])) = 1,
+  'introducé geteld (ook met andere schrijfwijze)');
+select pg_temp.assert((select intro_limit from guest_intro_counts('00000000-0000-0000-0000-0000000c0001', array['x'])) = 5,
+  'limiet van de club');
+reset role;
+
+-- Karel speelde al drie keer mee met Jan
+insert into tee_bookings (club_id, course_id, starts_at)
+select '00000000-0000-0000-0000-0000000c0001', '00000000-0000-0000-0000-0000000f0001', pg_temp.at('10:02', current_date - d)
+from unnest(array[50, 57, 64]) d;
+insert into tee_booking_players (booking_id, member_id)
+select id, '00000000-0000-0000-0000-0000000e0001' from tee_bookings
+where starts_at in (pg_temp.at('10:02', current_date - 50), pg_temp.at('10:02', current_date - 57), pg_temp.at('10:02', current_date - 64));
+insert into tee_booking_players (booking_id, guest_name)
+select id, 'Karel Frequent' from tee_bookings
+where starts_at in (pg_temp.at('10:02', current_date - 50), pg_temp.at('10:02', current_date - 57), pg_temp.at('10:02', current_date - 64));
+set role authenticated;
+select pg_temp.assert(
+  (select rounds from my_frequent_guests('00000000-0000-0000-0000-0000000e0001') where name = 'Karel Frequent') = 3,
+  'frequente gast gevonden');
+select pg_temp.assert(
+  (select count(*) from my_frequent_guests('00000000-0000-0000-0000-0000000e0003')) = 0,
+  'niet voor een ander lid op te vragen');
+
+-- 13. Behouden in plaats van opzeggen ------------------------------------------------------
+insert into membership_changes (club_id, member_id, kind, target_membership_type_id, effective_date, reason, from_cancel_flow)
+values ('00000000-0000-0000-0000-0000000c0001', '00000000-0000-0000-0000-0000000e0001', 'pause',
+        '00000000-0000-0000-0000-0000000d0006', current_date, 'Knieblessure', true);
+select pg_temp.assert((select count(*) from membership_changes) = 1, 'lid ziet eigen verzoek');
+do $$ begin
+  begin
+    perform decide_membership_change((select id from membership_changes limit 1), true);
+    raise exception 'expected failure';
+  exception when others then
+    if sqlerrm = 'expected failure' then raise; end if;
+  end;
+end $$;
+reset role;
+select set_config('request.jwt.claim.sub', '00000000-0000-0000-0000-00000000a001', false);
+set role authenticated;
+select decide_membership_change((select id from membership_changes limit 1), true);
+reset role;
+select pg_temp.assert(
+  (select membership_type_id from members where id = '00000000-0000-0000-0000-0000000e0001') = '00000000-0000-0000-0000-0000000d0006',
+  'goedgekeurd: Jan is rustend lid');
+select set_config('request.jwt.claim.sub', '00000000-0000-0000-0000-00000000a002', false);
+set role authenticated;
+do $$ begin
+  begin
+    perform book_tee_time('00000000-0000-0000-0000-0000000f0001', pg_temp.at('16:10'), array['00000000-0000-0000-0000-0000000e0001'::uuid]);
+    raise exception 'expected failure';
+  exception when others then
+    if sqlerrm = 'expected failure' then raise; end if;
+    if sqlerrm not like '%staat op rust%' then raise exception 'onverwachte fout: %', sqlerrm; end if;
+  end;
+end $$;
+
+-- 14. Sponsors -----------------------------------------------------------------------------
+select pg_temp.assert((select count(*) from sponsors) = 3, 'lid ziet actieve sponsors');
+select sponsor_click((select id from sponsors where name = 'Duinzicht Makelaardij'));
+reset role;
+select pg_temp.assert((select clicks from sponsors where name = 'Duinzicht Makelaardij') = 1, 'klik geteld');
+update members set membership_type_id = '00000000-0000-0000-0000-0000000d0001' where id = '00000000-0000-0000-0000-0000000e0001';

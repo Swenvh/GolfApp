@@ -29,6 +29,13 @@ insert into membership_types (id, club_id, name, annual_fee_cents, entrance_fee_
   ('00000000-0000-0000-0000-0000000d0003', '00000000-0000-0000-0000-0000000c0001', 'Jeugdlid',           35000,     0, 0, null, 17, true),
   ('00000000-0000-0000-0000-0000000d0004', '00000000-0000-0000-0000-0000000c0001', 'Studentlid',         60000,     0, 0, 18, 27, true);
 
+-- Gezinspartner (korting voor partner van een lid) en rustend lid (wel lid, niet spelen)
+insert into membership_types (id, club_id, name, description, annual_fee_cents, entrance_fee_cents, vat_rate, min_age, max_age, can_book_weekend, can_play) values
+  ('00000000-0000-0000-0000-0000000d0005', '00000000-0000-0000-0000-0000000c0001', 'Gezinspartner',
+   'Voor de partner van een volledig lid.', 129500, 25000, 0, 18, null, true, true),
+  ('00000000-0000-0000-0000-0000000d0006', '00000000-0000-0000-0000-0000000c0001', 'Rustend lid',
+   'Bij blessure, verhuizing of een jaar in het buitenland: je blijft lid en houdt je plek, maar speelt niet.', 15000, 0, 0, 18, null, false, false);
+
 insert into members (id, club_id, user_id, member_number, ngf_number, first_name, infix, last_name, gender, date_of_birth,
                      email, phone, street, house_number, postal_code, city, membership_type_id, join_date, handicap_index, iban)
 values
@@ -164,7 +171,28 @@ insert into products (club_id, category, name, description, price_cents, handica
    14876, null, 21, 60, 'season', 'De ledenadministratie mailt je je stallingsnummer.', 'bag-handle-outline', 45),
   ('00000000-0000-0000-0000-0000000c0001', 'event',   'Wedstrijddiner',
    'Driegangendiner na afloop van de wedstrijd, met prijsuitreiking. De keuken weet zo vooraf hoeveel gasten er komen.',
-   3211, null, 9, 60, 'day', null, 'restaurant', 50);
+   3211, null, 9, 60, 'day', null, 'restaurant', 50),
+  ('00000000-0000-0000-0000-0000000c0001', 'greenfee','Greenfee gast',
+   'Voor gasten die de introductielimiet van dit jaar bereikt hebben.',
+   7798, null, 9, null, 'day', null, 'person-outline', 21);
+
+-- Tegoeden: introductiekaart en weekendrecht voor weekdagleden
+insert into products (club_id, category, name, description, price_cents, vat_rate, grants_kind, grants_uses, grants_days, icon, sort) values
+  ('00000000-0000-0000-0000-0000000c0001', 'greenfee', 'Introductiekaart (5 introducés)',
+   'Vijf keer een gast meenemen tegen het introductietarief, met € 30 korting. Een jaar geldig.',
+   24771, 9, 'intro', 5, 365, 'ticket-outline', 22),
+  ('00000000-0000-0000-0000-0000000c0001', 'playing_right', 'Weekendronde',
+   'Eén ronde in het weekend spelen met je weekdaglidmaatschap. Een jaar geldig.',
+   3500, 0, 'weekend', 1, 365, 'sunny-outline', 60),
+  ('00000000-0000-0000-0000-0000000c0001', 'playing_right', 'Weekendpas (30 dagen)',
+   'Dertig dagen onbeperkt ook in het weekend spelen.',
+   9500, 0, 'weekend', null, 30, 'calendar-outline', 61);
+
+-- Sponsorplekken
+insert into sponsors (club_id, name, tagline, url, placement, hole_number, fee_cents, valid_until) values
+  ('00000000-0000-0000-0000-0000000c0001', 'Duinzicht Makelaardij', 'Uw makelaar aan de kust', 'https://example.com/duinzicht', 'scorecard', 7, 150000, make_date(extract(year from current_date)::int, 12, 31)),
+  ('00000000-0000-0000-0000-0000000c0001', 'Autobedrijf Van Leeuwen', 'Proefrit? Neem je golftas mee.', 'https://example.com/vanleeuwen', 'scorecard', 16, 150000, make_date(extract(year from current_date)::int, 12, 31)),
+  ('00000000-0000-0000-0000-0000000c0001', 'Brasserie De Branding', 'Leden 10% korting op het diner', 'https://example.com/branding', 'home', null, 250000, make_date(extract(year from current_date)::int, 12, 31));
 
 -- Pieter heeft een Handicart-pas
 update members set handicart_pass_number = 'HC-20417', handicart_pass_type = 'permanent',

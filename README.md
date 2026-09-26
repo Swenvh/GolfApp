@@ -40,7 +40,8 @@ Eén vast thema voor app, beheeromgeving en e-mails.
 | Starttijden | Starttijden per 8 minuten (instelbaar per baan). Tee sheet per baan/dag, boeken, aansluiten bij flight, clubgenoten en gasten toevoegen, afmelden. Een lid kan niet in twee flights staan waarvan de rondes overlappen (rondeduur per baan) |
 | Wedstrijden | Kalender, in-/uitschrijven, deelnemerslijst, uitslagen |
 | Scores | Scorekaart invoeren met live Stableford (WHS: course/playing handicap, net double bogey), handicapindicatie |
-| Profiel | Facturen bekijken en betalen met iDEAL, contactgegevens wijzigen, privacy (ledenlijst opt-out), ledenlijst |
+| Profiel | Facturen bekijken en betalen met iDEAL, contactgegevens wijzigen, privacy (ledenlijst opt-out), ledenlijst, tegoed (introductiekaart, weekendrondes) |
+| Lidmaatschap | Upgraden, pauzeren (rustend lid), omzetten, gezinslid aanmelden, opzeggen: verzoek naar het secretariaat |
 | Meerdere clubs | Eén account kan lid zijn van meerdere clubs; app neemt de huisstijlkleur van de club over |
 
 ### Upsells: de app verdient zichzelf terug
@@ -56,8 +57,14 @@ Uitgangspunt: **geen extra werk voor personeel**. De app neemt reserveren en afr
 | Wedstrijd | Inschrijfgeld + wedstrijddiner in één keer | Wedstrijdgelden; de keuken weet vooraf hoeveel gasten |
 | Weekend kiezen als weekdaglid | Upgrade naar volledig lidmaatschap | Hogere contributie (lead voor secretariaat) |
 | Profiel / Clubhuis | Introduceer een vriend (gratis introductieronde) | Nieuwe leden (lead) |
+| Clubhuis | **Vaste introducé** (≥ 3 rondes met jou in 12 maanden): "Wordt Lotte ook lid?" | Nieuwe leden uit de eigen gastenstroom (lead) |
+| Boeken met gasten | **Introducé-limiet** per gast per jaar (instelbaar, standaard 5×); daarna automatisch de gewone greenfee. **Introductiekaart** (5 introducés) wordt bij het boeken vanzelf gebruikt | Handhaving zonder balie, voordeelkaart voor vaste gastheren |
+| Opzeggen | Eerst passende alternatieven: **lidmaatschap op rust** of een goedkopere vorm, afhankelijk van de reden | Behouden contributie in plaats van een opzegging |
+| Lidmaatschap / Clubhuis | **Gezinslid aanmelden**: app kiest gezinspartner, jeugd- of studentlid op leeftijd | Nieuwe leden (lead met jaarwaarde) |
+| Weekenddag als weekdaglid | **Weekendronde** of **weekendpas (30 dagen)** los kopen, of upgraden | Extra omzet van weekdagleden, opstap naar upgrade |
+| Clubhuis / Scorekaart | **Sponsorplekken**: partner in het clubhuis en holesponsors op de digitale scorekaart, met kliks | Sponsorinkomsten met meetbaar bereik |
 
-Buggy's worden per tijdvak geteld (een buggy kan 's ochtends én 's middags rijden), kluisjes en stalling per seizoen. Afmelden voor een starttijd annuleert de buggy automatisch. In de beheeromgeving toont **App-omzet** de omzet via de app, de buggy-reserveringen voor de receptie (met Handicart-pasnummer) en de leads; onder **Aanbod beheren** stelt de club prijzen (incl. btw), het Handicart-tarief, aantallen en de tekst na bestellen in.
+Buggy's worden per tijdvak geteld (een buggy kan 's ochtends én 's middags rijden), kluisjes en stalling per seizoen. Afmelden voor een starttijd annuleert de buggy automatisch. In de beheeromgeving toont **App-omzet** de omzet via de app, de buggy-reserveringen voor de receptie (met Handicart-pasnummer) en de leads; onder **Aanbod beheren** stelt de club prijzen (incl. btw), het Handicart-tarief, aantallen, speelrecht (introducés/weekend) en de tekst na bestellen in. **Sponsors** beheert de sponsorplekken met kliks; **Leden → Wijzigingen** toont verzoeken om te pauzeren, om te zetten of op te zeggen (goedkeuren past het lidmaatschap aan) en hoeveel leden en contributie via de app behouden zijn.
 
 ### Clubbeheer (web)
 - **Dashboard** — actieve leden, spelers vandaag, openstaand/achterstallig, komende wedstrijden
@@ -72,7 +79,7 @@ Buggy's worden per tijdvak geteld (een buggy kan 's ochtends én 's middags rijd
 - **Starttijden** — tee sheet per dag met check-in en annuleren
 - **Wedstrijden** — aanmaken, status, uitslagen invoeren
 - **Nieuws** — berichten (vastpinnen, concept) die direct in de app verschijnen
-- **Instellingen** — clubgegevens, IBAN/incassant-ID, huisstijl, lidmaatschapsvormen & tarieven
+- **Instellingen** — clubgegevens, IBAN/incassant-ID, introducé-limiet, lidmaatschapsvormen & tarieven (incl. rustend lidmaatschap)
 
 ### Rollen
 `admin` (alles) · `finance` (penningmeester) · `secretariat` (ledenadministratie, wedstrijden, nieuws) · `marshal` (starttijden). Leden zien alleen hun eigen gegevens; de ledenlijst toont alleen naam + handicap van leden die daarmee instemmen. Alle wijzigingen aan leden, facturen, betalingen en machtigingen komen in een audit-log (AVG).

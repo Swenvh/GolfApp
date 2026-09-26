@@ -43,7 +43,7 @@ export default function Aanbod() {
   const regularUnit = priceInclVat(product.price_cents, Number(product.vat_rate));
   const unit = handicart ? priceInclVat(product.handicart_price_cents!, Number(product.vat_rate)) : regularUnit;
   const total = unit + regularUnit * (qty - 1);
-  const max = Math.min(product.category === 'lesson' ? 4 : product.capacity_scope === 'season' ? 1 : 2, data.remaining ?? 8);
+  const max = Math.min(product.category === 'lesson' ? 4 : product.capacity_scope === 'season' || product.grants_kind ? (product.grants_uses === 1 ? 4 : 1) : 2, data.remaining ?? 8);
   const soldOut = data.remaining !== undefined && data.remaining <= 0;
 
   const order = async () => {
@@ -76,7 +76,7 @@ export default function Aanbod() {
       <View style={styles.bigIcon}><Ionicons name={productIcon(product)} size={34} color={colors.brassLight} /></View>
       {context && <Eyebrow color={colors.brassLight}>{context}</Eyebrow>}
       <Text style={styles.title}>{product.name}</Text>
-      <Text style={styles.price}>{formatEuro(unit)}{handicart ? '  ·  Handicart-tarief' : product.capacity_scope === 'season' ? '  ·  per seizoen' : ''}</Text>
+      <Text style={styles.price}>{formatEuro(unit)}{handicart ? '  ·  Handicart-tarief' : product.capacity_scope === 'season' ? '  ·  per seizoen' : product.grants_uses && product.grants_uses > 1 ? `  ·  ${product.grants_uses} keer` : ''}</Text>
     </View>
   );
 

@@ -1,4 +1,4 @@
-import type { Order, Product, ProductCategory } from '@golfapp/shared';
+import type { EntitlementKind, Order, Product, ProductCategory } from '@golfapp/shared';
 import { supabase } from './supabase';
 import { unwrap } from './useQuery';
 
@@ -38,8 +38,10 @@ export async function cancelOrder(orderId: string): Promise<void> {
 }
 
 /** Wat het lid na bestellen moet weten. De club vult dit per product in; anders een neutrale tekst. */
-export function fulfilmentHint(p: Pick<Product, 'category' | 'pickup_note'>): string {
+export function fulfilmentHint(p: Pick<Product, 'category' | 'pickup_note' | 'grants_kind'>): string {
   if (p.pickup_note) return p.pickup_note;
+  if (p.grants_kind === 'intro') return 'Staat op je account: bij het boeken met een gast gebruik je de kaart automatisch';
+  if (p.grants_kind === 'weekend') return 'Je kunt nu ook in het weekend een starttijd boeken';
   switch (p.category) {
     case 'rental': return 'Sleutel ophalen bij de receptie';
     case 'greenfee': return 'Je gast hoeft niet langs de balie';
@@ -48,4 +50,20 @@ export function fulfilmentHint(p: Pick<Product, 'category' | 'pickup_note'>): st
     case 'event': return 'Na afloop van de wedstrijd';
     default: return 'Staat op je rekening';
   }
+}
+
+export interface Entitlement { id: string; kind: EntitlementKind; uses_left: number | null; valid_from: string; valid_until: string }
+
+/** Speelrechten van het lid die op deze dag gelden (introductiekaart, weekendronde of -pas). */
+export async function fetchEntitlements(memberId: string, day: string, kind?: EntitlementKind): Promise<Entitlement[]> {
+  let q = supabase.from('member_entitlements').select('id, kind, uses_left, valid_from, valid_until')
+    .eq('member_id', memberId).lte('valid_from', day).gte('valid_until', day).order('valid_until');
+  if (kind) q = q.eq('kind', kind);
+  return (unwrap(await q) as Entitlement[]).filter((e) => e.uses_left == null || e.uses_left > 0);
+}
+
+/** Totaal nog te gebruiken; null = onbeperkt (bijv. weekendpas). */
+export function usesLeft(ents: Entitlement[]): number | null {
+  if (ents.some((e) => e.uses_left == null)) return null;
+  return ents.reduce((n, e) => n + (e.uses_left ?? 0), 0);
 }

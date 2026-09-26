@@ -1,14 +1,15 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { router } from 'expo-router';
-import { Pressable, RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Linking, Pressable, RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { formatEuro, hasValidHandicart, localDate, localTime, priceInclVat, type MembershipType, type NewsPost, type Product, type TeeSheetRow } from '@golfapp/shared';
+import { formatEuro, hasValidHandicart, localDate, localTime, priceInclVat, type MembershipType, type NewsPost, type Product, type Sponsor, type TeeSheetRow } from '@golfapp/shared';
 import { OfferCard, productIcon } from '@/components/offer';
 import { Contours, LogoMark } from '@/components/brand';
 import { TeeTicket } from '@/components/ticket';
 import { Card, Empty, ErrorText, Eyebrow, Row, Section, T, type IconName } from '@/components/ui';
 import { formatDate, formatHandicap } from '@/lib/format';
 import { haptic } from '@/lib/haptics';
+import { fetchEntitlements, usesLeft } from '@/lib/offers';
 import { useMember } from '@/lib/session';
 import { supabase } from '@/lib/supabase';
 import { colors, fonts, radius, space } from '@/lib/theme';
@@ -51,13 +52,19 @@ export default function Clubhuis() {
         .map((l) => (l.quantity > 1 ? `${l.quantity}× ${l.description}` : l.description));
     }
     const year = new Date().getFullYear();
-    const [products, types, seasonal] = await Promise.all([
+    const [products, types, seasonal, guests, sponsors, introEnts] = await Promise.all([
       supabase.from('products').select('*').eq('club_id', member.club_id).eq('active', true).order('sort'),
       supabase.from('membership_types').select('*').eq('club_id', member.club_id),
       // Wat dit lid dit seizoen al huurt (kluisje, stalling)
       supabase.from('orders').select('order_lines(product_id)').eq('member_id', member.id).neq('status', 'cancelled')
         .gte('fulfil_on', `${year}-01-01`).lte('fulfil_on', `${year}-12-31`),
+      // Gasten die met dit lid meespeelden: kandidaat-leden en reden voor een introductiekaart
+      supabase.rpc('my_frequent_guests', { p_member: member.id, p_min: 1 }),
+      supabase.from('sponsors').select('*').eq('club_id', member.club_id).eq('placement', 'home').eq('active', true),
+      fetchEntitlements(member.id, localDate(), 'intro'),
     ]);
+    const today = localDate();
+    const homeSponsors = ((sponsors.data ?? []) as Sponsor[]).filter((s) => !s.valid_until || s.valid_until >= today);
     const owned = new Set(((seasonal.data ?? []) as { order_lines: { product_id: string | null }[] }[])
       .flatMap((o) => o.order_lines.map((l) => l.product_id)));
     return {
@@ -66,6 +73,10 @@ export default function Clubhuis() {
       products: ((products.data ?? []) as Product[]).filter((p) => !(p.capacity_scope === 'season' && owned.has(p.id))),
       myType: ((types.data ?? []) as MembershipType[]).find((t) => t.id === member.membership_type_id),
       outstanding: (unwrap(invoices) ?? []).reduce((s, i) => s + i.total_cents - i.paid_cents, 0),
+      guests: (guests.data ?? []) as { name: string; rounds: number }[],
+      introLeft: introEnts.length ? usesLeft(introEnts) : 0,
+      // Wisselend per bezoek, zodat elke partner zichtbaar is
+      sponsor: homeSponsors[Math.floor(Math.random() * homeSponsors.length)] as Sponsor | undefined,
     };
   }, [member.id]);
 
@@ -97,8 +108,25 @@ export default function Clubhuis() {
     offers.push({ key: 'upgrade', eyebrow: 'Lidmaatschap', title: 'Ook in het weekend spelen?', subtitle: 'Bekijk wat een upgrade kost', icon: 'ribbon-outline', tone: 'pine',
       onPress: () => router.push('/upgrade') });
   }
+  for (const g of (data?.guests ?? []).filter((g) => g.rounds >= 3).slice(0, 2)) {
+    const first = g.name.split(' ')[0];
+    offers.push({ key: `guest-${g.name}`, eyebrow: `Speelde ${g.rounds}× met je mee`, title: `Wordt ${first} ook lid?`,
+      subtitle: `Wij nemen contact op met ${first}; jij hoeft niets te doen`, icon: 'person-add-outline', tone: 'pine',
+      onPress: () => router.push({ pathname: '/introduceren', params: { name: g.name, rounds: String(g.rounds) } }) });
+  }
+  const introCard = data?.products.find((p) => p.grants_kind === 'intro');
+  const greenfee = data?.products.filter((p) => p.category === 'greenfee' && !p.grants_kind).sort((a, b) => a.price_cents - b.price_cents)[0];
+  if (introCard && greenfee && data?.guests.length && data.introLeft === 0) {
+    const perGuest = Math.round(priceInclVat(introCard.price_cents, Number(introCard.vat_rate)) / (introCard.grants_uses ?? 1));
+    offers.push({ key: 'intro-card', eyebrow: 'Vaak een gast mee?', title: introCard.name,
+      subtitle: `${formatEuro(perGuest)} per introducé in plaats van ${price(greenfee)}`, price: price(introCard), icon: 'ticket-outline',
+      onPress: () => router.push({ pathname: '/aanbod/[id]', params: { id: introCard.id, context: 'Voordelig een gast mee' } }) });
+  }
   offers.push({ key: 'referral', eyebrow: 'Samen golfen', title: 'Introduceer een vriend', subtitle: 'Gratis introductieronde, samen met jou', icon: 'people-outline', tone: 'pine',
     onPress: () => router.push('/introduceren') });
+  offers.push({ key: 'family', eyebrow: 'Gezin', title: 'Samen lid met je gezin', subtitle: 'Partner of kinderen aanmelden, met gezinstarief', icon: 'home-outline',
+    onPress: () => router.push('/gezin') });
+  const sponsor = data?.sponsor;
 
 
   return (
@@ -173,6 +201,21 @@ export default function Clubhuis() {
           </Section>
         )}
 
+        {sponsor && (
+          <Pressable onPress={() => {
+            haptic.tap();
+            void supabase.rpc('sponsor_click', { p_sponsor: sponsor.id });
+            if (sponsor.url) void Linking.openURL(sponsor.url);
+          }} style={({ pressed }) => [styles.sponsor, pressed && { opacity: 0.85 }]}>
+            <View style={{ flex: 1, gap: 2 }}>
+              <Text style={styles.sponsorEyebrow}>Partner van de club</Text>
+              <Text style={styles.sponsorName}>{sponsor.name}</Text>
+              {sponsor.tagline && <T variant="small" color={colors.slate}>{sponsor.tagline}</T>}
+            </View>
+            {sponsor.url && <Ionicons name="open-outline" size={18} color={colors.brass} />}
+          </Pressable>
+        )}
+
         <Section title="Van de club">
           {!data?.news.length && <Empty icon="newspaper-outline" title="Nog geen nieuws">Berichten van de club verschijnen hier.</Empty>}
           {featured && (
@@ -231,5 +274,11 @@ const styles = StyleSheet.create({
     flex: 1, alignItems: 'center', gap: 6, paddingVertical: 14, borderRadius: radius.lg,
     backgroundColor: colors.paper, borderWidth: StyleSheet.hairlineWidth, borderColor: colors.line,
   },
+  sponsor: {
+    flexDirection: 'row', alignItems: 'center', gap: space.md, padding: space.lg, borderRadius: radius.lg,
+    borderWidth: 1, borderColor: colors.brassSoft, backgroundColor: colors.paper,
+  },
+  sponsorEyebrow: { fontFamily: fonts.bodyHeavy, fontSize: 10, letterSpacing: 1.3, textTransform: 'uppercase', color: colors.mist },
+  sponsorName: { fontFamily: fonts.display, fontSize: 18, color: colors.ink },
   quickLabel: { fontFamily: fonts.bodyBold, fontSize: 11.5, color: colors.ink },
 });

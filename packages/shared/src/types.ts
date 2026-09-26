@@ -28,6 +28,8 @@ export interface Club {
   logo_url: string | null;
   payment_term_days: number;
   greenside_fee_cents: number;
+  /** Hoe vaak dezelfde introducé per kalenderjaar mag spelen */
+  guest_intro_limit: number;
 }
 
 export interface MembershipType {
@@ -41,6 +43,8 @@ export interface MembershipType {
   min_age: number | null;
   max_age: number | null;
   can_book_weekend: boolean;
+  /** false = rustend lidmaatschap: wel lid, niet spelen */
+  can_play: boolean;
   active: boolean;
 }
 
@@ -260,11 +264,15 @@ export interface MemberBalance {
   open_invoices: number;
 }
 
-export type ProductCategory = 'rental' | 'range' | 'greenfee' | 'lesson' | 'food' | 'proshop' | 'event' | 'storage';
+export type ProductCategory = 'rental' | 'range' | 'greenfee' | 'lesson' | 'food' | 'proshop' | 'event' | 'storage' | 'playing_right';
 export type CapacityScope = 'slot' | 'day' | 'season';
 export type HandicartPassType = 'permanent' | 'temporary';
 export type OrderStatus = 'placed' | 'fulfilled' | 'cancelled';
-export type LeadType = 'upgrade' | 'referral' | 'lesson';
+export type LeadType = 'upgrade' | 'referral' | 'lesson' | 'family';
+export type EntitlementKind = 'intro' | 'weekend';
+export type MembershipChangeKind = 'pause' | 'switch' | 'cancel';
+export type MembershipChangeStatus = 'requested' | 'approved' | 'rejected';
+export type SponsorPlacement = 'home' | 'scorecard';
 export type LeadStatus = 'new' | 'contacted' | 'won' | 'lost';
 
 export interface Product {
@@ -283,6 +291,11 @@ export interface Product {
   handicart_price_cents: number | null;
   /** Wat het lid na bestellen moet weten, bv. waar de sleutel ligt */
   pickup_note: string | null;
+  /** Speelrecht dat bij aankoop wordt toegekend (introductiekaart, weekendronde) */
+  grants_kind: EntitlementKind | null;
+  /** Aantal keer te gebruiken; null = onbeperkt binnen de looptijd */
+  grants_uses: number | null;
+  grants_days: number;
   icon: string | null;
   sort: number;
   active: boolean;
@@ -327,4 +340,44 @@ export interface Lead {
   value_cents: number | null;
   status: LeadStatus;
   created_at: string;
+}
+
+export interface MemberEntitlement {
+  id: string;
+  club_id: string;
+  member_id: string;
+  kind: EntitlementKind;
+  uses_left: number | null;
+  valid_from: string;
+  valid_until: string;
+  order_line_id: string | null;
+}
+
+export interface MembershipChange {
+  id: string;
+  club_id: string;
+  member_id: string;
+  kind: MembershipChangeKind;
+  target_membership_type_id: string | null;
+  effective_date: string;
+  reason: string | null;
+  from_cancel_flow: boolean;
+  status: MembershipChangeStatus;
+  handled_by: string | null;
+  handled_at: string | null;
+  created_at: string;
+}
+
+export interface Sponsor {
+  id: string;
+  club_id: string;
+  name: string;
+  tagline: string | null;
+  url: string | null;
+  placement: SponsorPlacement;
+  hole_number: number | null;
+  fee_cents: number;
+  valid_until: string | null;
+  active: boolean;
+  clicks: number;
 }

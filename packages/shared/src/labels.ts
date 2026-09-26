@@ -1,4 +1,6 @@
-import type { LeadStatus, LeadType, OrderStatus, ProductCategory } from './types';
+import type {
+  LeadStatus, LeadType, MembershipChangeKind, MembershipChangeStatus, OrderStatus, ProductCategory,
+} from './types';
 import type {
   CompetitionFormat, CompetitionStatus, InvoiceStatus, LedgerAccountType, MemberStatus, PaymentMethod, StaffRole,
 } from './types';
@@ -37,6 +39,7 @@ export const ledgerTypeLabel: Record<LedgerAccountType, string> = {
 export const productCategoryLabel: Record<ProductCategory, string> = {
   rental: 'Verhuur', range: 'Driving range', greenfee: 'Greenfees', lesson: 'Lessen',
   food: 'Horeca', proshop: 'Proshop', event: 'Wedstrijden & events', storage: 'Stalling & kluisjes',
+  playing_right: 'Speelrecht',
 };
 
 /** Heeft het lid op deze dag een geldige Handicart-pas? */
@@ -51,7 +54,7 @@ export const orderStatusLabel: Record<OrderStatus, string> = {
 };
 
 export const leadTypeLabel: Record<LeadType, string> = {
-  upgrade: 'Upgrade lidmaatschap', referral: 'Introductie vriend', lesson: 'Lesaanvraag',
+  upgrade: 'Upgrade lidmaatschap', referral: 'Introductie vriend', lesson: 'Lesaanvraag', family: 'Gezinslid',
 };
 
 export const leadStatusLabel: Record<LeadStatus, string> = {
@@ -76,4 +79,17 @@ export function priceExclFromIncl(inclCents: number, vatRate: number): number {
     if (Math.abs(priceInclVat(e, vatRate) - inclCents) < Math.abs(priceInclVat(best, vatRate) - inclCents)) best = e;
   }
   return best;
+}
+
+export const membershipChangeKindLabel: Record<MembershipChangeKind, string> = {
+  pause: 'Pauzeren', switch: 'Omzetten', cancel: 'Opzeggen',
+};
+
+export const membershipChangeStatusLabel: Record<MembershipChangeStatus, string> = {
+  requested: 'Aangevraagd', approved: 'Goedgekeurd', rejected: 'Afgewezen',
+};
+
+/** Einde van het lopende verenigingsjaar: de gebruikelijke ingangsdatum voor opzeggen of omzetten. */
+export function endOfMembershipYear(today: string): string {
+  return `${today.slice(0, 4)}-12-31`;
 }

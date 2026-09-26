@@ -6,7 +6,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { formatEuro, fullName, hasValidHandicart, localDate, localTime, priceInclVat, type Product } from '@golfapp/shared';
 import { AddOnRow } from '@/components/offer';
-import { fetchAvailability, fetchProducts, placeOrder } from '@/lib/offers';
+import { fetchAvailability, fetchEntitlements, fetchProducts, placeOrder, usesLeft } from '@/lib/offers';
 import { Contours } from '@/components/brand';
 import { Avatar, Button, ErrorText, Eyebrow, Group, Input, ListRow, Row, Screen, T } from '@/components/ui';
 import { capitalize, formatDate, formatHandicap } from '@/lib/format';
@@ -41,15 +41,31 @@ export default function Boeken() {
   const day = localDate(new Date(startsAt));
   const handicart = hasValidHandicart(member, day);
   const offers = useQuery(async () => {
-    const [products, availability] = await Promise.all([
-      fetchProducts(member.club_id, ['rental', 'greenfee']),
+    const [products, availability, introEnts] = await Promise.all([
+      fetchProducts(member.club_id, ['rental', 'greenfee', 'playing_right']),
       fetchAvailability(member.club_id, day, startsAt),
+      fetchEntitlements(member.id, day, 'intro'),
     ]);
-    return { products, availability };
+    return { products, availability, introLeft: usesLeft(introEnts) };
   }, [member.club_id, day, startsAt]);
   const [addOns, setAddOns] = useState<Record<string, number>>({});
-  const guestCount = players.filter((p) => p.guestName).length;
-  const greenfee = offers.data?.products.find((p) => p.category === 'greenfee');
+  const guests = players.flatMap((p) => (p.guestName ? [p.guestName] : []));
+  // Introducés mogen een beperkt aantal keer per jaar tegen introductietarief; daarna geldt de gewone greenfee
+  const guestRounds = useQuery(async () => {
+    if (!guests.length) return new Map<string, { rounds: number; limit: number }>();
+    const rows = unwrap(await supabase.rpc('guest_intro_counts', { p_club: member.club_id, p_names: guests })) as { name: string; rounds: number; intro_limit: number }[];
+    return new Map(rows.map((r) => [r.name, { rounds: r.rounds, limit: r.intro_limit }]));
+  }, [member.club_id, guests.join('|')]);
+  const overLimit = (name: string) => { const g = guestRounds.data?.get(name); return !!g && g.rounds >= g.limit; };
+  const greenfees = (offers.data?.products ?? []).filter((p) => p.category === 'greenfee' && !p.grants_kind).sort((a, b) => a.price_cents - b.price_cents);
+  const greenfee = greenfees[0];
+  const regularGreenfee = greenfees.length > 1 ? greenfees[greenfees.length - 1] : undefined;
+  const introCard = (offers.data?.products ?? []).find((p) => p.grants_kind === 'intro');
+  const regularGuests = regularGreenfee ? guests.filter(overLimit).length : 0;
+  const introGuests = guests.length - regularGuests;
+  const introLeft = offers.data?.introLeft;
+  const fromCard = Math.min(introGuests, introLeft == null ? introGuests : introLeft);
+  const guestCount = introGuests - fromCard;
   const extras = (offers.data?.products ?? []).filter((p) => p.category === 'rental');
 
   // Handicart-pashouders hebben de buggy nodig: standaard aan als er een vrij is
@@ -64,7 +80,8 @@ export default function Boeken() {
   const orderLines = useMemo(() => [
     ...extras.map((p) => ({ product: p, quantity: addOns[p.id] ?? 0 })),
     ...(greenfee && guestCount ? [{ product: greenfee, quantity: guestCount }] : []),
-  ].filter((l) => l.quantity > 0), [extras, addOns, greenfee, guestCount]);
+    ...(regularGreenfee && regularGuests ? [{ product: regularGreenfee, quantity: regularGuests }] : []),
+  ].filter((l) => l.quantity > 0), [extras, addOns, greenfee, guestCount, regularGreenfee, regularGuests]);
   const linePrice = (p: Product, q: number) => {
     const special = handicart && p.handicart_price_cents != null;
     return special
@@ -91,13 +108,18 @@ export default function Boeken() {
         p_member_ids: players.flatMap((p) => (p.memberId ? [p.memberId] : [])),
         p_guest_names: players.flatMap((p) => (p.guestName ? [p.guestName] : [])),
       })) as string;
-      if (orderLines.length) {
+      // Introductiekaart eerst: wat de kaart niet dekt, gaat als greenfee op de rekening
+      const redeemed = fromCard > 0
+        ? unwrap(await supabase.rpc('redeem_intro', { p_member: member.id, p_booking: newBookingId, p_count: fromCard })) as number
+        : 0;
+      const lines = orderLines.map((l) => ({ productId: l.product.id, quantity: l.quantity }));
+      if (greenfee && redeemed < fromCard) {
+        const line = lines.find((l) => l.productId === greenfee.id);
+        if (line) line.quantity += fromCard - redeemed; else lines.push({ productId: greenfee.id, quantity: fromCard - redeemed });
+      }
+      if (lines.length) {
         try {
-          await placeOrder({
-            memberId: member.id,
-            bookingId: newBookingId,
-            lines: orderLines.map((l) => ({ productId: l.product.id, quantity: l.quantity })),
-          });
+          await placeOrder({ memberId: member.id, bookingId: newBookingId, lines });
         } catch (e) {
           // De starttijd staat vast; alleen de extra's zijn niet gelukt
           const msg = `Je starttijd is geboekt, maar de extra's niet: ${e instanceof Error ? e.message : e}`;
@@ -157,7 +179,7 @@ export default function Boeken() {
           <ListRow
             key={i}
             title={i === 0 ? `${p.label} (jij)` : p.label}
-            subtitle={p.guestName ? 'Introducé · greenfee op jouw rekening' : `Handicap ${formatHandicap(p.hcp)}`}
+            subtitle={p.guestName ? guestSubtitle(guestRounds.data?.get(p.guestName), !!regularGreenfee) : `Handicap ${formatHandicap(p.hcp)}`}
             last={i === players.length - 1}
             right={
               <Row gap={space.md}>
@@ -200,7 +222,7 @@ export default function Boeken() {
           </Row>
         </>
       )}
-      {(extras.length > 0 || (greenfee && guestCount > 0)) && (
+      {(extras.length > 0 || guests.length > 0) && (
         <>
           <View style={{ marginTop: space.lg, gap: 2 }}>
             <T variant="heading">Regel het meteen</T>
@@ -219,8 +241,25 @@ export default function Boeken() {
               onChange={(q) => setAddOns({ ...addOns, [p.id]: q })}
             />
           ))}
+          {greenfee && fromCard > 0 && (
+            <AddOnRow product={greenfee} quantity={fromCard} onChange={() => {}} locked={`van je introductiekaart${introLeft != null ? `, nog ${introLeft - fromCard} over` : ''}`} free />
+          )}
           {greenfee && guestCount > 0 && (
             <AddOnRow product={greenfee} quantity={guestCount} onChange={() => {}} locked={`${guestCount === 1 ? 'je introducé' : `${guestCount} introducés`}`} />
+          )}
+          {regularGreenfee && regularGuests > 0 && (
+            <AddOnRow product={regularGreenfee} quantity={regularGuests} onChange={() => {}} locked="introductielimiet bereikt" />
+          )}
+          {introCard && greenfee && guestCount > 0 && introLeft === 0 && (
+            <Pressable onPress={() => { haptic.tap(); router.push({ pathname: '/aanbod/[id]', params: { id: introCard.id, context: 'Vaker een gast mee?' } }); }}>
+              <Row gap={space.sm} style={styles.tip}>
+                <Ionicons name="ticket-outline" size={18} color={colors.pine700} />
+                <T variant="small" style={{ flex: 1 }}>
+                  Vaker een gast mee? Met de {introCard.name.toLowerCase()} betaal je {formatEuro(Math.round(priceInclVat(introCard.price_cents, Number(introCard.vat_rate)) / (introCard.grants_uses ?? 1)))} per introducé in plaats van {formatEuro(priceInclVat(greenfee.price_cents, Number(greenfee.vat_rate)))}.
+                </T>
+                <Ionicons name="chevron-forward" size={16} color={colors.pine700} />
+              </Row>
+            </Pressable>
           )}
         </>
       )}
@@ -234,5 +273,12 @@ const styles = StyleSheet.create({
   close: { width: 34, height: 34, borderRadius: 17, backgroundColor: colors.onDarkLine, alignItems: 'center', justifyContent: 'center' },
   time: { fontFamily: fonts.display, fontSize: 64, lineHeight: 70, color: colors.onDark, letterSpacing: -2, marginTop: space.md, fontVariant: ['tabular-nums'] },
   match: { paddingHorizontal: space.lg, paddingVertical: 12 },
+  tip: { backgroundColor: colors.pine50, borderRadius: 12, padding: space.md },
   matchDivider: { borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: colors.line },
 });
+
+function guestSubtitle(g: { rounds: number; limit: number } | undefined, hasRegular: boolean): string {
+  if (!g) return 'Introducé · greenfee op jouw rekening';
+  if (g.rounds >= g.limit) return hasRegular ? `Speelde dit jaar al ${g.rounds}× als introducé · gewone greenfee` : `Introductielimiet van ${g.limit}× bereikt`;
+  return `Introducé · ${g.rounds + 1}e van ${g.limit} keer dit jaar`;
+}

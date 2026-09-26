@@ -2,10 +2,12 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { router } from 'expo-router';
 import { useMemo, useState } from 'react';
 import { Alert, Platform, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { addDays, generateTeeSlots, localDate, localTime, type Course, type TeeSheetRow } from '@golfapp/shared';
+import { addDays, formatEuro, generateTeeSlots, localDate, localTime, priceInclVat, type Course, type Product, type TeeSheetRow } from '@golfapp/shared';
 import { Contours } from '@/components/brand';
 import { Avatar, Button, Card, Empty, ErrorText, Eyebrow, Loading, Row, Screen, Segmented, T } from '@/components/ui';
+import { formatDate } from '@/lib/format';
 import { haptic } from '@/lib/haptics';
+import { fetchEntitlements, usesLeft } from '@/lib/offers';
 import { useMember } from '@/lib/session';
 import { supabase } from '@/lib/supabase';
 import { colors, fonts, radius, space } from '@/lib/theme';
@@ -28,6 +30,13 @@ export default function Starttijden() {
     const { data } = await supabase.from('membership_types').select('name, can_book_weekend').eq('id', member.membership_type_id).maybeSingle();
     return data as { name: string; can_book_weekend: boolean } | null;
   }, [member.membership_type_id]);
+  const weekendRights = useQuery(async () => {
+    const [ents, products] = await Promise.all([
+      fetchEntitlements(member.id, day, 'weekend'),
+      supabase.from('products').select('*').eq('club_id', member.club_id).eq('active', true).eq('grants_kind', 'weekend').order('sort'),
+    ]);
+    return { ents, products: unwrap(products) as Product[] };
+  }, [member.id, day]);
   const course = courses.data?.find((c) => c.id === courseId) ?? courses.data?.[0];
 
   const sheet = useQuery(async () => {
@@ -56,7 +65,12 @@ export default function Starttijden() {
 
   const now = Date.now();
   const isWeekend = [0, 6].includes(new Date(`${day}T12:00:00Z`).getUTCDay());
-  const weekendLocked = isWeekend && membership.data?.can_book_weekend === false;
+  const weekdayOnly = isWeekend && membership.data?.can_book_weekend === false;
+  const weekendEnts = weekendRights.data?.ents ?? [];
+  // Wie zijn weekendronde al gebruikt heeft, moet zijn eigen starttijd nog zien (en kunnen afmelden)
+  const playingThisDay = (sheet.data ?? []).some((r) => r.member_id === member.id);
+  const weekendLocked = weekdayOnly && weekendEnts.length === 0 && !playingThisDay;
+  const weekendLeft = usesLeft(weekendEnts);
   const slots = weekendLocked ? [] : generateTeeSlots(day, course).filter((s) => new Date(s.startsAt).getTime() > now);
   const parts = [
     { label: 'Ochtend', slots: slots.filter((s) => s.time < '12:00') },
@@ -117,10 +131,30 @@ export default function Starttijden() {
             <Contours seed={12} opacity={0.06} />
             <Eyebrow color={colors.brassLight}>{membership.data?.name}</Eyebrow>
             <T variant="heading" color={colors.onDark} style={{ fontSize: 24, lineHeight: 29 }}>Ook in het weekend de baan op?</T>
-            <T color={colors.onDarkMuted}>Met je huidige lidmaatschap speel je doordeweeks. Bekijk wat een upgrade per maand kost.</T>
+            <T color={colors.onDarkMuted}>Met je huidige lidmaatschap speel je doordeweeks. Koop een losse weekendronde of een weekendpas, of kijk wat een upgrade kost.</T>
+            {weekendRights.data?.products.map((p) => (
+              <Pressable key={p.id} onPress={() => { haptic.tap(); router.push({ pathname: '/aanbod/[id]', params: { id: p.id, context: 'Weekend spelen' } }); }}
+                style={({ pressed }) => [styles.weekendOption, pressed && { opacity: 0.85 }]}>
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.weekendName}>{p.name}</Text>
+                  <Text style={styles.weekendMeta}>{p.grants_uses === 1 ? 'Eén ronde, een jaar geldig' : `Alle weekenden, ${p.grants_days} dagen geldig`}</Text>
+                </View>
+                <Text style={styles.weekendPrice}>{formatEuro(priceInclVat(p.price_cents, Number(p.vat_rate))).replace(',00', '')}</Text>
+                <Ionicons name="chevron-forward" size={18} color={colors.brassLight} />
+              </Pressable>
+            ))}
             <Button title="Bekijk upgrade" variant="accent" icon="arrow-up-circle-outline" onPress={() => router.push('/upgrade')} />
           </Card>
-        ) : slots.length === 0 && <Empty icon="moon-outline" title="Geen starttijden meer vandaag">Kies een andere dag in de strip hierboven.</Empty>}
+        ) : weekdayOnly && (weekendEnts.length > 0 || playingThisDay) && (
+          <Row gap={space.sm} style={styles.weekendBanner}>
+            <Ionicons name="sunny-outline" size={18} color={colors.pine700} />
+            <T variant="small" style={{ flex: 1 }}>
+              {weekendEnts.length === 0 ? 'Je weekendronde is gebruikt voor je starttijd van deze dag'
+                : weekendLeft == null ? `Weekendpas geldig t/m ${formatDate(weekendEnts[weekendEnts.length - 1]!.valid_until)}` : `Je hebt nog ${weekendLeft} ${weekendLeft === 1 ? 'weekendronde' : 'weekendrondes'}`}
+            </T>
+          </Row>
+        )}
+        {!weekendLocked && slots.length === 0 && <Empty icon="moon-outline" title="Geen starttijden meer vandaag">Kies een andere dag in de strip hierboven.</Empty>}
         {parts.map((part) => (
           <View key={part.label} style={{ gap: space.sm }}>
             <Row style={{ marginTop: space.md, justifyContent: 'space-between' }}>
@@ -207,5 +241,13 @@ const styles = StyleSheet.create({
   time: { fontFamily: fonts.display, fontSize: 21, color: colors.ink, width: 62, fontVariant: ['tabular-nums'] },
   add: { width: 26, height: 26, borderRadius: 13, backgroundColor: colors.pine50, alignItems: 'center', justifyContent: 'center' },
   player: { backgroundColor: colors.chalk, borderRadius: radius.pill, paddingRight: 9, paddingLeft: 2, paddingVertical: 2 },
+  weekendOption: {
+    flexDirection: 'row', alignItems: 'center', gap: space.md, padding: space.md, borderRadius: radius.md,
+    backgroundColor: colors.onDarkLine,
+  },
+  weekendName: { fontFamily: fonts.bodyBold, fontSize: 15, color: colors.onDark },
+  weekendMeta: { fontFamily: fonts.body, fontSize: 12.5, color: colors.onDarkMuted },
+  weekendPrice: { fontFamily: fonts.display, fontSize: 20, color: colors.onDark },
+  weekendBanner: { backgroundColor: colors.pine50, borderRadius: radius.md, padding: space.md },
   playerName: { fontFamily: fonts.bodySemibold, fontSize: 12.5, color: colors.ink, maxWidth: 90 },
 });

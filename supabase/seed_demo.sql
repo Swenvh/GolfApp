@@ -9,7 +9,13 @@ declare
   v_players uuid[] := array['00000000-0000-0000-0000-0000000e0001', '00000000-0000-0000-0000-0000000e0002',
                             '00000000-0000-0000-0000-0000000e0005', '00000000-0000-0000-0000-0000000e0004']::uuid[];
   v_times   time[] := array['08:02', '09:06', '10:58', '14:02']::time[];
-  v_guests  text[] := array['Ruud Koster', 'Inge Smit', 'Bas Mulder', 'Lotte de Graaf', 'Tom Hendriks', 'Fleur Dekker'];
+  -- Introducés: veel verschillende gasten (elk een paar keer), plus twee vaste maatjes van Jan
+  v_first   text[] := array['Ruud', 'Inge', 'Tom', 'Fleur', 'Koen', 'Sophie', 'Daan', 'Eva', 'Lars', 'Noor', 'Thijs', 'Anouk'];
+  v_last    text[] := array['Koster', 'Smit', 'Hendriks', 'Dekker', 'Bos', 'Vos', 'Peters', 'Jacobs', 'Meijer', 'Visser', 'Kok'];
+  v_g1      text;
+  v_g2      text;
+  v_lotte   int := 0;
+  v_bas     int := 0;
   v_day     date;
   v_booking uuid;
   v_member  uuid;
@@ -41,8 +47,14 @@ begin
       values (v_club, v_course, (v_day + v_times[j])::timestamp at time zone 'Europe/Amsterdam')
       returning id into v_booking;
       insert into tee_booking_players (booking_id, member_id) values (v_booking, v_member);
-      insert into tee_booking_players (booking_id, guest_name)
-      values (v_booking, v_guests[((d + j) % 6) + 1]), (v_booking, v_guests[((d + j + 3) % 6) + 1]);
+      v_g1 := v_first[((d * 8 + j * 2) % 12) + 1] || ' ' || v_last[(((d * 8 + j * 2) * 7) % 11) + 1];
+      v_g2 := v_first[((d * 8 + j * 2 + 1) % 12) + 1] || ' ' || v_last[(((d * 8 + j * 2 + 1) * 7) % 11) + 1];
+      if v_member = '00000000-0000-0000-0000-0000000e0001' and v_lotte < 4 then
+        v_g1 := 'Lotte de Graaf'; v_lotte := v_lotte + 1;
+      elsif v_member = '00000000-0000-0000-0000-0000000e0001' and v_bas < 3 then
+        v_g1 := 'Bas Mulder'; v_bas := v_bas + 1;
+      end if;
+      insert into tee_booking_players (booking_id, guest_name) values (v_booking, v_g1), (v_booking, v_g2);
 
       -- Wat leden rond hun ronde regelen: buggy en de greenfee van hun introducés
       if j = 1 or (j = 3 and d % 2 = 0) then
@@ -104,3 +116,18 @@ insert into leads (club_id, member_id, type, name, email, phone, note, membershi
    'Net haar GVB gehaald.', '00000000-0000-0000-0000-0000000d0001', 235000, 'won', now() - interval '21 days'),
   ('00000000-0000-0000-0000-0000000c0001', '00000000-0000-0000-0000-0000000e0005', 'lesson', 'Mohammed el Amrani', 'mohammed@example.test', null,
    'Wil werken aan zijn drive.', null, 4500, 'new', now() - interval '1 day');
+
+-- Gezinslid aangemeld via de app
+insert into leads (club_id, member_id, type, name, email, note, membership_type_id, value_cents, status, created_at) values
+  ('00000000-0000-0000-0000-0000000c0001', '00000000-0000-0000-0000-0000000e0001', 'family', 'Marieke de Vries', 'marieke@example.test',
+   'Partner van Jan de Vries, geboren 03-09-1970 (56 jaar)', '00000000-0000-0000-0000-0000000d0005', 154500, 'new', now() - interval '3 days');
+
+-- Opzeggen in de app: twee leden kozen voor een alternatief, één zegde toch op
+insert into membership_changes (club_id, member_id, kind, target_membership_type_id, effective_date, reason, from_cancel_flow, status, handled_at, created_at) values
+  ('00000000-0000-0000-0000-0000000c0001', '00000000-0000-0000-0000-0000000e0002', 'pause', '00000000-0000-0000-0000-0000000d0006',
+   date_trunc('month', current_date + interval '1 month')::date, 'Blessure of gezondheid', true, 'requested', null, now() - interval '1 day'),
+  ('00000000-0000-0000-0000-0000000c0001', '00000000-0000-0000-0000-0000000e0005', 'switch', '00000000-0000-0000-0000-0000000d0002',
+   make_date(extract(year from current_date)::int + 1, 1, 1), 'Ik speel vooral doordeweeks', true, 'approved', now() - interval '10 days', now() - interval '12 days');
+
+update sponsors set clicks = case name when 'Duinzicht Makelaardij' then 47 when 'Autobedrijf Van Leeuwen' then 31 else 62 end
+where club_id = '00000000-0000-0000-0000-0000000c0001';

@@ -6,8 +6,15 @@ export default async function BeheerLayout({ children }: { children: React.React
   const nav = [
     { href: '/', label: 'Dashboard', icon: 'dashboard' },
     { href: '/leden', label: 'Leden', icon: 'leden' },
+    ...(hasRole(ctx, 'secretariat') ? [{ href: '/leden/wijzigingen', label: 'Wijzigingen', icon: '', sub: true }] : []),
     { href: '/starttijden', label: 'Starttijden', icon: 'starttijden' },
     ...(hasRole(ctx, 'secretariat', 'finance') ? [{ href: '/app-omzet', label: 'App-omzet', icon: 'omzet' }] : []),
+    ...(hasRole(ctx, 'finance')
+      ? [
+          { href: '/app-omzet/aanbod', label: 'Aanbod', icon: '', sub: true },
+          { href: '/app-omzet/sponsors', label: 'Sponsors', icon: '', sub: true },
+        ]
+      : []),
     { href: '/wedstrijden', label: 'Wedstrijden', icon: 'wedstrijden' },
     { href: '/nieuws', label: 'Nieuws', icon: 'nieuws' },
     ...(hasRole(ctx, 'finance')

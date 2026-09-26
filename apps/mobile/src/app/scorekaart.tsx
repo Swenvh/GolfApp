@@ -1,10 +1,10 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { router } from 'expo-router';
 import { useMemo, useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
+import { Linking, Pressable, ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
 import {
   courseHandicap, localDate, playingHandicap, scoreDifferential, scoreRound,
-  type Course, type CourseHole, type CourseTee,
+  type Course, type CourseHole, type CourseTee, type Sponsor,
 } from '@golfapp/shared';
 import { Button, Empty, ErrorText, Eyebrow, Loading, Row, Screen, Segmented, T } from '@/components/ui';
 import { haptic } from '@/lib/haptics';
@@ -30,11 +30,17 @@ export default function Scorekaart() {
   const { data, loading } = useQuery(async () => {
     const courses = unwrap(await supabase.from('courses').select('*').eq('club_id', member.club_id).eq('active', true)) as Course[];
     const ids = courses.map((c) => c.id);
-    const [tees, holes] = await Promise.all([
+    const [tees, holes, sponsors] = await Promise.all([
       supabase.from('course_tees').select('*').in('course_id', ids).order('course_rating', { ascending: false }),
       supabase.from('course_holes').select('*').in('course_id', ids).order('number'),
+      supabase.from('sponsors').select('*').eq('club_id', member.club_id).eq('placement', 'scorecard').eq('active', true),
     ]);
-    return { courses, tees: unwrap(tees) as CourseTee[], holes: unwrap(holes) as CourseHole[] };
+    const today = localDate();
+    return {
+      courses, tees: unwrap(tees) as CourseTee[], holes: unwrap(holes) as CourseHole[],
+      // Holesponsors horen bij de hoofdbaan (18 holes)
+      holeSponsors: new Map(((sponsors.data ?? []) as Sponsor[]).filter((x) => x.hole_number && (!x.valid_until || x.valid_until >= today)).map((x) => [x.hole_number!, x])),
+    };
   }, [member.club_id]);
 
   const withHoles = (data?.courses ?? []).filter((c) => data?.holes.some((h) => h.course_id === c.id));
@@ -142,8 +148,10 @@ export default function Scorekaart() {
             {part.map((h, k) => {
               const i = nine.from + k;
               const hole = holes[i]!;
+              const sponsor = holes.length === 18 ? data?.holeSponsors.get(h.hole) : undefined;
               return (
-                <View key={h.hole} style={[styles.hole, k < part.length - 1 && styles.holeDivider]}>
+                <View key={h.hole} style={k < part.length - 1 && styles.holeDivider}>
+                <View style={styles.hole}>
                   <View style={styles.colHole}><View style={styles.holeNo}><Text style={styles.holeNoText}>{h.hole}</Text></View></View>
                   <Text style={[styles.colPar, styles.cell]}>{hole.par}</Text>
                   <View style={styles.colSi}>
@@ -156,6 +164,16 @@ export default function Scorekaart() {
                     <Step icon="add" label={`Hole ${h.hole} een slag meer`} onPress={() => setScore(i, +1)} />
                   </Row>
                   <Text style={[styles.colPts, styles.points, h.gross == null && { color: colors.lineStrong }]}>{h.gross == null ? '·' : h.points}</Text>
+                </View>
+                {sponsor && (
+                  <Pressable onPress={() => {
+                    haptic.tap();
+                    void supabase.rpc('sponsor_click', { p_sponsor: sponsor.id });
+                    if (sponsor.url) void Linking.openURL(sponsor.url);
+                  }} style={styles.sponsor}>
+                    <Text style={styles.sponsorText} numberOfLines={1}>Hole {h.hole} aangeboden door <Text style={styles.sponsorName}>{sponsor.name}</Text></Text>
+                  </Pressable>
+                )}
                 </View>
               );
             })}
@@ -238,6 +256,9 @@ const styles = StyleSheet.create({
   colPar: { width: 30, textAlign: 'center' },
   colSi: { width: 34, alignItems: 'center', gap: 3 },
   colPts: { width: 34, textAlign: 'right' },
+  sponsor: { paddingHorizontal: space.md, paddingBottom: 8, marginTop: -4 },
+  sponsorText: { fontFamily: fonts.body, fontSize: 11, color: colors.mist, textAlign: 'center' },
+  sponsorName: { fontFamily: fonts.bodyBold, color: colors.brass },
   hole: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: space.md, paddingVertical: 9 },
   holeDivider: { borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: colors.line },
   holeNo: { width: 30, height: 30, borderRadius: 15, backgroundColor: colors.pine800, alignItems: 'center', justifyContent: 'center' },

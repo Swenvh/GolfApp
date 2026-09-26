@@ -31,6 +31,7 @@ async function saveClub(formData: FormData) {
     sepa_creditor_id: str(formData.get('sepa_creditor_id')),
     payment_term_days: Number(formData.get('payment_term_days')) || 14,
     greenside_fee_cents: parseEuro(String(formData.get('greenside_fee') || '0')) ?? 0,
+    guest_intro_limit: Math.min(52, Math.max(1, Number(formData.get('guest_intro_limit')) || 5)),
   }).eq('id', ctx.club.id);
   if (error) redirect(`/instellingen?error=${encodeURIComponent(error.message)}`);
   revalidatePath('/', 'layout');
@@ -48,6 +49,7 @@ async function saveMembershipType(formData: FormData) {
     annual_fee_cents: parseEuro(String(formData.get('annual_fee') ?? '0')) ?? 0,
     entrance_fee_cents: parseEuro(String(formData.get('entrance_fee') ?? '0')) ?? 0,
     can_book_weekend: formData.get('can_book_weekend') === 'on',
+    can_play: formData.get('can_play') === 'on',
     active: formData.get('active') !== null ? formData.get('active') === 'on' : true,
   };
   const { error } = id
@@ -94,6 +96,7 @@ export default async function InstellingenPage({ searchParams }: { searchParams:
             <Field label="Incassant-ID" hint="Aan te vragen bij uw bank"><input name="sepa_creditor_id" defaultValue={c.sepa_creditor_id ?? ''} /></Field>
             <Field label="Betaaltermijn (dagen)"><input name="payment_term_days" type="number" defaultValue={c.payment_term_days} /></Field>
             <Field label="Greenside-abonnement per maand" hint="Voor de terugverdienberekening onder App-omzet"><input name="greenside_fee" defaultValue={euro(Number(c.greenside_fee_cents ?? 0))} /></Field>
+            <Field label="Introducé max. per jaar" hint="Zo vaak mag dezelfde gast per jaar tegen introductietarief spelen"><input name="guest_intro_limit" type="number" min={1} max={52} defaultValue={c.guest_intro_limit ?? 5} /></Field>
             <div className="sm:col-span-2"><Button type="submit">Opslaan</Button></div>
           </form>
         </Card>
@@ -109,6 +112,7 @@ export default async function InstellingenPage({ searchParams }: { searchParams:
                   <Field label="Entreegeld"><input name="entrance_fee" defaultValue={euro(t.entrance_fee_cents)} /></Field>
                   <div className="space-y-1 text-sm">
                     <label className="flex items-center gap-2 font-normal"><input type="checkbox" name="can_book_weekend" defaultChecked={t.can_book_weekend} /> Weekend</label>
+                    <label className="flex items-center gap-2 font-normal" title="Uit = rustend lidmaatschap: wel lid, niet spelen"><input type="checkbox" name="can_play" defaultChecked={t.can_play} /> Speelrecht</label>
                     <label className="flex items-center gap-2 font-normal"><input type="checkbox" name="active" defaultChecked={t.active} /> Actief</label>
                   </div>
                   <Button variant="secondary">Opslaan</Button>
@@ -118,7 +122,10 @@ export default async function InstellingenPage({ searchParams }: { searchParams:
                 <Field label="Nieuwe vorm"><input name="name" required placeholder="bv. Gezinslid" /></Field>
                 <Field label="Contributie/jaar"><input name="annual_fee" placeholder={formatEuro(0)} /></Field>
                 <Field label="Entreegeld"><input name="entrance_fee" placeholder={formatEuro(0)} /></Field>
-                <label className="flex items-center gap-2 text-sm font-normal"><input type="checkbox" name="can_book_weekend" defaultChecked /> Weekend</label>
+                <div className="space-y-1 text-sm">
+                  <label className="flex items-center gap-2 font-normal"><input type="checkbox" name="can_book_weekend" defaultChecked /> Weekend</label>
+                  <label className="flex items-center gap-2 font-normal"><input type="checkbox" name="can_play" defaultChecked /> Speelrecht</label>
+                </div>
                 <Button>Toevoegen</Button>
               </form>
             </div>

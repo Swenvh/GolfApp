@@ -7,6 +7,7 @@ import { Button, Card, Empty, ErrorText, Eyebrow, Loading, Row, Screen, T } from
 import { haptic } from '@/lib/haptics';
 import { useMember } from '@/lib/session';
 import { supabase } from '@/lib/supabase';
+import { age } from '@/lib/format';
 import { colors, fonts, space } from '@/lib/theme';
 import { unwrap, useQuery } from '@/lib/useQuery';
 
@@ -92,9 +93,3 @@ export default function Upgrade() {
   );
 }
 
-function age(dob: string | null): number {
-  if (!dob) return 30;
-  const d = new Date(dob);
-  const now = new Date();
-  return now.getFullYear() - d.getFullYear() - (now < new Date(now.getFullYear(), d.getMonth(), d.getDate()) ? 1 : 0);
-}

@@ -55,6 +55,8 @@ export default function RootLayout() {
           <Stack.Screen name="introduceren" options={{ title: 'Introduceer een vriend' }} />
           <Stack.Screen name="upgrade" options={{ title: 'Upgrade' }} />
           <Stack.Screen name="handicart" options={{ title: 'Handicart-pas' }} />
+          <Stack.Screen name="lidmaatschap" options={{ title: 'Lidmaatschap' }} />
+          <Stack.Screen name="gezin" options={{ title: 'Gezinslid toevoegen' }} />
         </Stack>
       </SessionProvider>
     </SafeAreaProvider>

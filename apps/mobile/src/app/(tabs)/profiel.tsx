@@ -1,23 +1,38 @@
 import { router } from 'expo-router';
 import { Linking } from 'react-native';
-import { formatIban } from '@golfapp/shared';
+import { formatIban, localDate } from '@golfapp/shared';
 import { MemberCard } from '@/components/member-card';
 import { Group, ListRow, Screen, T } from '@/components/ui';
+import { formatDate } from '@/lib/format';
+import { fetchEntitlements } from '@/lib/offers';
 import { useMember, useSession } from '@/lib/session';
+import { useQuery } from '@/lib/useQuery';
 import { colors, space } from '@/lib/theme';
 
 export default function Lidmaatschap() {
   const member = useMember();
   const { memberships, signOut } = useSession();
   const club = member.club;
+  const { data: rights } = useQuery(() => fetchEntitlements(member.id, localDate()), [member.id]);
 
   return (
     <Screen title="Lidmaatschap" eyebrow={club.name}>
       <MemberCard member={member} />
       <T variant="small" color={colors.mist} style={{ textAlign: 'center', marginBottom: space.sm }}>Laat deze kaart zien bij de caddiemaster of in het clubhuis.</T>
 
+      {!!rights?.length && (
+        <Group>
+          {rights.map((r, i) => (
+            <ListRow key={r.id} icon={r.kind === 'intro' ? 'ticket-outline' : 'sunny-outline'}
+              title={r.kind === 'intro' ? `Introductiekaart · nog ${r.uses_left} ${r.uses_left === 1 ? 'introducé' : 'introducés'}`
+                : r.uses_left == null ? 'Weekendpas' : `${r.uses_left} ${r.uses_left === 1 ? 'weekendronde' : 'weekendrondes'}`}
+              subtitle={`Geldig t/m ${formatDate(r.valid_until, { day: 'numeric', month: 'long', year: 'numeric' })}`} last={i === rights.length - 1} />
+          ))}
+        </Group>
+      )}
+
       <Group>
-        <ListRow icon="ribbon-outline" title="Lidmaatschap wijzigen" subtitle="Bekijk upgrades en wat ze kosten" onPress={() => router.push('/upgrade')} />
+        <ListRow icon="ribbon-outline" title="Lidmaatschap wijzigen" subtitle="Upgraden, pauzeren, gezinslid toevoegen" onPress={() => router.push('/lidmaatschap')} />
         <ListRow icon="receipt-outline" title="Facturen & betalingen" subtitle="Contributie, lessen en greenfees" onPress={() => router.push('/facturen')} />
         <ListRow icon="person-outline" title="Mijn gegevens" subtitle="Adres, telefoon en privacy" onPress={() => router.push('/gegevens')} />
         <ListRow icon="car-sport-outline" title="Handicart-pas"
