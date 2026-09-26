@@ -137,21 +137,39 @@ insert into news_posts (club_id, title, body, published_at) values
   ('00000000-0000-0000-0000-0000000c0001', 'Nieuwe openingstijden restaurant',
    'Vanaf oktober is het restaurant op maandag gesloten. De bar op het terras blijft dagelijks open tot zonsondergang.', now() - interval '6 days');
 
--- Aanbod in de app (upsells) en wat de club voor Greenside betaalt (demo-bedrag)
+-- Wat de club voor Greenside betaalt (demo-bedrag)
 update clubs set greenside_fee_cents = 39900 where id = '00000000-0000-0000-0000-0000000c0001';
 
-insert into products (club_id, category, name, description, price_cents, vat_rate, daily_capacity, icon, sort) values
-  ('00000000-0000-0000-0000-0000000c0001', 'rental',  'E-buggy',                   'Elektrische golfkar voor 18 holes, staat klaar bij de caddiemaster.', 3306, 21, 8, 'car-sport-outline', 10),
-  ('00000000-0000-0000-0000-0000000c0001', 'rental',  'Elektrische trolley',       'Volgeladen accu, klaar bij de eerste tee.', 1240, 21, 12, 'battery-charging-outline', 20),
-  ('00000000-0000-0000-0000-0000000c0001', 'range',   'Range-emmer (50 ballen)',   'Warm je op voor je ronde. De emmer staat klaar bij de driving range.', 413, 21, null, 'basket-outline', 30),
-  ('00000000-0000-0000-0000-0000000c0001', 'greenfee','Greenfee introducé',        'Voor gasten die met een lid meespelen. Lagere prijs dan de losse greenfee van € 85.', 5505, 9, null, 'people-outline', 40),
-  ('00000000-0000-0000-0000-0000000c0001', 'lesson',  'Privéles bij de pro (30 min)', 'Eén-op-één met pro Mark van Dijk, met videoanalyse van je swing.', 4132, 21, 6, 'school-outline', 50),
-  ('00000000-0000-0000-0000-0000000c0001', 'lesson',  'Korte-spel clinic',         'Chippen en putten in een kleine groep, zaterdag 10:00.', 2479, 21, 10, 'flag-outline', 55),
-  ('00000000-0000-0000-0000-0000000c0001', 'food',    'Lunch na je ronde',         'Clubsandwich en koffie of thee. Je tafel staat klaar als je binnenkomt.', 1514, 9, null, 'restaurant-outline', 60),
-  ('00000000-0000-0000-0000-0000000c0001', 'food',    'Borrelplank voor de flight','Kaas, worst en bitterballen voor vier, op het terras.', 2248, 9, null, 'wine-outline', 65),
-  ('00000000-0000-0000-0000-0000000c0001', 'proshop', 'Titleist Pro V1 (12 ballen)','Ophalen bij de caddiemaster of in de proshop.', 5372, 21, null, 'golf-outline', 70),
-  ('00000000-0000-0000-0000-0000000c0001', 'proshop', 'Golfhandschoen',            'FootJoy WeatherSof, alle maten. Ophalen in de proshop.', 1818, 21, null, 'hand-left-outline', 75),
-  ('00000000-0000-0000-0000-0000000c0001', 'event',   'Wedstrijddiner',            'Driegangendiner na afloop van de wedstrijd, met prijsuitreiking.', 3211, 9, 60, 'restaurant', 80);
+-- Aanbod in de app. Alleen dingen die geen extra werk vragen: reserveren en afrekenen
+-- gaat via de app, uitgifte loopt via wat de club al doet (sleutel bij de receptie).
+insert into products (club_id, category, name, description, price_cents, handicart_price_cents, vat_rate,
+                      capacity, capacity_scope, pickup_note, icon, sort) values
+  ('00000000-0000-0000-0000-0000000c0001', 'rental',  'Buggy',
+   'Elektrische buggy voor je ronde. Met een Handicart-pas betaal je het Handicart-tarief.',
+   3306, 661, 21, 8, 'slot', 'Sleutel ophalen bij de receptie, buggy staat in de stalling naast de eerste tee.', 'car-sport-outline', 10),
+  ('00000000-0000-0000-0000-0000000c0001', 'greenfee','Greenfee introducé',
+   'Voor gasten die met een lid meespelen. Lager dan de losse greenfee van € 85, en je gast hoeft niet langs de balie.',
+   5505, null, 9, null, 'day', null, 'people-outline', 20),
+  ('00000000-0000-0000-0000-0000000c0001', 'lesson',  'Privéles bij de pro (30 min)',
+   'Eén-op-één met pro Mark van Dijk. Hij stuurt je binnen een dag een voorstel voor een tijd.',
+   4132, null, 21, 6, 'day', 'De pro neemt contact met je op om een tijd af te spreken.', 'school-outline', 30),
+  ('00000000-0000-0000-0000-0000000c0001', 'lesson',  'Korte-spel clinic',
+   'Chippen en putten in een kleine groep, zaterdag 10:00 bij de oefengreen.',
+   2479, null, 21, 10, 'day', 'Meld je om 09:55 bij de oefengreen.', 'flag-outline', 35),
+  ('00000000-0000-0000-0000-0000000c0001', 'storage', 'Kluisje in de kleedkamer',
+   'Eigen kluisje voor je spullen, het hele seizoen.',
+   9917, null, 21, 40, 'season', 'De ledenadministratie mailt je je kluisnummer.', 'lock-closed-outline', 40),
+  ('00000000-0000-0000-0000-0000000c0001', 'storage', 'Stalling tas en trolley',
+   'Droge stalling voor je golftas en trolley, met laadpunt. Nooit meer sjouwen.',
+   14876, null, 21, 60, 'season', 'De ledenadministratie mailt je je stallingsnummer.', 'bag-handle-outline', 45),
+  ('00000000-0000-0000-0000-0000000c0001', 'event',   'Wedstrijddiner',
+   'Driegangendiner na afloop van de wedstrijd, met prijsuitreiking. De keuken weet zo vooraf hoeveel gasten er komen.',
+   3211, null, 9, 60, 'day', null, 'restaurant', 50);
+
+-- Pieter heeft een Handicart-pas
+update members set handicart_pass_number = 'HC-20417', handicart_pass_type = 'permanent',
+       handicart_valid_until = make_date(extract(year from current_date)::int, 12, 31)
+where id = '00000000-0000-0000-0000-0000000e0003';
 
 -- Een paar facturen: contributie via incasso en een losse factuur
 select set_config('request.jwt.claim.sub', '00000000-0000-0000-0000-00000000a001', false);

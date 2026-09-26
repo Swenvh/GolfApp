@@ -2,7 +2,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { router } from 'expo-router';
 import { Pressable, RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { formatEuro, localDate, localTime, priceInclVat, type MembershipType, type NewsPost, type Product, type TeeSheetRow } from '@golfapp/shared';
+import { formatEuro, hasValidHandicart, localDate, localTime, priceInclVat, type MembershipType, type NewsPost, type Product, type TeeSheetRow } from '@golfapp/shared';
 import { OfferCard, productIcon } from '@/components/offer';
 import { Contours, LogoMark } from '@/components/brand';
 import { TeeTicket } from '@/components/ticket';
@@ -13,6 +13,8 @@ import { useMember } from '@/lib/session';
 import { supabase } from '@/lib/supabase';
 import { colors, fonts, radius, space } from '@/lib/theme';
 import { unwrap, useQuery } from '@/lib/useQuery';
+
+const wholeEuro = new Intl.NumberFormat('nl-NL', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 });
 
 function greeting() {
   const h = Number(new Intl.DateTimeFormat('nl-NL', { hour: 'numeric', hour12: false, timeZone: 'Europe/Amsterdam' }).format(new Date()));
@@ -48,14 +50,20 @@ export default function Clubhuis() {
         .flatMap((o) => o.order_lines).filter((l) => l.product?.category !== 'greenfee')
         .map((l) => (l.quantity > 1 ? `${l.quantity}× ${l.description}` : l.description));
     }
-    const [products, types] = await Promise.all([
+    const year = new Date().getFullYear();
+    const [products, types, seasonal] = await Promise.all([
       supabase.from('products').select('*').eq('club_id', member.club_id).eq('active', true).order('sort'),
       supabase.from('membership_types').select('*').eq('club_id', member.club_id),
+      // Wat dit lid dit seizoen al huurt (kluisje, stalling)
+      supabase.from('orders').select('order_lines(product_id)').eq('member_id', member.id).neq('status', 'cancelled')
+        .gte('fulfil_on', `${year}-01-01`).lte('fulfil_on', `${year}-12-31`),
     ]);
+    const owned = new Set(((seasonal.data ?? []) as { order_lines: { product_id: string | null }[] }[])
+      .flatMap((o) => o.order_lines.map((l) => l.product_id)));
     return {
       news: unwrap(news) as NewsPost[],
       next, flight, extras, upcomingCount: upcoming.length,
-      products: (products.data ?? []) as Product[],
+      products: ((products.data ?? []) as Product[]).filter((p) => !(p.capacity_scope === 'season' && owned.has(p.id))),
       myType: ((types.data ?? []) as MembershipType[]).find((t) => t.id === member.membership_type_id),
       outstanding: (unwrap(invoices) ?? []).reduce((s, i) => s + i.total_cents - i.paid_cents, 0),
     };
@@ -63,20 +71,27 @@ export default function Clubhuis() {
 
   const [featured, ...rest] = data?.news ?? [];
 
-  // Aanbod dat past bij het moment: rond je volgende ronde, of algemeen
+  // Aanbod dat past bij het moment, zonder extra werk voor de club: alleen reserveren en afrekenen
   const find = (cat: Product['category']) => data?.products.find((p) => p.category === cat);
   const price = (p: Product) => formatEuro(priceInclVat(p.price_cents, Number(p.vat_rate)));
   const has = (name: string) => data?.extras.some((e) => e.includes(name));
   const offers: (Parameters<typeof OfferCard>[0] & { key: string })[] = [];
   const next = data?.next;
   if (next) {
-    const range = find('range');
-    const lunch = find('food');
-    const when = `Voor je ronde van ${localTime(next.starts_at)}`;
-    if (range && !has(range.name)) offers.push({ key: 'range', eyebrow: when, title: 'Warm je op op de range', subtitle: range.name, price: price(range), icon: productIcon(range),
-      onPress: () => router.push({ pathname: '/aanbod/[id]', params: { id: range.id, booking: next.id, context: when } }) });
-    if (lunch && !has(lunch.name)) offers.push({ key: 'lunch', eyebrow: 'Na je ronde', title: lunch.name, subtitle: 'Je tafel staat klaar als je binnenkomt', price: price(lunch), icon: productIcon(lunch),
-      onPress: () => router.push({ pathname: '/aanbod/[id]', params: { id: lunch.id, booking: next.id, context: 'Na je ronde' } }) });
+    const buggy = find('rental');
+    const when = `Bij je ronde van ${localTime(next.starts_at)}`;
+    const hc = buggy?.handicart_price_cents != null && hasValidHandicart(member, localDate(new Date(next.starts_at)));
+    if (buggy && !has(buggy.name)) offers.push({
+      key: 'buggy', eyebrow: when, title: hc ? 'Buggy met je Handicart-pas' : 'Buggy reserveren',
+      subtitle: 'Zonder te bellen; de sleutel ligt bij de receptie',
+      price: hc ? formatEuro(priceInclVat(buggy.handicart_price_cents!, Number(buggy.vat_rate))) : price(buggy), icon: productIcon(buggy),
+      onPress: () => router.push({ pathname: '/aanbod/[id]', params: { id: buggy.id, booking: next.id, context: when } }),
+    });
+  }
+  const storage = data?.products.filter((p) => p.category === 'storage') ?? [];
+  for (const st of storage.slice(0, 2)) {
+    offers.push({ key: st.id, eyebrow: 'Dit seizoen', title: st.name, subtitle: st.description ?? undefined, price: price(st), icon: productIcon(st),
+      onPress: () => router.push({ pathname: '/aanbod/[id]', params: { id: st.id, context: 'Voor het hele seizoen' } }) });
   }
   if (data?.myType && !data.myType.can_book_weekend) {
     offers.push({ key: 'upgrade', eyebrow: 'Lidmaatschap', title: 'Ook in het weekend spelen?', subtitle: 'Bekijk wat een upgrade kost', icon: 'ribbon-outline', tone: 'pine',
@@ -84,9 +99,7 @@ export default function Clubhuis() {
   }
   offers.push({ key: 'referral', eyebrow: 'Samen golfen', title: 'Introduceer een vriend', subtitle: 'Gratis introductieronde, samen met jou', icon: 'people-outline', tone: 'pine',
     onPress: () => router.push('/introduceren') });
-  const shop = find('proshop');
-  if (shop) offers.push({ key: 'shop', eyebrow: 'Proshop', title: shop.name, subtitle: 'Ligt voor je klaar bij de caddiemaster', price: price(shop), icon: productIcon(shop),
-    onPress: () => router.push({ pathname: '/aanbod/[id]', params: { id: shop.id, context: 'Proshop' } }) });
+
 
   return (
     <ScrollView
@@ -115,7 +128,7 @@ export default function Clubhuis() {
           <View style={styles.statDivider} />
           <HeroStat label="Gepland" value={String(data?.upcomingCount ?? 0)} onPress={() => router.push('/(tabs)/starttijden')} />
           <View style={styles.statDivider} />
-          <HeroStat label="Openstaand" value={formatEuro(data?.outstanding ?? 0).replace(',00', '')}
+          <HeroStat label="Openstaand" value={wholeEuro.format(Math.round((data?.outstanding ?? 0) / 100))}
             highlight={!!data?.outstanding} onPress={() => router.push('/facturen')} />
         </Row>
       </View>

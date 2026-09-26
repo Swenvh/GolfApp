@@ -4,18 +4,18 @@ import {
 } from '@golfapp/shared';
 import { requireRole } from '@/lib/club';
 import { createClient } from '@/lib/supabase/server';
-import { Badge, Button, ButtonLink, Card, Empty, Notice, PageHeader, Stat } from '@/components/ui';
+import { Badge, ButtonLink, Card, Empty, Notice, PageHeader, Stat } from '@/components/ui';
 import { formatDate } from '@/lib/format';
-import { cancelOrderAction, markFulfilled, setLeadStatus } from './actions';
+import { cancelOrderAction, setLeadStatus } from './actions';
 
 export const metadata = { title: 'App-omzet' };
 
 type Row = { fulfil_on: string; category: ProductCategory; orders: number; items: number; revenue_incl_cents: number };
 type OpenOrder = {
   id: string; fulfil_on: string; total_cents: number;
-  member: { first_name: string; infix: string | null; last_name: string };
+  member: { first_name: string; infix: string | null; last_name: string; handicart_pass_number: string | null };
   booking: { starts_at: string } | null;
-  order_lines: { description: string; quantity: number }[];
+  order_lines: { description: string; quantity: number; handicart: boolean; product: { category: ProductCategory } | null }[];
 };
 
 export default async function AppOmzet({ searchParams }: { searchParams: Promise<{ error?: string }> }) {
@@ -31,7 +31,7 @@ export default async function AppOmzet({ searchParams }: { searchParams: Promise
     supabase.from('tee_bookings').select('id', { count: 'exact', head: true }).eq('club_id', ctx.club.id)
       .gte('starts_at', `${from30}T00:00:00Z`).lte('starts_at', `${today}T23:59:59Z`),
     supabase.from('orders')
-      .select('id, fulfil_on, total_cents, member:members(first_name, infix, last_name), booking:tee_bookings(starts_at), order_lines(description, quantity)')
+      .select('id, fulfil_on, total_cents, member:members(first_name, infix, last_name, handicart_pass_number), booking:tee_bookings(starts_at), order_lines(description, quantity, handicart, product:products(category))')
       .eq('club_id', ctx.club.id).eq('status', 'placed').gte('fulfil_on', today).lte('fulfil_on', addDays(today, 1))
       .order('fulfil_on'),
     supabase.from('leads').select('*, member:members(first_name, infix, last_name)').eq('club_id', ctx.club.id)
@@ -61,7 +61,11 @@ export default async function AppOmzet({ searchParams }: { searchParams: Promise
   });
   const maxWeek = Math.max(1, ...weeks.map((w) => w.value));
 
-  const openOrders = (open.data ?? []) as unknown as OpenOrder[];
+  // Alleen buggy's: dat is wat de receptie meegeeft. De rest (greenfees, kluisjes, lessen) vraagt geen handeling.
+  const buggyOrders = ((open.data ?? []) as unknown as OpenOrder[])
+    .map((o) => ({ ...o, order_lines: o.order_lines.filter((l) => l.product?.category === 'rental') }))
+    .filter((o) => o.order_lines.length > 0)
+    .sort((a, b) => (a.booking?.starts_at ?? '').localeCompare(b.booking?.starts_at ?? ''));
   const leadRows = (leads.data ?? []) as (Lead & { member: { first_name: string; infix: string | null; last_name: string } | null })[];
   const pipeline = leadRows.filter((l) => l.status === 'new' || l.status === 'contacted').reduce((s, l) => s + Number(l.value_cents ?? 0), 0);
 
@@ -78,7 +82,7 @@ export default async function AppOmzet({ searchParams }: { searchParams: Promise
         <Stat label="Omzet via de app (30 dagen)" value={formatEuro(total30)} hint={`${orders30} bestellingen`} tone="good" />
         <Stat label="Extra per geboekte flight" value={formatEuro(perRound)} hint={`${bookings.count ?? 0} flights in 30 dagen`} />
         <Stat label="Terugverdiend" value={multiple ? `${multiple.toFixed(1).replace('.', ',')}×` : '—'}
-          hint={fee ? `de Greenside-licentie van ${formatEuro(fee)} p/m` : 'Vul het abonnementsbedrag in bij Instellingen'} tone={multiple && multiple >= 1 ? 'good' : 'default'} />
+          hint={fee ? `alle omzet via de app ÷ licentie van ${formatEuro(fee)} p/m` : 'Vul het abonnementsbedrag in bij Instellingen'} tone={multiple && multiple >= 1 ? 'good' : 'default'} />
         <Stat label="Leads in behandeling" value={formatEuro(pipeline)} hint="Verwachte jaarwaarde van upgrades en nieuwe leden" />
       </div>
 
@@ -122,23 +126,29 @@ export default async function AppOmzet({ searchParams }: { searchParams: Promise
           )}
         </Card>
 
-        <Card title="Klaarzetten vandaag en morgen" className="xl:col-span-3">
-          {openOrders.length === 0 ? <Empty>Niets klaar te zetten.</Empty> : (
+        <Card title="Buggy's vandaag en morgen" className="xl:col-span-3">
+          <p className="border-b border-stone-200/70 px-5 py-3 text-xs text-stone-500">
+            Gereserveerd en betaald via de app, dus geen telefoontjes meer. De receptie geeft zoals altijd de sleutel mee.
+          </p>
+          {buggyOrders.length === 0 ? <Empty>Geen buggy&apos;s gereserveerd.</Empty> : (
             <table>
-              <thead className="bg-stone-50"><tr><th>Wanneer</th><th>Lid</th><th>Wat</th><th className="text-right">Bedrag</th><th /></tr></thead>
+              <thead className="bg-stone-50"><tr><th>Starttijd</th><th>Lid</th><th>Buggy</th><th /></tr></thead>
               <tbody>
-                {openOrders.map((o) => (
+                {buggyOrders.map((o) => (
                   <tr key={o.id}>
                     <td className="whitespace-nowrap">
                       {o.fulfil_on === today ? 'Vandaag' : 'Morgen'}
                       {o.booking && <span className="ml-1 font-semibold tabular">{localTime(o.booking.starts_at)}</span>}
                     </td>
                     <td>{fullName(o.member)}</td>
-                    <td className="text-stone-700">{o.order_lines.map((l) => `${l.quantity > 1 ? `${l.quantity}× ` : ''}${l.description}`).join(', ')}</td>
-                    <td className="text-right tabular">{formatEuro(o.total_cents)}</td>
+                    <td>
+                      {o.order_lines.reduce((s, l) => s + l.quantity, 0)}×
+                      {o.order_lines.some((l) => l.handicart) && (
+                        <span className="ml-2"><Badge tone="amber">Handicart {o.member.handicart_pass_number}</Badge></span>
+                      )}
+                    </td>
                     <td className="whitespace-nowrap text-right">
-                      <form action={markFulfilled} className="inline"><input type="hidden" name="order_id" value={o.id} /><Button variant="secondary" className="px-3 py-1 text-xs">Afgerond</Button></form>
-                      <form action={cancelOrderAction} className="ml-1 inline"><input type="hidden" name="order_id" value={o.id} /><button className="text-xs text-red-700 hover:underline">Annuleer</button></form>
+                      <form action={cancelOrderAction} className="inline"><input type="hidden" name="order_id" value={o.id} /><button className="text-xs text-red-700 hover:underline">Annuleer</button></form>
                     </td>
                   </tr>
                 ))}
@@ -180,7 +190,7 @@ export default async function AppOmzet({ searchParams }: { searchParams: Promise
         </Card>
       </div>
       <p className="mt-4 text-xs text-stone-500">
-        <Badge tone="green">Tip</Badge> Bestellingen zijn definitieve facturen: leden met een machtiging betalen via de eerstvolgende incasso, anderen via iDEAL.
+        <Badge tone="green">Tip</Badge> Alles wat leden via de app regelen is direct een definitieve factuur: leden met een machtiging betalen via de eerstvolgende incasso, anderen via iDEAL. Niemand hoeft iets klaar te zetten of aan de balie af te rekenen.
       </p>
     </>
   );

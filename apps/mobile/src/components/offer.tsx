@@ -38,9 +38,14 @@ export function OfferCard({ eyebrow, title, subtitle, price, icon, onPress, tone
 }
 
 /** Regel met − / + om een extra aan een boeking toe te voegen. */
-export function AddOnRow({ product, quantity, onChange, remaining, max = 4, locked }: {
+export function AddOnRow({ product, quantity, onChange, remaining, max = 4, locked, handicart }: {
   product: Product; quantity: number; onChange: (q: number) => void; remaining?: number; max?: number; locked?: string;
+  /** Lid heeft een geldige Handicart-pas: toon het Handicart-tarief */
+  handicart?: boolean;
 }) {
+  const regular = priceInclVat(product.price_cents, Number(product.vat_rate));
+  const special = handicart && product.handicart_price_cents != null
+    ? priceInclVat(product.handicart_price_cents, Number(product.vat_rate)) : null;
   const soldOut = remaining !== undefined && remaining <= 0 && quantity === 0;
   const limit = Math.min(max, remaining ?? max);
   const active = quantity > 0;
@@ -52,8 +57,13 @@ export function AddOnRow({ product, quantity, onChange, remaining, max = 4, lock
       <View style={{ flex: 1, gap: 2 }}>
         <Text style={styles.addOnTitle}>{product.name}</Text>
         <Text style={[styles.addOnMeta, soldOut && { color: colors.flag }]}>
-          {formatEuro(priceInclVat(product.price_cents, Number(product.vat_rate)))}
-          {locked ? ` · ${locked}` : soldOut ? ' · uitverkocht op deze dag' : remaining !== undefined && remaining <= 3 ? ` · nog ${remaining} beschikbaar` : ''}
+          {special != null ? (
+            <>
+              <Text style={styles.strike}>{formatEuro(regular)}</Text>{' '}
+              <Text style={styles.special}>{formatEuro(special)} met je Handicart-pas</Text>
+            </>
+          ) : formatEuro(regular)}
+          {locked ? ` · ${locked}` : soldOut ? ' · alles vergeven rond deze tijd' : remaining !== undefined && remaining <= 3 ? ` · nog ${remaining} vrij` : ''}
         </Text>
       </View>
       {locked ? (
@@ -104,4 +114,6 @@ const styles = StyleSheet.create({
   step: { width: 32, height: 32, borderRadius: 16, borderWidth: 1, borderColor: colors.lineStrong, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.paper },
   stepAdd: { backgroundColor: colors.pine700, borderColor: colors.pine700 },
   qty: { fontFamily: fonts.display, fontSize: 18, color: colors.ink, minWidth: 14, textAlign: 'center' },
+  strike: { textDecorationLine: 'line-through', color: colors.mist },
+  special: { fontFamily: fonts.bodyBold, color: colors.pine700 },
 });

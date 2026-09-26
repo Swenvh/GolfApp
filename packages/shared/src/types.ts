@@ -72,6 +72,9 @@ export interface Member {
   notes: string | null;
   photo_url: string | null;
   show_in_directory: boolean;
+  handicart_pass_number: string | null;
+  handicart_pass_type: HandicartPassType | null;
+  handicart_valid_until: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -257,7 +260,9 @@ export interface MemberBalance {
   open_invoices: number;
 }
 
-export type ProductCategory = 'rental' | 'range' | 'greenfee' | 'lesson' | 'food' | 'proshop' | 'event';
+export type ProductCategory = 'rental' | 'range' | 'greenfee' | 'lesson' | 'food' | 'proshop' | 'event' | 'storage';
+export type CapacityScope = 'slot' | 'day' | 'season';
+export type HandicartPassType = 'permanent' | 'temporary';
 export type OrderStatus = 'placed' | 'fulfilled' | 'cancelled';
 export type LeadType = 'upgrade' | 'referral' | 'lesson';
 export type LeadStatus = 'new' | 'contacted' | 'won' | 'lost';
@@ -271,7 +276,13 @@ export interface Product {
   price_cents: number;
   vat_rate: number;
   ledger_account_id: string | null;
-  daily_capacity: number | null;
+  /** Aantal beschikbaar per starttijd (slot), per dag of per seizoen */
+  capacity: number | null;
+  capacity_scope: CapacityScope;
+  /** Tarief voor Stichting Handicart-pashouders (excl. btw) */
+  handicart_price_cents: number | null;
+  /** Wat het lid na bestellen moet weten, bv. waar de sleutel ligt */
+  pickup_note: string | null;
   icon: string | null;
   sort: number;
   active: boolean;
@@ -300,6 +311,7 @@ export interface OrderLine {
   quantity: number;
   unit_price_cents: number;
   vat_rate: number;
+  handicart: boolean;
 }
 
 export interface Lead {

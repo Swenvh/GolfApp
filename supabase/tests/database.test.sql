@@ -271,14 +271,14 @@ select pg_temp.assert(
   'weekdaglid kan doordeweeks boeken');
 
 -- 9. Upsells: bestellen bij een starttijd -------------------------------------------------
--- Jan staat om 10:02 in de flight (zie 5). E-buggy + range-emmer.
+-- Jan staat om 10:02 in de flight (zie 5). Buggy + greenfee voor zijn introducé.
 select pg_temp.assert(
   (select total_cents from place_order('00000000-0000-0000-0000-0000000e0001',
      jsonb_build_array(
-       jsonb_build_object('product_id', (select id from products where name = 'E-buggy'), 'quantity', 1),
-       jsonb_build_object('product_id', (select id from products where name = 'Range-emmer (50 ballen)'), 'quantity', 1)),
-     (select b.id from tee_bookings b where b.starts_at = pg_temp.at('10:02')))) = 4500,
-  'bestelling: e-buggy 40,00 + range-emmer 5,00 incl. btw');
+       jsonb_build_object('product_id', (select id from products where name = 'Buggy'), 'quantity', 1),
+       jsonb_build_object('product_id', (select id from products where name = 'Greenfee introducé'), 'quantity', 1)),
+     (select b.id from tee_bookings b where b.starts_at = pg_temp.at('10:02')))) = 10000,
+  'bestelling: buggy 40,00 + greenfee introducé 60,00 incl. btw');
 select pg_temp.assert(
   (select (i.status, i.collect_by_direct_debit, i.invoice_number is not null)::text from orders o join invoices i on i.id = o.invoice_id
    where o.member_id = '00000000-0000-0000-0000-0000000e0001' order by o.created_at desc limit 1) = '(open,t,t)',
@@ -288,7 +288,7 @@ select pg_temp.assert(
 do $$ begin
   begin
     perform place_order('00000000-0000-0000-0000-0000000e0001',
-      jsonb_build_array(jsonb_build_object('product_id', (select id from products where name = 'E-buggy'))),
+      jsonb_build_array(jsonb_build_object('product_id', (select id from products where name = 'Buggy'))),
       (select b.id from tee_bookings b where b.starts_at = pg_temp.at('16:02')));
     raise exception 'expected failure';
   exception when others then
@@ -296,18 +296,85 @@ do $$ begin
   end;
 end $$;
 
--- Beperkte voorraad: 8 e-buggy's per dag, er is er al 1 weg
+-- Beperkte vloot: 8 buggy's, per tijdvak geteld. Rond 10:02 is er al 1 weg.
 do $$ begin
   begin
     perform place_order('00000000-0000-0000-0000-0000000e0001',
-      jsonb_build_array(jsonb_build_object('product_id', (select id from products where name = 'E-buggy'), 'quantity', 8)),
+      jsonb_build_array(jsonb_build_object('product_id', (select id from products where name = 'Buggy'), 'quantity', 8)),
       (select b.id from tee_bookings b where b.starts_at = pg_temp.at('10:02')));
     raise exception 'expected failure';
   exception when others then
     if sqlerrm = 'expected failure' then raise; end if;
-    if sqlerrm not like 'Nog maar 7 × E-buggy%' then raise exception 'onverwachte fout: %', sqlerrm; end if;
+    if sqlerrm not like 'Nog maar 7 × Buggy beschikbaar rond deze starttijd%' then raise exception 'onverwachte fout: %', sqlerrm; end if;
   end;
 end $$;
+select pg_temp.assert(
+  (select remaining from product_availability('00000000-0000-0000-0000-0000000c0001', pg_temp.test_day(), pg_temp.at('12:02'))
+   where product_id = (select id from products where name = 'Buggy')) = 7,
+  'om 12:02 rijdt de buggy van 10:02 nog');
+select pg_temp.assert(
+  (select remaining from product_availability('00000000-0000-0000-0000-0000000c0001', pg_temp.test_day(), pg_temp.at('16:02'))
+   where product_id = (select id from products where name = 'Buggy')) = 8,
+  'om 16:02 is de buggy van 10:02 weer vrij');
+
+-- Buggy alleen bij een starttijd
+do $$ begin
+  begin
+    perform place_order('00000000-0000-0000-0000-0000000e0001',
+      jsonb_build_array(jsonb_build_object('product_id', (select id from products where name = 'Buggy'))));
+    raise exception 'expected failure';
+  exception when others then
+    if sqlerrm = 'expected failure' then raise; end if;
+    if sqlerrm not like '%reserveer je bij een starttijd%' then raise exception 'onverwachte fout: %', sqlerrm; end if;
+  end;
+end $$;
+
+-- Kluisje: seizoensvoorraad van 40
+select place_order('00000000-0000-0000-0000-0000000e0001',
+  jsonb_build_array(jsonb_build_object('product_id', (select id from products where name = 'Kluisje in de kleedkamer'))));
+select pg_temp.assert(
+  (select remaining from product_availability('00000000-0000-0000-0000-0000000c0001', current_date)
+   where product_id = (select id from products where name = 'Kluisje in de kleedkamer')) = 39,
+  'kluisjes tellen per seizoen');
+
+-- Handicart-pas vastleggen door het lid zelf
+do $$ begin
+  begin
+    perform member_set_handicart('00000000-0000-0000-0000-0000000e0001', 'HC-1', 'temporary', null);
+    raise exception 'expected failure';
+  exception when others then
+    if sqlerrm = 'expected failure' then raise; end if;
+  end;
+end $$;
+select member_set_handicart('00000000-0000-0000-0000-0000000e0001', 'hc-777', 'temporary', current_date + 100);
+select pg_temp.assert((select handicart_pass_number from members where id = '00000000-0000-0000-0000-0000000e0001') = 'HC-777', 'pas vastgelegd');
+select member_set_handicart('00000000-0000-0000-0000-0000000e0001', null);
+select pg_temp.assert((select handicart_pass_number is null from members where id = '00000000-0000-0000-0000-0000000e0001'), 'pas verwijderd');
+do $$ begin
+  begin
+    perform member_set_handicart('00000000-0000-0000-0000-0000000e0003', 'HC-1');
+    raise exception 'expected failure';
+  exception when others then
+    if sqlerrm = 'expected failure' then raise; end if;
+  end;
+end $$;
+
+-- Pieter (Handicart-pas) krijgt automatisch het Handicart-tarief bij zijn ronde van 16:02
+reset role;
+select set_config('request.jwt.claim.sub', '00000000-0000-0000-0000-00000000a003', false);
+set role authenticated;
+select pg_temp.assert(
+  (select total_cents from place_order('00000000-0000-0000-0000-0000000e0003',
+     jsonb_build_array(jsonb_build_object('product_id', (select id from products where name = 'Buggy'), 'quantity', 1)),
+     (select b.id from tee_bookings b where b.starts_at = pg_temp.at('16:02')))) = 800,
+  'Handicart-tarief: 8,00 in plaats van 40,00');
+select pg_temp.assert(
+  (select bool_and(l.handicart) from order_lines l join orders o on o.id = l.order_id
+   where o.member_id = '00000000-0000-0000-0000-0000000e0003' and o.booking_id = (select id from tee_bookings where starts_at = pg_temp.at('16:02'))),
+  'regel gemarkeerd als Handicart');
+reset role;
+select set_config('request.jwt.claim.sub', '00000000-0000-0000-0000-00000000a002', false);
+set role authenticated;
 
 -- Leden kunnen niet om de controles heen
 do $$ begin
@@ -321,7 +388,7 @@ end $$;
 do $$ begin
   begin
     perform place_order('00000000-0000-0000-0000-0000000e0002',
-      jsonb_build_array(jsonb_build_object('product_id', (select id from products where name = 'Range-emmer (50 ballen)'))));
+      jsonb_build_array(jsonb_build_object('product_id', (select id from products where name = 'Kluisje in de kleedkamer'))));
     raise exception 'expected failure';
   exception when others then
     if sqlerrm = 'expected failure' then raise; end if;
@@ -369,7 +436,7 @@ select pg_temp.assert(
 select set_config('request.jwt.claim.sub', '00000000-0000-0000-0000-00000000a002', false);
 set role authenticated;
 select pg_temp.assert(
-  (select remaining from product_availability('00000000-0000-0000-0000-0000000c0001', pg_temp.test_day())
-   where product_id = (select id from products where name = 'E-buggy')) = 8,
+  (select remaining from product_availability('00000000-0000-0000-0000-0000000c0001', pg_temp.test_day(), pg_temp.at('10:02'))
+   where product_id = (select id from products where name = 'Buggy')) = 8,
   'geannuleerde buggy telt niet mee: 8 beschikbaar');
 reset role;

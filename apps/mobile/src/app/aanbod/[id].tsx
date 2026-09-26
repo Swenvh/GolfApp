@@ -4,7 +4,7 @@ import * as WebBrowser from 'expo-web-browser';
 import { useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { formatEuro, localTime, priceInclVat, type Order, type Product } from '@golfapp/shared';
+import { formatEuro, hasValidHandicart, localTime, priceInclVat, type Order, type Product } from '@golfapp/shared';
 import { Contours } from '@/components/brand';
 import { productIcon } from '@/components/offer';
 import { Button, ErrorText, Eyebrow, Group, ListRow, Loading, Row, Screen, T } from '@/components/ui';
@@ -32,15 +32,18 @@ export default function Aanbod() {
       ? unwrap(await supabase.from('tee_bookings').select('starts_at, course:courses(name)').eq('id', booking).single()) as { starts_at: string; course: { name: string } }
       : null;
     const day = bk ? new Date(bk.starts_at) : new Date();
-    const availability = product.daily_capacity ? await fetchAvailability(member.club_id, formatISO(day)) : new Map<string, number>();
+    const availability = product.capacity ? await fetchAvailability(member.club_id, formatISO(day), bk?.starts_at) : new Map<string, number>();
     const mandate = await supabase.from('sepa_mandates').select('id').eq('member_id', member.id).eq('status', 'active').maybeSingle();
     return { product, booking: bk, remaining: availability.get(product.id), hasMandate: !!mandate.data };
   }, [id, booking]);
 
   if (loading || !data) return <Loading />;
   const { product } = data;
-  const unit = priceInclVat(product.price_cents, Number(product.vat_rate));
-  const max = Math.min(product.category === 'lesson' ? 4 : 8, data.remaining ?? 8);
+  const handicart = product.handicart_price_cents != null && hasValidHandicart(member, formatISO(data.booking ? new Date(data.booking.starts_at) : new Date()));
+  const regularUnit = priceInclVat(product.price_cents, Number(product.vat_rate));
+  const unit = handicart ? priceInclVat(product.handicart_price_cents!, Number(product.vat_rate)) : regularUnit;
+  const total = unit + regularUnit * (qty - 1);
+  const max = Math.min(product.category === 'lesson' ? 4 : product.capacity_scope === 'season' ? 1 : 2, data.remaining ?? 8);
   const soldOut = data.remaining !== undefined && data.remaining <= 0;
 
   const order = async () => {
@@ -73,7 +76,7 @@ export default function Aanbod() {
       <View style={styles.bigIcon}><Ionicons name={productIcon(product)} size={34} color={colors.brassLight} /></View>
       {context && <Eyebrow color={colors.brassLight}>{context}</Eyebrow>}
       <Text style={styles.title}>{product.name}</Text>
-      <Text style={styles.price}>{formatEuro(unit)}</Text>
+      <Text style={styles.price}>{formatEuro(unit)}{handicart ? '  ·  Handicart-tarief' : product.capacity_scope === 'season' ? '  ·  per seizoen' : ''}</Text>
     </View>
   );
 
@@ -83,7 +86,7 @@ export default function Aanbod() {
         <View style={styles.done}>
           <View style={styles.check}><Ionicons name="checkmark" size={30} color={colors.onDark} /></View>
           <T variant="heading" style={{ textAlign: 'center' }}>Geregeld!</T>
-          <T color={colors.slate} style={{ textAlign: 'center' }}>{fulfilmentHint[product.category]}.</T>
+          <T color={colors.slate} style={{ textAlign: 'center' }}>{fulfilmentHint(product)}</T>
         </View>
         <Group>
           <ListRow icon="receipt-outline" title={formatEuro(placed.total_cents)} subtitle={data.hasMandate ? 'Wordt automatisch geïncasseerd' : 'Staat als factuur onder Facturen'} last />
@@ -98,7 +101,7 @@ export default function Aanbod() {
       header={header}
       footer={
         <Button
-          title={soldOut ? 'Uitverkocht op deze dag' : `Bestellen · ${formatEuro(unit * qty)}`}
+          title={soldOut ? 'Niet meer beschikbaar' : `Bestellen · ${formatEuro(total)}`}
           icon={soldOut ? undefined : 'bag-check-outline'} onPress={order} loading={busy} disabled={soldOut}
         />
       }
@@ -111,7 +114,7 @@ export default function Aanbod() {
           <ListRow icon="time-outline" title={`Bij je ronde van ${localTime(data.booking.starts_at)}`}
             subtitle={`${capitalize(formatDate(data.booking.starts_at, { weekday: 'long', day: 'numeric', month: 'long' }))} · ${data.booking.course.name}`} />
         )}
-        <ListRow icon="location-outline" title={fulfilmentHint[product.category]} />
+        <ListRow icon="information-circle-outline" title={fulfilmentHint(product)} />
         <ListRow icon={data.hasMandate ? 'repeat-outline' : 'card-outline'} title="Op je rekening"
           subtitle={data.hasMandate ? 'Via je automatische incasso, geen gedoe bij de balie' : 'Je ontvangt een factuur en betaalt met iDEAL'} last />
       </Group>
@@ -129,7 +132,7 @@ export default function Aanbod() {
         </Row>
       )}
       {data.remaining !== undefined && data.remaining <= 3 && !soldOut && (
-        <T variant="small" color={colors.flag}>Nog {data.remaining} beschikbaar op deze dag</T>
+        <T variant="small" color={colors.flag}>Nog {data.remaining} vrij{product.capacity_scope === 'season' ? ' dit seizoen' : ''}</T>
       )}
       <ErrorText message={error} />
     </Screen>

@@ -47,7 +47,7 @@ export function TeeTicket({ startsAt, courseName, players, maxPlayers = 4, onPre
       {extras.length > 0 && (
         <Row gap={8} style={{ paddingHorizontal: space.lg, paddingBottom: space.lg, marginTop: -4, flexWrap: 'wrap' }}>
           <Ionicons name="checkmark-circle" size={16} color={colors.pine600} />
-          <T variant="small" color={colors.pine700} style={{ fontFamily: fonts.bodySemibold, flex: 1 }}>Klaar voor je: {extras.join(' · ')}</T>
+          <T variant="small" color={colors.pine700} style={{ fontFamily: fonts.bodySemibold, flex: 1 }}>Geregeld: {extras.join(' · ')}</T>
         </Row>
       )}
     </Card>

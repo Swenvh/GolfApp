@@ -45,19 +45,19 @@ Eén vast thema voor app, beheeromgeving en e-mails.
 
 ### Upsells: de app verdient zichzelf terug
 
-Leden krijgen op logische momenten aanbod, en alles wat ze bestellen wordt direct een definitieve factuur (incasso of iDEAL) en een journaalpost in het grootboek.
+Uitgangspunt: **geen extra werk voor personeel**. De app neemt reserveren en afrekenen over; uitgifte loopt via wat de club al doet (sleutel bij de receptie). Alles wat een lid bestelt wordt direct een definitieve factuur (incasso of iDEAL) en een journaalpost.
 
 | Moment in de app | Aanbod | Opbrengst voor de club |
 |---|---|---|
-| Starttijd boeken | E-buggy, elektrische trolley, range-emmer; greenfee introducé automatisch | Verhuur, greenfees, minder werk aan de balie |
-| Clubhuis, voor je ronde | Range-emmer, lunch na je ronde | Driving range, horeca |
+| Starttijd boeken | Buggy reserveren, **met Handicart-tarief** voor pashouders; greenfee introducé automatisch | Geen telefoontjes meer, greenfee niet meer aan de balie |
+| Profiel | **Handicart-pas** vastleggen (Stichting Handicart); pashouders krijgen de buggy standaard bij elke boeking | Betere bezetting buggyvloot, service voor een grote groep leden |
+| Clubhuis | Buggy bij je volgende ronde; kluisje of stalling voor het seizoen | Verhuur, seizoensinkomsten zonder werk per ronde |
 | Scores | Les bij de pro, gericht als je vorm terugloopt | Lessen |
-| Wedstrijd | Inschrijfgeld + wedstrijddiner in één keer | Wedstrijdgelden, horeca |
+| Wedstrijd | Inschrijfgeld + wedstrijddiner in één keer | Wedstrijdgelden; de keuken weet vooraf hoeveel gasten |
 | Weekend kiezen als weekdaglid | Upgrade naar volledig lidmaatschap | Hogere contributie (lead voor secretariaat) |
 | Profiel / Clubhuis | Introduceer een vriend (gratis introductieronde) | Nieuwe leden (lead) |
-| Clubhuis | Proshop-aanbod | Proshop |
 
-Voor de club: **App-omzet** in de beheeromgeving toont omzet via de app, extra besteding per geboekte flight, hoe vaak de Greenside-licentie is terugverdiend, een klaarzetlijst voor de caddiemaster en de leads. Onder **Aanbod beheren** stelt de club producten, prijzen (incl. btw) en dagvoorraad in (bv. 8 e-buggy's per dag). Afmelden voor een starttijd annuleert automatisch de bijbehorende extra's.
+Buggy's worden per tijdvak geteld (een buggy kan 's ochtends én 's middags rijden), kluisjes en stalling per seizoen. Afmelden voor een starttijd annuleert de buggy automatisch. In de beheeromgeving toont **App-omzet** de omzet via de app, de buggy-reserveringen voor de receptie (met Handicart-pasnummer) en de leads; onder **Aanbod beheren** stelt de club prijzen (incl. btw), het Handicart-tarief, aantallen en de tekst na bestellen in.
 
 ### Clubbeheer (web)
 - **Dashboard** — actieve leden, spelers vandaag, openstaand/achterstallig, komende wedstrijden

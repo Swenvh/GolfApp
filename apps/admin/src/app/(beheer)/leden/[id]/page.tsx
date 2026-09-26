@@ -59,6 +59,13 @@ export default async function LidDetail({ params, searchParams }: {
       {error && <Notice tone="error">{errors[error] ?? 'Er ging iets mis.'}</Notice>}
       {saved && <Notice tone="success">Opgeslagen.</Notice>}
       {invited && <Notice tone="success">Uitnodiging verstuurd naar {m.email}.</Notice>}
+      {m.handicart_pass_number && (
+        <p className="-mt-4 mb-6 text-sm text-stone-600">
+          <Badge tone="amber">Handicart-pas {m.handicart_pass_number}</Badge>{' '}
+          {m.handicart_pass_type === 'temporary' ? 'tijdelijk' : 'doorlopend'}
+          {m.handicart_valid_until ? `, geldig tot ${formatDate(m.handicart_valid_until)}` : ''} · krijgt automatisch het Handicart-tarief voor buggy&apos;s
+        </p>
+      )}
 
       <div className="mb-6 grid grid-cols-2 gap-4 lg:grid-cols-4">
         <Stat label="Status" value={memberStatusLabel[m.status]} hint={m.membership_type?.name} />

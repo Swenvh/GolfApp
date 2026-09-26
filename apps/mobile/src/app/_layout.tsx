@@ -54,6 +54,7 @@ export default function RootLayout() {
           <Stack.Screen name="aanbod/[id]" options={{ headerShown: false, presentation: 'modal' }} />
           <Stack.Screen name="introduceren" options={{ title: 'Introduceer een vriend' }} />
           <Stack.Screen name="upgrade" options={{ title: 'Upgrade' }} />
+          <Stack.Screen name="handicart" options={{ title: 'Handicart-pas' }} />
         </Stack>
       </SessionProvider>
     </SafeAreaProvider>

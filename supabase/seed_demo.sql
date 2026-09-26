@@ -18,15 +18,19 @@ declare
   d int; j int;
 begin
   select
-    max(id::text) filter (where name = 'E-buggy')::uuid                   as buggy,
-    max(id::text) filter (where name = 'Elektrische trolley')::uuid       as trolley,
-    max(id::text) filter (where name = 'Range-emmer (50 ballen)')::uuid   as range,
-    max(id::text) filter (where name = 'Greenfee introducé')::uuid        as greenfee,
+    max(id::text) filter (where name = 'Buggy')::uuid                        as buggy,
+    max(id::text) filter (where name = 'Greenfee introducé')::uuid           as greenfee,
     max(id::text) filter (where name = 'Privéles bij de pro (30 min)')::uuid as lesson,
-    max(id::text) filter (where name = 'Lunch na je ronde')::uuid         as lunch,
-    max(id::text) filter (where name = 'Borrelplank voor de flight')::uuid as borrel,
-    max(id::text) filter (where name = 'Titleist Pro V1 (12 ballen)')::uuid as balls
+    max(id::text) filter (where name = 'Kluisje in de kleedkamer')::uuid     as locker,
+    max(id::text) filter (where name = 'Stalling tas en trolley')::uuid      as storage,
+    max(id::text) filter (where name = 'Wedstrijddiner')::uuid               as diner
   into p from products where club_id = v_club;
+
+  -- Seizoenshuur, afgesloten via de app
+  perform create_order_internal('00000000-0000-0000-0000-0000000e0001', jsonb_build_array(jsonb_build_object('product_id', p.locker)), null, null, current_date - 40, null, current_date - 40);
+  perform create_order_internal('00000000-0000-0000-0000-0000000e0002', jsonb_build_array(jsonb_build_object('product_id', p.storage)), null, null, current_date - 38, null, current_date - 38);
+  perform create_order_internal('00000000-0000-0000-0000-0000000e0005', jsonb_build_array(jsonb_build_object('product_id', p.storage)), null, null, current_date - 21, null, current_date - 21);
+  perform create_order_internal('00000000-0000-0000-0000-0000000e0003', jsonb_build_array(jsonb_build_object('product_id', p.locker)), null, null, current_date - 9, null, current_date - 9);
 
   for d in 1..42 loop
     v_day := current_date - d;
@@ -40,34 +44,39 @@ begin
       insert into tee_booking_players (booking_id, guest_name)
       values (v_booking, v_guests[((d + j) % 6) + 1]), (v_booking, v_guests[((d + j + 3) % 6) + 1]);
 
-      -- Wat leden rond hun ronde bestellen (niet iedere keer iets)
-      if j = 1 then
+      -- Wat leden rond hun ronde regelen: buggy en de greenfee van hun introducés
+      if j = 1 or (j = 3 and d % 2 = 0) then
         perform create_order_internal(v_member, jsonb_build_array(
           jsonb_build_object('product_id', p.buggy, 'quantity', 1),
-          jsonb_build_object('product_id', p.range, 'quantity', 1)), v_booking, null, v_day, null, v_day);
-      elsif j = 2 then
+          jsonb_build_object('product_id', p.greenfee, 'quantity', 2)), v_booking, null, v_day, null, v_day);
+      elsif j = 2 or (j = 4 and d % 3 = 0) then
         perform create_order_internal(v_member, jsonb_build_array(
-          jsonb_build_object('product_id', p.greenfee, 'quantity', 2),
-          jsonb_build_object('product_id', p.lunch, 'quantity', 1)), v_booking, null, v_day, null, v_day);
-      elsif j = 3 and d % 2 = 0 then
-        perform create_order_internal(v_member, jsonb_build_array(
-          jsonb_build_object('product_id', p.trolley, 'quantity', 1)), v_booking, null, v_day, null, v_day);
-      elsif j = 4 and d % 3 = 0 then
-        perform create_order_internal(v_member, jsonb_build_array(
-          jsonb_build_object('product_id', p.borrel, 'quantity', 1),
-          jsonb_build_object('product_id', p.greenfee, 'quantity', 1)), v_booking, null, v_day, null, v_day);
+          jsonb_build_object('product_id', p.greenfee, 'quantity', 2)), v_booking, null, v_day, null, v_day);
       end if;
     end loop;
 
-    -- Losse aankopen: lessen en de proshop
+    -- Pieter (Handicart-pas) speelt doordeweeks met een buggy tegen het Handicart-tarief
+    if extract(isodow from v_day) < 6 and d % 2 = 1 then
+      insert into tee_bookings (club_id, course_id, starts_at)
+      values (v_club, v_course, (v_day + time '12:10')::timestamp at time zone 'Europe/Amsterdam')
+      returning id into v_booking;
+      insert into tee_booking_players (booking_id, member_id) values (v_booking, '00000000-0000-0000-0000-0000000e0003');
+      perform create_order_internal('00000000-0000-0000-0000-0000000e0003', jsonb_build_array(
+        jsonb_build_object('product_id', p.buggy, 'quantity', 1)), v_booking, null, v_day, null, v_day);
+    end if;
+
+    -- Lessen bij de pro
     if d % 3 = 0 then
       perform create_order_internal('00000000-0000-0000-0000-0000000e0003', jsonb_build_array(
         jsonb_build_object('product_id', p.lesson, 'quantity', 1)), null, null, v_day, null, v_day);
     end if;
-    if d % 5 = 0 then
-      perform create_order_internal('00000000-0000-0000-0000-0000000e0002', jsonb_build_array(
-        jsonb_build_object('product_id', p.balls, 'quantity', 1)), null, null, v_day, null, v_day);
-    end if;
+  end loop;
+
+  -- Wedstrijddiners bij de Septembermedal (via inschrijving in de app)
+  for v_member in select member_id from competition_entries e join competitions c on c.id = e.competition_id
+                  where c.name = 'Septembermedal' and e.member_id <> '00000000-0000-0000-0000-0000000e0004' loop
+    perform create_order_internal(v_member, jsonb_build_array(jsonb_build_object('product_id', p.diner)),
+      null, (select id from competitions where name = 'Septembermedal'), null, null, current_date - 13);
   end loop;
 
   -- Alles in het verleden is geleverd. Leden met machtiging zijn via de wekelijkse incasso betaald,

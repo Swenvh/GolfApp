@@ -8,9 +8,9 @@ export async function fetchProducts(clubId: string, categories?: ProductCategory
   return unwrap(await q) as Product[];
 }
 
-/** Resterende voorraad per product op een dag (alleen producten met een dagcapaciteit). */
-export async function fetchAvailability(clubId: string, day: string): Promise<Map<string, number>> {
-  const rows = unwrap(await supabase.rpc('product_availability', { p_club: clubId, p_day: day })) as { product_id: string; remaining: number }[];
+/** Wat er nog vrij is: buggy's rond een starttijd, lessen per dag, kluisjes per seizoen. */
+export async function fetchAvailability(clubId: string, day: string, startsAt?: string): Promise<Map<string, number>> {
+  const rows = unwrap(await supabase.rpc('product_availability', { p_club: clubId, p_day: day, p_starts_at: startsAt ?? null })) as { product_id: string; remaining: number }[];
   return new Map(rows.map((r) => [r.product_id, r.remaining]));
 }
 
@@ -37,13 +37,15 @@ export async function cancelOrder(orderId: string): Promise<void> {
   unwrap(await supabase.rpc('cancel_order', { p_order: orderId }));
 }
 
-/** Leesbare zin voor waar/wanneer iets klaarstaat. */
-export const fulfilmentHint: Record<ProductCategory, string> = {
-  rental: 'Staat klaar bij de caddiemaster',
-  range: 'Staat klaar bij de driving range',
-  greenfee: 'Wordt op jouw rekening gezet',
-  lesson: 'De pro neemt contact met je op voor een tijd',
-  food: 'Je tafel staat klaar na je ronde',
-  proshop: 'Ophalen bij de caddiemaster of in de proshop',
-  event: 'Na afloop van de wedstrijd',
-};
+/** Wat het lid na bestellen moet weten. De club vult dit per product in; anders een neutrale tekst. */
+export function fulfilmentHint(p: Pick<Product, 'category' | 'pickup_note'>): string {
+  if (p.pickup_note) return p.pickup_note;
+  switch (p.category) {
+    case 'rental': return 'Sleutel ophalen bij de receptie';
+    case 'greenfee': return 'Je gast hoeft niet langs de balie';
+    case 'lesson': return 'De pro neemt contact met je op om een tijd af te spreken';
+    case 'storage': return 'De ledenadministratie mailt je je nummer';
+    case 'event': return 'Na afloop van de wedstrijd';
+    default: return 'Staat op je rekening';
+  }
+}

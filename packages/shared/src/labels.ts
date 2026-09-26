@@ -36,8 +36,15 @@ export const ledgerTypeLabel: Record<LedgerAccountType, string> = {
 
 export const productCategoryLabel: Record<ProductCategory, string> = {
   rental: 'Verhuur', range: 'Driving range', greenfee: 'Greenfees', lesson: 'Lessen',
-  food: 'Horeca', proshop: 'Proshop', event: 'Wedstrijden & events',
+  food: 'Horeca', proshop: 'Proshop', event: 'Wedstrijden & events', storage: 'Stalling & kluisjes',
 };
+
+/** Heeft het lid op deze dag een geldige Handicart-pas? */
+export function hasValidHandicart(
+  m: { handicart_pass_number: string | null; handicart_valid_until: string | null }, day: string,
+): boolean {
+  return !!m.handicart_pass_number && (!m.handicart_valid_until || m.handicart_valid_until >= day);
+}
 
 export const orderStatusLabel: Record<OrderStatus, string> = {
   placed: 'Klaarzetten', fulfilled: 'Geleverd', cancelled: 'Geannuleerd',

@@ -1,10 +1,10 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { router, useLocalSearchParams } from 'expo-router';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Alert, Platform } from 'react-native';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { formatEuro, fullName, localDate, localTime, priceInclVat } from '@golfapp/shared';
+import { formatEuro, fullName, hasValidHandicart, localDate, localTime, priceInclVat, type Product } from '@golfapp/shared';
 import { AddOnRow } from '@/components/offer';
 import { fetchAvailability, fetchProducts, placeOrder } from '@/lib/offers';
 import { Contours } from '@/components/brand';
@@ -37,24 +37,41 @@ export default function Boeken() {
   const directory = useQuery(async () =>
     unwrap(await supabase.rpc('club_directory', { p_club: member.club_id })) as DirectoryEntry[], [member.club_id]);
 
-  // Extra's bij de ronde: verhuur, range en de greenfee voor introducés
+  // Wat je in de app regelt in plaats van te bellen: buggy (met Handicart-tarief) en de greenfee van je introducés
   const day = localDate(new Date(startsAt));
+  const handicart = hasValidHandicart(member, day);
   const offers = useQuery(async () => {
     const [products, availability] = await Promise.all([
-      fetchProducts(member.club_id, ['rental', 'range', 'greenfee']),
-      fetchAvailability(member.club_id, day),
+      fetchProducts(member.club_id, ['rental', 'greenfee']),
+      fetchAvailability(member.club_id, day, startsAt),
     ]);
     return { products, availability };
-  }, [member.club_id, day]);
+  }, [member.club_id, day, startsAt]);
   const [addOns, setAddOns] = useState<Record<string, number>>({});
   const guestCount = players.filter((p) => p.guestName).length;
   const greenfee = offers.data?.products.find((p) => p.category === 'greenfee');
-  const extras = (offers.data?.products ?? []).filter((p) => p.category !== 'greenfee');
+  const extras = (offers.data?.products ?? []).filter((p) => p.category === 'rental');
+
+  // Handicart-pashouders hebben de buggy nodig: standaard aan als er een vrij is
+  useEffect(() => {
+    if (!handicart || !offers.data) return;
+    const buggy = extras.find((p) => p.handicart_price_cents != null);
+    if (buggy && (offers.data.availability.get(buggy.id) ?? 1) > 0 && addOns[buggy.id] === undefined) {
+      setAddOns((a) => ({ ...a, [buggy.id]: 1 }));
+    }
+  }, [handicart, offers.data]); // eslint-disable-line react-hooks/exhaustive-deps
+
   const orderLines = useMemo(() => [
     ...extras.map((p) => ({ product: p, quantity: addOns[p.id] ?? 0 })),
     ...(greenfee && guestCount ? [{ product: greenfee, quantity: guestCount }] : []),
   ].filter((l) => l.quantity > 0), [extras, addOns, greenfee, guestCount]);
-  const extrasTotal = orderLines.reduce((s, l) => s + priceInclVat(l.product.price_cents, Number(l.product.vat_rate), l.quantity), 0);
+  const linePrice = (p: Product, q: number) => {
+    const special = handicart && p.handicart_price_cents != null;
+    return special
+      ? priceInclVat(p.handicart_price_cents!, Number(p.vat_rate)) + priceInclVat(p.price_cents, Number(p.vat_rate), q - 1)
+      : priceInclVat(p.price_cents, Number(p.vat_rate), q);
+  };
+  const extrasTotal = orderLines.reduce((s, l) => s + linePrice(l.product, l.quantity), 0);
 
   const maxPlayers = 4 - (existing.data ?? 0);
   const canAdd = players.length < maxPlayers;
@@ -186,8 +203,10 @@ export default function Boeken() {
       {(extras.length > 0 || (greenfee && guestCount > 0)) && (
         <>
           <View style={{ marginTop: space.lg, gap: 2 }}>
-            <T variant="heading">Maak je ronde compleet</T>
-            <T variant="small" color={colors.slate}>Staat klaar als je aankomt. Wordt op je rekening gezet.</T>
+            <T variant="heading">Regel het meteen</T>
+            <T variant="small" color={colors.slate}>
+              {handicart ? 'Je Handicart-pas staat in de app: je betaalt automatisch het Handicart-tarief.' : 'Geen telefoontje naar de receptie nodig. Het staat op je rekening.'}
+            </T>
           </View>
           {extras.map((p) => (
             <AddOnRow
@@ -195,7 +214,8 @@ export default function Boeken() {
               product={p}
               quantity={addOns[p.id] ?? 0}
               remaining={offers.data?.availability.get(p.id)}
-              max={p.category === 'rental' ? players.length : 4}
+              max={Math.max(1, Math.ceil(players.length / 2))}
+              handicart={handicart}
               onChange={(q) => setAddOns({ ...addOns, [p.id]: q })}
             />
           ))}
