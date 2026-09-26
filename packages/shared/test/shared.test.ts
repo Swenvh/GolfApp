@@ -107,3 +107,13 @@ describe('names', () => {
     expect(fullName({ first_name: 'Pieter', infix: 'van den', last_name: 'Berg' })).toBe('Pieter van den Berg');
   });
 });
+
+describe('consumentenprijzen', () => {
+  it('rekent een ronde prijs incl. btw terug naar excl.', async () => {
+    const { priceExclFromIncl, priceInclVat } = await import('../src');
+    expect(priceExclFromIncl(4000, 21)).toBe(3306);
+    expect(priceInclVat(3306, 21)).toBe(4000);
+    expect(priceInclVat(priceExclFromIncl(6000, 9), 9)).toBe(6000);
+    expect(priceInclVat(priceExclFromIncl(5000, 21), 21)).toBe(5000);
+  });
+});

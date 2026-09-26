@@ -6,6 +6,15 @@ begin
   if cond is not true then raise exception 'ASSERTION FAILED: %', msg; end if;
 end $$;
 
+-- Testdag: de eerstvolgende woensdag, minstens twee dagen vooruit (geen weekendregels, altijd in de toekomst)
+create or replace function pg_temp.test_day() returns date language sql stable as $$
+  select current_date + 2 + ((3 - extract(isodow from current_date + 2)::int + 7) % 7)
+$$;
+-- Tijdstip op de testdag in Nederlandse tijd
+create or replace function pg_temp.at(t time, d date default null) returns timestamptz language sql stable as $$
+  select (coalesce(d, pg_temp.test_day()) + t)::timestamp at time zone 'Europe/Amsterdam'
+$$;
+
 -- 1. Seed: contributiefacturen zijn aangemaakt, genummerd en geboekt ------------
 select pg_temp.assert((select count(*) from invoices where status in ('open','paid')) = 5, 'vijf contributiefacturen');
 select pg_temp.assert((select count(*) from invoices where invoice_number is null) = 0, 'alle facturen hebben een nummer');
@@ -101,7 +110,7 @@ select pg_temp.assert((select count(*) from news_posts) = 3, 'lid ziet nieuws');
 -- Starttijd boeken en flight-limiet
 insert into tee_bookings (club_id, course_id, starts_at, created_by)
 values ('00000000-0000-0000-0000-0000000c0001', '00000000-0000-0000-0000-0000000f0001',
-        date_trunc('day', now()) + interval '2 days 10 hours', auth.uid());
+        pg_temp.at('10:02'), auth.uid());
 insert into tee_booking_players (booking_id, member_id, guest_name)
 select b.id, m, g from (select id from tee_bookings where created_by = auth.uid()) b,
   (values ('00000000-0000-0000-0000-0000000e0001'::uuid, null::text),
@@ -144,10 +153,10 @@ reset role;
 select set_config('request.jwt.claim.sub', '00000000-0000-0000-0000-00000000a002', false);
 set role authenticated;
 select pg_temp.assert(
-  (select count(*) from tee_sheet('00000000-0000-0000-0000-0000000f0001', (now() + interval '2 days')::date)) = 4,
+  (select count(*) from tee_sheet('00000000-0000-0000-0000-0000000f0001', pg_temp.test_day())) = 4,
   'tee_sheet geeft 4 spelers');
 select pg_temp.assert(
-  (select bool_or(player_name = 'Sanne Jansen') from tee_sheet('00000000-0000-0000-0000-0000000f0001', (now() + interval '2 days')::date)),
+  (select bool_or(player_name = 'Sanne Jansen') from tee_sheet('00000000-0000-0000-0000-0000000f0001', pg_temp.test_day())),
   'naam medespeler zichtbaar');
 select pg_temp.assert(
   (select count(*) from competition_participants((select id from competitions where name = 'Dinsdagmiddag Stableford'))) = 1,
@@ -156,7 +165,7 @@ reset role;
 select set_config('request.jwt.claim.sub', '00000000-0000-0000-0000-00000000ffff', false);
 set role authenticated;
 select pg_temp.assert(
-  (select count(*) from tee_sheet('00000000-0000-0000-0000-0000000f0001', (now() + interval '2 days')::date)) = 0,
+  (select count(*) from tee_sheet('00000000-0000-0000-0000-0000000f0001', pg_temp.test_day())) = 0,
   'niet-lid ziet geen starttijden');
 select pg_temp.assert((select count(*) from clubs) = 0, 'niet-lid ziet geen club');
 reset role;
@@ -165,11 +174,11 @@ reset role;
 select set_config('request.jwt.claim.sub', '00000000-0000-0000-0000-00000000a002', false);
 set role authenticated;
 
--- Sanne staat om T+10:00 op de Duinbaan (ronde van 4 uur). Om T+12:00 kan niet.
+-- Sanne staat om 10:02 op de Duinbaan (ronde van 4 uur). Om 12:02 kan niet.
 do $$ begin
   begin
     perform book_tee_time('00000000-0000-0000-0000-0000000f0001',
-      date_trunc('day', now()) + interval '2 days 12 hours',
+      pg_temp.at('12:02'),
       array['00000000-0000-0000-0000-0000000e0002'::uuid]);
     raise exception 'expected failure';
   exception when others then
@@ -179,14 +188,14 @@ do $$ begin
 end $$;
 -- Mislukte boeking laat geen lege flight achter (alles in één transactie)
 select pg_temp.assert(
-  not exists (select 1 from tee_bookings where starts_at = date_trunc('day', now()) + interval '2 days 12 hours'),
+  not exists (select 1 from tee_bookings where starts_at = pg_temp.at('12:02')),
   'mislukte boeking laat geen lege flight achter');
 
--- Ook op een andere baan telt de overlap (par-3 om 13:00 valt binnen de ronde van 10:00)
+-- Ook op een andere baan telt de overlap (par-3 om 13:04 valt binnen de ronde van 10:02)
 do $$ begin
   begin
     perform book_tee_time('00000000-0000-0000-0000-0000000f0002',
-      date_trunc('day', now()) + interval '2 days 13 hours',
+      pg_temp.at('13:04'),
       array['00000000-0000-0000-0000-0000000e0002'::uuid]);
     raise exception 'expected failure';
   exception when others then
@@ -194,30 +203,30 @@ do $$ begin
   end;
 end $$;
 
--- Na afloop van de ronde (14:00) mag het wel, met een gast erbij
+-- Na afloop van de ronde (14:02) mag het wel, met een gast erbij
 select pg_temp.assert(
   book_tee_time('00000000-0000-0000-0000-0000000f0001',
-    date_trunc('day', now()) + interval '2 days 14 hours',
-    array['00000000-0000-0000-0000-0000000e0002'::uuid, '00000000-0000-0000-0000-0000000e0003'::uuid],
+    pg_temp.at('14:02'),
+    array['00000000-0000-0000-0000-0000000e0002'::uuid, '00000000-0000-0000-0000-0000000e0004'::uuid],
     array['Gast Middag']) is not null,
   'boeking na afloop van de vorige ronde lukt');
 select pg_temp.assert(
   (select count(*) from tee_booking_players p join tee_bookings b on b.id = p.booking_id
-   where b.starts_at = date_trunc('day', now()) + interval '2 days 14 hours') = 3,
+   where b.starts_at = pg_temp.at('14:02')) = 3,
   'flight met twee leden en een gast');
 
 -- Aansluiten bij een bestaande flight via dezelfde functie
 select book_tee_time('00000000-0000-0000-0000-0000000f0001',
-  date_trunc('day', now()) + interval '2 days 14 hours', array['00000000-0000-0000-0000-0000000e0005'::uuid]);
+  pg_temp.at('14:02'), array['00000000-0000-0000-0000-0000000e0005'::uuid]);
 select pg_temp.assert(
-  (select count(*) from tee_bookings where starts_at = date_trunc('day', now()) + interval '2 days 14 hours') = 1,
+  (select count(*) from tee_bookings where starts_at = pg_temp.at('14:02')) = 1,
   'aansluiten maakt geen tweede flight');
 
 -- Vijfde speler via de functie: flight vol
 do $$ begin
   begin
     perform book_tee_time('00000000-0000-0000-0000-0000000f0001',
-      date_trunc('day', now()) + interval '2 days 14 hours', '{}', array['Te veel']);
+      pg_temp.at('14:02'), '{}', array['Te veel']);
     raise exception 'expected failure';
   exception when others then
     if sqlerrm = 'expected failure' then raise; end if;
@@ -230,3 +239,137 @@ reset role;
 select pg_temp.assert(
   not exists (select 1 from information_schema.columns where table_name = 'clubs' and column_name = 'primary_color'),
   'clubkleur is verwijderd');
+
+-- 8. Starttijdenraster (8 minuten) en weekenddagen -------------------------------------
+select set_config('request.jwt.claim.sub', '00000000-0000-0000-0000-00000000a002', false);
+set role authenticated;
+do $$ begin
+  begin
+    perform book_tee_time('00000000-0000-0000-0000-0000000f0001', pg_temp.at('10:05'),
+      array['00000000-0000-0000-0000-0000000e0001'::uuid]);
+    raise exception 'expected failure';
+  exception when others then
+    if sqlerrm = 'expected failure' then raise; end if;
+    if sqlerrm not like 'Geen geldige starttijd%elke 8 minuten%' then raise exception 'onverwachte fout: %', sqlerrm; end if;
+  end;
+end $$;
+
+-- Pieter is weekdaglid: zaterdag niet, woensdag wel
+do $$ begin
+  begin
+    perform book_tee_time('00000000-0000-0000-0000-0000000f0001',
+      pg_temp.at('16:02', pg_temp.test_day() + 3), array['00000000-0000-0000-0000-0000000e0003'::uuid]);
+    raise exception 'expected failure';
+  exception when others then
+    if sqlerrm = 'expected failure' then raise; end if;
+    if sqlerrm not like '%niet in het weekend%' then raise exception 'onverwachte fout: %', sqlerrm; end if;
+  end;
+end $$;
+select pg_temp.assert(
+  book_tee_time('00000000-0000-0000-0000-0000000f0001', pg_temp.at('16:02'),
+    array['00000000-0000-0000-0000-0000000e0003'::uuid]) is not null,
+  'weekdaglid kan doordeweeks boeken');
+
+-- 9. Upsells: bestellen bij een starttijd -------------------------------------------------
+-- Jan staat om 10:02 in de flight (zie 5). E-buggy + range-emmer.
+select pg_temp.assert(
+  (select total_cents from place_order('00000000-0000-0000-0000-0000000e0001',
+     jsonb_build_array(
+       jsonb_build_object('product_id', (select id from products where name = 'E-buggy'), 'quantity', 1),
+       jsonb_build_object('product_id', (select id from products where name = 'Range-emmer (50 ballen)'), 'quantity', 1)),
+     (select b.id from tee_bookings b where b.starts_at = pg_temp.at('10:02')))) = 4500,
+  'bestelling: e-buggy 40,00 + range-emmer 5,00 incl. btw');
+select pg_temp.assert(
+  (select (i.status, i.collect_by_direct_debit, i.invoice_number is not null)::text from orders o join invoices i on i.id = o.invoice_id
+   where o.member_id = '00000000-0000-0000-0000-0000000e0001' order by o.created_at desc limit 1) = '(open,t,t)',
+  'bestelling is een definitieve factuur die via incasso loopt');
+
+-- Niet bestellen op andermans flight
+do $$ begin
+  begin
+    perform place_order('00000000-0000-0000-0000-0000000e0001',
+      jsonb_build_array(jsonb_build_object('product_id', (select id from products where name = 'E-buggy'))),
+      (select b.id from tee_bookings b where b.starts_at = pg_temp.at('16:02')));
+    raise exception 'expected failure';
+  exception when others then
+    if sqlerrm = 'expected failure' then raise; end if;
+  end;
+end $$;
+
+-- Beperkte voorraad: 8 e-buggy's per dag, er is er al 1 weg
+do $$ begin
+  begin
+    perform place_order('00000000-0000-0000-0000-0000000e0001',
+      jsonb_build_array(jsonb_build_object('product_id', (select id from products where name = 'E-buggy'), 'quantity', 8)),
+      (select b.id from tee_bookings b where b.starts_at = pg_temp.at('10:02')));
+    raise exception 'expected failure';
+  exception when others then
+    if sqlerrm = 'expected failure' then raise; end if;
+    if sqlerrm not like 'Nog maar 7 × E-buggy%' then raise exception 'onverwachte fout: %', sqlerrm; end if;
+  end;
+end $$;
+
+-- Leden kunnen niet om de controles heen
+do $$ begin
+  begin
+    perform create_order_internal('00000000-0000-0000-0000-0000000e0002', '[]'::jsonb);
+    raise exception 'expected failure';
+  exception when others then
+    if sqlerrm = 'expected failure' then raise; end if;
+  end;
+end $$;
+do $$ begin
+  begin
+    perform place_order('00000000-0000-0000-0000-0000000e0002',
+      jsonb_build_array(jsonb_build_object('product_id', (select id from products where name = 'Range-emmer (50 ballen)'))));
+    raise exception 'expected failure';
+  exception when others then
+    if sqlerrm = 'expected failure' then raise; end if;
+  end;
+end $$;
+
+-- Wedstrijd: inschrijfgeld + diner in één bestelling (Jan staat ingeschreven, zie 5)
+select pg_temp.assert(
+  (select total_cents from place_order('00000000-0000-0000-0000-0000000e0001',
+     jsonb_build_array(jsonb_build_object('product_id', (select id from products where name = 'Wedstrijddiner'))),
+     null, (select id from competitions where name = 'Dinsdagmiddag Stableford'))) = 4000,
+  'inschrijfgeld 5,00 + diner 35,00 incl. btw');
+
+-- Afmelden voor de starttijd annuleert de bijbehorende bestelling en crediteert de factuur
+delete from tee_booking_players
+where member_id = '00000000-0000-0000-0000-0000000e0001'
+  and booking_id = (select id from tee_bookings where starts_at = pg_temp.at('10:02'));
+select pg_temp.assert(
+  (select (o.status, i.status)::text from orders o join invoices i on i.id = o.invoice_id
+   where o.booking_id = (select id from tee_bookings where starts_at = pg_temp.at('10:02'))) = '(cancelled,cancelled)',
+  'afmelden annuleert bestelling en factuur');
+
+-- Leads: een vriend introduceren
+insert into leads (club_id, member_id, type, name, email)
+values ('00000000-0000-0000-0000-0000000c0001', '00000000-0000-0000-0000-0000000e0001', 'referral', 'Karin de Wit', 'karin@example.test');
+select pg_temp.assert((select count(*) from leads) = 1, 'lid ziet alleen eigen leads');
+do $$ begin
+  begin
+    insert into leads (club_id, member_id, type, name) values
+      ('00000000-0000-0000-0000-0000000c0001', '00000000-0000-0000-0000-0000000e0002', 'referral', 'Namens een ander');
+    raise exception 'expected failure';
+  exception when others then
+    if sqlerrm = 'expected failure' then raise; end if;
+  end;
+end $$;
+reset role;
+
+select pg_temp.assert((select sum(debit_cents) = sum(credit_cents) from journal_lines), 'grootboek in balans na bestellingen');
+select pg_temp.assert(
+  (select balance_cents from ledger_balances where code = '1300' and club_id = '00000000-0000-0000-0000-0000000c0001')
+  = (select coalesce(sum(total_cents - paid_cents), 0) from invoices where status = 'open'),
+  'debiteurensaldo sluit aan na bestellingen');
+
+-- 10. Beschikbaarheid zichtbaar voor leden
+select set_config('request.jwt.claim.sub', '00000000-0000-0000-0000-00000000a002', false);
+set role authenticated;
+select pg_temp.assert(
+  (select remaining from product_availability('00000000-0000-0000-0000-0000000c0001', pg_temp.test_day())
+   where product_id = (select id from products where name = 'E-buggy')) = 8,
+  'geannuleerde buggy telt niet mee: 8 beschikbaar');
+reset role;

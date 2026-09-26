@@ -1,3 +1,4 @@
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { View } from 'react-native';
 import { localTime } from '@golfapp/shared';
 import { Perforation } from './brand';
@@ -12,10 +13,12 @@ export interface TicketProps {
   maxPlayers?: number;
   onPress?: () => void;
   background?: string;
+  /** Bestelde extra's die klaarstaan, bv. ['E-buggy', 'Range-emmer'] */
+  extras?: string[];
 }
 
 /** Een starttijd als ticket: groot tijdstip, perforatie, en de flight eronder. */
-export function TeeTicket({ startsAt, courseName, players, maxPlayers = 4, onPress, background = colors.chalk }: TicketProps) {
+export function TeeTicket({ startsAt, courseName, players, maxPlayers = 4, onPress, background = colors.chalk, extras = [] }: TicketProps) {
   return (
     <Card elevated onPress={onPress} style={{ padding: 0, gap: 0 }}>
       <Row style={{ padding: space.lg, paddingBottom: space.md, alignItems: 'flex-end' }} gap={space.lg}>
@@ -41,6 +44,12 @@ export function TeeTicket({ startsAt, courseName, players, maxPlayers = 4, onPre
           {players.length === 1 ? 'Alleen jij' : `Flight van ${players.length}`} · {maxPlayers - players.length} vrij
         </T>
       </Row>
+      {extras.length > 0 && (
+        <Row gap={8} style={{ paddingHorizontal: space.lg, paddingBottom: space.lg, marginTop: -4, flexWrap: 'wrap' }}>
+          <Ionicons name="checkmark-circle" size={16} color={colors.pine600} />
+          <T variant="small" color={colors.pine700} style={{ fontFamily: fonts.bodySemibold, flex: 1 }}>Klaar voor je: {extras.join(' · ')}</T>
+        </Row>
+      )}
     </Card>
   );
 }

@@ -3,7 +3,9 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { competitionFormatLabel, competitionStatusLabel, formatEuro, localTime, type Competition } from '@golfapp/shared';
+import { competitionFormatLabel, competitionStatusLabel, formatEuro, localTime, priceInclVat, type Competition, type Product } from '@golfapp/shared';
+import { AddOnRow } from '@/components/offer';
+import { cancelOrder, placeOrder } from '@/lib/offers';
 import { Contours } from '@/components/brand';
 import { Avatar, Button, Empty, ErrorText, Eyebrow, Group, Loading, Pill, Row, Screen, T } from '@/components/ui';
 import { formatDate, formatDateTime, formatHandicap } from '@/lib/format';
@@ -24,12 +26,20 @@ export default function WedstrijdDetail() {
   const insets = useSafeAreaInsets();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string>();
+  const [withDiner, setWithDiner] = useState(false);
   const { data, loading, reload } = useQuery(async () => {
-    const [comp, participants] = await Promise.all([
+    const [comp, participants, diner, orders] = await Promise.all([
       supabase.from('competitions').select('*, course:courses(name)').eq('id', id).single(),
       supabase.rpc('competition_participants', { p_competition: id }),
+      supabase.from('products').select('*').eq('club_id', member.club_id).eq('category', 'event').eq('active', true).order('sort').limit(1),
+      supabase.from('orders').select('id, total_cents, order_lines(description)').eq('competition_id', id).eq('member_id', member.id).eq('status', 'placed'),
     ]);
-    return { comp: unwrap(comp) as Competition & { course: { name: string } | null }, participants: unwrap(participants) as Participant[] };
+    return {
+      comp: unwrap(comp) as Competition & { course: { name: string } | null },
+      participants: unwrap(participants) as Participant[],
+      diner: ((diner.data ?? []) as Product[])[0],
+      orders: (orders.data ?? []) as { id: string; total_cents: number; order_lines: { description: string }[] }[],
+    };
   }, [id]);
 
   if (loading || !data) return <Loading />;
@@ -44,11 +54,32 @@ export default function WedstrijdDetail() {
   const toggle = async () => {
     setBusy(true);
     setError(undefined);
-    const res = joined
-      ? await supabase.from('competition_entries').delete().eq('competition_id', id).eq('member_id', member.id)
-      : await supabase.from('competition_entries').insert({ competition_id: id, member_id: member.id });
+    try {
+      if (joined) {
+        // Eerst de bestelling (inschrijfgeld, diner) annuleren, dan uitschrijven
+        for (const o of data.orders) await cancelOrder(o.id);
+        unwrap(await supabase.from('competition_entries').delete().eq('competition_id', id).eq('member_id', member.id).select());
+      } else {
+        unwrap(await supabase.from('competition_entries').insert({ competition_id: id, member_id: member.id }).select());
+        if (comp.entry_fee_cents > 0 || withDiner) {
+          try {
+            await placeOrder({
+              memberId: member.id, competitionId: id,
+              lines: withDiner && data.diner ? [{ productId: data.diner.id, quantity: 1 }] : [],
+            });
+          } catch (e) {
+            // Zonder betaalde inschrijving geen deelname: inschrijving terugdraaien
+            await supabase.from('competition_entries').delete().eq('competition_id', id).eq('member_id', member.id);
+            throw e;
+          }
+        }
+      }
+      haptic.success();
+    } catch (e) {
+      haptic.warn();
+      setError(e instanceof Error ? e.message : String(e));
+    }
     setBusy(false);
-    if (res.error) { haptic.warn(); setError(res.error.message); } else haptic.success();
     reload();
   };
 
@@ -85,6 +116,20 @@ export default function WedstrijdDetail() {
           <Ionicons name="checkmark-circle" size={22} color={colors.pine700} />
           <T variant="bodyStrong" color={colors.pine800} style={{ flex: 1 }}>Je staat op de deelnemerslijst</T>
         </Row>
+      )}
+      {joined && data.orders.length > 0 && (
+        <T variant="small" color={colors.slate}>
+          Op je rekening: {data.orders.flatMap((o) => o.order_lines.map((l) => l.description)).join(', ')} ({formatEuro(data.orders.reduce((s, o) => s + o.total_cents, 0))})
+        </T>
+      )}
+      {!joined && canJoin && data.diner && (
+        <AddOnRow product={data.diner} quantity={withDiner ? 1 : 0} max={1} onChange={(q) => setWithDiner(q > 0)} />
+      )}
+      {!joined && canJoin && (comp.entry_fee_cents > 0 || withDiner) && (
+        <T variant="small" color={colors.slate}>
+          Bij inschrijven zet de club {formatEuro(comp.entry_fee_cents + (withDiner && data.diner ? priceInclVat(data.diner.price_cents, Number(data.diner.vat_rate)) : 0))} op je rekening
+          {comp.entry_fee_cents > 0 ? ` (inschrijfgeld ${formatEuro(comp.entry_fee_cents)}${withDiner ? ' + diner' : ''})` : ''}.
+        </T>
       )}
       {comp.description && <T color={colors.slate}>{comp.description}</T>}
       {comp.registration_deadline && comp.status === 'open' && (

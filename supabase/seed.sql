@@ -1,5 +1,5 @@
 -- Demodata voor lokale ontwikkeling (supabase db reset)
--- Inloggen: beheer@deduinen.test / golfapp123 (admin)  en  jan@example.test / golfapp123 (lid)
+-- Inloggen: beheer@deduinen.test / golfapp123 (admin), leden jan@example.test en pieter@example.test (weekdaglid) via e-mailcode
 
 insert into auth.users (id, instance_id, aud, role, email, encrypted_password, email_confirmed_at, created_at, updated_at,
                         raw_app_meta_data, raw_user_meta_data, confirmation_token, recovery_token, email_change_token_new, email_change)
@@ -7,11 +7,12 @@ select id::uuid, '00000000-0000-0000-0000-000000000000', 'authenticated', 'authe
        crypt('golfapp123', gen_salt('bf')), now(), now(), now(),
        '{"provider":"email","providers":["email"]}', '{}', '', '', '', ''
 from (values ('00000000-0000-0000-0000-00000000a001', 'beheer@deduinen.test'),
-             ('00000000-0000-0000-0000-00000000a002', 'jan@example.test')) as u(id, email);
+             ('00000000-0000-0000-0000-00000000a002', 'jan@example.test'),
+             ('00000000-0000-0000-0000-00000000a003', 'pieter@example.test')) as u(id, email);
 
 insert into auth.identities (id, user_id, provider_id, provider, identity_data, last_sign_in_at, created_at, updated_at)
 select gen_random_uuid(), id, id::text, 'email', jsonb_build_object('sub', id::text, 'email', email), now(), now(), now()
-from auth.users where email in ('beheer@deduinen.test', 'jan@example.test');
+from auth.users where email in ('beheer@deduinen.test', 'jan@example.test', 'pieter@example.test');
 
 insert into clubs (id, slug, name, ngf_club_code, email, phone, website, street, house_number, postal_code, city,
                    kvk_number, iban, bic, sepa_creditor_id)
@@ -37,7 +38,7 @@ values
   ('00000000-0000-0000-0000-0000000e0002', '00000000-0000-0000-0000-0000000c0001', null,
    '1002', '23456789', 'Sanne', null, 'Jansen', 'female', '1985-09-30', 'sanne@example.test', '06-23456789',
    'Kerkstraat', '4', '2201 CC', 'Noordwijk', '00000000-0000-0000-0000-0000000d0001', '2019-01-15', 8.7, 'NL44RABO0123456788'),
-  ('00000000-0000-0000-0000-0000000e0003', '00000000-0000-0000-0000-0000000c0001', null,
+  ('00000000-0000-0000-0000-0000000e0003', '00000000-0000-0000-0000-0000000c0001', '00000000-0000-0000-0000-00000000a003',
    '1003', '34567890', 'Pieter', 'van den', 'Berg', 'male', '1952-11-02', 'pieter@example.test', null,
    'Duinlaan', '88', '2204 DD', 'Katwijk', '00000000-0000-0000-0000-0000000d0002', '2008-06-01', 22.5, 'NL69INGB0123456789'),
   ('00000000-0000-0000-0000-0000000e0004', '00000000-0000-0000-0000-0000000c0001', null,
@@ -53,7 +54,7 @@ insert into sepa_mandates (club_id, member_id, mandate_reference, account_holder
   ('00000000-0000-0000-0000-0000000c0001', '00000000-0000-0000-0000-0000000e0005', 'DD-1005', 'M. el Amrani',   'NL20INGB0001234567', 'INGBNL2A', '2021-01-01');
 
 insert into courses (id, club_id, name, holes, first_tee_time, last_tee_time, interval_minutes, round_minutes) values
-  ('00000000-0000-0000-0000-0000000f0001', '00000000-0000-0000-0000-0000000c0001', 'Duinbaan (18 holes)', 18, '07:30', '17:00', 10, 240),
+  ('00000000-0000-0000-0000-0000000f0001', '00000000-0000-0000-0000-0000000c0001', 'Duinbaan (18 holes)', 18, '07:30', '17:00', 8, 240),
   ('00000000-0000-0000-0000-0000000f0002', '00000000-0000-0000-0000-0000000c0001', 'Par-3 baan', 9, '08:00', '18:00', 8, 90);
 
 insert into course_tees (course_id, name, gender, course_rating, slope_rating, par) values
@@ -116,25 +117,41 @@ with b as (
   insert into tee_bookings (club_id, course_id, starts_at, created_by)
   select '00000000-0000-0000-0000-0000000c0001', '00000000-0000-0000-0000-0000000f0001',
          ((current_date + 1) + t)::timestamp at time zone 'Europe/Amsterdam', null
-  from unnest(array[time '08:00', time '08:30', time '09:10', time '13:30']) t
+  from unnest(array[time '08:02', time '08:34', time '09:14', time '13:30']) t
   returning id, starts_at
 )
 insert into tee_booking_players (booking_id, member_id, guest_name)
 select b.id, p.m, p.g from b join (values
-  (time '08:00', '00000000-0000-0000-0000-0000000e0002'::uuid, null::text),
-  (time '08:00', '00000000-0000-0000-0000-0000000e0005', null),
-  (time '08:30', '00000000-0000-0000-0000-0000000e0003', null),
-  (time '08:30', null, 'Henk Visser'),
-  (time '09:10', '00000000-0000-0000-0000-0000000e0004', null),
+  (time '08:02', '00000000-0000-0000-0000-0000000e0002'::uuid, null::text),
+  (time '08:02', '00000000-0000-0000-0000-0000000e0005', null),
+  (time '08:34', null, 'Henk Visser'),
+  (time '08:34', null, 'Els Visser'),
+  (time '09:14', '00000000-0000-0000-0000-0000000e0004', null),
   (time '13:30', '00000000-0000-0000-0000-0000000e0002', null),
-  (time '13:30', '00000000-0000-0000-0000-0000000e0003', null),
   (time '13:30', '00000000-0000-0000-0000-0000000e0005', null),
-  (time '13:30', null, 'Anouk de Boer')
+  (time '13:30', null, 'Anouk de Boer'),
+  (time '13:30', null, 'Kees Bakker')
 ) as p(t, m, g) on (b.starts_at at time zone 'Europe/Amsterdam')::time = p.t;
 
 insert into news_posts (club_id, title, body, published_at) values
   ('00000000-0000-0000-0000-0000000c0001', 'Nieuwe openingstijden restaurant',
    'Vanaf oktober is het restaurant op maandag gesloten. De bar op het terras blijft dagelijks open tot zonsondergang.', now() - interval '6 days');
+
+-- Aanbod in de app (upsells) en wat de club voor Greenside betaalt (demo-bedrag)
+update clubs set greenside_fee_cents = 39900 where id = '00000000-0000-0000-0000-0000000c0001';
+
+insert into products (club_id, category, name, description, price_cents, vat_rate, daily_capacity, icon, sort) values
+  ('00000000-0000-0000-0000-0000000c0001', 'rental',  'E-buggy',                   'Elektrische golfkar voor 18 holes, staat klaar bij de caddiemaster.', 3306, 21, 8, 'car-sport-outline', 10),
+  ('00000000-0000-0000-0000-0000000c0001', 'rental',  'Elektrische trolley',       'Volgeladen accu, klaar bij de eerste tee.', 1240, 21, 12, 'battery-charging-outline', 20),
+  ('00000000-0000-0000-0000-0000000c0001', 'range',   'Range-emmer (50 ballen)',   'Warm je op voor je ronde. De emmer staat klaar bij de driving range.', 413, 21, null, 'basket-outline', 30),
+  ('00000000-0000-0000-0000-0000000c0001', 'greenfee','Greenfee introducé',        'Voor gasten die met een lid meespelen. Lagere prijs dan de losse greenfee van € 85.', 5505, 9, null, 'people-outline', 40),
+  ('00000000-0000-0000-0000-0000000c0001', 'lesson',  'Privéles bij de pro (30 min)', 'Eén-op-één met pro Mark van Dijk, met videoanalyse van je swing.', 4132, 21, 6, 'school-outline', 50),
+  ('00000000-0000-0000-0000-0000000c0001', 'lesson',  'Korte-spel clinic',         'Chippen en putten in een kleine groep, zaterdag 10:00.', 2479, 21, 10, 'flag-outline', 55),
+  ('00000000-0000-0000-0000-0000000c0001', 'food',    'Lunch na je ronde',         'Clubsandwich en koffie of thee. Je tafel staat klaar als je binnenkomt.', 1514, 9, null, 'restaurant-outline', 60),
+  ('00000000-0000-0000-0000-0000000c0001', 'food',    'Borrelplank voor de flight','Kaas, worst en bitterballen voor vier, op het terras.', 2248, 9, null, 'wine-outline', 65),
+  ('00000000-0000-0000-0000-0000000c0001', 'proshop', 'Titleist Pro V1 (12 ballen)','Ophalen bij de caddiemaster of in de proshop.', 5372, 21, null, 'golf-outline', 70),
+  ('00000000-0000-0000-0000-0000000c0001', 'proshop', 'Golfhandschoen',            'FootJoy WeatherSof, alle maten. Ophalen in de proshop.', 1818, 21, null, 'hand-left-outline', 75),
+  ('00000000-0000-0000-0000-0000000c0001', 'event',   'Wedstrijddiner',            'Driegangendiner na afloop van de wedstrijd, met prijsuitreiking.', 3211, 9, 60, 'restaurant', 80);
 
 -- Een paar facturen: contributie via incasso en een losse factuur
 select set_config('request.jwt.claim.sub', '00000000-0000-0000-0000-00000000a001', false);

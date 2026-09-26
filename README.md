@@ -37,11 +37,27 @@ Eén vast thema voor app, beheeromgeving en e-mails.
 |---|---|
 | Inloggen | E-mailadres + 6-cijferige code (geen wachtwoord); alleen door de club uitgenodigde leden |
 | Home | Handicap, openstaand bedrag, eigen starttijden, clubnieuws |
-| Starttijden | Tee sheet per baan/dag, boeken, aansluiten bij flight, clubgenoten en gasten toevoegen, afmelden. Een lid kan niet in twee flights staan waarvan de rondes overlappen (rondeduur per baan) |
+| Starttijden | Starttijden per 8 minuten (instelbaar per baan). Tee sheet per baan/dag, boeken, aansluiten bij flight, clubgenoten en gasten toevoegen, afmelden. Een lid kan niet in twee flights staan waarvan de rondes overlappen (rondeduur per baan) |
 | Wedstrijden | Kalender, in-/uitschrijven, deelnemerslijst, uitslagen |
 | Scores | Scorekaart invoeren met live Stableford (WHS: course/playing handicap, net double bogey), handicapindicatie |
 | Profiel | Facturen bekijken en betalen met iDEAL, contactgegevens wijzigen, privacy (ledenlijst opt-out), ledenlijst |
 | Meerdere clubs | Eén account kan lid zijn van meerdere clubs; app neemt de huisstijlkleur van de club over |
+
+### Upsells: de app verdient zichzelf terug
+
+Leden krijgen op logische momenten aanbod, en alles wat ze bestellen wordt direct een definitieve factuur (incasso of iDEAL) en een journaalpost in het grootboek.
+
+| Moment in de app | Aanbod | Opbrengst voor de club |
+|---|---|---|
+| Starttijd boeken | E-buggy, elektrische trolley, range-emmer; greenfee introducé automatisch | Verhuur, greenfees, minder werk aan de balie |
+| Clubhuis, voor je ronde | Range-emmer, lunch na je ronde | Driving range, horeca |
+| Scores | Les bij de pro, gericht als je vorm terugloopt | Lessen |
+| Wedstrijd | Inschrijfgeld + wedstrijddiner in één keer | Wedstrijdgelden, horeca |
+| Weekend kiezen als weekdaglid | Upgrade naar volledig lidmaatschap | Hogere contributie (lead voor secretariaat) |
+| Profiel / Clubhuis | Introduceer een vriend (gratis introductieronde) | Nieuwe leden (lead) |
+| Clubhuis | Proshop-aanbod | Proshop |
+
+Voor de club: **App-omzet** in de beheeromgeving toont omzet via de app, extra besteding per geboekte flight, hoe vaak de Greenside-licentie is terugverdiend, een klaarzetlijst voor de caddiemaster en de leads. Onder **Aanbod beheren** stelt de club producten, prijzen (incl. btw) en dagvoorraad in (bv. 8 e-buggy's per dag). Afmelden voor een starttijd annuleert automatisch de bijbehorende extra's.
 
 ### Clubbeheer (web)
 - **Dashboard** — actieve leden, spelers vandaag, openstaand/achterstallig, komende wedstrijden
@@ -78,7 +94,8 @@ pnpm mobile                 # Expo: scan QR met Expo Go, of druk 'w' voor web
 
 Demo-accounts (uit `supabase/seed.sql`):
 - Beheer: `beheer@deduinen.test` / `golfapp123`
-- Lid (app): `jan@example.test` → inlogcode staat in Mailpit (http://127.0.0.1:54324)
+- Leden (app): `jan@example.test` (A-lid) en `pieter@example.test` (weekdaglid) → inlogcode staat in Mailpit (http://127.0.0.1:54324)
+- `supabase/seed_demo.sql` voegt zes weken gebruik toe (boekingen, bestellingen, leads) voor demo's
 
 ## Testen
 

@@ -17,9 +17,11 @@ export default function Lidmaatschap() {
       <T variant="small" color={colors.mist} style={{ textAlign: 'center', marginBottom: space.sm }}>Laat deze kaart zien bij de caddiemaster of in het clubhuis.</T>
 
       <Group>
+        <ListRow icon="ribbon-outline" title="Lidmaatschap wijzigen" subtitle="Bekijk upgrades en wat ze kosten" onPress={() => router.push('/upgrade')} />
         <ListRow icon="receipt-outline" title="Facturen & betalingen" subtitle="Contributie, lessen en greenfees" onPress={() => router.push('/facturen')} />
         <ListRow icon="person-outline" title="Mijn gegevens" subtitle="Adres, telefoon en privacy" onPress={() => router.push('/gegevens')} />
-        <ListRow icon="people-outline" title="Ledenlijst" subtitle="Zoek een clubgenoot" onPress={() => router.push('/ledenlijst')} last={memberships.length < 2} />
+        <ListRow icon="people-outline" title="Ledenlijst" subtitle="Zoek een clubgenoot" onPress={() => router.push('/ledenlijst')} />
+        <ListRow icon="gift-outline" title="Introduceer een vriend" subtitle="Gratis introductieronde, samen met jou" onPress={() => router.push('/introduceren')} last={memberships.length < 2} />
         {memberships.length > 1 && <ListRow icon="swap-horizontal-outline" title="Andere club" subtitle={`${memberships.length} lidmaatschappen`} onPress={() => router.push('/kies-club')} last />}
       </Group>
 

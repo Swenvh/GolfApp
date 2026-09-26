@@ -3,7 +3,8 @@ import { router } from 'expo-router';
 import { useMemo, useState } from 'react';
 import { Alert, Platform, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { addDays, generateTeeSlots, localDate, localTime, type Course, type TeeSheetRow } from '@golfapp/shared';
-import { Avatar, Empty, ErrorText, Eyebrow, Loading, Row, Screen, Segmented, T } from '@/components/ui';
+import { Contours } from '@/components/brand';
+import { Avatar, Button, Card, Empty, ErrorText, Eyebrow, Loading, Row, Screen, Segmented, T } from '@/components/ui';
 import { haptic } from '@/lib/haptics';
 import { useMember } from '@/lib/session';
 import { supabase } from '@/lib/supabase';
@@ -22,6 +23,11 @@ export default function Starttijden() {
   const courses = useQuery(async () =>
     unwrap(await supabase.from('courses').select('*').eq('club_id', member.club_id).eq('active', true).order('name')) as Course[],
   [member.club_id]);
+  const membership = useQuery(async () => {
+    if (!member.membership_type_id) return null;
+    const { data } = await supabase.from('membership_types').select('name, can_book_weekend').eq('id', member.membership_type_id).maybeSingle();
+    return data as { name: string; can_book_weekend: boolean } | null;
+  }, [member.membership_type_id]);
   const course = courses.data?.find((c) => c.id === courseId) ?? courses.data?.[0];
 
   const sheet = useQuery(async () => {
@@ -49,7 +55,9 @@ export default function Starttijden() {
   if (!course) return <Screen title="Starttijden"><Empty icon="map-outline" title="Nog geen banen">De club heeft nog geen baan opengesteld voor boekingen.</Empty></Screen>;
 
   const now = Date.now();
-  const slots = generateTeeSlots(day, course).filter((s) => new Date(s.startsAt).getTime() > now);
+  const isWeekend = [0, 6].includes(new Date(`${day}T12:00:00Z`).getUTCDay());
+  const weekendLocked = isWeekend && membership.data?.can_book_weekend === false;
+  const slots = weekendLocked ? [] : generateTeeSlots(day, course).filter((s) => new Date(s.startsAt).getTime() > now);
   const parts = [
     { label: 'Ochtend', slots: slots.filter((s) => s.time < '12:00') },
     { label: 'Middag', slots: slots.filter((s) => s.time >= '12:00' && s.time < '17:00') },
@@ -64,7 +72,7 @@ export default function Starttijden() {
       sheet.reload();
     };
     if (Platform.OS === 'web') return doLeave();
-    Alert.alert('Afmelden', `Wil je je afmelden voor ${localTime(row.starts_at)}?`, [
+    Alert.alert('Afmelden', `Wil je je afmelden voor ${localTime(row.starts_at)}? Bestelde extra's worden ook geannuleerd.`, [
       { text: 'Blijven', style: 'cancel' },
       { text: 'Afmelden', style: 'destructive', onPress: doLeave },
     ]);
@@ -104,7 +112,15 @@ export default function Starttijden() {
 
       <View style={{ paddingHorizontal: space.lg, gap: space.sm, marginTop: space.md }}>
         <ErrorText message={sheet.error} />
-        {slots.length === 0 && <Empty icon="moon-outline" title="Geen starttijden meer vandaag">Kies een andere dag in de strip hierboven.</Empty>}
+        {weekendLocked ? (
+          <Card tone="pine" style={{ padding: space.xl, gap: space.md, marginTop: space.sm }}>
+            <Contours seed={12} opacity={0.06} />
+            <Eyebrow color={colors.brassLight}>{membership.data?.name}</Eyebrow>
+            <T variant="heading" color={colors.onDark} style={{ fontSize: 24, lineHeight: 29 }}>Ook in het weekend de baan op?</T>
+            <T color={colors.onDarkMuted}>Met je huidige lidmaatschap speel je doordeweeks. Bekijk wat een upgrade per maand kost.</T>
+            <Button title="Bekijk upgrade" variant="accent" icon="arrow-up-circle-outline" onPress={() => router.push('/upgrade')} />
+          </Card>
+        ) : slots.length === 0 && <Empty icon="moon-outline" title="Geen starttijden meer vandaag">Kies een andere dag in de strip hierboven.</Empty>}
         {parts.map((part) => (
           <View key={part.label} style={{ gap: space.sm }}>
             <Row style={{ marginTop: space.md, justifyContent: 'space-between' }}>

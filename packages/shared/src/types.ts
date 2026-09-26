@@ -27,6 +27,7 @@ export interface Club {
   sepa_creditor_id: string | null;
   logo_url: string | null;
   payment_term_days: number;
+  greenside_fee_cents: number;
 }
 
 export interface MembershipType {
@@ -254,4 +255,64 @@ export interface MemberBalance {
   outstanding_cents: number | null;
   overdue_cents: number | null;
   open_invoices: number;
+}
+
+export type ProductCategory = 'rental' | 'range' | 'greenfee' | 'lesson' | 'food' | 'proshop' | 'event';
+export type OrderStatus = 'placed' | 'fulfilled' | 'cancelled';
+export type LeadType = 'upgrade' | 'referral' | 'lesson';
+export type LeadStatus = 'new' | 'contacted' | 'won' | 'lost';
+
+export interface Product {
+  id: string;
+  club_id: string;
+  category: ProductCategory;
+  name: string;
+  description: string | null;
+  price_cents: number;
+  vat_rate: number;
+  ledger_account_id: string | null;
+  daily_capacity: number | null;
+  icon: string | null;
+  sort: number;
+  active: boolean;
+}
+
+export interface Order {
+  id: string;
+  club_id: string;
+  member_id: string;
+  booking_id: string | null;
+  competition_id: string | null;
+  status: OrderStatus;
+  fulfil_on: string;
+  total_cents: number;
+  invoice_id: string | null;
+  note: string | null;
+  created_at: string;
+  fulfilled_at: string | null;
+}
+
+export interface OrderLine {
+  id: string;
+  order_id: string;
+  product_id: string | null;
+  description: string;
+  quantity: number;
+  unit_price_cents: number;
+  vat_rate: number;
+}
+
+export interface Lead {
+  id: string;
+  club_id: string;
+  member_id: string | null;
+  type: LeadType;
+  name: string | null;
+  email: string | null;
+  phone: string | null;
+  note: string | null;
+  membership_type_id: string | null;
+  value_cents: number | null;
+  status: LeadStatus;
+  created_at: string;
 }

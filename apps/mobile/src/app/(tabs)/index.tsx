@@ -2,7 +2,8 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { router } from 'expo-router';
 import { Pressable, RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { formatEuro, localDate, type NewsPost, type TeeSheetRow } from '@golfapp/shared';
+import { formatEuro, localDate, localTime, priceInclVat, type MembershipType, type NewsPost, type Product, type TeeSheetRow } from '@golfapp/shared';
+import { OfferCard, productIcon } from '@/components/offer';
 import { Contours, LogoMark } from '@/components/brand';
 import { TeeTicket } from '@/components/ticket';
 import { Card, Empty, ErrorText, Eyebrow, Row, Section, T, type IconName } from '@/components/ui';
@@ -34,18 +35,58 @@ export default function Clubhuis() {
     const upcoming = (unwrap(bookings) as unknown as B[]).map((b) => b.booking).sort((a, b) => a.starts_at.localeCompare(b.starts_at));
     const next = upcoming[0];
     let flight: TeeSheetRow[] = [];
+    let extras: string[] = [];
     if (next) {
-      const sheet = await supabase.rpc('tee_sheet', { p_course: next.course.id, p_day: localDate(new Date(next.starts_at)) });
+      const [sheet, orders] = await Promise.all([
+        supabase.rpc('tee_sheet', { p_course: next.course.id, p_day: localDate(new Date(next.starts_at)) }),
+        supabase.from('orders').select('order_lines(description, quantity, product:products(category))').eq('booking_id', next.id)
+          .eq('member_id', member.id).eq('status', 'placed'),
+      ]);
       flight = ((sheet.data ?? []) as TeeSheetRow[]).filter((r) => r.booking_id === next.id && r.player_id);
+      // Alleen wat fysiek klaarstaat (niet de greenfee van introducés)
+      extras = ((orders.data ?? []) as unknown as { order_lines: { description: string; quantity: number; product: { category: string } | null }[] }[])
+        .flatMap((o) => o.order_lines).filter((l) => l.product?.category !== 'greenfee')
+        .map((l) => (l.quantity > 1 ? `${l.quantity}× ${l.description}` : l.description));
     }
+    const [products, types] = await Promise.all([
+      supabase.from('products').select('*').eq('club_id', member.club_id).eq('active', true).order('sort'),
+      supabase.from('membership_types').select('*').eq('club_id', member.club_id),
+    ]);
     return {
       news: unwrap(news) as NewsPost[],
-      next, flight, upcomingCount: upcoming.length,
+      next, flight, extras, upcomingCount: upcoming.length,
+      products: (products.data ?? []) as Product[],
+      myType: ((types.data ?? []) as MembershipType[]).find((t) => t.id === member.membership_type_id),
       outstanding: (unwrap(invoices) ?? []).reduce((s, i) => s + i.total_cents - i.paid_cents, 0),
     };
   }, [member.id]);
 
   const [featured, ...rest] = data?.news ?? [];
+
+  // Aanbod dat past bij het moment: rond je volgende ronde, of algemeen
+  const find = (cat: Product['category']) => data?.products.find((p) => p.category === cat);
+  const price = (p: Product) => formatEuro(priceInclVat(p.price_cents, Number(p.vat_rate)));
+  const has = (name: string) => data?.extras.some((e) => e.includes(name));
+  const offers: (Parameters<typeof OfferCard>[0] & { key: string })[] = [];
+  const next = data?.next;
+  if (next) {
+    const range = find('range');
+    const lunch = find('food');
+    const when = `Voor je ronde van ${localTime(next.starts_at)}`;
+    if (range && !has(range.name)) offers.push({ key: 'range', eyebrow: when, title: 'Warm je op op de range', subtitle: range.name, price: price(range), icon: productIcon(range),
+      onPress: () => router.push({ pathname: '/aanbod/[id]', params: { id: range.id, booking: next.id, context: when } }) });
+    if (lunch && !has(lunch.name)) offers.push({ key: 'lunch', eyebrow: 'Na je ronde', title: lunch.name, subtitle: 'Je tafel staat klaar als je binnenkomt', price: price(lunch), icon: productIcon(lunch),
+      onPress: () => router.push({ pathname: '/aanbod/[id]', params: { id: lunch.id, booking: next.id, context: 'Na je ronde' } }) });
+  }
+  if (data?.myType && !data.myType.can_book_weekend) {
+    offers.push({ key: 'upgrade', eyebrow: 'Lidmaatschap', title: 'Ook in het weekend spelen?', subtitle: 'Bekijk wat een upgrade kost', icon: 'ribbon-outline', tone: 'pine',
+      onPress: () => router.push('/upgrade') });
+  }
+  offers.push({ key: 'referral', eyebrow: 'Samen golfen', title: 'Introduceer een vriend', subtitle: 'Gratis introductieronde, samen met jou', icon: 'people-outline', tone: 'pine',
+    onPress: () => router.push('/introduceren') });
+  const shop = find('proshop');
+  if (shop) offers.push({ key: 'shop', eyebrow: 'Proshop', title: shop.name, subtitle: 'Ligt voor je klaar bij de caddiemaster', price: price(shop), icon: productIcon(shop),
+    onPress: () => router.push({ pathname: '/aanbod/[id]', params: { id: shop.id, context: 'Proshop' } }) });
 
   return (
     <ScrollView
@@ -87,6 +128,7 @@ export default function Clubhuis() {
             courseName={data.next.course.name}
             maxPlayers={data.next.course.max_players}
             players={data.flight.map((f) => ({ name: f.player_name ?? '', guest: !f.member_id, me: f.member_id === member.id }))}
+            extras={data.extras}
             onPress={() => router.push('/(tabs)/starttijden')}
           />
         ) : (
@@ -108,6 +150,15 @@ export default function Clubhuis() {
           <Quick icon="trophy-outline" label="Wedstrijden" onPress={() => router.push('/(tabs)/wedstrijden')} />
           <Quick icon="people-outline" label="Leden" onPress={() => router.push('/ledenlijst')} />
         </Row>
+
+        {offers.length > 0 && (
+          <Section title="Voor jou">
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginHorizontal: -space.lg }}
+              contentContainerStyle={{ gap: space.md, paddingHorizontal: space.lg, paddingBottom: 4 }}>
+              {offers.map(({ key, ...o }) => <OfferCard key={key} {...o} />)}
+            </ScrollView>
+          </Section>
+        )}
 
         <Section title="Van de club">
           {!data?.news.length && <Empty icon="newspaper-outline" title="Nog geen nieuws">Berichten van de club verschijnen hier.</Empty>}

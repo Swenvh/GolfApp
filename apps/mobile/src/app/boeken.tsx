@@ -1,9 +1,12 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { router, useLocalSearchParams } from 'expo-router';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
+import { Alert, Platform } from 'react-native';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { fullName, localTime } from '@golfapp/shared';
+import { formatEuro, fullName, localDate, localTime, priceInclVat } from '@golfapp/shared';
+import { AddOnRow } from '@/components/offer';
+import { fetchAvailability, fetchProducts, placeOrder } from '@/lib/offers';
 import { Contours } from '@/components/brand';
 import { Avatar, Button, ErrorText, Eyebrow, Group, Input, ListRow, Row, Screen, T } from '@/components/ui';
 import { capitalize, formatDate, formatHandicap } from '@/lib/format';
@@ -34,6 +37,25 @@ export default function Boeken() {
   const directory = useQuery(async () =>
     unwrap(await supabase.rpc('club_directory', { p_club: member.club_id })) as DirectoryEntry[], [member.club_id]);
 
+  // Extra's bij de ronde: verhuur, range en de greenfee voor introducés
+  const day = localDate(new Date(startsAt));
+  const offers = useQuery(async () => {
+    const [products, availability] = await Promise.all([
+      fetchProducts(member.club_id, ['rental', 'range', 'greenfee']),
+      fetchAvailability(member.club_id, day),
+    ]);
+    return { products, availability };
+  }, [member.club_id, day]);
+  const [addOns, setAddOns] = useState<Record<string, number>>({});
+  const guestCount = players.filter((p) => p.guestName).length;
+  const greenfee = offers.data?.products.find((p) => p.category === 'greenfee');
+  const extras = (offers.data?.products ?? []).filter((p) => p.category !== 'greenfee');
+  const orderLines = useMemo(() => [
+    ...extras.map((p) => ({ product: p, quantity: addOns[p.id] ?? 0 })),
+    ...(greenfee && guestCount ? [{ product: greenfee, quantity: guestCount }] : []),
+  ].filter((l) => l.quantity > 0), [extras, addOns, greenfee, guestCount]);
+  const extrasTotal = orderLines.reduce((s, l) => s + priceInclVat(l.product.price_cents, Number(l.product.vat_rate), l.quantity), 0);
+
   const maxPlayers = 4 - (existing.data ?? 0);
   const canAdd = players.length < maxPlayers;
   const matches = search.length >= 2
@@ -46,12 +68,27 @@ export default function Boeken() {
     setError(undefined);
     try {
       // Eén transactie: lukt het voor één speler niet (vol, al elders ingeschreven), dan wordt er niets geboekt
-      unwrap(await supabase.rpc('book_tee_time', {
+      const newBookingId = unwrap(await supabase.rpc('book_tee_time', {
         p_course: course,
         p_starts_at: startsAt,
         p_member_ids: players.flatMap((p) => (p.memberId ? [p.memberId] : [])),
         p_guest_names: players.flatMap((p) => (p.guestName ? [p.guestName] : [])),
-      }));
+      })) as string;
+      if (orderLines.length) {
+        try {
+          await placeOrder({
+            memberId: member.id,
+            bookingId: newBookingId,
+            lines: orderLines.map((l) => ({ productId: l.product.id, quantity: l.quantity })),
+          });
+        } catch (e) {
+          // De starttijd staat vast; alleen de extra's zijn niet gelukt
+          const msg = `Je starttijd is geboekt, maar de extra's niet: ${e instanceof Error ? e.message : e}`;
+          if (Platform.OS === 'web') setError(msg); else Alert.alert('Bijna gelukt', msg);
+          haptic.warn();
+          return;
+        }
+      }
       haptic.success();
       router.back();
     } catch (e) {
@@ -81,7 +118,17 @@ export default function Boeken() {
   return (
     <Screen
       header={header}
-      footer={<Button title={`Bevestig voor ${players.length} ${players.length === 1 ? 'speler' : 'spelers'}`} icon="checkmark" onPress={book} loading={busy} />}
+      footer={
+        <View style={{ gap: space.sm }}>
+          {extrasTotal > 0 && (
+            <Row style={{ justifyContent: 'space-between' }}>
+              <T variant="small" color={colors.slate}>Extra's op je rekening</T>
+              <T variant="bodyStrong">{formatEuro(extrasTotal)}</T>
+            </Row>
+          )}
+          <Button title={`Bevestig voor ${players.length} ${players.length === 1 ? 'speler' : 'spelers'}`} icon="checkmark" onPress={book} loading={busy} />
+        </View>
+      }
     >
       <View style={{ height: space.lg }} />
       <Row style={{ justifyContent: 'space-between' }}>
@@ -93,7 +140,7 @@ export default function Boeken() {
           <ListRow
             key={i}
             title={i === 0 ? `${p.label} (jij)` : p.label}
-            subtitle={p.guestName ? 'Gast · greenfee via de club' : `Handicap ${formatHandicap(p.hcp)}`}
+            subtitle={p.guestName ? 'Introducé · greenfee op jouw rekening' : `Handicap ${formatHandicap(p.hcp)}`}
             last={i === players.length - 1}
             right={
               <Row gap={space.md}>
@@ -134,6 +181,27 @@ export default function Boeken() {
             <Button title="Gast" icon="person-add-outline" variant="secondary" compact disabled={!guest.trim()}
               onPress={() => { setPlayers([...players, { guestName: guest.trim(), label: guest.trim() }]); setGuest(''); }} />
           </Row>
+        </>
+      )}
+      {(extras.length > 0 || (greenfee && guestCount > 0)) && (
+        <>
+          <View style={{ marginTop: space.lg, gap: 2 }}>
+            <T variant="heading">Maak je ronde compleet</T>
+            <T variant="small" color={colors.slate}>Staat klaar als je aankomt. Wordt op je rekening gezet.</T>
+          </View>
+          {extras.map((p) => (
+            <AddOnRow
+              key={p.id}
+              product={p}
+              quantity={addOns[p.id] ?? 0}
+              remaining={offers.data?.availability.get(p.id)}
+              max={p.category === 'rental' ? players.length : 4}
+              onChange={(q) => setAddOns({ ...addOns, [p.id]: q })}
+            />
+          ))}
+          {greenfee && guestCount > 0 && (
+            <AddOnRow product={greenfee} quantity={guestCount} onChange={() => {}} locked={`${guestCount === 1 ? 'je introducé' : `${guestCount} introducés`}`} />
+          )}
         </>
       )}
       <ErrorText message={error} />
