@@ -67,6 +67,6 @@ export default function Wedstrijden() {
 
 const styles = StyleSheet.create({
   date: { width: 58, paddingVertical: 10, borderRadius: radius.md, backgroundColor: colors.pine50, alignItems: 'center' },
-  dateMon: { fontFamily: fonts.bodyHeavy, fontSize: 10, letterSpacing: 1.2, textTransform: 'uppercase', color: colors.pine600 },
+  dateMon: { fontFamily: fonts.bodyHeavy, fontSize: 11, letterSpacing: 1.2, textTransform: 'uppercase', color: colors.pine600 },
   dateDay: { fontFamily: fonts.display, fontSize: 26, lineHeight: 30, color: colors.pine900 },
 });

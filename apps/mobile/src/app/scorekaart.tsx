@@ -98,7 +98,7 @@ export default function Scorekaart() {
       <View style={{ gap: space.md }}>
         <Row style={{ justifyContent: 'space-between' }}>
           <T variant="bodyStrong">Qualifying kaart (met marker)</T>
-          <Switch value={qualifying} onValueChange={setQualifying} trackColor={{ true: colors.pine700, false: colors.lineStrong }} thumbColor={colors.paper} />
+          <Switch accessibilityLabel="Qualifying kaart (met marker)" value={qualifying} onValueChange={setQualifying} trackColor={{ true: colors.pine700, false: colors.lineStrong }} thumbColor={colors.paper} />
         </Row>
         <Button title={complete ? `Kaart opslaan · ${result.stableford} punten` : `Nog ${holes.length - done} holes invullen`} onPress={save} loading={saving} disabled={!complete} />
       </View>
@@ -251,14 +251,14 @@ const styles = StyleSheet.create({
   summaryValue: { fontFamily: fonts.display, fontSize: 30, color: colors.onDark, fontVariant: ['tabular-nums'] },
   card: { backgroundColor: colors.paper, borderRadius: radius.lg, borderWidth: StyleSheet.hairlineWidth, borderColor: colors.line, overflow: 'hidden' },
   cardHead: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: space.md, paddingVertical: 10, backgroundColor: colors.pine50 },
-  headText: { fontFamily: fonts.bodyHeavy, fontSize: 10, letterSpacing: 1.2, textTransform: 'uppercase', color: colors.pine600 },
+  headText: { fontFamily: fonts.bodyHeavy, fontSize: 11, letterSpacing: 1.2, textTransform: 'uppercase', color: colors.pine600 },
   colHole: { width: 44 },
   colPar: { width: 30, textAlign: 'center' },
   colSi: { width: 34, alignItems: 'center', gap: 3 },
   colPts: { width: 34, textAlign: 'right' },
   sponsor: { paddingHorizontal: space.md, paddingBottom: 8, marginTop: -4 },
   sponsorText: { fontFamily: fonts.body, fontSize: 11, color: colors.mist, textAlign: 'center' },
-  sponsorName: { fontFamily: fonts.bodyBold, color: colors.brass },
+  sponsorName: { fontFamily: fonts.bodyBold, color: colors.brassText },
   hole: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: space.md, paddingVertical: 9 },
   holeDivider: { borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: colors.line },
   holeNo: { width: 30, height: 30, borderRadius: 15, backgroundColor: colors.pine800, alignItems: 'center', justifyContent: 'center' },
@@ -266,7 +266,7 @@ const styles = StyleSheet.create({
   cell: { fontFamily: fonts.bodyBold, fontSize: 15, color: colors.ink },
   cellMuted: { fontFamily: fonts.body, fontSize: 13, color: colors.slate, textAlign: 'center' },
   strokeDot: { width: 5, height: 5, borderRadius: 3, backgroundColor: colors.brass },
-  step: { width: 34, height: 34, borderRadius: 17, borderWidth: 1, borderColor: colors.line, alignItems: 'center', justifyContent: 'center' },
+  step: { width: 40, height: 40, borderRadius: 20, borderWidth: 1, borderColor: colors.line, alignItems: 'center', justifyContent: 'center' },
   mark: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center' },
   markInner: { width: 34, height: 34, alignItems: 'center', justifyContent: 'center' },
   markText: { fontFamily: fonts.display, fontSize: 21, fontVariant: ['tabular-nums'] },

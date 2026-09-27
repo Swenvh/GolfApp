@@ -39,7 +39,7 @@ export default function Ledenlijst() {
         keyExtractor={(d) => d.id}
         stickySectionHeadersEnabled
         renderSectionHeader={({ section }) => (
-          <View style={styles.sectionHead}><T variant="eyebrow" color={colors.brass}>{section.title}</T></View>
+          <View style={styles.sectionHead}><T variant="eyebrow" color={colors.brassText}>{section.title}</T></View>
         )}
         renderItem={({ item }) => (
           <Row gap={space.md} style={styles.row}>

@@ -273,7 +273,7 @@ export default function Boeken() {
 
 const styles = StyleSheet.create({
   header: { backgroundColor: colors.pine900, paddingHorizontal: space.xl, paddingBottom: space.xxl, gap: 4 },
-  close: { width: 34, height: 34, borderRadius: 17, backgroundColor: colors.onDarkLine, alignItems: 'center', justifyContent: 'center' },
+  close: { width: 44, height: 44, borderRadius: 22, backgroundColor: colors.onDarkLine, alignItems: 'center', justifyContent: 'center' },
   time: { fontFamily: fonts.display, fontSize: 64, lineHeight: 70, color: colors.onDark, letterSpacing: -2, marginTop: space.md, fontVariant: ['tabular-nums'] },
   match: { paddingHorizontal: space.lg, paddingVertical: 12 },
   tip: { backgroundColor: colors.pine50, borderRadius: 12, padding: space.md },

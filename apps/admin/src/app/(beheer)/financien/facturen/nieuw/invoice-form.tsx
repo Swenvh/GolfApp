@@ -54,7 +54,7 @@ export function InvoiceForm({ members, accounts, membersWithMandate, defaultMemb
       {error && <Notice tone="error">{error}</Notice>}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <Field label="Lid">
-          <select value={memberId} onChange={(e) => setMemberId(e.target.value)}>
+          <select aria-label="Lid" value={memberId} onChange={(e) => setMemberId(e.target.value)}>
             <option value="">Kies een lid…</option>
             {members.map((m) => <option key={m.id} value={m.id}>{m.label}</option>)}
           </select>
@@ -84,18 +84,18 @@ export function InvoiceForm({ members, accounts, membersWithMandate, defaultMemb
                   <td><input className="w-20" type="number" step="0.01" value={l.quantity} onChange={(e) => update(i, { quantity: Number(e.target.value) })} /></td>
                   <td><input className="w-28" inputMode="decimal" placeholder="0,00" value={l.unitPrice} onChange={(e) => update(i, { unitPrice: e.target.value })} /></td>
                   <td>
-                    <select value={l.vatRate} onChange={(e) => update(i, { vatRate: Number(e.target.value) as VatRate })}>
+                    <select aria-label="Btw" value={l.vatRate} onChange={(e) => update(i, { vatRate: Number(e.target.value) as VatRate })}>
                       {VAT_RATES.map((r) => <option key={r} value={r}>{r}%</option>)}
                     </select>
                   </td>
                   <td>
-                    <select value={l.ledgerAccountId ?? ''} onChange={(e) => update(i, { ledgerAccountId: e.target.value || null })}>
+                    <select aria-label="Grootboekrekening" value={l.ledgerAccountId ?? ''} onChange={(e) => update(i, { ledgerAccountId: e.target.value || null })}>
                       <option value="">Standaard</option>
                       {accounts.map((a) => <option key={a.id} value={a.id}>{a.label}</option>)}
                     </select>
                   </td>
                   <td className="text-right tabular-nums">{formatEuro(net)}</td>
-                  <td>{lines.length > 1 && <button className="text-stone-400 hover:text-red-600" onClick={() => setLines((ls) => ls.filter((_, j) => j !== i))}>✕</button>}</td>
+                  <td>{lines.length > 1 && <button aria-label="Regel verwijderen" className="text-stone-500 hover:text-red-600" onClick={() => setLines((ls) => ls.filter((_, j) => j !== i))}>✕</button>}</td>
                 </tr>
               );
             })}

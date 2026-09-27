@@ -54,13 +54,13 @@ export default async function LedenPage({ searchParams }: {
 
       <form className="mb-4 flex flex-wrap gap-2">
         <input name="q" defaultValue={q} placeholder="Zoek op naam, lidnummer, NGF-nummer, e-mail, plaats…" className="min-w-64 flex-1" />
-        <select name="status" defaultValue={status}>
+        <select name="status" defaultValue={status} aria-label="Status">
           <option value="all">Alle statussen</option>
           {(Object.keys(memberStatusLabel) as MemberStatus[]).map((s) => (
             <option key={s} value={s}>{memberStatusLabel[s]}</option>
           ))}
         </select>
-        <select name="type" defaultValue={type}>
+        <select name="type" defaultValue={type} aria-label="Lidmaatschap">
           <option value="">Alle lidmaatschappen</option>
           {(types ?? []).map((t) => <option key={t.id} value={t.id}>{t.name}</option>)}
         </select>

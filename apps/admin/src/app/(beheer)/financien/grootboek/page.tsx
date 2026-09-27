@@ -40,7 +40,7 @@ export default async function GrootboekPage() {
                 <tbody key={type}>
                   <tr><td colSpan={4} className="bg-stone-50/60 text-xs font-semibold uppercase tracking-wide text-stone-500">{ledgerTypeLabel[type]}</td></tr>
                   {group.map((r) => (
-                    <tr key={r.ledger_account_id} className={r.debit_cents + r.credit_cents === 0 ? 'text-stone-400' : ''}>
+                    <tr key={r.ledger_account_id} className={r.debit_cents + r.credit_cents === 0 ? 'text-stone-500' : ''}>
                       <td><span className="mr-2 font-mono text-stone-500">{r.code}</span>{r.name}</td>
                       <td className="text-right tabular-nums">{formatEuro(r.debit_cents)}</td>
                       <td className="text-right tabular-nums">{formatEuro(r.credit_cents)}</td>

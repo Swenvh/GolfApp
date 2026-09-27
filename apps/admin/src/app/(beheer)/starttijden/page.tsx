@@ -36,8 +36,8 @@ export default async function StarttijdenPage({ searchParams }: { searchParams: 
           <div className="flex items-center gap-2">
             <Link className="rounded-md border border-stone-300 bg-white px-3 py-2 text-sm" href={link(addDays(day, -1))}>←</Link>
             <form className="flex gap-2">
-              <input type="date" name="dag" defaultValue={day} />
-              <select name="baan" defaultValue={course.id}>
+              <input type="date" name="dag" defaultValue={day} aria-label="Dag" />
+              <select name="baan" defaultValue={course.id} aria-label="Baan">
                 {courses.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
               </select>
               <button className="rounded-md bg-stone-800 px-3 text-sm text-white">Toon</button>
@@ -54,7 +54,7 @@ export default async function StarttijdenPage({ searchParams }: { searchParams: 
               const flight = (byTime.get(slot.time) ?? []).filter((r) => r.player_id);
               const bookingId = byTime.get(slot.time)?.[0]?.booking_id;
               return (
-                <tr key={slot.time} className={flight.length ? '' : 'text-stone-400'}>
+                <tr key={slot.time} className={flight.length ? '' : 'text-stone-500'}>
                   <td className="font-mono">{slot.time}</td>
                   <td>
                     {flight.length === 0 ? 'vrij' : (
@@ -71,7 +71,7 @@ export default async function StarttijdenPage({ searchParams }: { searchParams: 
                             </button>
                           </form>
                         ))}
-                        <span className="self-center text-xs text-stone-400">{flight.length}/{course.max_players}</span>
+                        <span className="self-center text-xs text-stone-500">{flight.length}/{course.max_players}</span>
                       </div>
                     )}
                   </td>

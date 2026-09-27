@@ -21,12 +21,15 @@ export const colors = {
   brass: '#B8924A',
   brassLight: '#D9BC82',
   brassSoft: '#F4ECDB',
+  /** Messing als tekst op licht papier (contrast ≥ 4,5:1) */
+  brassText: '#86652A',
   // Papier en inkt
   chalk: '#F4F5F0',
   paper: '#FFFFFF',
   ink: '#12201A',
   slate: '#56655D',
-  mist: '#8C9A92',
+  /** Bijschriften en placeholders; donker genoeg voor 4,5:1 op wit en krijtwit */
+  mist: '#5F6E66',
   line: '#E3E7E0',
   lineStrong: '#CBD3CC',
   // Signaal

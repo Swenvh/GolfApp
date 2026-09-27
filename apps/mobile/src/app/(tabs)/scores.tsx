@@ -141,14 +141,14 @@ function Spark({ values }: { values: number[] }) {
 const styles = StyleSheet.create({
   proIcon: { width: 44, height: 44, borderRadius: 22, backgroundColor: colors.brassSoft, alignItems: 'center', justifyContent: 'center' },
   hcp: { fontFamily: fonts.display, fontSize: 72, lineHeight: 76, color: colors.onDark, letterSpacing: -2, fontVariant: ['tabular-nums'] },
-  sideLabel: { fontFamily: fonts.bodyHeavy, fontSize: 10, letterSpacing: 1.2, textTransform: 'uppercase', color: colors.onDarkMuted },
+  sideLabel: { fontFamily: fonts.bodyHeavy, fontSize: 11, letterSpacing: 1.2, textTransform: 'uppercase', color: colors.onDarkMuted },
   sideValue: { fontFamily: fonts.display, fontSize: 28, color: colors.brassLight },
   sideSub: { fontFamily: fonts.body, fontSize: 12, color: colors.onDarkMuted },
   round: { paddingHorizontal: space.lg, paddingVertical: 12 },
   divider: { borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: colors.line },
   dateBox: { width: 46, paddingVertical: 6, borderRadius: radius.sm, backgroundColor: colors.chalk, alignItems: 'center' },
   dateDay: { fontFamily: fonts.display, fontSize: 18, lineHeight: 20, color: colors.ink },
-  dateMon: { fontFamily: fonts.bodyHeavy, fontSize: 9, letterSpacing: 1, textTransform: 'uppercase', color: colors.slate },
+  dateMon: { fontFamily: fonts.bodyHeavy, fontSize: 10.5, letterSpacing: 1, textTransform: 'uppercase', color: colors.slate },
   pts: { fontFamily: fonts.display, fontSize: 26, lineHeight: 28, color: colors.pine700 },
   ptsUnit: { fontFamily: fonts.body, fontSize: 11, color: colors.slate },
 });

@@ -21,7 +21,7 @@ export function T({ variant = 'body', color = colors.ink, style, children, numbe
   return <Text onPress={onPress} numberOfLines={numberOfLines} style={[type[variant] as TextStyle, { color }, style]}>{children}</Text>;
 }
 
-export function Eyebrow({ children, color = colors.brass, style }: { children: ReactNode; color?: string; style?: StyleProp<TextStyle> }) {
+export function Eyebrow({ children, color = colors.brassText, style }: { children: ReactNode; color?: string; style?: StyleProp<TextStyle> }) {
   return <T variant="eyebrow" color={color} style={style}>{children}</T>;
 }
 
@@ -164,7 +164,7 @@ export function Input({ label, style, ...props }: TextInputProps & { label?: str
   return (
     <View style={{ gap: 6 }}>
       {label && <Eyebrow color={colors.slate}>{label}</Eyebrow>}
-      <TextInput placeholderTextColor={colors.mist} {...props} style={[styles.input, style]} />
+      <TextInput placeholderTextColor={colors.mist} accessibilityLabel={label ?? props.placeholder} {...props} style={[styles.input, style]} />
     </View>
   );
 }
@@ -284,7 +284,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row', gap: space.sm, alignItems: 'center', justifyContent: 'center',
     borderRadius: radius.pill, borderWidth: 1.5, paddingVertical: 15, paddingHorizontal: space.xl,
   },
-  buttonCompact: { paddingVertical: 9, paddingHorizontal: 14 },
+  buttonCompact: { paddingVertical: 11, paddingHorizontal: 14, minHeight: 44 },
   buttonText: { fontFamily: fonts.bodyBold, fontSize: 16, letterSpacing: 0.2 },
   input: {
     backgroundColor: colors.paper, borderWidth: 1, borderColor: colors.line, borderRadius: radius.md,

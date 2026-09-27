@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import type { ReactNode } from 'react';
+import { cloneElement, isValidElement, useId, type ReactNode } from 'react';
 
 export function PageHeader({ title, subtitle, actions }: { title: string; subtitle?: string; actions?: ReactNode }) {
   return (
@@ -72,12 +72,17 @@ export function ButtonLink({ href, variant = 'primary', children }: {
   return <Link href={href} className={`${buttonBase} ${buttonVariants[variant]}`}>{children}</Link>;
 }
 
+/** Label boven een invoerveld; het label is gekoppeld aan het veld (klikbaar en voorleesbaar). */
 export function Field({ label, children, hint }: { label: string; children: ReactNode; hint?: string }) {
+  const generated = useId();
+  const child = isValidElement<{ id?: string; 'aria-describedby'?: string }>(children) ? children : null;
+  const id = child?.props.id ?? `f${generated.replace(/:/g, '')}`;
+  const hintId = hint ? `${id}-hint` : undefined;
   return (
     <div className="flex flex-col gap-1">
-      <label>{label}</label>
-      {children}
-      {hint && <span className="text-xs text-stone-500">{hint}</span>}
+      <label htmlFor={child ? id : undefined}>{label}</label>
+      {child ? cloneElement(child, { id, 'aria-describedby': hintId ?? child.props['aria-describedby'] }) : children}
+      {hint && <span id={hintId} className="text-xs text-stone-500">{hint}</span>}
     </div>
   );
 }

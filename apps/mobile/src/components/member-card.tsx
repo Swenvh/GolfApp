@@ -57,11 +57,11 @@ const styles = StyleSheet.create({
   },
   card: { aspectRatio: 1.586, borderRadius: radius.lg, padding: space.xl, justifyContent: 'space-between', overflow: 'hidden' },
   top: { flexDirection: 'row', alignItems: 'flex-start', gap: space.md },
-  eyebrow: { fontFamily: fonts.bodyHeavy, fontSize: 10, letterSpacing: 1.8, textTransform: 'uppercase', color: colors.brassLight },
+  eyebrow: { fontFamily: fonts.bodyHeavy, fontSize: 11, letterSpacing: 1.8, textTransform: 'uppercase', color: colors.brassLight },
   club: { fontFamily: fonts.displayItalic, fontSize: 17, color: colors.onDark },
   name: { fontFamily: fonts.display, fontSize: 26, color: colors.onDark, letterSpacing: -0.4 },
   fields: { flexDirection: 'row', justifyContent: 'space-between', marginTop: space.sm },
-  fieldLabel: { fontFamily: fonts.bodyHeavy, fontSize: 9, letterSpacing: 1.3, textTransform: 'uppercase', color: colors.onDarkMuted },
+  fieldLabel: { fontFamily: fonts.bodyHeavy, fontSize: 10.5, letterSpacing: 1.3, textTransform: 'uppercase', color: colors.onDarkMuted },
   fieldValue: { fontFamily: fonts.bodyBold, fontSize: 14, color: colors.onDark, fontVariant: ['tabular-nums'], letterSpacing: 0.4 },
   foil: { position: 'absolute', right: 0, top: 0, bottom: 0, width: 5, backgroundColor: colors.brass },
 });

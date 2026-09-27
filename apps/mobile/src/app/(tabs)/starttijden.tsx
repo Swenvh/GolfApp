@@ -230,7 +230,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.paper, borderWidth: StyleSheet.hairlineWidth, borderColor: colors.line,
   },
   dateActive: { backgroundColor: colors.pine800, borderColor: colors.pine800 },
-  dateDay: { fontFamily: fonts.bodyHeavy, fontSize: 10, letterSpacing: 1, textTransform: 'uppercase', color: colors.slate },
+  dateDay: { fontFamily: fonts.bodyHeavy, fontSize: 11, letterSpacing: 1, textTransform: 'uppercase', color: colors.slate },
   dateNum: { fontFamily: fonts.display, fontSize: 22, color: colors.ink },
   slot: {
     flexDirection: 'row', alignItems: 'center', gap: space.md, paddingHorizontal: space.lg, paddingVertical: 14,

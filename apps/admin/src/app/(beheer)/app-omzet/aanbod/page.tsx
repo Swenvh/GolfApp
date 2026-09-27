@@ -8,9 +8,9 @@ export const metadata = { title: 'Aanbod in de app' };
 
 const euro = (c: number) => (c / 100).toFixed(2).replace('.', ',');
 
-function CategorySelect({ value }: { value?: ProductCategory }) {
+function CategorySelect({ value, id }: { value?: ProductCategory; id?: string }) {
   return (
-    <select name="category" defaultValue={value ?? 'rental'}>
+    <select id={id} name="category" defaultValue={value ?? 'rental'}>
       {(Object.keys(productCategoryLabel) as ProductCategory[]).map((c) => <option key={c} value={c}>{productCategoryLabel[c]}</option>)}
     </select>
   );

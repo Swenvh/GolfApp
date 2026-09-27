@@ -145,12 +145,12 @@ function formatISO(d: Date) {
 
 const styles = StyleSheet.create({
   hero: { backgroundColor: colors.pine900, paddingHorizontal: space.xl, paddingBottom: space.xxl, gap: 6 },
-  back: { width: 36, height: 36, borderRadius: 18, backgroundColor: colors.onDarkLine, alignItems: 'center', justifyContent: 'center', alignSelf: 'flex-end' },
+  back: { width: 44, height: 44, borderRadius: 22, backgroundColor: colors.onDarkLine, alignItems: 'center', justifyContent: 'center', alignSelf: 'flex-end' },
   bigIcon: { width: 68, height: 68, borderRadius: 34, backgroundColor: colors.onDarkLine, alignItems: 'center', justifyContent: 'center', marginBottom: space.md },
   title: { fontFamily: fonts.display, fontSize: 32, lineHeight: 36, color: colors.onDark, letterSpacing: -0.5 },
   price: { fontFamily: fonts.display, fontSize: 22, color: colors.brassLight },
   qtyRow: { backgroundColor: colors.paper, borderRadius: radius.lg, padding: space.lg, borderWidth: StyleSheet.hairlineWidth, borderColor: colors.line, gap: space.md },
-  step: { width: 36, height: 36, borderRadius: 18, borderWidth: 1, borderColor: colors.lineStrong, alignItems: 'center', justifyContent: 'center' },
+  step: { width: 44, height: 44, borderRadius: 22, borderWidth: 1, borderColor: colors.lineStrong, alignItems: 'center', justifyContent: 'center' },
   qty: { fontFamily: fonts.display, fontSize: 22, minWidth: 24, textAlign: 'center', color: colors.ink },
   done: { alignItems: 'center', gap: space.sm, paddingVertical: space.xl },
   check: { width: 64, height: 64, borderRadius: 32, backgroundColor: colors.pine700, alignItems: 'center', justifyContent: 'center', marginBottom: space.sm },

@@ -267,7 +267,7 @@ const styles = StyleSheet.create({
   name: { fontFamily: fonts.display, fontSize: 44, lineHeight: 48, color: colors.onDark, letterSpacing: -1 },
   stats: { marginTop: space.xl, paddingTop: space.lg, borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: colors.onDarkLine },
   statDivider: { width: StyleSheet.hairlineWidth, alignSelf: 'stretch', backgroundColor: colors.onDarkLine, marginHorizontal: space.md },
-  statLabel: { fontFamily: fonts.bodyHeavy, fontSize: 10, letterSpacing: 1.4, textTransform: 'uppercase', color: colors.onDarkMuted },
+  statLabel: { fontFamily: fonts.bodyHeavy, fontSize: 11, letterSpacing: 1.4, textTransform: 'uppercase', color: colors.onDarkMuted },
   statValue: { fontFamily: fonts.display, fontSize: 24, color: colors.onDark, fontVariant: ['tabular-nums'] },
   bigIcon: { width: 46, height: 46, borderRadius: 23, backgroundColor: colors.brassSoft, alignItems: 'center', justifyContent: 'center' },
   quick: {
@@ -278,7 +278,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row', alignItems: 'center', gap: space.md, padding: space.lg, borderRadius: radius.lg,
     borderWidth: 1, borderColor: colors.brassSoft, backgroundColor: colors.paper,
   },
-  sponsorEyebrow: { fontFamily: fonts.bodyHeavy, fontSize: 10, letterSpacing: 1.3, textTransform: 'uppercase', color: colors.mist },
+  sponsorEyebrow: { fontFamily: fonts.bodyHeavy, fontSize: 11, letterSpacing: 1.3, textTransform: 'uppercase', color: colors.mist },
   sponsorName: { fontFamily: fonts.display, fontSize: 18, color: colors.ink },
   quickLabel: { fontFamily: fonts.bodyBold, fontSize: 11.5, color: colors.ink },
 });

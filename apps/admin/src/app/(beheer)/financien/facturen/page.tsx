@@ -41,7 +41,7 @@ export default async function FacturenPage({ searchParams }: {
       />
       <form className="mb-4 flex flex-wrap gap-2">
         <input name="q" defaultValue={q} placeholder="Zoek op factuurnummer of omschrijving" className="min-w-64 flex-1" />
-        <select name="status" defaultValue={status}>
+        <select name="status" defaultValue={status} aria-label="Status">
           <option value="">Alle statussen</option>
           {(Object.keys(invoiceStatusLabel) as InvoiceStatus[]).map((s) => <option key={s} value={s}>{invoiceStatusLabel[s]}</option>)}
         </select>

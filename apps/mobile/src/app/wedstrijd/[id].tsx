@@ -182,10 +182,10 @@ function Fact({ label, value }: { label: string; value: string }) {
 
 const styles = StyleSheet.create({
   hero: { backgroundColor: colors.pine900, paddingHorizontal: space.xl, paddingBottom: space.xl },
-  back: { width: 36, height: 36, borderRadius: 18, backgroundColor: colors.onDarkLine, alignItems: 'center', justifyContent: 'center' },
+  back: { width: 44, height: 44, borderRadius: 22, backgroundColor: colors.onDarkLine, alignItems: 'center', justifyContent: 'center' },
   title: { fontFamily: fonts.display, fontSize: 32, lineHeight: 36, color: colors.onDark, letterSpacing: -0.6, marginTop: 6 },
   facts: { flexDirection: 'row', flexWrap: 'wrap', marginTop: space.lg, paddingTop: space.sm, borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: colors.onDarkLine },
-  factLabel: { fontFamily: fonts.bodyHeavy, fontSize: 10, letterSpacing: 1.3, textTransform: 'uppercase', color: colors.onDarkMuted },
+  factLabel: { fontFamily: fonts.bodyHeavy, fontSize: 11, letterSpacing: 1.3, textTransform: 'uppercase', color: colors.onDarkMuted },
   factValue: { fontFamily: fonts.display, fontSize: 19, color: colors.onDark },
   joined: { backgroundColor: colors.pine50, borderRadius: 14, padding: space.md },
   row: { paddingHorizontal: space.lg, paddingVertical: 12 },
