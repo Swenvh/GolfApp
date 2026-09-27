@@ -7,6 +7,9 @@
     "admin": "pnpm --filter @golfapp/admin dev",
     "typecheck": "pnpm -r typecheck",
     "test": "pnpm -r test",
-    "build:admin": "pnpm --filter @golfapp/admin build"
+    "build:admin": "pnpm --filter @golfapp/admin build",
+    "demo": "bash scripts/demo.sh start",
+    "demo:reset": "bash scripts/demo.sh reset",
+    "demo:stop": "bash scripts/demo.sh stop"
   }
 }

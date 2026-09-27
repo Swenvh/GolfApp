@@ -84,6 +84,10 @@ Buggy's worden per tijdvak geteld (een buggy kan 's ochtends én 's middags rijd
 ### Rollen
 `admin` (alles) · `finance` (penningmeester) · `secretariat` (ledenadministratie, wedstrijden, nieuws) · `marshal` (starttijden). Leden zien alleen hun eigen gegevens; de ledenlijst toont alleen naam + handicap van leden die daarmee instemmen. Alle wijzigingen aan leden, facturen, betalingen en machtigingen komen in een audit-log (AVG).
 
+## Demo
+
+Eén commando voor de volledige demo (database met demodata, clubbeheer en ledenapp): `pnpm demo`. Draaiboek voor de pitch en inloggegevens staan in [DEMO.md](DEMO.md).
+
 ## Lokaal starten
 
 Vereist: Node 22, pnpm 10, Docker, [Supabase CLI](https://supabase.com/docs/guides/cli).
