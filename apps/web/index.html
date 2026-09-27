@@ -1,0 +1,631 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Greenside</title>
+<meta name="description" content="Greenside is de ledenapp en het clubbeheer voor Nederlandse golfclubs: starttijden, leden, facturen en automatische incasso, in één verzorgde app.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Manrope:wght@400;500;600;700;800&display=swap">
+<style>
+:root{
+  color-scheme:light;
+  /* Greenside-merkkleuren */
+  --pine-950:#07201A; --pine-900:#0B2A21; --pine-800:#10392D; --pine-700:#174A3A; --pine-600:#23604B; --pine-100:#DCE8E0; --pine-50:#EEF4EF;
+  --brass:#B8924A; --brass-light:#D9BC82; --brass-soft:#F4ECDB; --brass-text:#86652A;
+  --chalk:#F4F5F0; --paper:#FFFFFF; --ink:#12201A; --slate:#56655D; --mist:#5F6E66; --line:#E3E7E0; --line-strong:#CBD3CC;
+  --on-dark:#F4F5F0; --on-dark-muted:rgba(244,245,240,.72); --on-dark-line:rgba(244,245,240,.14);
+  --display:"Fraunces",Georgia,"Times New Roman",serif;
+  --body:"Manrope",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --gutter:clamp(16px,5vw,64px);
+  --max:1200px;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--chalk);color:var(--ink);font:17px/1.6 var(--body);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{max-width:100%;display:block}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--brass);outline-offset:3px;border-radius:6px}
+.wrap{max-width:var(--max);margin:0 auto;padding-inline:var(--gutter)}
+.eyebrow{font:800 12px/1 var(--body);letter-spacing:.18em;text-transform:uppercase;color:var(--brass-text)}
+.dark .eyebrow,.calc-out .eyebrow,.plan.main .eyebrow{color:var(--brass-light)}
+h1,h2,h3{font-family:var(--display);font-weight:600;letter-spacing:-.02em;margin:0;text-wrap:balance}
+h2{font-size:clamp(34px,4.6vw,58px);line-height:1.04}
+h3{font-size:24px;line-height:1.2;letter-spacing:-.01em}
+em{font-style:italic;font-weight:500;color:var(--brass-text)}
+.dark em{color:var(--brass-light)}
+p{margin:0}
+.lede{font-size:clamp(18px,1.6vw,21px);line-height:1.55;color:var(--slate);max-width:60ch}
+.dark{background:var(--pine-900);color:var(--on-dark)}
+.dark .lede{color:var(--on-dark-muted)}
+section{padding-block:clamp(72px,10vw,140px);scroll-margin-top:76px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:52px;padding:0 26px;border-radius:999px;font:700 16px var(--body);text-decoration:none;border:1.5px solid transparent;transition:transform .15s ease,background .2s ease}
+.btn:hover{transform:translateY(-1px)}
+.btn-brass{background:var(--brass);color:#1c160a}
+.btn-brass:hover{background:var(--brass-light)}
+.btn-ghost{border-color:var(--on-dark-line);color:var(--on-dark)}
+.btn-ghost:hover{background:rgba(244,245,240,.06)}
+.btn-pine{background:var(--pine-700);color:var(--on-dark)}
+.btn-pine:hover{background:var(--pine-600)}
+.btn svg{width:18px;height:18px}
+
+/* Navigatie */
+.nav{position:fixed;inset:0 0 auto;z-index:50;padding-top:env(safe-area-inset-top,0px);transition:background .3s ease,box-shadow .3s ease}
+.nav.solid{background:rgba(11,42,33,.94);backdrop-filter:blur(10px);box-shadow:0 1px 0 var(--on-dark-line)}
+.nav .wrap{display:flex;align-items:center;gap:28px;height:76px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--on-dark)}
+.brand b{font:600 23px var(--display);letter-spacing:-.01em;font-style:italic}
+.nav ul{display:flex;gap:26px;list-style:none;margin:0 0 0 auto;padding:0}
+.nav ul a{color:var(--on-dark-muted);text-decoration:none;font-weight:600;font-size:15px}
+.nav ul a:hover{color:var(--on-dark)}
+.nav .btn{min-height:44px;padding:0 20px;font-size:15px}
+@media (max-width:900px){.nav ul{display:none}.nav .btn{margin-left:auto}}
+
+/* Opening */
+.hero{position:relative;overflow:hidden;background:var(--pine-900);color:var(--on-dark);padding-block:calc(76px + clamp(48px,8vw,110px)) clamp(64px,8vw,120px)}
+.hero canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.hero .wrap{position:relative;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:clamp(32px,5vw,72px);align-items:center}
+.hero h1{font-size:clamp(46px,6.6vw,92px);line-height:.98;letter-spacing:-.035em;margin-top:20px}
+.hero .lede{margin-top:26px}
+.hero .ctas{display:flex;flex-wrap:wrap;gap:12px;margin-top:36px}
+.facts{display:flex;flex-wrap:wrap;gap:10px 22px;margin-top:40px;padding-top:26px;border-top:1px solid var(--on-dark-line);font-size:14.5px;color:var(--on-dark-muted)}
+.facts span{display:inline-flex;align-items:center;gap:8px}
+.facts span::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--brass-light)}
+.phones{position:relative;height:clamp(460px,52vw,640px)}
+.phone{position:absolute;width:clamp(210px,21vw,290px);aspect-ratio:390/844;border-radius:40px;padding:9px;background:#050c09;box-shadow:0 0 0 1.5px #24453a,0 40px 80px -30px rgba(0,0,0,.7)}
+.phone img{width:100%;height:100%;object-fit:cover;border-radius:31px}
+.phones .p1{right:clamp(90px,12vw,170px);top:0;z-index:2}
+.phones .p2{right:0;top:14%;transform:rotate(4deg);opacity:.96}
+@media (max-width:900px){
+  .hero .wrap{grid-template-columns:1fr}
+  .phones{height:auto;display:flex;justify-content:center;gap:14px}
+  .phone{position:relative;width:min(44vw,240px);right:auto!important;top:auto!important}
+  .phones .p2{transform:rotate(3deg) translateY(24px)}
+}
+
+/* Drie redenen */
+.reasons{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(20px,3vw,40px);margin-top:56px}
+.reason{border-top:1.5px solid var(--ink);padding-top:22px}
+.reason .num{font:600 56px/1 var(--display);color:var(--pine-700);letter-spacing:-.03em}
+.reason .num small{font-size:22px;color:var(--brass-text)}
+.reason h3{margin-top:14px}
+.reason p{margin-top:10px;color:var(--slate)}
+@media (max-width:860px){.reasons{grid-template-columns:1fr}}
+
+/* Kenmerken met telefoon */
+.split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(36px,6vw,96px);align-items:center}
+.split + .split{margin-top:clamp(72px,9vw,120px)}
+.split.flip .copy{order:2}
+.split .copy h3{font-size:clamp(28px,3vw,38px)}
+.split .copy p{margin-top:16px}
+.ticks{list-style:none;margin:22px 0 0;padding:0;display:grid;gap:12px}
+.ticks li{display:grid;grid-template-columns:22px 1fr;gap:10px;align-items:start}
+.ticks li::before{content:"";width:18px;height:18px;margin-top:4px;border-radius:50%;background:var(--pine-50) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23174A3A' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12l4 4 10-10'/%3E%3C/svg%3E") center/11px no-repeat;box-shadow:inset 0 0 0 1px var(--pine-100)}
+.dark .ticks li::before{background-color:rgba(244,245,240,.1);box-shadow:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23D9BC82' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12l4 4 10-10'/%3E%3C/svg%3E")}
+.stage{position:relative;display:flex;justify-content:center;padding:clamp(28px,4vw,56px);border-radius:32px;background:var(--pine-50)}
+.stage .phone{position:relative;width:min(290px,70vw)}
+.stage.pair{gap:18px}
+.stage.pair .phone{width:min(250px,38vw)}
+.stage.pair .phone:last-child{transform:translateY(34px)}
+.dark .stage{background:rgba(244,245,240,.05)}
+@media (max-width:860px){.split{grid-template-columns:1fr}.split.flip .copy{order:0}}
+
+/* Rail met extra schermen */
+.rail{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:22px;margin-top:64px}
+.rail figure{margin:0}
+.rail .phone{position:relative;width:100%;border-radius:34px;padding:7px}
+.rail .phone img{border-radius:27px}
+.rail figcaption{margin-top:16px;font-size:15px;color:var(--slate)}
+.rail figcaption b{display:block;color:var(--ink);font-size:16px}
+@media (max-width:980px){.rail{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* Clubbeheer */
+.browser{border-radius:18px;overflow:hidden;background:var(--paper);box-shadow:0 0 0 1px var(--line),0 40px 90px -40px rgba(11,42,33,.45)}
+.browser .bar{display:flex;align-items:center;gap:7px;padding:12px 16px;background:#E9ECE6;border-bottom:1px solid var(--line)}
+.browser .bar i{width:11px;height:11px;border-radius:50%;background:var(--line-strong)}
+.browser .bar span{margin-left:12px;font:600 13px var(--body);color:var(--mist);background:var(--paper);border-radius:7px;padding:4px 14px}
+.browser img{width:100%}
+.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;margin-top:28px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:22px;overflow:hidden;display:flex;flex-direction:column}
+.card .shot{aspect-ratio:16/10;overflow:hidden;border-bottom:1px solid var(--line);background:var(--chalk)}
+.card .shot img{width:100%;height:100%;object-fit:cover;object-position:top left}
+.card .body{padding:22px}
+.card p{margin-top:8px;color:var(--slate);font-size:16px}
+@media (max-width:980px){.cards{grid-template-columns:1fr}}
+
+/* Behouden */
+.quote{font:500 clamp(28px,3.4vw,44px)/1.18 var(--display);letter-spacing:-.02em;font-style:italic;color:var(--on-dark)}
+.quote + .src{margin-top:18px;font-size:14px;color:var(--on-dark-muted)}
+
+/* Rekenvoorbeeld */
+.calc{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);border-radius:28px;overflow:hidden;background:var(--paper);border:1px solid var(--line);margin-top:48px}
+.calc-in{padding:clamp(24px,3.5vw,44px);display:grid;gap:22px}
+.field{display:grid;gap:10px}
+.field label{display:flex;justify-content:space-between;gap:16px;font-weight:700;font-size:16px}
+.field output{font-variant-numeric:tabular-nums;color:var(--pine-700);font-weight:800;white-space:nowrap}
+.field small{color:var(--mist);font-size:14px;line-height:1.45}
+input[type=range]{width:100%;accent-color:var(--pine-700);height:28px}
+.calc-out{background:var(--pine-900);color:var(--on-dark);padding:clamp(24px,3.5vw,44px);display:flex;flex-direction:column;gap:18px;position:relative;overflow:hidden}
+.calc-out .big{font:600 clamp(48px,6vw,72px)/1 var(--display);letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.calc-out dl{margin:0;display:grid;gap:10px;border-top:1px solid var(--on-dark-line);padding-top:18px}
+.calc-out dl div{display:flex;justify-content:space-between;gap:12px;font-size:15.5px;color:var(--on-dark-muted)}
+.calc-out dd{margin:0;color:var(--on-dark);font-weight:700;font-variant-numeric:tabular-nums}
+.calc-out .net{border-top:1px solid var(--on-dark-line);padding-top:12px;color:var(--on-dark)}
+.calc-out .net dd{color:var(--brass-light);font-size:19px}
+.payback{margin-top:auto;font:600 26px var(--display);color:var(--brass-light)}
+.payback small{display:block;font:500 14px var(--body);color:var(--on-dark-muted);margin-top:4px}
+.note{margin-top:18px;font-size:14px;color:var(--mist);max-width:80ch}
+@media (max-width:900px){.calc{grid-template-columns:1fr}}
+
+/* Uw club, uw merk */
+.brandgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;margin-top:52px}
+.tile{border:1px solid var(--on-dark-line);border-radius:22px;padding:24px;display:grid;gap:10px;align-content:start;background:rgba(244,245,240,.03)}
+.tile h3{font-size:21px}
+.tile p{color:var(--on-dark-muted);font-size:15.5px}
+.tag{justify-self:start;font:800 11px var(--body);letter-spacing:.12em;text-transform:uppercase;border-radius:999px;padding:5px 10px;background:rgba(217,188,130,.16);color:var(--brass-light)}
+.tag.live{background:rgba(220,232,224,.14);color:var(--pine-100)}
+@media (max-width:980px){.brandgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:560px){.brandgrid{grid-template-columns:1fr}}
+
+/* Zo werkt het */
+.steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;margin-top:52px;counter-reset:s}
+.step{background:var(--paper);border:1px solid var(--line);border-radius:22px;padding:28px;display:grid;gap:10px;align-content:start}
+.step::before{counter-increment:s;content:counter(s);font:600 44px/1 var(--display);color:var(--brass-text)}
+.step p{color:var(--slate)}
+@media (max-width:860px){.steps{grid-template-columns:1fr}}
+
+/* Prijs */
+.pricing{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:22px;margin-top:52px}
+.plan{border-radius:28px;padding:clamp(26px,3.5vw,44px);display:grid;gap:18px;align-content:start}
+.plan.main{background:var(--pine-900);color:var(--on-dark)}
+.plan.alt{background:var(--paper);border:1px solid var(--line)}
+.price{font:600 clamp(52px,6vw,76px)/1 var(--display);letter-spacing:-.03em}
+.price small{font:600 17px var(--body);letter-spacing:0;color:var(--on-dark-muted)}
+.plan.alt .price small{color:var(--mist)}
+.plan .ticks{margin-top:4px}
+@media (max-width:900px){.pricing{grid-template-columns:1fr}}
+
+/* Vragen */
+.faq{margin-top:44px;border-top:1.5px solid var(--ink)}
+.faq details{border-bottom:1px solid var(--line-strong)}
+.faq summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:20px;min-height:72px;font:600 clamp(19px,1.8vw,23px)/1.3 var(--display);padding-block:18px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";font:400 30px/1 var(--body);color:var(--brass-text);transition:transform .2s ease}
+.faq details[open] summary::after{transform:rotate(45deg)}
+.faq details p{padding:0 0 24px;color:var(--slate);max-width:72ch}
+
+/* Contact */
+.contact{position:relative;overflow:hidden}
+.contact canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.contact .wrap{position:relative;display:grid;gap:26px;justify-items:start}
+.contact h2{font-size:clamp(40px,6vw,80px);max-width:14ch}
+.mail{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-top:8px}
+.mail code{font:600 clamp(20px,2.4vw,28px) var(--display);color:var(--brass-light);user-select:all}
+.copy-btn{min-height:44px;padding:0 16px;border-radius:999px;border:1.5px solid var(--on-dark-line);background:transparent;color:var(--on-dark);font:700 14px var(--body);cursor:pointer}
+.copy-btn:hover{background:rgba(244,245,240,.06)}
+footer{background:var(--pine-950);color:var(--on-dark-muted);font-size:14.5px;padding-block:44px calc(44px + env(safe-area-inset-bottom,0px))}
+footer .wrap{display:flex;flex-wrap:wrap;gap:16px 32px;align-items:center}
+footer .brand{margin-right:auto}
+
+.reveal{transition:opacity .7s ease,transform .7s ease}
+.reveal.pending{opacity:0;transform:translateY(18px)}
+@media (prefers-reduced-motion:reduce){.reveal,.reveal.pending{opacity:1;transform:none;transition:none}.btn:hover{transform:none}}
+</style>
+</head>
+<body>
+
+<header class="nav" id="nav">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Greenside, naar boven">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><circle cx="17" cy="17" r="16" fill="none" stroke="#D9BC82" stroke-opacity=".55"/><path d="M15 8v16.5" stroke="#F4F5F0" stroke-width="1.7" stroke-linecap="round"/><path d="M15 8l8 3.4-8 3.4z" fill="#D9BC82"/><ellipse cx="15" cy="25" rx="7" ry="1.8" fill="#F4F5F0" opacity=".85"/></svg>
+      <b>Greenside</b>
+    </a>
+    <ul>
+      <li><a href="#leden">Voor leden</a></li>
+      <li><a href="#club">Voor de club</a></li>
+      <li><a href="#opbrengst">Opbrengst</a></li>
+      <li><a href="#prijs">Prijs</a></li>
+      <li><a href="#vragen">Vragen</a></li>
+    </ul>
+    <a class="btn btn-brass" href="#contact">Plan een demo</a>
+  </div>
+</header>
+
+<main id="top">
+  <!-- Opening -->
+  <section class="hero dark" aria-labelledby="hero-title">
+    <canvas id="contours-hero" aria-hidden="true"></canvas>
+    <div class="wrap">
+      <div>
+        <div class="eyebrow">Voor golfclubs in Nederland</div>
+        <h1 id="hero-title">De hele club in de broekzak van <em>elk lid.</em></h1>
+        <p class="lede">Greenside is de ledenapp en het clubbeheer in één. Starttijden, ledenadministratie, facturen en automatische incasso, in een app die net zo verzorgd is als uw baan.</p>
+        <div class="ctas">
+          <a class="btn btn-brass" href="#contact">Plan een demo
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <a class="btn btn-ghost" href="#leden">Bekijk de app</a>
+        </div>
+        <div class="facts">
+          <span>Starttijden per 8 minuten</span><span>SEPA-incasso ingebouwd</span><span>Stichting Handicart-tarief</span><span>Data in de EU</span>
+        </div>
+      </div>
+      <div class="phones" aria-label="Schermen van de ledenapp">
+        <div class="phone p1"><img src="img/app-clubhuis.jpg" alt="Het clubhuis in de app: de volgende starttijd als ticket, met flight en gereserveerde buggy" width="390" height="844"></div>
+        <div class="phone p2"><img src="img/app-ledenkaart.jpg" alt="De digitale ledenkaart met lidnummer, NGF-nummer en handicap" width="390" height="844"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Waarom -->
+  <section aria-labelledby="waarom-title">
+    <div class="wrap">
+      <div class="eyebrow">Waarom clubs kiezen voor Greenside</div>
+      <h2 id="waarom-title" class="reveal" style="margin-top:18px;max-width:18ch">Minder werk aan de balie. <em>Meer club</em> voor uw leden.</h2>
+      <div class="reasons">
+        <div class="reason reveal">
+          <div class="num">0 <small>telefoontjes</small></div>
+          <h3>Leden regelen het zelf</h3>
+          <p>Starttijd boeken, een buggy reserveren, de greenfee van een introducé betalen: alles in de app. Niemand hoeft iets klaar te zetten of af te rekenen.</p>
+        </div>
+        <div class="reason reveal">
+          <div class="num">1 <small>factuur</small></div>
+          <h3>Alles direct geboekt</h3>
+          <p>Elke bestelling is meteen een factuur en een journaalpost. Leden met een machtiging betalen via de incasso, anderen met iDEAL.</p>
+        </div>
+        <div class="reason reveal">
+          <div class="num">⅔ <small>van de inkomsten</small></div>
+          <h3>Leden die blijven</h3>
+          <p>Contributie is het grootste deel van de inkomsten van een vereniging. Wie wil opzeggen, krijgt in de app eerst een passend alternatief.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Voor leden -->
+  <section id="leden" aria-labelledby="leden-title" style="padding-top:0">
+    <div class="wrap">
+      <div class="eyebrow">Voor leden</div>
+      <h2 id="leden-title" class="reveal" style="margin-top:18px;max-width:17ch">Een app die leden <em>graag</em> openen.</h2>
+      <p class="lede reveal" style="margin-top:22px">Inloggen met een code, zonder wachtwoord. Daarna staat alles klaar: de volgende ronde als ticket, de ledenkaart, scores en facturen.</p>
+
+      <div class="split" style="margin-top:72px">
+        <div class="copy reveal">
+          <h3>Starttijden in drie tikken</h3>
+          <p class="lede">De tee sheet van de week, per baan. Tee-pegs laten zien hoeveel plekken er vrij zijn, en een lid kan nooit in twee flights tegelijk staan.</p>
+          <ul class="ticks">
+            <li>Clubgenoten en gasten toevoegen aan de flight</li>
+            <li>Afmelden met één tik, extra's worden automatisch geannuleerd</li>
+            <li>Weekdagleden kopen een losse weekendronde of een weekendpas</li>
+          </ul>
+        </div>
+        <div class="stage reveal"><div class="phone"><img src="img/app-starttijden.jpg" alt="De tee sheet: starttijden per 8 minuten met bezetting per flight" width="390" height="844"></div></div>
+      </div>
+
+      <div class="split flip">
+        <div class="copy reveal">
+          <h3>Regel het meteen, zonder de balie</h3>
+          <p class="lede">Bij het boeken staan buggy en greenfee van de introducés er direct bij. Pashouders van Stichting Handicart krijgen de buggy standaard tegen hun tarief.</p>
+          <ul class="ticks">
+            <li>Introducé-limiet per gast per jaar, daarna vanzelf de gewone greenfee</li>
+            <li>Introductiekaart voor wie vaak gasten meeneemt</li>
+            <li>Prijzen inclusief btw, precies zoals op de factuur</li>
+          </ul>
+        </div>
+        <div class="stage pair reveal">
+          <div class="phone"><img src="img/app-extras.jpg" alt="Boeken met twee introducés: buggy en greenfee direct op de rekening" width="390" height="844"></div>
+          <div class="phone"><img src="img/app-handicart.jpg" alt="Buggy tegen Handicart-tarief: 8 euro in plaats van 40 euro" width="390" height="844"></div>
+        </div>
+      </div>
+
+      <div class="rail">
+        <figure class="reveal"><div class="phone"><img src="img/app-clubhuis.jpg" alt="Het clubhuis met de volgende ronde en aanbod voor het lid" width="390" height="844"></div>
+          <figcaption><b>Het clubhuis</b>Volgende ronde, nieuws en aanbod dat bij het lid past.</figcaption></figure>
+        <figure class="reveal"><div class="phone"><img src="img/app-weekend.jpg" alt="Een weekdaglid ziet een weekendronde en een weekendpas" width="390" height="844"></div>
+          <figcaption><b>Weekend spelen</b>Voor weekdagleden: een ronde of pas, of een upgrade.</figcaption></figure>
+        <figure class="reveal"><div class="phone"><img src="img/app-scorekaart.jpg" alt="De digitale scorekaart met Stableford en een holesponsor" width="390" height="844"></div>
+          <figcaption><b>Scorekaart</b>Live Stableford volgens de WHS-regels, met holesponsors.</figcaption></figure>
+        <figure class="reveal"><div class="phone"><img src="img/app-ledenkaart.jpg" alt="De digitale ledenkaart" width="390" height="844"></div>
+          <figcaption><b>Ledenkaart</b>Altijd bij de hand, met lidnummer, NGF-nummer en handicap.</figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- Voor de club -->
+  <section id="club" aria-labelledby="club-title" style="background:var(--paper);border-block:1px solid var(--line)">
+    <div class="wrap">
+      <div class="eyebrow">Voor het bestuur en het secretariaat</div>
+      <h2 id="club-title" class="reveal" style="margin-top:18px;max-width:20ch">Mission control: in één oogopslag <em>hoe het gaat.</em></h2>
+      <p class="lede reveal" style="margin-top:22px">Bovenaan één zin: alles in orde, of wat er vandaag moet gebeuren. Daaronder een takenlijst in gewone taal, met bij elk punt één knop. Gemaakt voor vrijwilligers, niet voor boekhouders.</p>
+      <div class="browser reveal" style="margin-top:52px">
+        <div class="bar"><i></i><i></i><i></i><span>beheer.greenside.nl</span></div>
+        <img src="img/beheer-mission-control.jpg" alt="Mission control van het clubbeheer: een takenlijst met verzoeken, aanmeldingen en de incasso" width="1440" height="900">
+      </div>
+      <div class="cards">
+        <article class="card reveal">
+          <div class="shot"><img src="img/beheer-incasso.jpg" alt="SEPA-incasso: batches aanmaken en verwerken"></div>
+          <div class="body"><h3>Financiën die kloppen</h3>
+            <p>Facturen met btw per regel, SEPA-incasso voor de bank, betalingen en een grootboek dat automatisch dubbel boekt.</p></div>
+        </article>
+        <article class="card reveal">
+          <div class="shot"><img src="img/beheer-wijzigingen.jpg" alt="Verzoeken om het lidmaatschap te pauzeren of om te zetten"></div>
+          <div class="body"><h3>Ledenadministratie</h3>
+            <p>Leden, machtigingen en wijzigingen op één plek. Een pauze of omzetting gaat vanzelf in op de ingangsdatum.</p></div>
+        </article>
+        <article class="card reveal">
+          <div class="shot"><img src="img/beheer-app-omzet.jpg" alt="Omzet via de app, per week en per categorie"></div>
+          <div class="body"><h3>Zien wat de app oplevert</h3>
+            <p>Omzet via de app, buggy's voor de receptie, aanmeldingen van nieuwe leden en hoe vaak de licentie is terugverdiend.</p></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Behouden -->
+  <section class="dark" aria-labelledby="behoud-title">
+    <div class="wrap">
+      <div class="split">
+        <div class="copy">
+          <div class="eyebrow">Leden behouden</div>
+          <h2 id="behoud-title" class="reveal" style="margin-top:18px">Opzeggen wordt <em>pauzeren.</em></h2>
+          <p class="lede reveal" style="margin-top:20px">Wie wil stoppen, geeft eerst een reden. Bij een blessure biedt de app een lidmaatschap op rust aan; is het te duur, dan een vorm die beter past. Opzeggen kan altijd, maar staat onderaan.</p>
+          <ul class="ticks reveal">
+            <li>Het secretariaat keurt goed met één klik</li>
+            <li>Mission control laat zien hoeveel leden en contributie de app behield</li>
+            <li>Gezinsleden en vrienden aanmelden vanuit dezelfde app</li>
+          </ul>
+        </div>
+        <div class="stage reveal"><div class="phone"><img src="img/app-op-rust.jpg" alt="In plaats van opzeggen: lidmaatschap op rust of een goedkopere vorm" width="390" height="844"></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Opbrengst -->
+  <section id="opbrengst" aria-labelledby="opbrengst-title">
+    <div class="wrap">
+      <div class="eyebrow">De app verdient zichzelf terug</div>
+      <h2 id="opbrengst-title" class="reveal" style="margin-top:18px;max-width:18ch">Reken het uit voor <em>uw club.</em></h2>
+      <p class="lede reveal" style="margin-top:22px">Alleen inkomsten die er zonder app niet waren geweest, plus de tijd die de receptie terugkrijgt. Schuif met de aannames van uw eigen club.</p>
+      <div class="calc reveal">
+        <form class="calc-in" id="calc" onsubmit="return false" aria-label="Aannames">
+          <div class="field">
+            <label for="c-contributie">Gemiddelde jaarcontributie <output for="c-contributie" id="o-contributie"></output></label>
+            <input type="range" id="c-contributie" min="600" max="3000" step="1" value="1337">
+            <small>Gemiddeld in Nederland (2026): € 1.337 voor onbeperkt speelrecht (Golf.nl).</small>
+          </div>
+          <div class="field">
+            <label for="c-nieuw">Nieuwe leden via vrienden en gezin <output for="c-nieuw" id="o-nieuw"></output></label>
+            <input type="range" id="c-nieuw" min="0" max="30" step="1" value="6">
+          </div>
+          <div class="field">
+            <label for="c-behoud">Leden die pauzeren in plaats van opzeggen <output for="c-behoud" id="o-behoud"></output></label>
+            <input type="range" id="c-behoud" min="0" max="25" step="1" value="4">
+            <small>Gerekend met 40% van de contributie.</small>
+          </div>
+          <div class="field">
+            <label for="c-weekend">Weekendrondes van weekdagleden (à € 35) <output for="c-weekend" id="o-weekend"></output></label>
+            <input type="range" id="c-weekend" min="0" max="400" step="10" value="80">
+          </div>
+          <div class="field">
+            <label for="c-sponsor">Holesponsors op de scorekaart (à € 750 per jaar) <output for="c-sponsor" id="o-sponsor"></output></label>
+            <input type="range" id="c-sponsor" min="0" max="18" step="1" value="6">
+          </div>
+          <div class="field">
+            <label for="c-bellen">Minder telefoontjes en balie-afrekeningen per week <output for="c-bellen" id="o-bellen"></output></label>
+            <input type="range" id="c-bellen" min="0" max="200" step="5" value="60">
+            <small>Drie minuten per keer, à € 30 per uur.</small>
+          </div>
+        </form>
+        <div class="calc-out" aria-live="polite">
+          <div class="eyebrow">Wat de app per jaar oplevert</div>
+          <div class="big" id="r-totaal">€ 0</div>
+          <dl>
+            <div><dt>Nieuwe leden</dt><dd id="r-nieuw"></dd></div>
+            <div><dt>Behouden leden</dt><dd id="r-behoud"></dd></div>
+            <div><dt>Weekendrondes</dt><dd id="r-weekend"></dd></div>
+            <div><dt>Sponsorplekken</dt><dd id="r-sponsor"></dd></div>
+            <div><dt>Tijd aan de balie</dt><dd id="r-tijd"></dd></div>
+            <div><dt>Greenside (€ 399 per maand)</dt><dd id="r-licentie"></dd></div>
+            <div class="net"><dt>Over na de licentie</dt><dd id="r-net"></dd></div>
+          </dl>
+          <div class="payback"><span id="r-x">0×</span> terugverdiend<small id="r-weken"></small></div>
+        </div>
+      </div>
+      <p class="note">Rekenvoorbeeld, geen belofte. Nieuwe en behouden leden zijn gerekend met één jaar contributie, terwijl een lid meestal meerdere jaren blijft. Greenfees en buggyhuur die nu al aan de balie binnenkomen, tellen niet mee.</p>
+    </div>
+  </section>
+
+  <!-- Merk -->
+  <section class="dark" aria-labelledby="merk-title" style="background:var(--pine-950)">
+    <div class="wrap">
+      <div class="eyebrow">Uw club, in Greenside-kwaliteit</div>
+      <h2 id="merk-title" class="reveal" style="margin-top:18px;max-width:18ch">Een app die voelt als <em>uw eigen club.</em></h2>
+      <p class="lede reveal" style="margin-top:22px">Eén verzorgd ontwerp voor elke club, zodat het altijd klopt. Daarbinnen krijgt uw club een eigen gezicht.</p>
+      <div class="brandgrid">
+        <div class="tile reveal"><span class="tag live">Nu</span><h3>Uw naam en uw leden</h3><p>Clubnaam, lidnummers en de digitale ledenkaart in de stijl van Greenside.</p></div>
+        <div class="tile reveal"><span class="tag">Binnenkort</span><h3>Clubwapen en clubkleur</h3><p>Uw wapen in de app, uw kleur als accent. De app bewaakt dat alles leesbaar blijft.</p></div>
+        <div class="tile reveal"><span class="tag">Binnenkort</span><h3>Uw eigen baan als beeld</h3><p>De hoogtelijnen in de app getekend naar het terrein van uw baan: duin, bos of polder.</p></div>
+        <div class="tile reveal"><span class="tag">Binnenkort</span><h3>Eigen app in de stores</h3><p>Voor wie dat wil: de app onder uw clubnaam in de App Store en Google Play.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Zo werkt het -->
+  <section aria-labelledby="stappen-title">
+    <div class="wrap">
+      <div class="eyebrow">Zo stapt uw club over</div>
+      <h2 id="stappen-title" class="reveal" style="margin-top:18px;max-width:16ch">In drie stappen <em>live.</em></h2>
+      <div class="steps">
+        <div class="step reveal"><h3>Kennismaking</h3><p>We laten de app zien aan het bestuur, met de cijfers van uw eigen club in het rekenvoorbeeld.</p></div>
+        <div class="step reveal"><h3>Proefmaand</h3><p>Uw club probeert Greenside een maand. We zetten de banen, tarieven en lidmaatschappen samen klaar.</p></div>
+        <div class="step reveal"><h3>Leden uitnodigen</h3><p>Leden krijgen een uitnodiging per e-mail en loggen in met een code. Wij helpen het secretariaat de eerste weken.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Prijs -->
+  <section id="prijs" aria-labelledby="prijs-title" style="padding-top:0">
+    <div class="wrap">
+      <div class="eyebrow">Prijs</div>
+      <h2 id="prijs-title" class="reveal" style="margin-top:18px;max-width:18ch">Eén prijs, <em>alles erin.</em></h2>
+      <div class="pricing">
+        <div class="plan main reveal">
+          <div class="eyebrow">Greenside</div>
+          <div class="price">€ 399 <small>per maand, per club</small></div>
+          <p style="color:var(--on-dark-muted)">De ledenapp voor iOS en Android, het clubbeheer en alle functies. Geen kosten per lid.</p>
+          <ul class="ticks">
+            <li>Starttijden, wedstrijden, scorekaart en nieuws</li>
+            <li>Leden, facturen, SEPA-incasso en grootboek</li>
+            <li>Aanbod in de app, sponsorplekken en Mission control</li>
+            <li>De eerste maand gratis proberen</li>
+          </ul>
+          <a class="btn btn-brass" href="#contact" style="justify-self:start">Plan een demo</a>
+        </div>
+        <div class="plan alt reveal">
+          <div class="eyebrow">Clubeditie</div>
+          <div class="price" style="font-size:clamp(40px,4.4vw,56px)">Op aanvraag</div>
+          <p style="color:var(--slate)">Voor clubs die hun eigen app in de stores willen, met clubwapen en de hoogtelijnen van de eigen baan.</p>
+          <a class="btn btn-pine" href="#contact" style="justify-self:start">Neem contact op</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Vragen -->
+  <section id="vragen" aria-labelledby="vragen-title" style="padding-top:0">
+    <div class="wrap" style="max-width:920px">
+      <div class="eyebrow">Veelgestelde vragen</div>
+      <h2 id="vragen-title" style="margin-top:18px">Goed om te <em>weten.</em></h2>
+      <div class="faq">
+        <details><summary>Moeten leden een wachtwoord onthouden?</summary>
+          <p>Nee. Leden vullen hun e-mailadres in en krijgen een code van zes cijfers. Alleen leden die de club heeft uitgenodigd, komen binnen.</p></details>
+        <details><summary>Hoe werkt het met handicaps en de NGF?</summary>
+          <p>De app berekent Stableford en een handicapindicatie volgens de WHS-regels. Uw officiële handicap blijft bij de NGF; een koppeling daarmee staat op de planning.</p></details>
+        <details><summary>Wat gebeurt er met de betalingen?</summary>
+          <p>Elke bestelling in de app is direct een factuur in uw eigen administratie. Leden met een machtiging betalen via de eerstvolgende incasso; anderen betalen met iDEAL. Het geld komt rechtstreeks bij de club binnen.</p></details>
+        <details><summary>Waar staan de gegevens van onze leden?</summary>
+          <p>In een database in de EU. Elke club ziet alleen haar eigen leden, en leden alleen hun eigen gegevens. Wijzigingen aan leden, facturen en machtigingen worden vastgelegd, zoals de AVG vraagt.</p></details>
+        <details><summary>Wij hebben al een systeem. Kunnen we overstappen?</summary>
+          <p>Ja. In de proefmaand zetten we samen uw banen, tarieven en lidmaatschappen klaar en helpen we uw ledenbestand over te zetten.</p></details>
+        <details><summary>Heeft de club er extra werk aan?</summary>
+          <p>Nee, eerder minder. Leden regelen het zelf in de app en niemand hoeft iets klaar te zetten of aan de balie af te rekenen. Mission control laat zien wat er nog moet gebeuren.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section class="dark contact" id="contact" aria-labelledby="contact-title">
+    <canvas id="contours-contact" aria-hidden="true"></canvas>
+    <div class="wrap">
+      <div class="eyebrow">Plan een demo</div>
+      <h2 id="contact-title">Zullen we het uw club <em>laten zien?</em></h2>
+      <p class="lede">In een half uur ziet uw bestuur de app, het clubbeheer en wat het uw club oplevert. Stuur ons een bericht met de naam van uw club.</p>
+      <div class="mail">
+        <code id="mail">hallo@greenside.nl</code>
+        <button class="copy-btn" type="button" id="copy">Kopieer adres</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <a class="brand" href="#top"><svg width="26" height="26" viewBox="0 0 34 34" aria-hidden="true"><circle cx="17" cy="17" r="16" fill="none" stroke="#D9BC82" stroke-opacity=".55"/><path d="M15 8v16.5" stroke="#F4F5F0" stroke-width="1.7"/><path d="M15 8l8 3.4-8 3.4z" fill="#D9BC82"/></svg><b style="font-size:19px">Greenside</b></a>
+    <span>Ledenapp en clubbeheer voor golfclubs in Nederland</span>
+    <span>© 2026 Greenside</span>
+  </div>
+</footer>
+
+<script>
+(() => {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Navigatie wordt donker zodra je voorbij de opening scrolt
+  const nav = document.getElementById('nav');
+  const onScroll = () => nav.classList.toggle('solid', scrollY > 40);
+  addEventListener('scroll', onScroll, { passive: true }); onScroll();
+
+  // Rustig binnenkomen van secties (alleen zolang ze nog niet in beeld waren)
+  const els = [...document.querySelectorAll('.reveal')];
+  if (!reduce && 'IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => entries.forEach((e) => {
+      if (e.isIntersecting) { e.target.classList.remove('pending'); io.unobserve(e.target); }
+    }), { rootMargin: '0px 0px -8% 0px' });
+    els.forEach((el) => { if (el.getBoundingClientRect().top > innerHeight) { el.classList.add('pending'); io.observe(el); } });
+  }
+
+  // Hoogtelijnen zoals op een baankaart, langzaam bewegend
+  function contours(id, seed) {
+    const c = document.getElementById(id); if (!c) return;
+    const ctx = c.getContext('2d');
+    let w = 0, h = 0, t = 0;
+    const dpr = Math.min(2, devicePixelRatio || 1);
+    const size = () => { w = c.clientWidth; h = c.clientHeight; c.width = w * dpr; c.height = h * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0); };
+    const centers = [[0.78, 0.32, 1], [0.18, 0.9, 0.8], [0.52, 1.25, 1.3]].map(([x, y, s], i) => ({ x, y, s, p: seed + i * 1.7 }));
+    const draw = () => {
+      ctx.clearRect(0, 0, w, h);
+      ctx.lineWidth = 1;
+      const R = Math.max(w, h);
+      for (const k of centers) {
+        for (let ring = 1; ring < 16; ring++) {
+          const base = ring * R * 0.045 * k.s;
+          ctx.beginPath();
+          for (let a = 0; a <= Math.PI * 2 + 0.01; a += Math.PI / 90) {
+            const n = Math.sin(a * 3 + k.p + t * 0.6) * 0.09 + Math.sin(a * 5 - k.p + ring * 0.35 + t * 0.4) * 0.05 + Math.sin(a * 2 + ring * 0.2) * 0.06;
+            const r = base * (1 + n);
+            const x = k.x * w + Math.cos(a) * r * 1.25, y = k.y * h + Math.sin(a) * r;
+            a === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+          }
+          ctx.strokeStyle = `rgba(217,188,130,${ring % 5 === 0 ? 0.2 : 0.085})`;
+          ctx.stroke();
+        }
+      }
+    };
+    size(); draw();
+    addEventListener('resize', () => { size(); draw(); });
+    if (!reduce) {
+      let visible = true;
+      new IntersectionObserver(([e]) => { visible = e.isIntersecting; }).observe(c);
+      const loop = () => { if (visible && !document.hidden) { t += 0.004; draw(); } requestAnimationFrame(loop); };
+      requestAnimationFrame(loop);
+    }
+  }
+  contours('contours-hero', 0.3);
+  contours('contours-contact', 2.1);
+
+  // Rekenvoorbeeld
+  const eur = new Intl.NumberFormat('nl-NL', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 });
+  const val = (id) => Number(document.getElementById(id).value);
+  const put = (id, v) => { document.getElementById(id).textContent = v; };
+  const LICENTIE = 399 * 12;
+  function calc() {
+    const contributie = val('c-contributie'), nieuw = val('c-nieuw'), behoud = val('c-behoud'),
+          weekend = val('c-weekend'), sponsor = val('c-sponsor'), bellen = val('c-bellen');
+    put('o-contributie', eur.format(contributie)); put('o-nieuw', nieuw); put('o-behoud', behoud);
+    put('o-weekend', weekend); put('o-sponsor', sponsor); put('o-bellen', bellen);
+    const n = nieuw * contributie, b = behoud * contributie * 0.4, wk = weekend * 35, sp = sponsor * 750, tijd = bellen * 3 / 60 * 30 * 52;
+    const totaal = n + b + wk + sp + tijd;
+    put('r-totaal', eur.format(totaal)); put('r-nieuw', eur.format(n)); put('r-behoud', eur.format(b));
+    put('r-weekend', eur.format(wk)); put('r-sponsor', eur.format(sp)); put('r-tijd', eur.format(tijd));
+    put('r-licentie', '− ' + eur.format(LICENTIE)); put('r-net', eur.format(totaal - LICENTIE));
+    put('r-x', (totaal / LICENTIE).toFixed(1).replace('.', ',') + '×');
+    const weken = LICENTIE / (totaal / 52);
+    put('r-weken', totaal > 0 ? (weken <= 52 ? `De jaarlicentie is na ${Math.ceil(weken)} weken terugverdiend` : 'Met deze aannames verdient de licentie zich niet binnen een jaar terug') : '');
+  }
+  document.querySelectorAll('#calc input').forEach((i) => i.addEventListener('input', calc)); calc();
+
+  // E-mailadres kopiëren
+  const btn = document.getElementById('copy');
+  btn.addEventListener('click', () => {
+    const text = document.getElementById('mail').textContent;
+    const done = () => { btn.textContent = 'Gekopieerd'; setTimeout(() => { btn.textContent = 'Kopieer adres'; }, 2000); };
+    (navigator.clipboard ? navigator.clipboard.writeText(text) : Promise.reject()).then(done, () => {
+      const r = document.createRange(); r.selectNodeContents(document.getElementById('mail'));
+      const s = getSelection(); s.removeAllRanges(); s.addRange(r); btn.textContent = 'Geselecteerd';
+    });
+  });
+})();
+</script>
+</body>
+</html>

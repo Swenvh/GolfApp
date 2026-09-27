@@ -10,6 +10,7 @@ Eén platform voor alle golfclubs in Nederland:
 ```
 apps/mobile      Expo Router-app voor leden
 apps/admin       Next.js-beheeromgeving voor de club
+apps/web         Website van Greenside (statisch: index.html + img/)
 packages/shared  TypeScript-domeinlogica + types (met unit tests)
 supabase/        migraties, seed, RLS-tests, edge functions, e-mailtemplates
 ```
