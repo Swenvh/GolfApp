@@ -195,8 +195,11 @@ export interface InvoiceLine {
   unit_price_cents: number;
   vat_rate: number;
   ledger_account_id: string | null;
+  /** Bedrag excl. btw van de regel */
   line_total_cents: number;
   vat_cents: number;
+  /** Prijs per stuk is incl. btw (bestellingen van leden); de btw is eruit teruggerekend */
+  prices_include_vat: boolean;
 }
 
 export interface Payment {

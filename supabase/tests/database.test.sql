@@ -615,3 +615,17 @@ select pg_temp.assert((select uses_left from member_entitlements where member_id
 delete from tee_bookings where starts_at = pg_temp.at('16:02', pg_temp.test_day() + 3);
 select pg_temp.assert((select uses_left from member_entitlements where member_id = '00000000-0000-0000-0000-0000000e0003' and kind = 'weekend') = 1,
   'verwijderde starttijd geeft de weekendronde terug');
+
+-- 16. Prijzen voor leden inclusief btw -------------------------------------------------------
+select set_config('request.jwt.claim.sub', '00000000-0000-0000-0000-00000000a002', false);
+set role authenticated;
+select place_order('00000000-0000-0000-0000-0000000e0001',
+  jsonb_build_array(jsonb_build_object('product_id', (select id from products where name = 'Greenfee introducé'), 'quantity', 2)));
+reset role;
+select pg_temp.assert((select total_cents from orders where member_id = '00000000-0000-0000-0000-0000000e0001'
+  order by created_at desc limit 1) = 12000, 'twee greenfees van € 60,00 zijn € 120,00');
+select pg_temp.assert((select vat_cents from invoices i join orders o on o.invoice_id = i.id
+  where o.member_id = '00000000-0000-0000-0000-0000000e0001' order by o.created_at desc limit 1) = 991,
+  'btw teruggerekend uit het bedrag incl. btw (9/109 van € 120,00)');
+select pg_temp.assert((select i.subtotal_cents + i.vat_cents = i.total_cents from invoices i join orders o on o.invoice_id = i.id
+  where o.member_id = '00000000-0000-0000-0000-0000000e0001' order by o.created_at desc limit 1), 'subtotaal + btw = totaal');

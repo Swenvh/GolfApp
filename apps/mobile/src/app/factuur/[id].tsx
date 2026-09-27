@@ -64,10 +64,10 @@ export default function Factuur() {
           {lines.map((l) => (
             <Row key={l.id} style={{ alignItems: 'flex-start' }}>
               <T style={{ flex: 1 }}>{Number(l.quantity) !== 1 ? `${Number(l.quantity).toLocaleString('nl-NL')} × ` : ''}{l.description}</T>
-              <T variant="bodyStrong">{formatEuro(l.line_total_cents)}</T>
+              <T variant="bodyStrong">{formatEuro(l.line_total_cents + l.vat_cents)}</T>
             </Row>
           ))}
-          {invoice.vat_cents > 0 && <Meta label="BTW" value={formatEuro(invoice.vat_cents)} />}
+          {invoice.vat_cents > 0 && <Meta label="Waarvan btw" value={formatEuro(invoice.vat_cents)} />}
           <View style={styles.rule} />
           <Row style={{ justifyContent: 'space-between' }}>
             <T variant="subheading">Totaal</T>

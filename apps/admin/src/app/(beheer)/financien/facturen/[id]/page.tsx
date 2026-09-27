@@ -81,13 +81,16 @@ export default async function FactuurDetail({ params, searchParams }: {
               </dl>
             </div>
             <table>
-              <thead><tr className="border-b"><th className="px-0">Omschrijving</th><th className="text-right">Aantal</th><th className="text-right">Prijs</th><th className="text-right">BTW</th><th className="px-0 text-right">Bedrag</th></tr></thead>
+              <thead><tr className="border-b"><th className="px-0">Omschrijving</th><th className="text-right">Aantal</th><th className="text-right">Prijs</th><th className="text-right">BTW</th><th className="px-0 text-right">Bedrag excl. btw</th></tr></thead>
               <tbody>
                 {((lines ?? []) as InvoiceLine[]).map((l) => (
                   <tr key={l.id}>
                     <td className="px-0">{l.description}</td>
                     <td className="text-right">{Number(l.quantity).toLocaleString('nl-NL')}</td>
-                    <td className="text-right tabular-nums">{formatEuro(l.unit_price_cents)}</td>
+                    <td className="text-right tabular-nums">
+                      {formatEuro(l.unit_price_cents)}
+                      {l.prices_include_vat && <span className="block text-xs text-stone-500">incl. btw</span>}
+                    </td>
                     <td className="text-right">{Number(l.vat_rate)}%</td>
                     <td className="px-0 text-right tabular-nums">{formatEuro(l.line_total_cents)}</td>
                   </tr>

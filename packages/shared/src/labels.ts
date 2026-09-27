@@ -61,10 +61,10 @@ export const leadStatusLabel: Record<LeadStatus, string> = {
   new: 'Nieuw', contacted: 'In gesprek', won: 'Gewonnen', lost: 'Afgevallen',
 };
 
-/** Prijs inclusief btw, zoals de database per regel afrondt. */
+/** Prijs inclusief btw die het lid betaalt (per stuk afgerond, gelijk aan de factuur). */
 export function priceInclVat(priceCents: number, vatRate: number, quantity = 1): number {
-  const net = quantity * priceCents;
-  return net + Math.round((net * vatRate) / 100);
+  // Per stuk afronden en dan vermenigvuldigen: 2 × € 60,00 is € 120,00, zoals op de factuur
+  return quantity * (priceCents + Math.round((priceCents * vatRate) / 100));
 }
 
 /**

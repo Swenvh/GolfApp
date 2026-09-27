@@ -115,5 +115,7 @@ describe('consumentenprijzen', () => {
     expect(priceInclVat(3306, 21)).toBe(4000);
     expect(priceInclVat(priceExclFromIncl(6000, 9), 9)).toBe(6000);
     expect(priceInclVat(priceExclFromIncl(5000, 21), 21)).toBe(5000);
+    // Twee greenfees van € 60,00 zijn € 120,00, niet € 120,01
+    expect(priceInclVat(priceExclFromIncl(6000, 9), 9, 2)).toBe(12000);
   });
 });
