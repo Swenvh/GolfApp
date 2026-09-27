@@ -1,5 +1,6 @@
 -- Demodata voor lokale ontwikkeling (supabase db reset)
--- Inloggen: beheer@deduinen.test / golfapp123 (admin), leden jan@example.test en pieter@example.test (weekdaglid) via e-mailcode
+-- Inloggen: beheer@deduinen.test / golfapp123 (admin), hq@greenside.test / golfapp123 (Greenside HQ),
+-- leden jan@example.test en pieter@example.test (weekdaglid) via e-mailcode
 
 insert into auth.users (id, instance_id, aud, role, email, encrypted_password, email_confirmed_at, created_at, updated_at,
                         raw_app_meta_data, raw_user_meta_data, confirmation_token, recovery_token, email_change_token_new, email_change)
@@ -8,17 +9,22 @@ select id::uuid, '00000000-0000-0000-0000-000000000000', 'authenticated', 'authe
        '{"provider":"email","providers":["email"]}', '{}', '', '', '', ''
 from (values ('00000000-0000-0000-0000-00000000a001', 'beheer@deduinen.test'),
              ('00000000-0000-0000-0000-00000000a002', 'jan@example.test'),
-             ('00000000-0000-0000-0000-00000000a003', 'pieter@example.test')) as u(id, email);
+             ('00000000-0000-0000-0000-00000000a003', 'pieter@example.test'),
+             ('00000000-0000-0000-0000-00000000a009', 'hq@greenside.test')) as u(id, email);
 
 insert into auth.identities (id, user_id, provider_id, provider, identity_data, last_sign_in_at, created_at, updated_at)
 select gen_random_uuid(), id, id::text, 'email', jsonb_build_object('sub', id::text, 'email', email), now(), now(), now()
-from auth.users where email in ('beheer@deduinen.test', 'jan@example.test', 'pieter@example.test');
+from auth.users where email in ('beheer@deduinen.test', 'jan@example.test', 'pieter@example.test', 'hq@greenside.test');
 
 insert into clubs (id, slug, name, ngf_club_code, email, phone, website, street, house_number, postal_code, city,
                    kvk_number, iban, bic, sepa_creditor_id)
 values ('00000000-0000-0000-0000-0000000c0001', 'de-duinen', 'Golfclub De Duinen', '0123',
         'info@deduinen.test', '071-1234567', 'https://deduinen.test', 'Duinweg', '1', '2201 AA', 'Noordwijk',
         '40123456', 'NL91ABNA0417164300', 'ABNANL2A', 'NL00ZZZ401234560000');
+
+-- Greenside zelf (HQ): ziet alle klanten, geen ledengegevens van een club
+insert into platform_staff (user_id, name) values ('00000000-0000-0000-0000-00000000a009', 'Team Greenside');
+update clubs set greenside_status = 'actief', greenside_since = current_date - 210 where id = '00000000-0000-0000-0000-0000000c0001';
 
 insert into club_staff (club_id, user_id, role) values
   ('00000000-0000-0000-0000-0000000c0001', '00000000-0000-0000-0000-00000000a001', 'admin');

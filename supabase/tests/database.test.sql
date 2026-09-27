@@ -629,3 +629,25 @@ select pg_temp.assert((select vat_cents from invoices i join orders o on o.invoi
   'btw teruggerekend uit het bedrag incl. btw (9/109 van € 120,00)');
 select pg_temp.assert((select i.subtotal_cents + i.vat_cents = i.total_cents from invoices i join orders o on o.invoice_id = i.id
   where o.member_id = '00000000-0000-0000-0000-0000000e0001' order by o.created_at desc limit 1), 'subtotaal + btw = totaal');
+
+-- 17. Greenside HQ: alleen Greenside ziet het overzicht over alle clubs ------------------------
+insert into hq_prospects (club_name, stage) values ('Testclub', 'lead');
+select set_config('test.club_count', (select count(*)::text from clubs), false);
+select set_config('request.jwt.claim.sub', '00000000-0000-0000-0000-00000000a001', false);  -- clubbeheerder
+set role authenticated;
+select pg_temp.assert((select count(*) from hq_club_overview()) = 0, 'clubbeheer ziet geen overzicht van andere clubs');
+select pg_temp.assert((select count(*) from hq_prospects) = 0, 'clubbeheer ziet de verkooppijplijn niet');
+reset role;
+select set_config('request.jwt.claim.sub', '00000000-0000-0000-0000-00000000a002', false);  -- lid
+set role authenticated;
+select pg_temp.assert((select count(*) from hq_weekly()) = 0, 'lid ziet geen HQ-cijfers');
+reset role;
+select set_config('request.jwt.claim.sub', '00000000-0000-0000-0000-00000000a009', false);  -- Greenside
+set role authenticated;
+select pg_temp.assert((select count(*) from hq_club_overview()) = current_setting('test.club_count')::int, 'Greenside ziet alle clubs');
+select pg_temp.assert((select count(*) from clubs) = 0, 'Greenside leest geen clubtabellen direct (alleen totalen)');
+select pg_temp.assert((select members from hq_club_overview() where name = 'Golfclub De Duinen') = 5, 'ledental per club');
+select pg_temp.assert((select count(*) from hq_weekly(12)) = 12, 'twaalf weken trend');
+select pg_temp.assert((select count(*) from hq_prospects) = 1, 'Greenside ziet de pijplijn');
+reset role;
+delete from hq_prospects;

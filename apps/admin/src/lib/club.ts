@@ -28,7 +28,11 @@ export const getStaffContext = cache(async (): Promise<StaffContext> => {
     .eq('user_id', userId);
 
   const rows = (staff ?? []) as unknown as { role: StaffRole; club: Club }[];
-  if (rows.length === 0) redirect('/login?error=geen-toegang');
+  if (rows.length === 0) {
+    // Medewerkers van Greenside zonder club gaan naar HQ
+    const { data: hq } = await supabase.from('platform_staff').select('user_id').eq('user_id', userId).maybeSingle();
+    redirect(hq ? '/hq' : '/login?error=geen-toegang');
+  }
 
   const clubs = [...new Map(rows.map((r) => [r.club.id, { id: r.club.id, name: r.club.name }])).values()];
   const selected = (await cookies()).get(CLUB_COOKIE)?.value;

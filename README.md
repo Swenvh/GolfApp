@@ -81,6 +81,9 @@ Buggy's worden per tijdvak geteld (een buggy kan 's ochtends én 's middags rijd
 - **Nieuws** — berichten (vastpinnen, concept) die direct in de app verschijnen
 - **Instellingen** — clubgegevens, IBAN/incassant-ID, introducé-limiet, lidmaatschapsvormen & tarieven (incl. rustend lidmaatschap)
 
+### Greenside HQ (voor Greenside zelf)
+Op `/hq`, alleen voor medewerkers van Greenside (`platform_staff`). Mission control met omzet per maand en jaar, klanten, pijplijn, golfers op Greenside, hoeveel leden de app echt gebruiken, omzet via de app bij klanten en hoe vaak de licentie is terugverdiend. Een takenlijst signaleert clubs zonder activiteit, aflopende proefperiodes, lage app-adoptie, ontbrekende incasso of iDEAL en afspraken in de verkoop. Per klant een gezondheidsscore (goed / let op / risico, met reden), een trend van twaalf weken en een verkooppijplijn (lead → demo → proefperiode → gewonnen / verloren) om bij te houden. Clubs zien elkaars gegevens nooit; HQ ziet alleen totalen per club.
+
 ### Rollen
 `admin` (alles) · `finance` (penningmeester) · `secretariat` (ledenadministratie, wedstrijden, nieuws) · `marshal` (starttijden). Leden zien alleen hun eigen gegevens; de ledenlijst toont alleen naam + handicap van leden die daarmee instemmen. Alle wijzigingen aan leden, facturen, betalingen en machtigingen komen in een audit-log (AVG).
 

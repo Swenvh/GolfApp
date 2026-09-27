@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
-import { CalendarClock, Landmark, LayoutDashboard, Newspaper, Settings, TrendingUp, Trophy, Users, type LucideIcon } from 'lucide-react';
+import { Building2, CalendarClock, Handshake, Landmark, LayoutDashboard, Newspaper, Settings, TrendingUp, Trophy, Users, type LucideIcon } from 'lucide-react';
 import { selectClub, logout } from '@/app/(beheer)/actions';
 import { Contours, Wordmark } from './brand';
 
@@ -11,10 +11,12 @@ interface NavItem { href: string; label: string; icon: string; sub?: boolean }
 
 const icons: Record<string, LucideIcon> = {
   dashboard: LayoutDashboard, leden: Users, starttijden: CalendarClock, wedstrijden: Trophy,
-  nieuws: Newspaper, financien: Landmark, instellingen: Settings, omzet: TrendingUp,
+  nieuws: Newspaper, financien: Landmark, instellingen: Settings, omzet: TrendingUp, klanten: Building2, verkoop: Handshake,
 };
 
-export function Sidebar({ nav, clubs, currentClubId, clubName, email }: {
+export function Sidebar({ nav, clubs, currentClubId, clubName, email, eyebrow = 'Clubbeheer' }: {
+  /** Kopje boven de naam: 'Clubbeheer' of 'Greenside HQ' */
+  eyebrow?: string;
   nav: NavItem[];
   clubs: { id: string; name: string }[];
   currentClubId: string;
@@ -40,7 +42,7 @@ export function Sidebar({ nav, clubs, currentClubId, clubName, email }: {
         <Contours seed={4} opacity={0.07} className="text-chalk" />
         <div className="relative px-6 pb-5 pt-7">
           <Wordmark />
-          <div className="mt-6 text-[10px] font-extrabold uppercase tracking-[0.16em] text-brass-light">Clubbeheer</div>
+          <div className="mt-6 text-[10px] font-extrabold uppercase tracking-[0.16em] text-brass-light">{eyebrow}</div>
           {clubs.length > 1 ? (
             <form action={selectClub}>
               <select

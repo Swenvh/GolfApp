@@ -193,3 +193,92 @@ update orders set created_at = least(now() - interval '5 minutes', (fulfil_on + 
 where club_id = '00000000-0000-0000-0000-0000000c0001';
 update payments set created_at = (paid_on + time '09:00')::timestamp at time zone 'Europe/Amsterdam' + make_interval(mins => (abs(hashtext(id::text)) % 480))
 where club_id = '00000000-0000-0000-0000-0000000c0001' and paid_on < current_date;
+
+-- -----------------------------------------------------------------------------
+-- Greenside HQ: vier andere (verzonnen) klanten, zodat het overzicht over meerdere clubs gaat
+-- -----------------------------------------------------------------------------
+do $$
+declare
+  r         record;
+  v_club    uuid;
+  v_course  uuid;
+  v_type    uuid;
+  v_booking uuid;
+  v_members uuid[];
+  v_first   text[] := array['Anne', 'Bart', 'Carla', 'Dirk', 'Els', 'Frank', 'Greet', 'Henk', 'Ineke', 'Joop', 'Karin', 'Luuk',
+                            'Marja', 'Niels', 'Olga', 'Paul', 'Rianne', 'Sjaak', 'Truus', 'Victor'];
+  v_last    text[] := array['de Jong', 'Jansen', 'de Vries', 'van den Berg', 'Bakker', 'Visser', 'Smit', 'Meijer', 'de Boer', 'Mulder',
+                            'de Groot', 'Bos', 'Vos', 'Peters', 'Hendriks', 'Dekker', 'Brouwer', 'de Wit', 'Dijkstra', 'Smits', 'van Leeuwen'];
+  v_buggy   uuid;
+  v_fee     uuid;
+  d int; f int; j int; n int; idx int; v_users int;
+begin
+  for r in select * from (values
+    ('00000000-0000-0000-0000-0000000c0002'::uuid, 'het-woud',      'Golfclub Het Woud',       'Ede',        'actief',  420, null::int, 39900, 720, 22, 0, true,  0.55),
+    ('00000000-0000-0000-0000-0000000c0003'::uuid, 'de-polder',     'Golfbaan De Polder',      'Zoetermeer', 'actief',  150, null::int, 29900, 480, 12, 0, false, 0.38),
+    ('00000000-0000-0000-0000-0000000c0004'::uuid, 'rijnoever',     'Golfsociëteit Rijnoever', 'Arnhem',     'pilot',    40, 20,        39900, 310,  4, 0, true,  0.12),
+    ('00000000-0000-0000-0000-0000000c0005'::uuid, 'heideveld',     'Golfclub Heideveld',      'Hilversum',  'actief',  300, null::int, 49900, 900, 15, 9, true,  0.45)
+  ) as t(id, slug, name, city, status, since_days, pilot_days, fee, member_count, flights_per_day, quiet_days, bank, app_share)
+  loop
+    v_club := r.id;
+    insert into clubs (id, slug, name, city, email, iban, sepa_creditor_id, greenside_status, greenside_since, greenside_pilot_until, greenside_fee_cents)
+    values (v_club, r.slug, r.name, r.city, 'info@' || r.slug || '.test',
+            case when r.bank then 'NL20INGB0001234567' end, case when r.bank then 'NL00ZZZ409876540000' end,
+            r.status, current_date - r.since_days, case when r.pilot_days is not null then current_date + r.pilot_days end, r.fee);
+    insert into courses (club_id, name, holes, first_tee_time, last_tee_time, interval_minutes, max_players, round_minutes)
+    values (v_club, '18 holes', 18, '07:30', '17:00', 8, 4, 240) returning id into v_course;
+    insert into membership_types (club_id, name, annual_fee_cents, can_book_weekend) values (v_club, 'A-lid', 145000, true)
+    returning id into v_type;
+
+    insert into members (club_id, member_number, first_name, last_name, membership_type_id, join_date)
+    select v_club, (2000 + g)::text, v_first[(g % 20) + 1], v_last[((g * 7) % 21) + 1], v_type, current_date - (g % 3000)
+    from generate_series(1, r.member_count) g;
+    select array_agg(id order by member_number) into v_members from members where club_id = v_club;
+    -- Alleen een deel van de leden gebruikt de app (al)
+    v_users := greatest(1, round(r.member_count * r.app_share)::int);
+
+    -- Zelfde aanbod als De Duinen (prijzen kiest de club later zelf)
+    insert into products (club_id, category, name, description, price_cents, vat_rate, icon, sort, active, capacity, capacity_scope,
+                          handicart_price_cents, pickup_note, grants_kind, grants_uses, grants_days, guest_rate)
+    select v_club, category, name, description, price_cents, vat_rate, icon, sort, active, capacity, capacity_scope,
+           handicart_price_cents, pickup_note, grants_kind, grants_uses, grants_days, guest_rate
+    from products where club_id = '00000000-0000-0000-0000-0000000c0001';
+    select id into v_buggy from products where club_id = v_club and name = 'Buggy';
+    select id into v_fee from products where club_id = v_club and guest_rate = 'intro';
+
+    -- Dertig dagen spelen; een stille club heeft de laatste dagen niets meer
+    n := 0;
+    for d in (r.quiet_days + 1)..30 loop
+      for f in 0..(r.flights_per_day - 1) loop
+        insert into tee_bookings (club_id, course_id, starts_at)
+        values (v_club, v_course, (current_date - d + time '07:30' + make_interval(mins => f * 16))::timestamp at time zone 'Europe/Amsterdam')
+        returning id into v_booking;
+        for j in 1..3 loop
+          idx := ((d * r.flights_per_day * 3 + f * 3 + j) % v_users) + 1;
+          insert into tee_booking_players (booking_id, member_id) values (v_booking, v_members[idx]);
+        end loop;
+        insert into tee_booking_players (booking_id, guest_name) values (v_booking, 'Gast ' || v_first[((d + f) % 20) + 1]);
+        -- Een deel regelt buggy of greenfee in de app
+        n := n + 1;
+        if n % 3 = 0 then
+          perform create_order_internal(v_members[idx], jsonb_build_array(
+            jsonb_build_object('product_id', case when n % 2 = 0 then v_buggy else v_fee end, 'quantity', 1)),
+            v_booking, null, current_date - d, null, current_date - d);
+        end if;
+      end loop;
+    end loop;
+  end loop;
+
+  update orders set status = 'fulfilled', created_at = (fulfil_on + time '08:00')::timestamp at time zone 'Europe/Amsterdam'
+  where club_id <> '00000000-0000-0000-0000-0000000c0001' and fulfil_on < current_date;
+end $$;
+
+-- Verkoop: clubs waarmee Greenside in gesprek is
+insert into hq_prospects (club_name, city, members_estimate, stage, monthly_value_cents, contact_name, contact_email, next_step, next_date, notes) values
+  ('Golfclub Zeegezicht',     'Zandvoort',  850, 'proefperiode', 49900, 'Marleen Voskuil', 'secretariaat@zeegezicht.test', 'Evaluatiegesprek na proefmaand', current_date + 3, 'Enthousiast over Handicart en de takenlijst.'),
+  ('Golfbaan Kastelenroute',  'Doorn',      620, 'demo',         39900, 'Rob Hoogland',    'bestuur@kastelenroute.test',   'Demo aan bestuur geven',         current_date + 6, 'Huidig systeem: e-golf4u, contract loopt tot 1 januari.'),
+  ('Golfclub De Lage Vuursche','Baarn',     540, 'demo',         39900, 'Anja Terpstra',   'info@lagevuursche.test',       'Offerte sturen',                 current_date - 2, 'Vroeg naar koppeling met de NGF.'),
+  ('Golfvereniging Maasdal',  'Venlo',      410, 'lead',         29900, 'Tom Peeters',     'penningmeester@maasdal.test',  'Eerste belafspraak',             current_date + 1, 'Via de penningmeester van Het Woud.'),
+  ('Golfclub Waddenkust',     'Leeuwarden', 380, 'lead',         29900, null,              null,                           'Contactpersoon zoeken',          null,             'Veel weekdagleden: weekend-add-on is interessant.'),
+  ('Golfsociëteit Veluwezoom','Rheden',     700, 'gewonnen',     39900, 'Pieter Wolters',  'bestuur@veluwezoom.test',      'Onboarding plannen',             current_date + 10, 'Start per 1 november.'),
+  ('Golfclub Brabantse Heide','Tilburg',    560, 'verloren',     39900, 'Els van Dam',     'info@brabantseheide.test',     null,                             null,             'Kiest voorlopig voor bestaande leverancier; over een jaar opnieuw.');

@@ -30,6 +30,7 @@ pnpm demo          # start alles; de eerste keer duurt dit 5 à 10 minuten
 | Clubbeheer | http://localhost:3000 | `beheer@deduinen.test` / `golfapp123` |
 | Ledenapp | http://localhost:8081 | `jan@example.test` (A-lid) of `pieter@example.test` (weekdaglid met Handicart-pas) |
 | Testmail | http://localhost:54324 | Hier staat de 6-cijferige inlogcode voor de ledenapp |
+| Greenside HQ | http://localhost:3000/hq | `hq@greenside.test` / `golfapp123` (voor Greenside zelf: alle klanten en de verkoop) |
 
 In de demo werkt alles behalve online betalen met iDEAL: daarvoor is een Mollie-account van de club nodig. De knop geeft dan netjes aan dat de factuur onder Facturen klaarstaat.
 
