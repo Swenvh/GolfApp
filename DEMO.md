@@ -57,7 +57,8 @@ Clubs werken met verouderde software, de receptie is druk met telefoontjes en af
 - Pieter heeft een Handicart-pas en betaalt automatisch € 8 in plaats van € 40 voor een buggy.
 
 **4. Clubbeheer (5 min)** — `beheer@deduinen.test`
-- Dashboard → Leden → een lid: alles op één plek, inclusief machtiging en facturen.
+- Mission control: één zin zegt of alles in orde is; daaronder wat er vandaag moet gebeuren, met per punt één knop. Verderop de baan van vandaag als strook, geld en leden.
+- Leden → een lid: alles op één plek, inclusief machtiging en facturen.
 - Leden → *Wijzigingen*: Jans verzoek goedkeuren met één klik. Het gaat vanzelf in op de ingangsdatum; bovenaan staat hoeveel leden en contributie de app heeft behouden.
 - App-omzet: omzet via de app, *hoe vaak de licentie is terugverdiend*, buggy's voor de receptie en leads.
 - Financiën → Incasso: SEPA-bestand voor de bank. Grootboek: alles automatisch dubbel geboekt.

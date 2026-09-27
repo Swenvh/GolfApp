@@ -67,7 +67,7 @@ Uitgangspunt: **geen extra werk voor personeel**. De app neemt reserveren en afr
 Buggy's worden per tijdvak geteld (een buggy kan 's ochtends én 's middags rijden), kluisjes en stalling per seizoen. Afmelden voor een starttijd annuleert de buggy automatisch. In de beheeromgeving toont **App-omzet** de omzet via de app, de buggy-reserveringen voor de receptie (met Handicart-pasnummer) en de leads; onder **Aanbod beheren** stelt de club prijzen (incl. btw), het Handicart-tarief, aantallen, speelrecht (introducés/weekend) en de tekst na bestellen in. **Sponsors** beheert de sponsorplekken met kliks; **Leden → Wijzigingen** toont verzoeken om te pauzeren, om te zetten of op te zeggen (goedkeuren past het lidmaatschap aan) en hoeveel leden en contributie via de app behouden zijn.
 
 ### Clubbeheer (web)
-- **Dashboard** — actieve leden, spelers vandaag, openstaand/achterstallig, komende wedstrijden
+- **Mission control** — in gewone taal: één zin of alles in orde is, een takenlijst met per punt één knop (verzoeken, aanmeldingen, te late en conceptfacturen, incasso klaarzetten of verwerken, verlopende Handicart-passen en sponsorcontracten, leden zonder app, ontbrekende bankgegevens), de bezetting van vandaag per baan, geld, leden, de komende twee weken, recente activiteit en wat de app oplevert. Ververst elke minuut.
 - **Leden** — zoeken/filteren, detail + bewerken, NGF-nummer, handicap, SEPA-machtiging, app-uitnodiging, CSV-export (Excel-NL)
 - **Financiën**
   - Facturen met regels, BTW 0/9/21%, grootboekrekening per regel, concept → definitief (doorlopende nummering per jaar), crediteren, printbare factuur/PDF

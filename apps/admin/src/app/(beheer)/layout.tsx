@@ -4,7 +4,7 @@ import { Sidebar } from '@/components/sidebar';
 export default async function BeheerLayout({ children }: { children: React.ReactNode }) {
   const ctx = await getStaffContext();
   const nav = [
-    { href: '/', label: 'Dashboard', icon: 'dashboard' },
+    { href: '/', label: 'Mission control', icon: 'dashboard' },
     { href: '/leden', label: 'Leden', icon: 'leden' },
     ...(hasRole(ctx, 'secretariat') ? [{ href: '/leden/wijzigingen', label: 'Wijzigingen', icon: '', sub: true }] : []),
     { href: '/starttijden', label: 'Starttijden', icon: 'starttijden' },

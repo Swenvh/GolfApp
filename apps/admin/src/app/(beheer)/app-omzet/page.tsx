@@ -172,7 +172,8 @@ export default async function AppOmzet({ searchParams }: { searchParams: Promise
           )}
         </Card>
 
-        <Card title="Leads uit de app" className="xl:col-span-2">
+        <div id="leads" className="scroll-mt-6 xl:col-span-2">
+        <Card title="Leads uit de app">
           {leadRows.length === 0 ? <Empty>Nog geen leads.</Empty> : (
             <ul className="divide-y divide-stone-200/70">
               {leadRows.map((l) => (
@@ -203,6 +204,7 @@ export default async function AppOmzet({ searchParams }: { searchParams: Promise
             Waarde = verwacht extra bedrag per jaar: contributie + entree bij nieuwe leden en gezinsleden, het verschil bij upgrades.
           </p>
         </Card>
+        </div>
       </div>
       <p className="mt-4 text-xs text-stone-500">
         <Badge tone="green">Tip</Badge> Alles wat leden via de app regelen is direct een definitieve factuur: leden met een machtiging betalen via de eerstvolgende incasso, anderen via iDEAL. Niemand hoeft iets klaar te zetten of aan de balie af te rekenen.

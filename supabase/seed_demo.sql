@@ -131,3 +131,65 @@ insert into membership_changes (club_id, member_id, kind, target_membership_type
 
 update sponsors set clicks = case name when 'Duinzicht Makelaardij' then 47 when 'Autobedrijf Van Leeuwen' then 31 else 62 end
 where club_id = '00000000-0000-0000-0000-0000000c0001';
+
+-- Vandaag op de baan (voor Mission control): leden met gasten en greenfeespelers, wie al gestart is staat ingecheckt
+do $$
+declare
+  v_club    uuid := '00000000-0000-0000-0000-0000000c0001';
+  v_duin    uuid := '00000000-0000-0000-0000-0000000f0001';
+  v_par3    uuid := '00000000-0000-0000-0000-0000000f0002';
+  v_names   text[] := array['Joost Brouwer', 'Ilse Kramer', 'Marco de Wit', 'Petra Dijkstra', 'Wouter Schouten', 'Nina Verbeek',
+                            'Gerard Hoekstra', 'Linda Post', 'Hans Kuipers', 'Yvonne Mulder', 'Ferry Timmer', 'Anja de Boer'];
+  v_booking uuid;
+  v_buggy   uuid;
+  k int; i int := 0;
+  -- Duinbaan: minuten na 07:30 (raster van 8 minuten) met eventueel een lid
+  v_slots int[]  := array[0, 1, 3, 4, 5, 7, 9, 12, 14, 17, 20, 23, 26, 29, 33, 37, 41, 45, 49, 50, 54, 58, 62];
+  v_member uuid;
+begin
+  select id into v_buggy from products where club_id = v_club and name = 'Buggy';
+  foreach k in array v_slots loop
+    i := i + 1;
+    v_member := case k when 4 then '00000000-0000-0000-0000-0000000e0001'::uuid when 5 then '00000000-0000-0000-0000-0000000e0002'::uuid
+                       when 12 then '00000000-0000-0000-0000-0000000e0004'::uuid when 26 then '00000000-0000-0000-0000-0000000e0005'::uuid
+                       when 49 then '00000000-0000-0000-0000-0000000e0001'::uuid when 50 then '00000000-0000-0000-0000-0000000e0002'::uuid
+                       else null end;
+    insert into tee_bookings (club_id, course_id, starts_at)
+    values (v_club, v_duin, (current_date + time '07:30' + make_interval(mins => k * 8))::timestamp at time zone 'Europe/Amsterdam')
+    returning id into v_booking;
+    if v_member is not null then
+      insert into tee_booking_players (booking_id, member_id) values (v_booking, v_member);
+    end if;
+    insert into tee_booking_players (booking_id, guest_name)
+    select v_booking, v_names[((i * 3 + g) % 12) + 1] from generate_series(1, case when k % 3 = 0 then 3 when v_member is null then 2 else 1 end) g;
+    if v_member is not null and k in (4, 26) then
+      perform create_order_internal(v_member, jsonb_build_array(jsonb_build_object('product_id', v_buggy, 'quantity', 1)),
+        v_booking, null, current_date, null, current_date);
+    end if;
+  end loop;
+  -- Par-3: een paar korte rondes
+  foreach k in array array[2, 6, 10, 21, 30, 44] loop
+    i := i + 1;
+    insert into tee_bookings (club_id, course_id, starts_at)
+    values (v_club, v_par3, (current_date + time '08:00' + make_interval(mins => k * 8))::timestamp at time zone 'Europe/Amsterdam')
+    returning id into v_booking;
+    insert into tee_booking_players (booking_id, guest_name)
+    select v_booking, v_names[((i * 5 + g) % 12) + 1] from generate_series(1, 2) g;
+  end loop;
+  -- Wie al gestart is, heeft zich gemeld
+  update tee_booking_players p set checked_in = true
+  from tee_bookings b where b.id = p.booking_id and b.club_id = v_club
+    and b.starts_at <= now() and b.starts_at >= current_date::timestamp at time zone 'Europe/Amsterdam';
+end $$;
+
+-- Een openstaande conceptfactuur en een nieuwe aanmelding van vandaag
+insert into leads (club_id, member_id, type, name, email, note, membership_type_id, value_cents, status, created_at) values
+  ('00000000-0000-0000-0000-0000000c0001', '00000000-0000-0000-0000-0000000e0002', 'referral', 'Karin Smits', 'karin@example.test',
+   'Speelde twee keer mee met Sanne, wil graag een proefles.', '00000000-0000-0000-0000-0000000d0001', 235000, 'new', now() - interval '2 hours');
+
+-- Tijdstippen zoals in het echt: bestellingen op de dag zelf, betalingen op de betaaldatum
+update orders set created_at = least(now() - interval '5 minutes', (fulfil_on + time '07:15')::timestamp at time zone 'Europe/Amsterdam'
+  + make_interval(mins => (abs(hashtext(id::text)) % 600)))
+where club_id = '00000000-0000-0000-0000-0000000c0001';
+update payments set created_at = (paid_on + time '09:00')::timestamp at time zone 'Europe/Amsterdam' + make_interval(mins => (abs(hashtext(id::text)) % 480))
+where club_id = '00000000-0000-0000-0000-0000000c0001' and paid_on < current_date;
