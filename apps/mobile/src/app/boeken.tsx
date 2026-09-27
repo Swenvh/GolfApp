@@ -53,13 +53,13 @@ export default function Boeken() {
   // Introducés mogen een beperkt aantal keer per jaar tegen introductietarief; daarna geldt de gewone greenfee
   const guestRounds = useQuery(async () => {
     if (!guests.length) return new Map<string, { rounds: number; limit: number }>();
-    const rows = unwrap(await supabase.rpc('guest_intro_counts', { p_club: member.club_id, p_names: guests })) as { name: string; rounds: number; intro_limit: number }[];
+    const rows = unwrap(await supabase.rpc('guest_intro_counts', { p_club: member.club_id, p_names: guests, p_day: day })) as { name: string; rounds: number; intro_limit: number }[];
     return new Map(rows.map((r) => [r.name, { rounds: r.rounds, limit: r.intro_limit }]));
   }, [member.club_id, guests.join('|')]);
   const overLimit = (name: string) => { const g = guestRounds.data?.get(name); return !!g && g.rounds >= g.limit; };
-  const greenfees = (offers.data?.products ?? []).filter((p) => p.category === 'greenfee' && !p.grants_kind).sort((a, b) => a.price_cents - b.price_cents);
-  const greenfee = greenfees[0];
-  const regularGreenfee = greenfees.length > 1 ? greenfees[greenfees.length - 1] : undefined;
+  // De club geeft per product aan welke greenfee geldt voor introducés binnen en boven de limiet
+  const greenfee = (offers.data?.products ?? []).find((p) => p.guest_rate === 'intro');
+  const regularGreenfee = (offers.data?.products ?? []).find((p) => p.guest_rate === 'regular');
   const introCard = (offers.data?.products ?? []).find((p) => p.grants_kind === 'intro');
   const regularGuests = regularGreenfee ? guests.filter(overLimit).length : 0;
   const introGuests = guests.length - regularGuests;
@@ -109,9 +109,12 @@ export default function Boeken() {
         p_guest_names: players.flatMap((p) => (p.guestName ? [p.guestName] : [])),
       })) as string;
       // Introductiekaart eerst: wat de kaart niet dekt, gaat als greenfee op de rekening
-      const redeemed = fromCard > 0
-        ? unwrap(await supabase.rpc('redeem_intro', { p_member: member.id, p_booking: newBookingId, p_count: fromCard })) as number
-        : 0;
+      // Lukt afboeken van de kaart niet, dan gaat de greenfee gewoon op de rekening
+      let redeemed = 0;
+      if (fromCard > 0) {
+        const res = await supabase.rpc('redeem_intro', { p_member: member.id, p_booking: newBookingId, p_count: fromCard });
+        if (!res.error) redeemed = res.data as number;
+      }
       const lines = orderLines.map((l) => ({ productId: l.product.id, quantity: l.quantity }));
       if (greenfee && redeemed < fromCard) {
         const line = lines.find((l) => l.productId === greenfee.id);

@@ -176,6 +176,10 @@ insert into products (club_id, category, name, description, price_cents, handica
    'Voor gasten die de introductielimiet van dit jaar bereikt hebben.',
    7798, null, 9, null, 'day', null, 'person-outline', 21);
 
+-- Welke greenfee geldt voor introducés binnen de limiet, en welke daarboven
+update products set guest_rate = 'intro' where name = 'Greenfee introducé' and club_id = '00000000-0000-0000-0000-0000000c0001';
+update products set guest_rate = 'regular' where name = 'Greenfee gast' and club_id = '00000000-0000-0000-0000-0000000c0001';
+
 -- Tegoeden: introductiekaart en weekendrecht voor weekdagleden
 insert into products (club_id, category, name, description, price_cents, vat_rate, grants_kind, grants_uses, grants_days, icon, sort) values
   ('00000000-0000-0000-0000-0000000c0001', 'greenfee', 'Introductiekaart (5 introducés)',

@@ -296,6 +296,8 @@ export interface Product {
   /** Aantal keer te gebruiken; null = onbeperkt binnen de looptijd */
   grants_uses: number | null;
   grants_days: number;
+  /** Greenfee voor introducés: introductietarief binnen de limiet, gewone greenfee daarboven */
+  guest_rate: 'intro' | 'regular' | null;
   icon: string | null;
   sort: number;
   active: boolean;
@@ -365,6 +367,8 @@ export interface MembershipChange {
   status: MembershipChangeStatus;
   handled_by: string | null;
   handled_at: string | null;
+  /** Wanneer de wijziging is doorgevoerd (op of na de ingangsdatum) */
+  applied_at: string | null;
   created_at: string;
 }
 

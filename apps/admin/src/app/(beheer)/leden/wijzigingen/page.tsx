@@ -83,7 +83,10 @@ export default async function Wijzigingen({ searchParams }: { searchParams: Prom
                   </td>
                   <td className="whitespace-nowrap tabular">{formatDate(r.effective_date)}</td>
                   <td className="text-sm text-stone-600">{r.reason ?? '—'}</td>
-                  <td><Badge tone={statusTone[r.status]}>{membershipChangeStatusLabel[r.status]}</Badge></td>
+                  <td>
+                    <Badge tone={statusTone[r.status]}>{membershipChangeStatusLabel[r.status]}</Badge>
+                    {r.status === 'approved' && !r.applied_at && <div className="mt-1 text-xs text-stone-500">gaat in per {formatDate(r.effective_date)}</div>}
+                  </td>
                   <td className="whitespace-nowrap text-right">
                     {r.status === 'requested' && (
                       <form action={decide} className="inline-flex gap-3">
@@ -99,7 +102,7 @@ export default async function Wijzigingen({ searchParams }: { searchParams: Prom
           </table>
         )}
         <p className="border-t border-stone-200/70 px-5 py-3 text-xs text-stone-500">
-          Goedkeuren past het lidmaatschap direct aan (pauzeren en omzetten) of zet de einddatum (opzeggen). Stuur het lid daarna de gebruikelijke bevestiging.
+          Goedgekeurd pauzeren of omzetten gaat automatisch in op de ingangsdatum; opzeggen zet direct de einddatum. Stuur het lid daarna de gebruikelijke bevestiging.
         </p>
       </Card>
     </>

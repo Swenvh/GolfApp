@@ -12,6 +12,8 @@ cd "$(dirname "$0")/.."
 ADMIN_PORT="${ADMIN_PORT:-3000}"
 APP_PORT="${APP_PORT:-8081}"
 RUN_DIR=".demo"
+# Vaste versie van de Supabase-CLI, zodat de demo niet breekt als er een nieuwe uitkomt
+SUPABASE="npx --yes supabase@2.118.0"
 mkdir -p "$RUN_DIR"
 
 say() { printf '\n\033[1;32m▸ %s\033[0m\n' "$1"; }
@@ -35,13 +37,13 @@ stop_servers() {
 case "${1:-start}" in
   stop)
     stop_servers
-    npx supabase stop
+    $SUPABASE stop
     echo "Demo gestopt."
     exit 0
     ;;
   reset)
     say "Demodata terugzetten"
-    npx supabase db reset
+    $SUPABASE db reset
     echo "Klaar: zes weken gebruik bij Golfclub De Duinen staat weer klaar."
     exit 0
     ;;
@@ -58,18 +60,18 @@ pnpm install --frozen-lockfile
 say "Database, inloggen en testmail starten (eerste keer duurt een paar minuten)"
 # De database-container heeft soms even nodig om op te starten: dan nog een paar keer proberen
 for poging in 1 2 3 4 5; do
-  npx supabase start -x studio,imgproxy,realtime,storage-api,edge-runtime,logflare,vector,supavisor,postgres-meta && break
+  $SUPABASE start -x studio,imgproxy,realtime,storage-api,logflare,vector,supavisor,postgres-meta && break
   [ "$poging" = 5 ] && fail "De database start niet. Kijk in Docker Desktop of er genoeg geheugen is (minimaal 4 GB)."
   echo "Database is nog aan het opstarten, opnieuw over 10 seconden…"
   sleep 10
 done
 
 say "Demodata laden (Golfclub De Duinen, zes weken gebruik)"
-npx supabase db reset
+$SUPABASE db reset
 
-API_URL="$(npx supabase status -o env | sed -n 's/^API_URL="\(.*\)"$/\1/p')"
-ANON_KEY="$(npx supabase status -o env | sed -n 's/^ANON_KEY="\(.*\)"$/\1/p')"
-[ -n "$ANON_KEY" ] || fail "Kon de sleutel van de lokale database niet lezen (npx supabase status)."
+API_URL="$($SUPABASE status -o env | sed -n 's/^API_URL="\(.*\)"$/\1/p')"
+ANON_KEY="$($SUPABASE status -o env | sed -n 's/^ANON_KEY="\(.*\)"$/\1/p')"
+[ -n "$ANON_KEY" ] || fail "Kon de sleutel van de lokale database niet lezen ($SUPABASE status)."
 
 printf 'NEXT_PUBLIC_SUPABASE_URL=%s\nNEXT_PUBLIC_SUPABASE_ANON_KEY=%s\n' "$API_URL" "$ANON_KEY" > apps/admin/.env.local
 printf 'EXPO_PUBLIC_SUPABASE_URL=%s\nEXPO_PUBLIC_SUPABASE_ANON_KEY=%s\n' "$API_URL" "$ANON_KEY" > apps/mobile/.env.local
@@ -88,12 +90,15 @@ nohup bash -c "cd $RUN_DIR/app && exec npx --yes serve -s -l $APP_PORT" > "$RUN_
 echo $! > "$RUN_DIR/app.pid"
 
 # Wachten tot clubbeheer en ledenapp antwoorden
-for url in "http://localhost:$ADMIN_PORT/login" "http://localhost:$APP_PORT/"; do
+wait_for() {
   for _ in $(seq 1 60); do
-    curl -fs --noproxy '*' "$url" >/dev/null 2>&1 && break
+    curl -fs --noproxy '*' "$1" >/dev/null 2>&1 && return 0
     sleep 1
   done
-done
+  fail "$2 start niet op $1. Staat de poort al in gebruik? Kijk in $3 (of kies een andere poort, bv. ADMIN_PORT=3001 pnpm demo)."
+}
+wait_for "http://localhost:$ADMIN_PORT/login" "Clubbeheer" "$RUN_DIR/admin.log"
+wait_for "http://localhost:$APP_PORT/" "De ledenapp" "$RUN_DIR/app.log"
 
 cat <<EOF
 

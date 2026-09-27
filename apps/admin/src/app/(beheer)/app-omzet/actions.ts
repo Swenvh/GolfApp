@@ -42,6 +42,7 @@ export async function saveProduct(formData: FormData) {
     capacity_scope: String(formData.get('capacity_scope') ?? 'day'),
     pickup_note: str(formData.get('pickup_note')),
     grants_kind: str(formData.get('grants_kind')),
+    guest_rate: str(formData.get('guest_rate')),
     grants_uses: str(formData.get('grants_uses')) ? Number(formData.get('grants_uses')) : null,
     grants_days: Number(formData.get('grants_days')) || 365,
     icon: str(formData.get('icon')),

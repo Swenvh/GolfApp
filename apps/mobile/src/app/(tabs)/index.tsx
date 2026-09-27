@@ -115,7 +115,7 @@ export default function Clubhuis() {
       onPress: () => router.push({ pathname: '/introduceren', params: { name: g.name, rounds: String(g.rounds) } }) });
   }
   const introCard = data?.products.find((p) => p.grants_kind === 'intro');
-  const greenfee = data?.products.filter((p) => p.category === 'greenfee' && !p.grants_kind).sort((a, b) => a.price_cents - b.price_cents)[0];
+  const greenfee = data?.products.find((p) => p.guest_rate === 'intro');
   if (introCard && greenfee && data?.guests.length && data.introLeft === 0) {
     const perGuest = Math.round(priceInclVat(introCard.price_cents, Number(introCard.vat_rate)) / (introCard.grants_uses ?? 1));
     offers.push({ key: 'intro-card', eyebrow: 'Vaak een gast mee?', title: introCard.name,

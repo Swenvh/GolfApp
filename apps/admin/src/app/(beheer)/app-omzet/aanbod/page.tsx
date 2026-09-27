@@ -39,7 +39,14 @@ function ProductFields({ p }: { p?: Product }) {
           </select>
         </Field>
       </div>
-      <div className="md:col-span-8"><Field label="Omschrijving in de app"><input name="description" defaultValue={p?.description ?? ''} /></Field></div>
+      <div className="md:col-span-6"><Field label="Omschrijving in de app"><input name="description" defaultValue={p?.description ?? ''} /></Field></div>
+      <div className="md:col-span-2">
+        <Field label="Greenfee introducés" hint="Alleen bij greenfees">
+          <select name="guest_rate" defaultValue={p?.guest_rate ?? ''}>
+            <option value="">—</option><option value="intro">Binnen de limiet</option><option value="regular">Boven de limiet</option>
+          </select>
+        </Field>
+      </div>
       <div className="md:col-span-2">
         <Field label="Geeft speelrecht" hint="Introductiekaart of weekend">
           <select name="grants_kind" defaultValue={p?.grants_kind ?? ''}>

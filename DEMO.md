@@ -31,6 +31,8 @@ pnpm demo          # start alles; de eerste keer duurt dit 5 à 10 minuten
 | Ledenapp | http://localhost:8081 | `jan@example.test` (A-lid) of `pieter@example.test` (weekdaglid met Handicart-pas) |
 | Testmail | http://localhost:54324 | Hier staat de 6-cijferige inlogcode voor de ledenapp |
 
+In de demo werkt alles behalve online betalen met iDEAL: daarvoor is een Mollie-account van de club nodig. De knop geeft dan netjes aan dat de factuur onder Facturen klaarstaat.
+
 Zet de ledenapp in telefoonweergave: in Chrome F12 → het telefoon-icoontje → iPhone 14.
 
 ```bash
@@ -56,7 +58,7 @@ Clubs werken met verouderde software, de receptie is druk met telefoontjes en af
 
 **4. Clubbeheer (5 min)** — `beheer@deduinen.test`
 - Dashboard → Leden → een lid: alles op één plek, inclusief machtiging en facturen.
-- Leden → *Wijzigingen*: Jans verzoek goedkeuren met één klik; bovenaan staat hoeveel leden en contributie de app heeft behouden.
+- Leden → *Wijzigingen*: Jans verzoek goedkeuren met één klik. Het gaat vanzelf in op de ingangsdatum; bovenaan staat hoeveel leden en contributie de app heeft behouden.
 - App-omzet: omzet via de app, *hoe vaak de licentie is terugverdiend*, buggy's voor de receptie en leads.
 - Financiën → Incasso: SEPA-bestand voor de bank. Grootboek: alles automatisch dubbel geboekt.
 

@@ -547,3 +547,71 @@ select sponsor_click((select id from sponsors where name = 'Duinzicht Makelaardi
 reset role;
 select pg_temp.assert((select clicks from sponsors where name = 'Duinzicht Makelaardij') = 1, 'klik geteld');
 update members set membership_type_id = '00000000-0000-0000-0000-0000000d0001' where id = '00000000-0000-0000-0000-0000000e0001';
+
+-- 15. Na code review -----------------------------------------------------------------------
+-- Tegoed met gebruik kan niet meer geannuleerd worden (Jans introductiekaart: 2 introducés gebruikt)
+select set_config('request.jwt.claim.sub', '00000000-0000-0000-0000-00000000a002', false);
+set role authenticated;
+do $$ begin
+  begin
+    perform cancel_order((select l.order_id from member_entitlements e join order_lines l on l.id = e.order_line_id
+                          where e.member_id = '00000000-0000-0000-0000-0000000e0001' and e.kind = 'intro'));
+    raise exception 'expected failure';
+  exception when others then
+    if sqlerrm = 'expected failure' then raise; end if;
+    if sqlerrm not like '%al gebruikt%' then raise exception 'onverwachte fout: %', sqlerrm; end if;
+  end;
+end $$;
+-- Afmelden geeft elk gebruikt introducé-tegoed terug (twee van één kaart)
+delete from tee_booking_players where member_id = '00000000-0000-0000-0000-0000000e0001'
+  and booking_id = (select id from tee_bookings where starts_at = pg_temp.at('08:02'));
+select pg_temp.assert((select uses_left from member_entitlements where member_id = '00000000-0000-0000-0000-0000000e0001' and kind = 'intro') = 5,
+  'afmelden geeft beide introducés terug');
+-- Introducés tellen per jaar van de ronde
+select pg_temp.assert((select rounds from guest_intro_counts('00000000-0000-0000-0000-0000000c0001', array['Karel Frequent'],
+  make_date(extract(year from current_date)::int + 1, 1, 5))) = 0, 'volgend jaar begint de telling opnieuw');
+-- Pauzeren zonder nieuwe vorm of met een vorm van buiten de club kan niet
+do $$ begin
+  begin
+    insert into membership_changes (club_id, member_id, kind, effective_date)
+    values ('00000000-0000-0000-0000-0000000c0001', '00000000-0000-0000-0000-0000000e0001', 'pause', current_date);
+    raise exception 'expected failure';
+  exception when others then
+    if sqlerrm = 'expected failure' then raise; end if;
+  end;
+  begin
+    insert into membership_changes (club_id, member_id, kind, target_membership_type_id, effective_date)
+    values ('00000000-0000-0000-0000-0000000c0001', '00000000-0000-0000-0000-0000000e0001', 'switch', gen_random_uuid(), current_date);
+    raise exception 'expected failure';
+  exception when others then
+    if sqlerrm = 'expected failure' then raise; end if;
+  end;
+end $$;
+-- Omzetten per 1 januari: goedkeuren verandert nu nog niets
+insert into membership_changes (club_id, member_id, kind, target_membership_type_id, effective_date)
+values ('00000000-0000-0000-0000-0000000c0001', '00000000-0000-0000-0000-0000000e0001', 'switch',
+        '00000000-0000-0000-0000-0000000d0002', make_date(extract(year from current_date)::int + 1, 1, 1));
+reset role;
+select set_config('request.jwt.claim.sub', '00000000-0000-0000-0000-00000000a001', false);
+set role authenticated;
+select decide_membership_change((select id from membership_changes where kind = 'switch' and status = 'requested'
+  and member_id = '00000000-0000-0000-0000-0000000e0001'), true);
+reset role;
+select pg_temp.assert((select membership_type_id from members where id = '00000000-0000-0000-0000-0000000e0001') = '00000000-0000-0000-0000-0000000d0001',
+  'omzetten gaat pas in op de ingangsdatum');
+update membership_changes set effective_date = current_date where kind = 'switch' and member_id = '00000000-0000-0000-0000-0000000e0001';
+select pg_temp.assert(apply_due_membership_changes() = 1, 'nachtelijke taak voert de wijziging door');
+select pg_temp.assert((select membership_type_id from members where id = '00000000-0000-0000-0000-0000000e0001') = '00000000-0000-0000-0000-0000000d0002',
+  'op de ingangsdatum is Jan weekdaglid');
+update members set membership_type_id = '00000000-0000-0000-0000-0000000d0001' where id = '00000000-0000-0000-0000-0000000e0001';
+-- Hele starttijd verwijderd (bv. door de marshal): de weekendronde komt terug
+select set_config('request.jwt.claim.sub', '00000000-0000-0000-0000-00000000a003', false);
+set role authenticated;
+select book_tee_time('00000000-0000-0000-0000-0000000f0001', pg_temp.at('16:02', pg_temp.test_day() + 3),
+  array['00000000-0000-0000-0000-0000000e0003'::uuid]);
+reset role;
+select pg_temp.assert((select uses_left from member_entitlements where member_id = '00000000-0000-0000-0000-0000000e0003' and kind = 'weekend') = 0,
+  'weekendronde gebruikt');
+delete from tee_bookings where starts_at = pg_temp.at('16:02', pg_temp.test_day() + 3);
+select pg_temp.assert((select uses_left from member_entitlements where member_id = '00000000-0000-0000-0000-0000000e0003' and kind = 'weekend') = 1,
+  'verwijderde starttijd geeft de weekendronde terug');
