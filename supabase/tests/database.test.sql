@@ -651,3 +651,137 @@ select pg_temp.assert((select count(*) from hq_weekly(12)) = 12, 'twaalf weken t
 select pg_temp.assert((select count(*) from hq_prospects) = 1, 'Greenside ziet de pijplijn');
 reset role;
 delete from hq_prospects;
+
+-- 18. Pilot: leden importeren, account koppelen, club aanmaken -------------------------------
+-- Een lid mag niet importeren
+select set_config('request.jwt.claim.sub', '00000000-0000-0000-0000-00000000a002', false);
+set role authenticated;
+do $$ begin
+  begin
+    perform import_members('00000000-0000-0000-0000-0000000c0001', '[{"first_name":"X","last_name":"Y"}]');
+    raise exception 'expected failure';
+  exception when others then
+    if sqlerrm = 'expected failure' then raise; end if;
+  end;
+end $$;
+reset role;
+
+select set_config('request.jwt.claim.sub', '00000000-0000-0000-0000-00000000a001', false);  -- beheerder De Duinen
+set role authenticated;
+-- Eén foute regel: niets geïmporteerd, en de melding noemt de regel
+do $$ begin
+  begin
+    perform import_members('00000000-0000-0000-0000-0000000c0001', '[
+      {"_line":"2","first_name":"Anna","last_name":"Import","membership_type":"A-lid (volledig)"},
+      {"_line":"3","first_name":"Bert","last_name":"Import","date_of_birth":"31-02-1970"}]');
+    raise exception 'expected failure';
+  exception when others then
+    if sqlerrm not like 'Regel 3:%' then raise; end if;
+  end;
+end $$;
+select pg_temp.assert((select count(*) from members where last_name = 'Import') = 0, 'bij een fout wordt niets geïmporteerd');
+
+-- Onbekend lidmaatschap zonder toestemming om aan te maken
+do $$ begin
+  begin
+    perform import_members('00000000-0000-0000-0000-0000000c0001', '[{"_line":"2","first_name":"Anna","last_name":"Import","membership_type":"Senior"}]');
+    raise exception 'expected failure';
+  exception when others then
+    if sqlerrm not like 'Regel 2: lidmaatschap "Senior" bestaat niet%' then raise; end if;
+  end;
+end $$;
+
+-- Echte import: twee nieuwe leden (één met machtiging, één zonder lidnummer), één bestaand lid bijgewerkt
+select set_config('test.import', import_members('00000000-0000-0000-0000-0000000c0001', '[
+  {"_line":"2","member_number":"9001","first_name":"Anna","last_name":"Import","email":"anna.import@example.test",
+   "membership_type":"a-lid (volledig)","gender":"female","date_of_birth":"1980-05-01","status":"active",
+   "iban":"NL91 ABNA 0417 1643 00","mandate_reference":"IMP-9001","mandate_signed_on":"2020-01-01"},
+  {"_line":"3","first_name":"Bert","last_name":"Import","membership_type":"Senior","handicap_index":"-1.5"},
+  {"_line":"4","member_number":"1002","first_name":"Sanne","last_name":"Jansen","phone":"06-99999999"}]', true, true)::text, false);
+reset role;
+select pg_temp.assert((current_setting('test.import')::jsonb->>'inserted')::int = 2, 'twee nieuwe leden');
+select pg_temp.assert((current_setting('test.import')::jsonb->>'updated')::int = 1, 'één lid bijgewerkt');
+select pg_temp.assert((current_setting('test.import')::jsonb->>'mandates')::int = 1, 'één machtiging');
+select pg_temp.assert(current_setting('test.import')::jsonb->'types_created' = '["Senior"]', 'lidmaatschap Senior aangemaakt');
+select pg_temp.assert((select iban from members where member_number = '9001') = 'NL91ABNA0417164300', 'IBAN zonder spaties');
+select pg_temp.assert((select member_number from members where first_name = 'Bert' and last_name = 'Import') = '9002',
+  'regel zonder lidnummer krijgt het volgende vrije nummer');
+select pg_temp.assert((select handicap_index from members where member_number = '9002') = -1.5, 'plushandicap als negatief getal');
+select pg_temp.assert((select phone from members where member_number = '1002') = '06-99999999'
+  and (select email from members where member_number = '1002') = 'sanne@example.test',
+  'bijwerken vult aan en wist niets');
+select pg_temp.assert((select account_holder from sepa_mandates where mandate_reference = 'IMP-9001') = 'A. Import', 'rekeninghouder afgeleid');
+
+-- Inloggen met een code koppelt het account aan het lid met hetzelfde bevestigde e-mailadres
+insert into auth.users (id, email, email_confirmed_at) values
+  ('00000000-0000-0000-0000-00000000a0a1', 'Anna.Import@example.test', now()),
+  ('00000000-0000-0000-0000-00000000a0a2', 'nieuw@pilotclub.test', now());
+select set_config('request.jwt.claim.sub', '00000000-0000-0000-0000-00000000a0a1', false);
+set role authenticated;
+select pg_temp.assert(claim_my_accounts() = '{"members": 1, "staff": 0}', 'account gekoppeld aan het geïmporteerde lid');
+select pg_temp.assert((select count(*) from members) = 1, 'na koppelen ziet Anna haar eigen gegevens');
+select pg_temp.assert(claim_my_accounts() = '{"members": 0, "staff": 0}', 'nogmaals koppelen doet niets');
+reset role;
+
+-- Greenside maakt een club aan; anderen kunnen dat niet
+select set_config('request.jwt.claim.sub', '00000000-0000-0000-0000-00000000a001', false);
+set role authenticated;
+do $$ begin
+  begin
+    perform hq_create_club('{"name":"Stiekem","slug":"stiekem","manager_email":"x@y.test"}');
+    raise exception 'expected failure';
+  exception when others then
+    if sqlerrm = 'expected failure' then raise; end if;
+  end;
+end $$;
+reset role;
+insert into hq_prospects (club_name, stage) values ('Pilotclub De Heide', 'proefperiode');
+select set_config('request.jwt.claim.sub', '00000000-0000-0000-0000-00000000a009', false);
+set role authenticated;
+select set_config('test.club', hq_create_club(jsonb_build_object(
+  'name', 'Pilotclub De Heide', 'slug', 'pilotclub-de-heide', 'city', 'Ede', 'layout', '18+9', 'status', 'pilot',
+  'fee_cents', 44900, 'manager_email', 'Nieuw@PilotClub.test',
+  'prospect_id', (select id from hq_prospects where club_name = 'Pilotclub De Heide')))::text, false);
+select pg_temp.assert((select manager_email from hq_club_setup(current_setting('test.club')::uuid)) = 'nieuw@pilotclub.test'
+  and not (select manager_joined from hq_club_setup(current_setting('test.club')::uuid)), 'beheerder uitgenodigd, nog niet ingelogd');
+select pg_temp.assert((select courses from hq_club_setup(current_setting('test.club')::uuid)) = 2, '18 holes en een par-3 baan');
+do $$ begin
+  begin
+    perform hq_create_club('{"name":"Dubbel","slug":"pilotclub-de-heide","manager_email":"x@y.test"}');
+    raise exception 'expected failure';
+  exception when others then
+    if sqlerrm not like 'Er is al een club%' then raise; end if;
+  end;
+end $$;
+reset role;
+select pg_temp.assert((select greenside_status = 'pilot' and greenside_pilot_until = current_date + 90 and greenside_fee_cents = 44900
+  from clubs where slug = 'pilotclub-de-heide'), 'pilot van 90 dagen met licentiebedrag');
+select pg_temp.assert((select count(*) from membership_types where club_id = current_setting('test.club')::uuid) = 6, 'zes lidmaatschappen');
+select pg_temp.assert((select count(*) from ledger_accounts where club_id = current_setting('test.club')::uuid and code in ('1100', '1300', '8000', '8100')) = 4
+  and exists (select 1 from finance_settings where club_id = current_setting('test.club')::uuid), 'rekeningschema en financiële instellingen aangemaakt');
+select pg_temp.assert((select count(*) from course_holes h join courses c on c.id = h.course_id
+  where c.club_id = current_setting('test.club')::uuid) = 27, '27 holes met par en stroke index');
+select pg_temp.assert((select count(*) from products where club_id = current_setting('test.club')::uuid and not active) = 6,
+  'aanbod klaargezet maar uit');
+select pg_temp.assert((select stage = 'gewonnen' and club_id = current_setting('test.club')::uuid from hq_prospects
+  where club_name = 'Pilotclub De Heide'), 'verkoopkans gewonnen en gekoppeld');
+
+-- De beheerder logt in met een code en is meteen beheerder van de nieuwe club
+select set_config('request.jwt.claim.sub', '00000000-0000-0000-0000-00000000a0a2', false);
+set role authenticated;
+select pg_temp.assert(claim_my_accounts() = '{"members": 0, "staff": 1}', 'uitnodiging wordt een rol');
+select pg_temp.assert(is_club_staff(current_setting('test.club')::uuid, array['admin']::staff_role[]), 'beheerder van de nieuwe club');
+select pg_temp.assert((select count(*) from members where club_id = '00000000-0000-0000-0000-0000000c0001') = 0,
+  'en ziet niets van andere clubs');
+-- en kan zelf een collega uitnodigen
+insert into club_staff_invites (club_id, email, role) values (current_setting('test.club')::uuid, 'penningmeester@pilotclub.test', 'finance');
+reset role;
+select pg_temp.assert((select accepted_at is not null from club_staff_invites where email = 'nieuw@pilotclub.test'), 'uitnodiging geaccepteerd');
+
+-- Opruimen, zodat de demodata daarna op een schone stand laadt
+delete from members where member_number in ('9001', '9002');
+delete from membership_types where name = 'Senior';
+update members set phone = '06-23456789' where member_number = '1002';
+delete from clubs where slug = 'pilotclub-de-heide';
+delete from hq_prospects;
+delete from auth.users where id in ('00000000-0000-0000-0000-00000000a0a1', '00000000-0000-0000-0000-00000000a0a2');

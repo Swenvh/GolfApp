@@ -36,6 +36,8 @@ export function SessionProvider({ children }: { children: ReactNode }) {
       setMemberships([]);
       return;
     }
+    // Koppel het account aan leden met hetzelfde (bevestigde) e-mailadres, bv. net geïmporteerd door de club
+    await supabase.rpc('claim_my_accounts');
     const { data } = await supabase
       .from('members')
       .select('*, club:clubs(*)')

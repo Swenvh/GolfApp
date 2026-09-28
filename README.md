@@ -70,6 +70,7 @@ Buggy's worden per tijdvak geteld (een buggy kan 's ochtends én 's middags rijd
 ### Clubbeheer (web)
 - **Mission control** — in gewone taal: één zin of alles in orde is, een takenlijst met per punt één knop (verzoeken, aanmeldingen, te late en conceptfacturen, incasso klaarzetten of verwerken, verlopende Handicart-passen en sponsorcontracten, leden zonder app, ontbrekende bankgegevens), de bezetting van vandaag per baan, geld, leden, de komende twee weken, recente activiteit en wat de app oplevert. Ververst elke minuut.
 - **Leden** — zoeken/filteren, detail + bewerken, NGF-nummer, handicap, SEPA-machtiging, app-uitnodiging, CSV-export (Excel-NL)
+- **Leden importeren** — CSV uit het vorige systeem (E-Golf4U, Nexxchange, IntoGolf, Excel): kolommen worden op naam herkend, elke regel wordt vooraf gecontroleerd (datums, e-mail, IBAN, handicap, dubbele lidnummers, gedeelde e-mailadressen), ontbrekende lidmaatschappen kunnen worden aangemaakt, machtigingen gaan mee. Alles of niets: bij één fout wordt niets opgeslagen. Bestaande leden (zelfde lidnummer) worden aangevuld, niet gewist.
 - **Financiën**
   - Facturen met regels, BTW 0/9/21%, grootboekrekening per regel, concept → definitief (doorlopende nummering per jaar), crediteren, printbare factuur/PDF
   - Contributie in bulk factureren op basis van lidmaatschapsvorm
@@ -80,10 +81,15 @@ Buggy's worden per tijdvak geteld (een buggy kan 's ochtends én 's middags rijd
 - **Starttijden** — tee sheet per dag met check-in en annuleren
 - **Wedstrijden** — aanmaken, status, uitslagen invoeren
 - **Nieuws** — berichten (vastpinnen, concept) die direct in de app verschijnen
-- **Instellingen** — clubgegevens, IBAN/incassant-ID, introducé-limiet, lidmaatschapsvormen & tarieven (incl. rustend lidmaatschap)
+- **Instellingen** — clubgegevens, IBAN/incassant-ID, introducé-limiet, lidmaatschapsvormen & tarieven (incl. rustend lidmaatschap), collega's uitnodigen per rol
+- **Inloggen met een code** — beheerders loggen in met een code per e-mail (wachtwoord blijft mogelijk). Een uitnodiging wordt een rol zodra iemand met dat adres inlogt.
 
 ### Greenside HQ (voor Greenside zelf)
 Op `/hq`, alleen voor medewerkers van Greenside (`platform_staff`). Mission control met omzet per maand en jaar, klanten, pijplijn, golfers op Greenside, hoeveel leden de app echt gebruiken, omzet via de app bij klanten en hoe vaak de licentie is terugverdiend. Een takenlijst signaleert clubs zonder activiteit, aflopende proefperiodes, lage app-adoptie, ontbrekende incasso of iDEAL en afspraken in de verkoop. Per klant een gezondheidsscore (goed / let op / risico, met reden), een trend van twaalf weken en een verkooppijplijn (lead → demo → proefperiode → gewonnen / verloren) om bij te houden. Clubs zien elkaars gegevens nooit; HQ ziet alleen totalen per club.
+
+**Club aanmaken** (`/hq/klanten/nieuw`, ook vanuit een verkoopkans): één formulier en de club staat klaar met zes gangbare lidmaatschappen, de baan (9, 18, 18 + par-3 of 27 holes, met standaard par en stroke index), het rekeningschema, het aanbod in de app (klaargezet, nog uit) en een uitnodiging voor de beheerder. Per klant een inrichtingspagina met de stappen van aanmelding tot gebruik en een kant-en-klaar bericht voor de beheerder.
+
+**Accounts koppelen** — leden en beheerders hoeven niet één voor één uitgenodigd te worden: na inloggen met een code koppelt `claim_my_accounts()` het account aan het lid (of de beheerdersuitnodiging) met hetzelfde bevestigde e-mailadres. Delen meerdere leden van één club een adres, dan wordt niets gekoppeld; de import waarschuwt daarvoor.
 
 ### Rollen
 `admin` (alles) · `finance` (penningmeester) · `secretariat` (ledenadministratie, wedstrijden, nieuws) · `marshal` (starttijden). Leden zien alleen hun eigen gegevens; de ledenlijst toont alleen naam + handicap van leden die daarmee instemmen. Alle wijzigingen aan leden, facturen, betalingen en machtigingen komen in een audit-log (AVG).
@@ -134,9 +140,9 @@ CI (`.github/workflows/ci.yml`) draait dit allemaal bij elke push.
 ## Roadmap / nog te doen
 
 - **NGF-koppeling** (officiële handicaps en qualifying kaarten via de NGF/GSN-API — vereist aansluiting bij de NGF)
-- Koppeling met bestaande clubsystemen (e-golf4u, Golfmanager) voor migratie van leden
+- Importsjablonen per oud systeem (E-Golf4U, Nexxchange, IntoGolf) met echte exportbestanden van een pilotclub
 - Pushnotificaties (nieuws, herinnering starttijd), marker-bevestiging van scorekaarten
 - Greenfee-boekingen voor gasten, baanstatus/weer, horeca/kassa
 - Bankafschriften importeren (CAMT.053) voor automatisch afletteren, export naar boekhoudpakket (Exact/Twinfield)
-- Clubbeheer: beheerders uitnodigen via UI, baangegevens (tees/holes) beheren, onboarding van nieuwe clubs
+- Clubbeheer: baangegevens (tees/holes, course rating en slope) beheren
 - Verwerkersovereenkomst, privacyverklaring en DPIA (AVG) per club

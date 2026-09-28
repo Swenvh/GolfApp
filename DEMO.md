@@ -27,7 +27,7 @@ pnpm demo          # start alles; de eerste keer duurt dit 5 à 10 minuten
 
 | | Adres | Inloggen |
 |---|---|---|
-| Clubbeheer | http://localhost:3000 | `beheer@deduinen.test` / `golfapp123` |
+| Clubbeheer | http://localhost:3000 | `beheer@deduinen.test` / `golfapp123` (kies *Inloggen met een wachtwoord*), of met een code per e-mail |
 | Ledenapp | http://localhost:8081 | `jan@example.test` (A-lid) of `pieter@example.test` (weekdaglid met Handicart-pas) |
 | Testmail | http://localhost:54324 | Hier staat de 6-cijferige inlogcode voor de ledenapp |
 | Greenside HQ | http://localhost:3000/hq | `hq@greenside.test` / `golfapp123` (voor Greenside zelf: alle klanten en de verkoop) |
@@ -64,7 +64,13 @@ Clubs werken met verouderde software, de receptie is druk met telefoontjes en af
 - App-omzet: omzet via de app, *hoe vaak de licentie is terugverdiend*, buggy's voor de receptie en leads.
 - Financiën → Incasso: SEPA-bestand voor de bank. Grootboek: alles automatisch dubbel geboekt.
 
-**5. Het verdienmodel (2 min)**
+**5. Overstappen, voor clubs die nu van E-Golf4U af moeten (3 min)** — `hq@greenside.test`
+- Greenside HQ → Verkoop → een club in *Proefperiode* → *Club aanmaken*. De club staat meteen klaar; de inrichtingspagina toont de stappen en een bericht voor de beheerder.
+- Nieuw browservenster → http://localhost:3000 → vul het e-mailadres van de beheerder in → code uit de testmailbox. De beheerder is direct beheerder van de nieuwe club.
+- Leden → *Importeren* → kies een CSV (het voorbeeldbestand staat op die pagina). Per regel zie je of het klopt; daarna in één keer importeren.
+- Een geïmporteerd lid logt in de ledenapp in met zijn e-mailadres en een code, zonder uitnodiging.
+
+**6. Het verdienmodel (2 min)**
 Laat in de rondleiding het rekenvoorbeeld en het onderdeel sponsoring zien. Schuif met de aannames van de club aan tafel.
 
 ## Wat er staat en wat nog moet
@@ -72,6 +78,7 @@ Laat in de rondleiding het rekenvoorbeeld en het onderdeel sponsoring zien. Schu
 **Klaar en getest**
 - Ledenapp: inloggen met code, starttijden per 8 minuten zonder dubbele boekingen, wedstrijden, scorekaart, facturen en iDEAL.
 - Clubbeheer: leden, starttijden, wedstrijden, nieuws, facturen, betalingen, SEPA-incasso en grootboek.
+- Overstappen: club aanmaken vanuit Greenside HQ, leden importeren uit het oude systeem, inloggen met een code zonder uitnodiging per lid.
 - De app verdient zichzelf terug:
   - buggy met Handicart-tarief;
   - greenfees, lessen, stalling en wedstrijddiner;
@@ -90,6 +97,6 @@ Laat in de rondleiding het rekenvoorbeeld en het onderdeel sponsoring zien. Schu
 **Nog te bouwen**
 - Branding per club: eigen hoogtelijnen uit het terrein, clubwapen en clubkleur, en de ledenkaart in Wallet.
 - Landelijke sponsors, gedeeld met clubs.
-- Leden overzetten uit e-golf4u of Golfmanager, pushberichten, en een koppeling met de NGF voor officiële handicaps.
+- Pushberichten en een koppeling met de NGF voor officiële handicaps.
 
 Technische details staan in [README.md](README.md).

@@ -60,15 +60,37 @@ async function saveMembershipType(formData: FormData) {
   redirect('/instellingen?saved=1');
 }
 
+async function inviteStaff(formData: FormData) {
+  'use server';
+  const ctx = await requireRole('admin');
+  const supabase = await createClient();
+  const email = String(formData.get('email') ?? '').trim().toLowerCase();
+  const { error } = await supabase.from('club_staff_invites').insert({
+    club_id: ctx.club.id, email, role: String(formData.get('role') ?? 'secretariat'),
+  });
+  if (error) redirect(`/instellingen?error=${encodeURIComponent(error.code === '23505' ? 'Deze persoon is al uitgenodigd voor die rol.' : 'Uitnodigen mislukt. Controleer het e-mailadres.')}`);
+  revalidatePath('/instellingen');
+  redirect('/instellingen?saved=1');
+}
+
+async function withdrawInvite(formData: FormData) {
+  'use server';
+  const ctx = await requireRole('admin');
+  const supabase = await createClient();
+  await supabase.from('club_staff_invites').delete().eq('id', String(formData.get('id'))).eq('club_id', ctx.club.id);
+  revalidatePath('/instellingen');
+}
+
 const euro = (c: number) => (c / 100).toFixed(2).replace('.', ',');
 
 export default async function InstellingenPage({ searchParams }: { searchParams: Promise<{ error?: string; saved?: string }> }) {
   const { error, saved } = await searchParams;
   const ctx = await requireRole('admin');
   const supabase = await createClient();
-  const [{ data: types }, { data: staff }] = await Promise.all([
+  const [{ data: types }, { data: staff }, { data: invites }] = await Promise.all([
     supabase.from('membership_types').select('*').eq('club_id', ctx.club.id).order('name'),
     supabase.from('club_staff').select('user_id, role').eq('club_id', ctx.club.id),
+    supabase.from('club_staff_invites').select('id, email, role').eq('club_id', ctx.club.id).is('accepted_at', null).order('created_at'),
   ]);
   const c = ctx.club;
 
@@ -142,6 +164,32 @@ export default async function InstellingenPage({ searchParams }: { searchParams:
                 ))}
               </tbody>
             </table>
+            {(invites ?? []).length > 0 && (
+              <div className="border-t border-stone-100 p-4">
+                <div className="text-[10.5px] font-extrabold uppercase tracking-[0.14em] text-stone-500">Uitgenodigd, nog niet ingelogd</div>
+                <ul className="mt-2 space-y-1">
+                  {(invites ?? []).map((i) => (
+                    <li key={i.id} className="flex items-center justify-between gap-2 text-sm">
+                      <span>{i.email} · {staffRoleLabel[i.role as StaffRole]}</span>
+                      <form action={withdrawInvite}><input type="hidden" name="id" value={i.id} />
+                        <button className="min-h-11 px-2 text-sm font-bold text-red-700 hover:underline">Intrekken</button>
+                      </form>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            <form action={inviteStaff} className="grid gap-3 border-t border-stone-100 p-4">
+              <Field label="Collega uitnodigen" hint="Diegene logt in op het clubbeheer met een code die naar dit e-mailadres wordt gestuurd.">
+                <input name="email" type="email" required placeholder="naam@club.nl" />
+              </Field>
+              <div className="flex gap-2">
+                <select name="role" defaultValue="secretariat" aria-label="Rol" className="flex-1">
+                  {(['admin', 'finance', 'secretariat', 'marshal'] as StaffRole[]).map((r) => <option key={r} value={r}>{staffRoleLabel[r]}</option>)}
+                </select>
+                <Button type="submit">Uitnodigen</Button>
+              </div>
+            </form>
             <p className="border-t border-stone-100 p-4 text-xs text-stone-500">
               Rollen: Beheerder (alles), Penningmeester (financiën), Secretariaat (leden, wedstrijden, nieuws), Marshal (starttijden).
             </p>

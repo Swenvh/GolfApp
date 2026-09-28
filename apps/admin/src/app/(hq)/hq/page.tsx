@@ -32,6 +32,7 @@ function health(c: Club, today: string): { level: 'goed' | 'let-op' | 'risico'; 
   const adoption = pct(c.active_30d, c.members);
   const quiet = c.last_activity ? days(localDate(new Date(c.last_activity)), today) : 999;
   if (c.status === 'opgezegd') return { level: 'risico', reason: 'Opgezegd' };
+  if (c.members === 0) return { level: 'let-op', reason: 'Nog in te richten: leden importeren' };
   if (quiet >= 7) return { level: 'risico', reason: `${quiet} dagen geen activiteit` };
   if (adoption < 15) return { level: 'risico', reason: `Maar ${adoption}% gebruikt de app` };
   if (c.pilot_until && days(today, c.pilot_until) <= 14) return { level: 'let-op', reason: `Proef loopt af over ${days(today, c.pilot_until)} dagen` };
@@ -75,29 +76,36 @@ export default async function HqMissionControl() {
   // ── Takenlijst
   const tasks: Task[] = [];
   for (const c of clubs) {
+    // Net aangemaakt: eerst inrichten, de andere signalen zeggen dan nog niets
+    if (c.status !== 'opgezegd' && c.members === 0) {
+      tasks.push({ key: `setup-${c.club_id}`, tone: 'todo', icon: Building2, title: `${c.name}: inrichting afmaken`,
+        explain: 'De club staat klaar, maar er zijn nog geen leden. De beheerder logt in met een code en importeert het ledenbestand.',
+        href: `/hq/klanten/${c.club_id}`, cta: 'Inrichting bekijken' });
+      continue;
+    }
     const quiet = c.last_activity ? days(localDate(new Date(c.last_activity)), today) : 999;
     if (c.status !== 'opgezegd' && quiet >= 7) {
       tasks.push({ key: `quiet-${c.club_id}`, tone: 'urgent', icon: PhoneCall, title: `${c.name}: ${quiet} dagen geen activiteit`,
         explain: 'Geen boekingen en geen bestellingen meer. Bel de club: is er iets mis met de app, of is de baan dicht? Dit is het eerste teken dat een klant wegloopt.',
-        href: '#klanten', cta: 'Bekijken' });
+        href: `/hq/klanten/${c.club_id}`, cta: 'Bekijken' });
     }
     if (c.pilot_until && c.pilot_until >= today && days(today, c.pilot_until) <= 30) {
       const left = days(today, c.pilot_until);
       tasks.push({ key: `pilot-${c.club_id}`, tone: left <= 14 ? 'urgent' : 'todo', icon: Rocket,
         title: `Proefperiode ${c.name} loopt af op ${formatDate(c.pilot_until)}`,
         explain: `Nog ${plural(left, 'dag', 'dagen')}. Plan een evaluatie met het bestuur en laat zien wat de app opleverde: ${euro(Number(c.app_revenue_30d_cents))} via de app in 30 dagen.`,
-        href: '#klanten', cta: 'Evaluatie plannen' });
+        href: `/hq/klanten/${c.club_id}`, cta: 'Evaluatie plannen' });
     }
     const adoption = pct(c.active_30d, c.members);
     if (c.status !== 'opgezegd' && quiet < 7 && adoption < 25) {
       tasks.push({ key: `adopt-${c.club_id}`, tone: 'todo', icon: Users, title: `${c.name}: ${adoption}% van de leden gebruikt de app`,
         explain: 'Help de club met uitnodigen: een mail aan alle leden vanuit het clubbeheer en een affiche in het clubhuis. Onder de 25% blijft de omzet via de app achter.',
-        href: '#klanten', cta: 'Bekijken' });
+        href: `/hq/klanten/${c.club_id}`, cta: 'Bekijken' });
     }
     if (c.status !== 'opgezegd' && !c.bank_ready) {
       tasks.push({ key: `bank-${c.club_id}`, tone: 'todo', icon: Landmark, title: `${c.name}: automatische incasso nog niet ingesteld`,
         explain: 'Zonder IBAN en incassant-ID betalen leden alles zelf. Help de penningmeester het incassant-ID bij de bank op te vragen.',
-        href: '#klanten', cta: 'Bekijken' });
+        href: `/hq/klanten/${c.club_id}`, cta: 'Bekijken' });
     }
   }
   const noIdeal = clubs.filter((c) => c.status !== 'opgezegd' && !c.payments_ready);
@@ -171,7 +179,7 @@ export default async function HqMissionControl() {
                 return (
                   <tr key={c.club_id}>
                     <td>
-                      <div className="font-bold text-stone-900">{c.name}</div>
+                      <Link href={`/hq/klanten/${c.club_id}`} className="font-bold text-stone-900 underline-offset-2 hover:underline">{c.name}</Link>
                       <div className="text-sm text-stone-600">{c.city}{c.status === 'pilot' ? ' · proefperiode' : c.status === 'opgezegd' ? ' · opgezegd' : ''}</div>
                     </td>
                     <td>

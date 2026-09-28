@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { formatEuro, localDate } from '@golfapp/shared';
 import { Button, Field, Notice } from '@/components/ui';
 import { formatDate } from '@/lib/format';
@@ -11,6 +12,7 @@ export const metadata = { title: 'Verkoop' };
 type Prospect = {
   id: string; club_name: string; city: string | null; members_estimate: number | null; stage: Stage; monthly_value_cents: number;
   contact_name: string | null; contact_email: string | null; next_step: string | null; next_date: string | null; notes: string | null;
+  club_id: string | null;
 };
 
 const euro = (c: number) => (c / 100).toFixed(2).replace('.', ',');
@@ -81,6 +83,15 @@ export default async function Verkoop({ searchParams }: { searchParams: Promise<
                     <span className="ml-3 font-bold text-brand-600 group-open:hidden">Bewerken</span>
                   </span>
                 </summary>
+                {(p.club_id || p.stage === 'proefperiode' || p.stage === 'gewonnen') && (
+                  <div className="flex flex-wrap items-center justify-between gap-2 border-t border-stone-200 bg-brand-50/50 px-5 py-3 text-[15px]">
+                    <span>{p.club_id ? 'Deze club staat in Greenside.' : 'Klaar om te starten? Maak de club aan; de beheerder kan dan meteen inloggen.'}</span>
+                    <Link href={p.club_id ? `/hq/klanten/${p.club_id}` : `/hq/klanten/nieuw?prospect=${p.id}`}
+                      className="inline-flex min-h-11 items-center rounded-full bg-brand-600 px-4 font-bold text-white hover:bg-brand-700">
+                      {p.club_id ? 'Inrichting bekijken' : 'Club aanmaken'}
+                    </Link>
+                  </div>
+                )}
                 <form action={saveProspect} className="grid items-end gap-3 border-t border-stone-200 p-5 md:grid-cols-12">
                   <input type="hidden" name="id" value={p.id} />
                   <ProspectFields p={p} />

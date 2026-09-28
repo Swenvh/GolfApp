@@ -6,3 +6,4 @@ export * from './teeTimes';
 export * from './sepa';
 export * from './types';
 export * from './labels';
+export * from './memberImport';

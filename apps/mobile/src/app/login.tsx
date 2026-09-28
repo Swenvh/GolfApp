@@ -10,7 +10,8 @@ import { colors, fonts, radius, space } from '@/lib/theme';
 
 /**
  * Inloggen met een eenmalige code per e-mail: geen wachtwoorden om te vergeten,
- * en geen deep links nodig. Het e-mailadres moet bij de club bekend zijn.
+ * en geen deep links nodig. Na inloggen koppelt de app het account aan het lid met
+ * hetzelfde e-mailadres (claim_my_accounts), dus leden hoeven niet eerst uitgenodigd te worden.
  */
 export default function Login() {
   const insets = useSafeAreaInsets();
@@ -23,9 +24,9 @@ export default function Login() {
   const sendCode = async () => {
     setBusy(true);
     setError(undefined);
-    const { error } = await supabase.auth.signInWithOtp({ email: email.trim(), options: { shouldCreateUser: false } });
+    const { error } = await supabase.auth.signInWithOtp({ email: email.trim(), options: { shouldCreateUser: true } });
     setBusy(false);
-    if (error) { haptic.warn(); setError('Dit e-mailadres kennen we niet. Vraag je club om een uitnodiging.'); }
+    if (error) { haptic.warn(); setError('Er ging iets mis bij het versturen. Controleer het e-mailadres en probeer het opnieuw.'); }
     else setStep('code');
   };
 

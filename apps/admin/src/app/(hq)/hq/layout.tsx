@@ -7,6 +7,7 @@ export default async function HqLayout({ children }: { children: React.ReactNode
     { href: '/hq', label: 'Mission control', icon: 'dashboard' },
     { href: '/hq#klanten', label: 'Klanten', icon: 'klanten' },
     { href: '/hq/verkoop', label: 'Verkoop', icon: 'verkoop' },
+    { href: '/hq/klanten/nieuw', label: 'Club aanmaken', icon: 'nieuw' },
     ...(ctx.isClubStaff ? [{ href: '/', label: 'Naar clubbeheer', icon: 'leden' }] : []),
   ];
   return (

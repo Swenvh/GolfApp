@@ -27,7 +27,7 @@ export default function KiesClub() {
         {memberships.length === 0 ? (
           <>
             <Empty icon="flag-outline" title="Nog geen lidmaatschap gekoppeld">
-              Je account is nog niet aan een club gekoppeld. Neem contact op met de ledenadministratie van je club.
+              {`We vinden geen lid met ${session?.user.email ?? 'dit e-mailadres'} bij een club. Vraag de ledenadministratie om je e-mailadres te controleren, of log in met het adres dat de club van je heeft.`}
             </Empty>
             <Button title="Uitloggen" variant="secondary" onPress={signOut} />
           </>

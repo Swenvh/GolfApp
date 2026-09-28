@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
-import { Building2, CalendarClock, Handshake, Landmark, LayoutDashboard, Newspaper, Settings, TrendingUp, Trophy, Users, type LucideIcon } from 'lucide-react';
+import { Building2, CalendarClock, CirclePlus, Handshake, Landmark, LayoutDashboard, Newspaper, Settings, TrendingUp, Trophy, Users, type LucideIcon } from 'lucide-react';
 import { selectClub, logout } from '@/app/(beheer)/actions';
 import { Contours, Wordmark } from './brand';
 
@@ -11,7 +11,7 @@ interface NavItem { href: string; label: string; icon: string; sub?: boolean }
 
 const icons: Record<string, LucideIcon> = {
   dashboard: LayoutDashboard, leden: Users, starttijden: CalendarClock, wedstrijden: Trophy,
-  nieuws: Newspaper, financien: Landmark, instellingen: Settings, omzet: TrendingUp, klanten: Building2, verkoop: Handshake,
+  nieuws: Newspaper, financien: Landmark, instellingen: Settings, omzet: TrendingUp, klanten: Building2, verkoop: Handshake, nieuw: CirclePlus,
 };
 
 export function Sidebar({ nav, clubs, currentClubId, clubName, email, eyebrow = 'Clubbeheer' }: {
