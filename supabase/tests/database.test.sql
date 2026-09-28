@@ -716,7 +716,20 @@ select pg_temp.assert((select account_holder from sepa_mandates where mandate_re
 insert into auth.users (id, email, email_confirmed_at) values
   ('00000000-0000-0000-0000-00000000a0a1', 'Anna.Import@example.test', now()),
   ('00000000-0000-0000-0000-00000000a0a2', 'nieuw@pilotclub.test', now());
+-- Aanvaller maakt zelf een account met wachtwoord op het adres van een lid: nooit koppelen
 select set_config('request.jwt.claim.sub', '00000000-0000-0000-0000-00000000a0a1', false);
+select set_config('request.jwt.claims', '{"amr":[{"method":"password"}]}', false);
+set role authenticated;
+select pg_temp.assert(claim_my_accounts() = '{"members": 0, "staff": 0}', 'inloggen met wachtwoord koppelt niet');
+select pg_temp.assert((select count(*) from members) = 0, 'en ziet geen ledengegevens');
+reset role;
+-- Onbevestigd adres koppelt ook met een code niet
+update auth.users set email_confirmed_at = null where id = '00000000-0000-0000-0000-00000000a0a1';
+select set_config('request.jwt.claims', '{"amr":[{"method":"otp"}]}', false);
+set role authenticated;
+select pg_temp.assert(claim_my_accounts() = '{"members": 0, "staff": 0}', 'onbevestigd adres koppelt niet');
+reset role;
+update auth.users set email_confirmed_at = now() where id = '00000000-0000-0000-0000-00000000a0a1';
 set role authenticated;
 select pg_temp.assert(claim_my_accounts() = '{"members": 1, "staff": 0}', 'account gekoppeld aan het geïmporteerde lid');
 select pg_temp.assert((select count(*) from members) = 1, 'na koppelen ziet Anna haar eigen gegevens');
@@ -768,6 +781,7 @@ select pg_temp.assert((select stage = 'gewonnen' and club_id = current_setting('
 
 -- De beheerder logt in met een code en is meteen beheerder van de nieuwe club
 select set_config('request.jwt.claim.sub', '00000000-0000-0000-0000-00000000a0a2', false);
+select set_config('request.jwt.claims', '{"amr":[{"method":"otp"}]}', false);
 set role authenticated;
 select pg_temp.assert(claim_my_accounts() = '{"members": 0, "staff": 1}', 'uitnodiging wordt een rol');
 select pg_temp.assert(is_club_staff(current_setting('test.club')::uuid, array['admin']::staff_role[]), 'beheerder van de nieuwe club');
@@ -777,6 +791,72 @@ select pg_temp.assert((select count(*) from members where club_id = '00000000-00
 insert into club_staff_invites (club_id, email, role) values (current_setting('test.club')::uuid, 'penningmeester@pilotclub.test', 'finance');
 reset role;
 select pg_temp.assert((select accepted_at is not null from club_staff_invites where email = 'nieuw@pilotclub.test'), 'uitnodiging geaccepteerd');
+
+-- Interne bouwstenen zijn van buitenaf niet aan te roepen (ook niet door een beheerder of lid)
+select set_config('request.jwt.claims', '', false);
+select set_config('request.jwt.claim.sub', '00000000-0000-0000-0000-00000000a001', false);
+set role authenticated;
+do $$ begin
+  begin
+    perform hq_add_course('00000000-0000-0000-0000-0000000c0001', 'Stiekeme baan', 9, 90);
+    raise exception 'expected failure';
+  exception when others then
+    if sqlerrm = 'expected failure' then raise; end if;
+  end;
+  begin
+    perform hq_standard_holes('00000000-0000-0000-0000-0000000f0001', 9);
+    raise exception 'expected failure';
+  exception when others then
+    if sqlerrm = 'expected failure' then raise; end if;
+  end;
+end $$;
+-- Een beheerder kan niet in een andere club importeren
+do $$ begin
+  begin
+    perform import_members(current_setting('test.club')::uuid, '[{"first_name":"X","last_name":"Y"}]');
+    raise exception 'expected failure';
+  exception when others then
+    if sqlerrm = 'expected failure' then raise; end if;
+  end;
+end $$;
+-- Invoer die de browser zou tegenhouden, houdt de database ook tegen
+do $$ begin
+  begin
+    perform import_members('00000000-0000-0000-0000-0000000c0001', jsonb_build_array(jsonb_build_object('_line', '2', 'first_name', repeat('A', 500), 'last_name', 'Lang')));
+    raise exception 'expected failure';
+  exception when others then
+    if sqlerrm not like 'Regel 2: waarde in veld first_name is te lang%' then raise; end if;
+  end;
+  begin
+    perform import_members('00000000-0000-0000-0000-0000000c0001', '[{"_line":"2","first_name":"A","last_name":"B","email":"geen-adres"}]');
+    raise exception 'expected failure';
+  exception when others then
+    if sqlerrm not like 'Regel 2: e-mailadres is ongeldig%' then raise; end if;
+  end;
+  begin
+    perform import_members('00000000-0000-0000-0000-0000000c0001', '[{"_line":"2","first_name":"A","last_name":"B","user_id":"00000000-0000-0000-0000-00000000a001","club_id":"x"}]');
+  exception when others then
+    raise exception 'onbekende velden horen genegeerd te worden: %', sqlerrm;
+  end;
+end $$;
+reset role;
+select pg_temp.assert((select user_id is null and club_id = '00000000-0000-0000-0000-0000000c0001' from members
+  where first_name = 'A' and last_name = 'B'), 'user_id en club_id uit het bestand worden genegeerd');
+select pg_temp.assert((select count(*) from audit_log where action = 'IMPORT' and table_name = 'members') >= 2
+  and (select new_data ? 'inserted' and not (new_data ? 'rows_data') from audit_log where action = 'IMPORT' order by id desc limit 1),
+  'elke import staat in het audit-log, zonder persoonsgegevens');
+-- Anoniem (niet ingelogd) kan geen van de nieuwe functies aanroepen
+set role anon;
+do $$ begin
+  begin perform import_members('00000000-0000-0000-0000-0000000c0001', '[{"first_name":"X","last_name":"Y"}]'); raise exception 'expected failure';
+  exception when others then if sqlerrm = 'expected failure' then raise; end if; end;
+  begin perform claim_my_accounts(); raise exception 'expected failure';
+  exception when others then if sqlerrm = 'expected failure' then raise; end if; end;
+  begin perform hq_create_club('{}'); raise exception 'expected failure';
+  exception when others then if sqlerrm = 'expected failure' then raise; end if; end;
+end $$;
+reset role;
+delete from members where first_name = 'A' and last_name = 'B';
 
 -- Opruimen, zodat de demodata daarna op een schone stand laadt
 delete from members where member_number in ('9001', '9002');

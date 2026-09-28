@@ -15,6 +15,7 @@ export async function GET() {
   return new NextResponse('﻿' + rows.map((r) => r.join(';')).join('\r\n'), {
     headers: {
       'Content-Type': 'text/csv; charset=utf-8',
+      'Cache-Control': 'no-store, private',
       'Content-Disposition': 'attachment; filename="leden-importeren-voorbeeld.csv"',
     },
   });

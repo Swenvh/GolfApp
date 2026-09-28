@@ -21,7 +21,7 @@ enable_signup = true    # inloggen met een code maakt het account aan; het ziet 
 
 [auth.email]
 enable_signup = true
-enable_confirmations = false
+enable_confirmations = true   # e-mailadres moet bewezen zijn; anders geen koppeling met een lid (zie claim_my_accounts)
 otp_length = 6
 
 [functions.mollie-webhook]

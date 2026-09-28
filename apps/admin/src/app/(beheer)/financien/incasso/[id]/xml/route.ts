@@ -48,6 +48,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
   return new NextResponse(xml, {
     headers: {
       'Content-Type': 'application/xml; charset=utf-8',
+      'Cache-Control': 'no-store, private',
       'Content-Disposition': `attachment; filename="incasso-${batch.collection_date}.xml"`,
     },
   });

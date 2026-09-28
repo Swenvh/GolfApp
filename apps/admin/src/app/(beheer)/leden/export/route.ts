@@ -50,6 +50,7 @@ export async function GET(request: NextRequest) {
   return new NextResponse('﻿' + lines.join('\r\n'), {
     headers: {
       'Content-Type': 'text/csv; charset=utf-8',
+      'Cache-Control': 'no-store, private',
       'Content-Disposition': `attachment; filename="leden-${ctx.club.slug}-${new Date().toISOString().slice(0, 10)}.csv"`,
     },
   });

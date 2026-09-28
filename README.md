@@ -131,9 +131,14 @@ CI (`.github/workflows/ci.yml`) draait dit allemaal bij elke push.
 
 1. **Supabase-project** aanmaken in regio EU (Frankfurt) → `supabase link` en `supabase db push`.
    Stel de e-mailtemplates uit `supabase/templates/` in (Authentication → Email Templates) en een eigen SMTP-server.
+   **Beveiliging (verplicht):** Authentication → Providers → Email: *Allow new users to sign up* aan, **Confirm email aan**
+   en *Secure email change* aan. Zonder bevestiging kan iemand een account op het e-mailadres van een lid aanmaken;
+   `claim_my_accounts()` koppelt daarnaast alleen sessies die met een code of e-maillink zijn verkregen.
+   Laat de standaard rate limits voor e-mail en codecontrole aan.
 2. **Edge functions** deployen: `supabase functions deploy invite-member create-payment mollie-webhook`.
    Per club een Mollie API-key in `club_payment_settings` zetten (alleen service role).
-3. **Clubbeheer** op Vercel (of vergelijkbaar) met `NEXT_PUBLIC_SUPABASE_URL` / `_ANON_KEY`.
+3. **Clubbeheer** op Vercel (of vergelijkbaar) met `NEXT_PUBLIC_SUPABASE_URL` / `_ANON_KEY`, alleen via HTTPS.
+   Beveiligingsheaders (geen frames, nosniff, HSTS) staan in `apps/admin/next.config.ts`; ledenexports worden nooit gecachet.
 4. **App** bouwen en indienen met EAS: `npx eas-cli build` / `eas submit`.
    White-label per club: zet `CLUB_SLUG`, `APP_NAME`, `BUNDLE_ID` in een EAS-profiel (zie `apps/mobile/app.config.ts`).
 
