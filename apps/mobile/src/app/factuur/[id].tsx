@@ -11,6 +11,7 @@ import { useMember } from '@/lib/session';
 import { supabase } from '@/lib/supabase';
 import { colors, fonts, radius, shadow, space } from '@/lib/theme';
 import { unwrap, useQuery } from '@/lib/useQuery';
+import { isSafeWebUrl } from '@/lib/links';
 
 export default function Factuur() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -37,7 +38,8 @@ export default function Factuur() {
     const { data: res, error } = await supabase.functions.invoke<{ checkoutUrl: string }>('create-payment', { body: { invoice_id: id } });
     setPaying(false);
     if (error || !res?.checkoutUrl) return setError('Online betalen lukt nu niet. Probeer het later opnieuw of maak het bedrag over.');
-    await WebBrowser.openBrowserAsync(res.checkoutUrl);
+    // Alleen een betaalpagina via https openen
+    if (isSafeWebUrl(res.checkoutUrl)) await WebBrowser.openBrowserAsync(res.checkoutUrl);
     setTimeout(reload, 1500);
   };
 

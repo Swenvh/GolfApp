@@ -11,9 +11,11 @@ Deno.serve(async (req) => {
   const { data: intent } = await admin.from('payment_intents').select('*').eq('provider_payment_id', id).maybeSingle();
   if (!intent) return new Response('ok'); // onbekend: negeren (Mollie verwacht 200)
 
-  const { data: settings } = await admin.from('club_payment_settings').select('mollie_api_key').eq('club_id', intent.club_id).single();
+  const { data: settings } = await admin.from('club_payment_settings').select('mollie_api_key').eq('club_id', intent.club_id).maybeSingle();
+  // Club heeft (nog) geen Mollie-koppeling: niets op te halen, Mollie hoeft niet opnieuw te proberen
+  if (!settings?.mollie_api_key) return new Response('ok');
   const res = await fetch(`https://api.mollie.com/v2/payments/${id}`, {
-    headers: { Authorization: `Bearer ${settings!.mollie_api_key}` },
+    headers: { Authorization: `Bearer ${settings.mollie_api_key}` },
   });
   if (!res.ok) return new Response('mollie error', { status: 502 });
   const payment = await res.json();

@@ -1,13 +1,14 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createClient } from '@supabase/supabase-js';
 import { AppState, Platform } from 'react-native';
+import { secureStorage } from './secureStorage';
 
 export const supabase = createClient(
   process.env.EXPO_PUBLIC_SUPABASE_URL!,
   process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY!,
   {
     auth: {
-      storage: Platform.OS === 'web' ? undefined : AsyncStorage,
+      // Sessie in de Keychain/Keystore van de telefoon; op het web de standaardopslag van de browser
+      storage: Platform.OS === 'web' ? undefined : secureStorage,
       autoRefreshToken: true,
       persistSession: true,
       detectSessionInUrl: false,

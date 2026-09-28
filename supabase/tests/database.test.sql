@@ -865,3 +865,177 @@ update members set phone = '06-23456789' where member_number = '1002';
 delete from clubs where slug = 'pilotclub-de-heide';
 delete from hq_prospects;
 delete from auth.users where id in ('00000000-0000-0000-0000-00000000a0a1', '00000000-0000-0000-0000-00000000a0a2');
+
+
+-- 19. Clubs strikt gescheiden: niets zien of wijzigen van een andere club -----------------------
+-- Tweede club met eigen beheerder en lid, aangemaakt zoals bij een echte klant
+insert into auth.users (id, email, email_confirmed_at) values
+  ('00000000-0000-0000-0000-00000000b0b1', 'beheer@isolatie.test', now()),
+  ('00000000-0000-0000-0000-00000000b0b2', 'lid@isolatie.test', now());
+select set_config('request.jwt.claim.sub', '00000000-0000-0000-0000-00000000a009', false);
+set role authenticated;
+select set_config('test.iso', hq_create_club('{"name":"Golfclub Isolatie","slug":"golfclub-isolatie","layout":"9","manager_email":"beheer@isolatie.test"}')::text, false);
+reset role;
+select set_config('request.jwt.claims', '{"amr":[{"method":"otp"}]}', false);
+select set_config('request.jwt.claim.sub', '00000000-0000-0000-0000-00000000b0b1', false);
+set role authenticated;
+select claim_my_accounts();
+select import_members(current_setting('test.iso')::uuid, '[{"_line":"2","member_number":"1","first_name":"Iso","last_name":"Lid","email":"lid@isolatie.test"}]');
+insert into news_posts (club_id, title, body, published_at) values (current_setting('test.iso')::uuid, 'Alleen voor Isolatie', 'x', now());
+reset role;
+select set_config('request.jwt.claim.sub', '00000000-0000-0000-0000-00000000b0b2', false);
+set role authenticated;
+select claim_my_accounts();
+reset role;
+
+-- Per club: alle rijen die bij die club horen, ook in tabellen zonder club_id (via de ouder)
+create or replace function pg_temp.parents(p_club uuid) returns jsonb language sql as $$
+  select jsonb_build_object(
+    'tee_bookings',         (select coalesce(jsonb_agg(id), '[]') from tee_bookings where club_id = p_club),
+    'invoices',             (select coalesce(jsonb_agg(id), '[]') from invoices where club_id = p_club),
+    'orders',               (select coalesce(jsonb_agg(id), '[]') from orders where club_id = p_club),
+    'courses',              (select coalesce(jsonb_agg(id), '[]') from courses where club_id = p_club),
+    'competitions',         (select coalesce(jsonb_agg(id), '[]') from competitions where club_id = p_club),
+    'journal_entries',      (select coalesce(jsonb_agg(id), '[]') from journal_entries where club_id = p_club),
+    'direct_debit_batches', (select coalesce(jsonb_agg(id), '[]') from direct_debit_batches where club_id = p_club),
+    'member_entitlements',  (select coalesce(jsonb_agg(id), '[]') from member_entitlements where club_id = p_club))
+$$;
+
+-- Wat de ingelogde gebruiker van club p_club kan zien, in álle tabellen en views; leeg = niets
+create or replace function pg_temp.leaks(p_club uuid, p_parents jsonb) returns text language plpgsql as $$
+declare t record; n bigint; bad text := '';
+begin
+  for t in select distinct c.table_name from information_schema.columns c
+           where c.table_schema = 'public' and c.column_name = 'club_id' loop
+    begin
+      execute format('select count(*) from public.%I where club_id = $1', t.table_name) into n using p_club;
+    exception when insufficient_privilege then n := 0; end;
+    if n > 0 then bad := bad || t.table_name || '(' || n || ') '; end if;
+  end loop;
+  for t in select * from (values
+      ('tee_booking_players', 'booking_id', 'tee_bookings'), ('invoice_lines', 'invoice_id', 'invoices'),
+      ('order_lines', 'order_id', 'orders'), ('course_holes', 'course_id', 'courses'), ('course_tees', 'course_id', 'courses'),
+      ('competition_entries', 'competition_id', 'competitions'), ('journal_lines', 'entry_id', 'journal_entries'),
+      ('direct_debit_items', 'batch_id', 'direct_debit_batches'), ('entitlement_uses', 'entitlement_id', 'member_entitlements')
+    ) as x(child, fk, parent) loop
+    begin
+      execute format('select count(*) from public.%I where %I in (select (jsonb_array_elements_text($1))::uuid)', t.child, t.fk)
+        into n using p_parents -> t.parent;
+    exception when insufficient_privilege then n := 0; end;
+    if n > 0 then bad := bad || t.child || '(' || n || ') '; end if;
+  end loop;
+  -- Clubfuncties met gegevens van de andere club
+  n := (select count(*) from club_directory(p_club)) + (select count(*) from product_availability(p_club, current_date, null))
+     + (select count(*) from guest_intro_counts(p_club, array['Lotte de Graaf'], current_date));
+  if n > 0 then bad := bad || 'clubfuncties(' || n || ') '; end if;
+  return bad;
+end $$;
+
+select set_config('test.dd_parents', pg_temp.parents('00000000-0000-0000-0000-0000000c0001')::text, false);
+select set_config('test.iso_parents', pg_temp.parents(current_setting('test.iso')::uuid)::text, false);
+select pg_temp.assert((select count(*) from tee_bookings where club_id = '00000000-0000-0000-0000-0000000c0001') > 0
+  and (select count(*) from invoices where club_id = '00000000-0000-0000-0000-0000000c0001') > 0, 'De Duinen heeft gegevens om te beschermen');
+
+-- Vier kanten: beheerder en lid van elke club zien niets van de andere club
+select set_config('request.jwt.claim.sub', '00000000-0000-0000-0000-00000000b0b1', false);
+set role authenticated;
+select pg_temp.assert(pg_temp.leaks('00000000-0000-0000-0000-0000000c0001', current_setting('test.dd_parents')::jsonb) = '',
+  'beheerder Isolatie ziet niets van De Duinen: ' || pg_temp.leaks('00000000-0000-0000-0000-0000000c0001', current_setting('test.dd_parents')::jsonb));
+select pg_temp.assert((select count(*) from members where club_id = current_setting('test.iso')::uuid) = 1, 'maar wel de eigen leden');
+reset role;
+select set_config('request.jwt.claim.sub', '00000000-0000-0000-0000-00000000b0b2', false);
+set role authenticated;
+select pg_temp.assert(pg_temp.leaks('00000000-0000-0000-0000-0000000c0001', current_setting('test.dd_parents')::jsonb) = '',
+  'lid Isolatie ziet niets van De Duinen: ' || pg_temp.leaks('00000000-0000-0000-0000-0000000c0001', current_setting('test.dd_parents')::jsonb));
+select pg_temp.assert((select count(*) from news_posts) = 1, 'lid Isolatie ziet alleen het eigen clubnieuws');
+reset role;
+select set_config('request.jwt.claim.sub', '00000000-0000-0000-0000-00000000a001', false);
+set role authenticated;
+select pg_temp.assert(pg_temp.leaks(current_setting('test.iso')::uuid, current_setting('test.iso_parents')::jsonb) = '',
+  'beheerder De Duinen ziet niets van Isolatie: ' || pg_temp.leaks(current_setting('test.iso')::uuid, current_setting('test.iso_parents')::jsonb));
+reset role;
+select set_config('request.jwt.claim.sub', '00000000-0000-0000-0000-00000000a002', false);
+set role authenticated;
+select pg_temp.assert(pg_temp.leaks(current_setting('test.iso')::uuid, current_setting('test.iso_parents')::jsonb) = '',
+  'lid Jan (De Duinen) ziet niets van Isolatie: ' || pg_temp.leaks(current_setting('test.iso')::uuid, current_setting('test.iso_parents')::jsonb));
+reset role;
+
+-- Schrijven naar de andere club: alles geweigerd
+select set_config('request.jwt.claim.sub', '00000000-0000-0000-0000-00000000b0b1', false);  -- beheerder Isolatie
+set role authenticated;
+do $$
+declare n int;
+begin
+  begin insert into members (club_id, member_number, first_name, last_name) values ('00000000-0000-0000-0000-0000000c0001', 'x1', 'In', 'Dringer');
+    raise exception 'expected failure'; exception when insufficient_privilege then null; end;
+  update members set notes = 'gehackt' where club_id = '00000000-0000-0000-0000-0000000c0001';
+  get diagnostics n = row_count; if n <> 0 then raise exception 'ASSERTION FAILED: leden van De Duinen gewijzigd'; end if;
+  delete from members where club_id = '00000000-0000-0000-0000-0000000c0001';
+  get diagnostics n = row_count; if n <> 0 then raise exception 'ASSERTION FAILED: leden van De Duinen verwijderd'; end if;
+  update clubs set name = 'Gehackt' where id = '00000000-0000-0000-0000-0000000c0001';
+  get diagnostics n = row_count; if n <> 0 then raise exception 'ASSERTION FAILED: club De Duinen gewijzigd'; end if;
+  begin perform import_members('00000000-0000-0000-0000-0000000c0001', '[{"first_name":"In","last_name":"Dringer"}]');
+    raise exception 'expected failure'; exception when others then if sqlerrm = 'expected failure' then raise; end if; end;
+  begin insert into club_staff_invites (club_id, email, role) values ('00000000-0000-0000-0000-0000000c0001', 'ik@isolatie.test', 'admin');
+    raise exception 'expected failure'; exception when others then if sqlerrm = 'expected failure' then raise; end if; end;
+  begin insert into club_staff (club_id, user_id, role) values ('00000000-0000-0000-0000-0000000c0001', '00000000-0000-0000-0000-00000000b0b1', 'admin');
+    raise exception 'expected failure'; exception when others then if sqlerrm = 'expected failure' then raise; end if; end;
+  -- Factuur in de eigen club op naam van een lid van De Duinen: geweigerd
+  begin insert into invoices (club_id, member_id, description, issue_date, due_date, status)
+    values (current_setting('test.iso')::uuid, '00000000-0000-0000-0000-0000000e0001', 'Stiekem', current_date, current_date + 14, 'draft');
+    raise exception 'expected failure'; exception when insufficient_privilege then null; end;
+  begin insert into sepa_mandates (club_id, member_id, mandate_reference, account_holder, iban, signed_on)
+    values (current_setting('test.iso')::uuid, '00000000-0000-0000-0000-0000000e0001', 'X-1', 'X', 'NL91ABNA0417164300', current_date);
+    raise exception 'expected failure'; exception when insufficient_privilege then null; end;
+  begin perform create_direct_debit_batch('00000000-0000-0000-0000-0000000c0001', current_date + 7);
+    raise exception 'expected failure'; exception when others then if sqlerrm = 'expected failure' then raise; end if; end;
+  begin perform generate_contribution_invoices('00000000-0000-0000-0000-0000000c0001', 2030);
+    raise exception 'expected failure'; exception when others then if sqlerrm = 'expected failure' then raise; end if; end;
+  -- Eigen contract aanpassen (bijvoorbeeld de licentie op € 0): alleen Greenside
+  begin update clubs set greenside_fee_cents = coalesce(greenside_fee_cents, 0) + 1 where id = current_setting('test.iso')::uuid;
+    raise exception 'expected failure'; exception when others then if sqlerrm not like 'Het contract met Greenside%' then raise; end if; end;
+end $$;
+reset role;
+
+select set_config('test.duinen_comp', (select id::text from competitions where name = 'Dinsdagmiddag Stableford'), false);
+select set_config('request.jwt.claim.sub', '00000000-0000-0000-0000-00000000b0b2', false);  -- lid Isolatie
+set role authenticated;
+do $$ begin
+  begin perform book_tee_time('00000000-0000-0000-0000-0000000f0001', pg_temp.at('12:02'), array[(select id from members where user_id = auth.uid())]);
+    raise exception 'expected failure'; exception when others then if sqlerrm = 'expected failure' then raise; end if; end;
+  begin perform place_order('00000000-0000-0000-0000-0000000e0001', '[]'::jsonb);
+    raise exception 'expected failure'; exception when others then if sqlerrm = 'expected failure' then raise; end if; end;
+  -- Inschrijven, ronde of lead bij De Duinen met het eigen lidmaatschap van Isolatie: geweigerd door de toegangsregels
+  begin insert into competition_entries (competition_id, member_id)
+    values (current_setting('test.duinen_comp')::uuid, (select id from members where user_id = auth.uid()));
+    raise exception 'expected failure'; exception when insufficient_privilege then null; end;
+  begin insert into rounds (club_id, member_id, played_on, hole_scores)
+    values ('00000000-0000-0000-0000-0000000c0001', (select id from members where user_id = auth.uid()), current_date, array[4,5,4]);
+    raise exception 'expected failure'; exception when insufficient_privilege then null; end;
+  begin insert into leads (club_id, member_id, type, name) values ('00000000-0000-0000-0000-0000000c0001', (select id from members where user_id = auth.uid()), 'referral', 'X');
+    raise exception 'expected failure'; exception when insufficient_privilege then null; end;
+  begin perform member_self_update('00000000-0000-0000-0000-0000000e0001', '0600000000', null, null, null, null, null, true);
+    raise exception 'expected failure'; exception when others then if sqlerrm = 'expected failure' then raise; end if; end;
+end $$;
+select pg_temp.assert((select count(*) from tee_sheet('00000000-0000-0000-0000-0000000f0001', current_date)) = 0, 'geen starttijdenlijst van een andere club');
+reset role;
+select pg_temp.assert((select count(*) from competition_entries e join members m on m.id = e.member_id
+  where m.club_id <> (select c.club_id from competitions c where c.id = e.competition_id)) = 0, 'geen inschrijvingen over clubs heen');
+
+-- Een beheerder van De Duinen kan het contract van zijn eigen club niet aanpassen; Greenside wel
+select set_config('request.jwt.claim.sub', '00000000-0000-0000-0000-00000000a001', false);
+set role authenticated;
+do $$ begin
+  begin update clubs set greenside_status = 'pilot' where id = '00000000-0000-0000-0000-0000000c0001';
+    raise exception 'expected failure'; exception when others then if sqlerrm not like 'Het contract met Greenside%' then raise; end if; end;
+  begin perform has_valid_handicart('00000000-0000-0000-0000-0000000e0003', current_date);
+    raise exception 'expected failure'; exception when others then if sqlerrm = 'expected failure' then raise; end if; end;
+end $$;
+update clubs set name = 'Golfclub De Duinen' where id = '00000000-0000-0000-0000-0000000c0001';  -- eigen gegevens wél
+reset role;
+select pg_temp.assert((select count(*) from sponsors where url !~ '^https://') = 0, 'sponsorlinks alleen https');
+
+-- Opruimen
+select set_config('request.jwt.claims', '', false);
+delete from clubs where id = current_setting('test.iso')::uuid;
+delete from auth.users where id in ('00000000-0000-0000-0000-00000000b0b1', '00000000-0000-0000-0000-00000000b0b2');

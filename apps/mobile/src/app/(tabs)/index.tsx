@@ -1,6 +1,6 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { router } from 'expo-router';
-import { Linking, Pressable, RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Pressable, RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { formatEuro, hasValidHandicart, localDate, localTime, priceInclVat, type MembershipType, type NewsPost, type Product, type Sponsor, type TeeSheetRow } from '@golfapp/shared';
 import { OfferCard, productIcon } from '@/components/offer';
@@ -14,6 +14,7 @@ import { useMember } from '@/lib/session';
 import { supabase } from '@/lib/supabase';
 import { colors, fonts, radius, space } from '@/lib/theme';
 import { unwrap, useQuery } from '@/lib/useQuery';
+import { isSafeWebUrl, openWebUrl } from '@/lib/links';
 
 const wholeEuro = new Intl.NumberFormat('nl-NL', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 });
 
@@ -205,14 +206,14 @@ export default function Clubhuis() {
           <Pressable onPress={() => {
             haptic.tap();
             void supabase.rpc('sponsor_click', { p_sponsor: sponsor.id });
-            if (sponsor.url) void Linking.openURL(sponsor.url);
+            openWebUrl(sponsor.url);
           }} style={({ pressed }) => [styles.sponsor, pressed && { opacity: 0.85 }]}>
             <View style={{ flex: 1, gap: 2 }}>
               <Text style={styles.sponsorEyebrow}>Partner van de club</Text>
               <Text style={styles.sponsorName}>{sponsor.name}</Text>
               {sponsor.tagline && <T variant="small" color={colors.slate}>{sponsor.tagline}</T>}
             </View>
-            {sponsor.url && <Ionicons name="open-outline" size={18} color={colors.brass} />}
+            {isSafeWebUrl(sponsor.url) && <Ionicons name="open-outline" size={18} color={colors.brass} />}
           </Pressable>
         )}
 

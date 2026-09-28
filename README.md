@@ -134,13 +134,29 @@ CI (`.github/workflows/ci.yml`) draait dit allemaal bij elke push.
    **Beveiliging (verplicht):** Authentication → Providers → Email: *Allow new users to sign up* aan, **Confirm email aan**
    en *Secure email change* aan. Zonder bevestiging kan iemand een account op het e-mailadres van een lid aanmaken;
    `claim_my_accounts()` koppelt daarnaast alleen sessies die met een code of e-maillink zijn verkregen.
-   Laat de standaard rate limits voor e-mail en codecontrole aan.
+   Neem de overige instellingen uit `supabase/config.toml` over: code 15 minuten geldig, toegangstoken 1 uur,
+   verversingstokens roteren, wachtwoord minimaal 10 tekens met hoofd- en kleine letters en cijfers, rate limits
+   op e-mail, aanmelden en codecontrole. Zet MFA aan voor beheerders en Greenside-medewerkers.
 2. **Edge functions** deployen: `supabase functions deploy invite-member create-payment mollie-webhook`.
    Per club een Mollie API-key in `club_payment_settings` zetten (alleen service role).
 3. **Clubbeheer** op Vercel (of vergelijkbaar) met `NEXT_PUBLIC_SUPABASE_URL` / `_ANON_KEY`, alleen via HTTPS.
    Beveiligingsheaders (geen frames, nosniff, HSTS) staan in `apps/admin/next.config.ts`; ledenexports worden nooit gecachet.
+   De service-role-sleutel hoort alleen in de edge functions, nooit in clubbeheer of de app.
 4. **App** bouwen en indienen met EAS: `npx eas-cli build` / `eas submit`.
    White-label per club: zet `CLUB_SLUG`, `APP_NAME`, `BUNDLE_ID` in een EAS-profiel (zie `apps/mobile/app.config.ts`).
+
+### Beveiliging in het kort
+
+- **Clubs gescheiden:** elke tabel heeft RLS op `club_id`; triggers weigeren een lid van club A op een factuur,
+  machtiging, bestelling, ronde of inschrijving van club B. `supabase/tests/database.test.sql` §19 maakt een tweede
+  club aan en controleert vanuit vier kanten dat niemand iets van de andere club kan zien of wijzigen.
+- **Functies:** zonder inloggen is geen enkele bedrijfsfunctie aanroepbaar; nieuwe functies zijn standaard dicht
+  (`alter default privileges`). Het contract met Greenside (status, licentie, webadres) kan alleen Greenside wijzigen.
+- **Import en onboarding:** alleen secretariaat of hoger van de eigen club, per regel gecontroleerd, alles-of-niets,
+  gelogd in `audit_log` (alleen aantallen). Accounts worden alleen gekoppeld op een bewezen e-mailadres.
+- **App:** de inlogsessie staat in de beveiligde opslag van de telefoon (Keychain/Keystore); links openen alleen via https.
+- **Afhankelijkheden:** `pnpm audit --prod` meldt één bekend, geaccepteerd risico (`decode-uri-component` in expo-router,
+  alleen voor links binnen de app; de oplossing werkt nog niet met Expo). `uuid` is via `pnpm.overrides` bijgewerkt.
 
 ## Roadmap / nog te doen
 

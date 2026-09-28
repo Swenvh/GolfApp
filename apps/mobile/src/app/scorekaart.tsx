@@ -1,7 +1,7 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { router } from 'expo-router';
 import { useMemo, useState } from 'react';
-import { Linking, Pressable, ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
 import {
   courseHandicap, localDate, playingHandicap, scoreDifferential, scoreRound,
   type Course, type CourseHole, type CourseTee, type Sponsor,
@@ -12,6 +12,7 @@ import { useMember } from '@/lib/session';
 import { supabase } from '@/lib/supabase';
 import { colors, fonts, radius, space } from '@/lib/theme';
 import { unwrap, useQuery } from '@/lib/useQuery';
+import { openWebUrl } from '@/lib/links';
 
 /** Kleur van de teemarker, zodat 'Geel' er ook geel uitziet. */
 const teeColor: Record<string, string> = {
@@ -169,7 +170,7 @@ export default function Scorekaart() {
                   <Pressable onPress={() => {
                     haptic.tap();
                     void supabase.rpc('sponsor_click', { p_sponsor: sponsor.id });
-                    if (sponsor.url) void Linking.openURL(sponsor.url);
+                    openWebUrl(sponsor.url);
                   }} style={styles.sponsor}>
                     <Text style={styles.sponsorText} numberOfLines={1}>Hole {h.hole} aangeboden door <Text style={styles.sponsorName}>{sponsor.name}</Text></Text>
                   </Pressable>

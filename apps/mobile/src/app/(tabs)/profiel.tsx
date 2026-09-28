@@ -8,6 +8,7 @@ import { fetchEntitlements } from '@/lib/offers';
 import { useMember, useSession } from '@/lib/session';
 import { useQuery } from '@/lib/useQuery';
 import { colors, space } from '@/lib/theme';
+import { isSafeWebUrl, openWebUrl } from '@/lib/links';
 
 export default function Lidmaatschap() {
   const member = useMember();
@@ -48,7 +49,7 @@ export default function Lidmaatschap() {
         {club.street && <ListRow icon="location-outline" title={`${club.street} ${club.house_number ?? ''}`} subtitle={`${club.postal_code ?? ''} ${club.city ?? ''}`} />}
         {club.phone && <ListRow icon="call-outline" title={club.phone} subtitle="Bellen" onPress={() => Linking.openURL(`tel:${club.phone}`)} />}
         {club.email && <ListRow icon="mail-outline" title={club.email} subtitle="E-mailen" onPress={() => Linking.openURL(`mailto:${club.email}`)} />}
-        {club.website && <ListRow icon="globe-outline" title={club.website.replace(/^https?:\/\//, '')} subtitle="Website" onPress={() => Linking.openURL(club.website!)} />}
+        {isSafeWebUrl(club.website) && <ListRow icon="globe-outline" title={club.website.replace(/^https?:\/\//, '')} subtitle="Website" onPress={() => openWebUrl(club.website)} />}
         {club.iban && <ListRow icon="card-outline" title={formatIban(club.iban)} subtitle={`t.n.v. ${club.name}`} last />}
       </Group>
 

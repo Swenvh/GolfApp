@@ -30,7 +30,6 @@ async function saveClub(formData: FormData) {
     bic: str(formData.get('bic')),
     sepa_creditor_id: str(formData.get('sepa_creditor_id')),
     payment_term_days: Number(formData.get('payment_term_days')) || 14,
-    greenside_fee_cents: parseEuro(String(formData.get('greenside_fee') || '0')) ?? 0,
     guest_intro_limit: Math.min(52, Math.max(1, Number(formData.get('guest_intro_limit')) || 5)),
   }).eq('id', ctx.club.id);
   if (error) redirect(`/instellingen?error=${encodeURIComponent(error.message)}`);
@@ -117,7 +116,7 @@ export default async function InstellingenPage({ searchParams }: { searchParams:
             <Field label="BIC"><input name="bic" defaultValue={c.bic ?? ''} /></Field>
             <Field label="Incassant-ID" hint="Aan te vragen bij uw bank"><input name="sepa_creditor_id" defaultValue={c.sepa_creditor_id ?? ''} /></Field>
             <Field label="Betaaltermijn (dagen)"><input name="payment_term_days" type="number" defaultValue={c.payment_term_days} /></Field>
-            <Field label="Greenside-abonnement per maand" hint="Voor de terugverdienberekening onder App-omzet"><input name="greenside_fee" defaultValue={euro(Number(c.greenside_fee_cents ?? 0))} /></Field>
+            <Field label="Greenside-abonnement per maand" hint="Volgens uw contract; wijzigen gaat via Greenside"><input value={euro(Number(c.greenside_fee_cents ?? 0))} readOnly disabled /></Field>
             <Field label="Introducé max. per jaar" hint="Zo vaak mag dezelfde gast per jaar tegen introductietarief spelen"><input name="guest_intro_limit" type="number" min={1} max={52} defaultValue={c.guest_intro_limit ?? 5} /></Field>
             <div className="sm:col-span-2"><Button type="submit">Opslaan</Button></div>
           </form>

@@ -15,6 +15,7 @@ import { useMember } from '@/lib/session';
 import { supabase } from '@/lib/supabase';
 import { colors, fonts, radius, space } from '@/lib/theme';
 import { unwrap, useQuery } from '@/lib/useQuery';
+import { isSafeWebUrl } from '@/lib/links';
 
 /** Eén aanbod bestellen, eventueel gekoppeld aan een starttijd. */
 export default function Aanbod() {
@@ -64,7 +65,8 @@ export default function Aanbod() {
     if (!placed?.invoice_id) return;
     const { data: res, error } = await supabase.functions.invoke<{ checkoutUrl: string }>('create-payment', { body: { invoice_id: placed.invoice_id } });
     if (error || !res?.checkoutUrl) return setError('Online betalen lukt nu niet. De factuur staat klaar onder Facturen.');
-    await WebBrowser.openBrowserAsync(res.checkoutUrl);
+    // Alleen een betaalpagina via https openen
+    if (isSafeWebUrl(res.checkoutUrl)) await WebBrowser.openBrowserAsync(res.checkoutUrl);
   };
 
   const header = (

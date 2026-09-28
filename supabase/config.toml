@@ -18,11 +18,27 @@ site_url = "http://localhost:3000"
 additional_redirect_urls = ["greenside://"]
 enable_signup = true    # inloggen met een code maakt het account aan; het ziet pas iets na koppeling
                         # aan een lid of beheerdersuitnodiging met hetzelfde e-mailadres (claim_my_accounts)
+jwt_expiry = 3600                      # toegangstoken 1 uur geldig
+enable_refresh_token_rotation = true   # een gestolen verversingstoken werkt maar één keer
+refresh_token_reuse_interval = 10
+minimum_password_length = 10           # beheerders die met een wachtwoord inloggen
+password_requirements = "lower_upper_letters_digits"
+
+# Tegen raden van codes en massaal aanmelden (per uur, per IP-adres waar het kan)
+[auth.rate_limit]
+email_sent = 30
+sign_in_sign_ups = 30
+token_verifications = 30
+token_refresh = 150
 
 [auth.email]
 enable_signup = true
 enable_confirmations = true   # e-mailadres moet bewezen zijn; anders geen koppeling met een lid (zie claim_my_accounts)
 otp_length = 6
+otp_expiry = 900               # code 15 minuten geldig
+max_frequency = "30s"          # niet vaker dan eens per 30 seconden een nieuwe code
+double_confirm_changes = true  # e-mailadres wijzigen: bevestigen op het oude én het nieuwe adres
+secure_password_change = true  # wachtwoord wijzigen alleen na recent inloggen
 
 [functions.mollie-webhook]
 verify_jwt = false   # Mollie stuurt geen Supabase-JWT; status wordt bij Mollie geverifieerd
