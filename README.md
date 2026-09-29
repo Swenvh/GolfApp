@@ -82,7 +82,7 @@ Buggy's worden per tijdvak geteld (een buggy kan 's ochtends én 's middags rijd
 - **Wedstrijden** — aanmaken, status, uitslagen invoeren
 - **Nieuws** — berichten (vastpinnen, concept) die direct in de app verschijnen
 - **Instellingen** — clubgegevens, IBAN/incassant-ID, introducé-limiet, lidmaatschapsvormen & tarieven (incl. rustend lidmaatschap), collega's uitnodigen per rol
-- **Inloggen met een code** — beheerders loggen in met een code per e-mail (wachtwoord blijft mogelijk). Een uitnodiging wordt een rol zodra iemand met dat adres inlogt.
+- **Inloggen met een code** — beheerders loggen in met een code per e-mail, net als leden; wachtwoorden zijn er niet. Een uitnodiging wordt een rol zodra iemand met dat adres inlogt.
 
 ### Greenside HQ (voor Greenside zelf)
 Op `/hq`, alleen voor medewerkers van Greenside (`platform_staff`). Mission control met omzet per maand en jaar, klanten, pijplijn, golfers op Greenside, hoeveel leden de app echt gebruiken, omzet via de app bij klanten en hoe vaak de licentie is terugverdiend. Een takenlijst signaleert clubs zonder activiteit, aflopende proefperiodes, lage app-adoptie, ontbrekende incasso of iDEAL en afspraken in de verkoop. Per klant een gezondheidsscore (goed / let op / risico, met reden), een trend van twaalf weken en een verkooppijplijn (lead → demo → proefperiode → gewonnen / verloren) om bij te houden. Clubs zien elkaars gegevens nooit; HQ ziet alleen totalen per club.
@@ -114,7 +114,7 @@ pnpm mobile                 # Expo: scan QR met Expo Go, of druk 'w' voor web
 ```
 
 Demo-accounts (uit `supabase/seed.sql`):
-- Beheer: `beheer@deduinen.test` / `golfapp123`
+- Beheer: `beheer@deduinen.test`, met de code uit de testmailbox (http://localhost:54324)
 - Leden (app): `jan@example.test` (A-lid) en `pieter@example.test` (weekdaglid) → inlogcode staat in Mailpit (http://127.0.0.1:54324)
 - `supabase/seed_demo.sql` voegt zes weken gebruik toe (boekingen, bestellingen, leads) voor demo's
 
@@ -148,9 +148,9 @@ CI (`.github/workflows/ci.yml`) draait dit allemaal bij elke push.
    `SUPABASE_URL=… SUPABASE_SERVICE_ROLE_KEY=… pnpm app-review`. Dat maakt of herstelt het reviewaccount
    (`REVIEW_EMAIL`, standaard `appreview@greenside.test`) met een nieuw wachtwoord en bouwt de democlub
    "Golfclub De Proefbaan" met nepleden opnieuw op. Plak de tekst die het script toont in App Store Connect
-   (App Review Information) en Play Console (App access). Het reviewaccount logt in met een wachtwoord in plaats van
-   een code, is in elke clubapp zichtbaar en ziet nooit echte ledengegevens. Leden kunnen hun account verwijderen via
-   Profiel → Account verwijderen (verplicht voor de App Store); het lidmaatschap en de facturen blijven bij de club.
+   (App Review Information) en Play Console (App access). Alleen het reviewaccount logt in met een wachtwoord (lokale
+   demo: `appreview@greenside.test` / `Proefbaan2026`); leden en beheerders zien dat nooit. Het account ziet in elke
+   clubapp alleen de democlub, nooit echte ledengegevens. Leden kunnen hun account verwijderen via Profiel → Account verwijderen (verplicht voor de App Store); het lidmaatschap en de facturen blijven bij de club.
 
 ### Beveiliging in het kort
 

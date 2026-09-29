@@ -1,6 +1,7 @@
 -- Demodata voor lokale ontwikkeling (supabase db reset)
--- Inloggen: beheer@deduinen.test / golfapp123 (admin), hq@greenside.test / golfapp123 (Greenside HQ),
--- leden jan@example.test en pieter@example.test (weekdaglid) via e-mailcode
+-- Inloggen met een code per e-mail (testmailbox): beheer@deduinen.test (admin), hq@greenside.test (Greenside HQ),
+-- leden jan@example.test en pieter@example.test (weekdaglid). Het wachtwoord golfapp123 is alleen voor
+-- geautomatiseerde tests via de API; de schermen bieden geen wachtwoord aan.
 
 insert into auth.users (id, instance_id, aud, role, email, encrypted_password, email_confirmed_at, created_at, updated_at,
                         raw_app_meta_data, raw_user_meta_data, confirmation_token, recovery_token, email_change_token_new, email_change)

@@ -5,19 +5,11 @@ import { Button, Field, Notice } from '@/components/ui';
 
 export const metadata = { title: 'Inloggen' };
 
-async function login(formData: FormData) {
-  'use server';
-  const supabase = await createClient();
-  const { error } = await supabase.auth.signInWithPassword({
-    email: String(formData.get('email') ?? ''),
-    password: String(formData.get('password') ?? ''),
-  });
-  if (error) redirect('/login?methode=wachtwoord&error=ongeldig');
-  await supabase.rpc('claim_my_accounts');
-  redirect('/');
-}
-
-/** Stap 1: code per e-mail. Een nieuw adres krijgt een account; rechten komen pas via een uitnodiging. */
+/**
+ * Inloggen gaat alleen met een code per e-mail, voor beheerders net als voor leden: geen wachtwoorden
+ * die uitlekken of hergebruikt worden. Stap 1: code versturen. Een nieuw adres krijgt een account;
+ * rechten komen pas via een uitnodiging van de club.
+ */
 async function sendCode(formData: FormData) {
   'use server';
   const email = String(formData.get('email') ?? '').trim().toLowerCase();
@@ -39,17 +31,15 @@ async function verifyCode(formData: FormData) {
 }
 
 const errors: Record<string, string> = {
-  ongeldig: 'E-mailadres of wachtwoord klopt niet.',
   'geen-toegang': 'Dit account heeft (nog) geen beheerrechten bij een club. Gebruik het e-mailadres waarop je bent uitgenodigd.',
   versturen: 'De code kon niet worden verstuurd. Controleer het e-mailadres en probeer het over een minuut opnieuw.',
   code: 'Deze code klopt niet of is verlopen. Vraag een nieuwe aan.',
 };
 
 export default async function LoginPage({ searchParams }: {
-  searchParams: Promise<{ error?: string; methode?: string; stap?: string; email?: string }>;
+  searchParams: Promise<{ error?: string; stap?: string; email?: string }>;
 }) {
-  const { error, methode, stap, email = '' } = await searchParams;
-  const withPassword = methode === 'wachtwoord';
+  const { error, stap, email = '' } = await searchParams;
   return (
     <main className="grid min-h-screen lg:grid-cols-[1.1fr_1fr]">
       <section className="relative hidden overflow-hidden bg-pine-900 p-12 text-chalk lg:flex lg:flex-col lg:justify-between">
@@ -72,23 +62,12 @@ export default async function LoginPage({ searchParams }: {
           <div>
             <h2 className="font-display text-3xl font-semibold">Inloggen</h2>
             <p className="mt-1 text-sm text-stone-500">
-              {withPassword ? 'Met je e-mailadres en wachtwoord.'
-                : stap === 'code' ? `We hebben een code van 6 cijfers gestuurd naar ${email}.`
+              {stap === 'code' ? `We hebben een code van 6 cijfers gestuurd naar ${email}.`
                 : 'Met je e-mailadres. We sturen je een code; een wachtwoord is niet nodig.'}
             </p>
           </div>
           {error && <Notice tone="error">{errors[error] ?? 'Inloggen mislukt.'}</Notice>}
-          {withPassword ? (
-            <form action={login} className="space-y-5">
-              <Field label="E-mailadres">
-                <input name="email" type="email" autoComplete="username" required className="py-3" />
-              </Field>
-              <Field label="Wachtwoord">
-                <input name="password" type="password" autoComplete="current-password" required className="py-3" />
-              </Field>
-              <Button type="submit" className="w-full py-3">Inloggen</Button>
-            </form>
-          ) : stap === 'code' ? (
+          {stap === 'code' ? (
             <form action={verifyCode} className="space-y-5">
               <input type="hidden" name="email" value={email} />
               <Field label="Inlogcode">
@@ -105,11 +84,11 @@ export default async function LoginPage({ searchParams }: {
               <Button type="submit" className="w-full py-3">Stuur inlogcode</Button>
             </form>
           )}
-          <p className="text-sm text-stone-500">
-            {withPassword || stap === 'code'
-              ? <a href="/login" className="font-bold text-brand-700 underline">{stap === 'code' ? 'Ander e-mailadres of nieuwe code' : 'Inloggen met een code'}</a>
-              : <a href="/login?methode=wachtwoord" className="font-bold text-brand-700 underline">Inloggen met een wachtwoord</a>}
-          </p>
+          {stap === 'code' && (
+            <p className="text-sm text-stone-500">
+              <a href="/login" className="font-bold text-brand-700 underline">Ander e-mailadres of nieuwe code</a>
+            </p>
+          )}
         </div>
       </section>
     </main>

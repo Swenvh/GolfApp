@@ -98,7 +98,7 @@ export default function Login() {
           <>
             <View style={{ gap: 4 }}>
               <T variant="heading">Wachtwoord</T>
-              <T variant="small" color={colors.slate}>Voor het testaccount van de keuring.</T>
+              <T variant="small" color={colors.slate}>Vul het wachtwoord van dit account in.</T>
             </View>
             <Input label="Wachtwoord" value={password} onChangeText={setPassword} secureTextEntry autoCapitalize="none"
               autoComplete="password" textContentType="password" onSubmitEditing={signInWithPassword} />

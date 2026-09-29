@@ -120,7 +120,7 @@ cat <<EOF
   Greenside-demo draait
 
   Clubbeheer   http://localhost:$ADMIN_PORT
-               beheer@deduinen.test / golfapp123
+               beheer@deduinen.test  (inlogcode: zie de testmailbox)
 
   Ledenapp     http://localhost:$APP_PORT   (tip: telefoonweergave in de browser)
                jan@example.test     A-lid
