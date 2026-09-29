@@ -35,7 +35,13 @@ export default function Login() {
     setBusy(true);
     const { error } = await supabase.auth.signInWithOtp({ email: email.trim(), options: { shouldCreateUser: true } });
     setBusy(false);
-    if (error) { haptic.warn(); setError('Er ging iets mis bij het versturen. Controleer het e-mailadres en probeer het opnieuw.'); }
+    if (error) {
+      haptic.warn();
+      // Net een e-mail gehad (bijvoorbeeld de uitnodiging): even wachten voor een nieuwe code
+      setError(error.status === 429
+        ? 'Je hebt net een e-mail van ons gekregen. Wacht een halve minuut en probeer het dan opnieuw.'
+        : 'Er ging iets mis bij het versturen. Controleer het e-mailadres en probeer het opnieuw.');
+    }
     else setStep('code');
   };
 

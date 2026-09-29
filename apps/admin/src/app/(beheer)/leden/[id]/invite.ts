@@ -9,6 +9,8 @@ export async function inviteMember(formData: FormData) {
   await requireRole('secretariat');
   const supabase = await createClient();
   const memberId = String(formData.get('member_id'));
-  const { error } = await supabase.functions.invoke('invite-member', { body: { member_id: memberId } });
-  redirect(`/leden/${memberId}?${error ? 'error=uitnodiging' : 'invited=1'}`);
+  const { data, error } = await supabase.functions.invoke('invite-member', { body: { member_id: memberId } });
+  if (error || !data) redirect(`/leden/${memberId}?error=uitnodiging`);
+  // Had het lid al een account (bijvoorbeeld bij een andere club), dan is er gekoppeld maar niets gemaild
+  redirect(`/leden/${memberId}?invited=${data.sent ? 'mail' : data.existing ? 'bestaand' : 'mail'}`);
 }

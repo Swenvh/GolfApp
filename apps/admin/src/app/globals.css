@@ -13,6 +13,7 @@
   --color-brass: #b8924a;
   --color-brass-light: #d9bc82;
   --color-brass-soft: #f4ecdb;
+  --color-brass-text: #86652a;  /* messing als tekst op licht papier (contrast ≥ 4,5:1) */
   --color-chalk: #f4f5f0;
 
   /* Neutrale tinten met een groene zweem in plaats van warm grijs */

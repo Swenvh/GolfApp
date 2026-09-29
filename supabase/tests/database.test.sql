@@ -1124,3 +1124,49 @@ delete from journal_entries where club_id = current_setting('test.review')::uuid
 delete from products where club_id = current_setting('test.review')::uuid;
 delete from finance_settings where club_id = current_setting('test.review')::uuid;
 delete from clubs where id = current_setting('test.review')::uuid;
+
+-- 21. Leden uitnodigen voor de app ------------------------------------------------------
+update members set app_invited_at = now() where id = '00000000-0000-0000-0000-0000000e0002';
+update auth.users set last_sign_in_at = now() where id = '00000000-0000-0000-0000-00000000a002';  -- Jan logt al in
+select set_config('request.jwt.claim.sub', '00000000-0000-0000-0000-00000000a001', false);  -- beheerder De Duinen
+set role authenticated;
+select pg_temp.assert((select invited from club_app_status('00000000-0000-0000-0000-0000000c0001')) = 1, 'uitnodigingen geteld');
+select pg_temp.assert((select logged_in from club_app_status('00000000-0000-0000-0000-0000000c0001')) = 1, 'leden die inloggen geteld');
+select pg_temp.assert((select to_invite from club_app_status('00000000-0000-0000-0000-0000000c0001'))
+  = (select count(*)::int from members where club_id = '00000000-0000-0000-0000-0000000c0001' and status in ('active', 'suspended')
+       and email is not null and user_id is null and app_invited_at is null), 'nog uit te nodigen: met e-mail, zonder account, niet uitgenodigd');
+select pg_temp.assert((select count(*) from club_app_status('00000000-0000-0000-0000-0000000c0002')) = 0, 'geen cijfers van een andere club');
+do $$ begin
+  -- Winkellinks van de app zijn van Greenside
+  begin update clubs set app_ios_url = 'https://apps.apple.com/app/nep' where id = '00000000-0000-0000-0000-0000000c0001';
+    raise exception 'expected failure'; exception when others then if sqlerrm not like 'Het contract met Greenside%' then raise; end if; end;
+end $$;
+reset role;
+select set_config('request.jwt.claim.sub', '00000000-0000-0000-0000-00000000a002', false);  -- lid Jan
+set role authenticated;
+select pg_temp.assert((select count(*) from club_app_status('00000000-0000-0000-0000-0000000c0001')) = 0, 'een lid ziet de uitnodigingscijfers niet');
+reset role;
+select pg_temp.assert(not has_function_privilege('anon', 'club_app_status(uuid)', 'execute'), 'anoniem kan de cijfers niet opvragen');
+select set_config('request.jwt.claim.sub', '00000000-0000-0000-0000-00000000a009', false);  -- Greenside
+set role authenticated;
+select hq_set_app_links('00000000-0000-0000-0000-0000000c0001', 'https://apps.apple.com/nl/app/de-duinen/id1', 'https://play.google.com/store/apps/details?id=nl.deduinen');
+select pg_temp.assert((select ios_url from hq_app_links('00000000-0000-0000-0000-0000000c0001')) = 'https://apps.apple.com/nl/app/de-duinen/id1', 'Greenside zet de downloadlinks');
+do $$ begin
+  begin perform hq_set_app_links('00000000-0000-0000-0000-0000000c0001', 'javascript:alert(1)', null);
+    raise exception 'expected failure'; exception when others then if sqlerrm not like 'Een downloadlink begint met https%' then raise; end if; end;
+end $$;
+reset role;
+select set_config('request.jwt.claim.sub', '00000000-0000-0000-0000-00000000a001', false);  -- beheerder De Duinen
+set role authenticated;
+select pg_temp.assert((select count(*) from hq_app_links('00000000-0000-0000-0000-0000000c0001')) = 0, 'club leest de HQ-functie niet');
+do $$ begin
+  begin perform hq_set_app_links('00000000-0000-0000-0000-0000000c0001', 'https://evil.example/app', null);
+    raise exception 'expected failure'; exception when insufficient_privilege then null; end;
+end $$;
+reset role;
+select set_config('request.jwt.claim.sub', '', false);
+do $$ begin
+  begin update clubs set app_android_url = 'http://play.google.com/x' where id = '00000000-0000-0000-0000-0000000c0001';
+    raise exception 'expected failure'; exception when check_violation then null; end;
+end $$;
+update members set app_invited_at = null where id = '00000000-0000-0000-0000-0000000e0002';

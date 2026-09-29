@@ -5,6 +5,7 @@ import { useMemo, useState, useTransition } from 'react';
 import { importFields, importPayload, parseMemberImport, type ImportParseResult } from '@golfapp/shared';
 import { Badge, Button, ButtonLink, Card, Notice, Stat } from '@/components/ui';
 import { importMembers, type ImportResult } from './actions';
+import { InviteRunner } from '../uitnodigen/invite-runner';
 
 /** Bestanden uit oudere systemen zijn vaak Windows-1252 in plaats van UTF-8 (é, ë, ï). */
 async function readText(file: File): Promise<string> {
@@ -70,11 +71,15 @@ export function ImportWizard({ types }: { types: string[] }) {
             vul die in bij <Link href="/instellingen" className="font-bold underline">Instellingen</Link> voordat je contributiefacturen maakt.
           </Notice>
         )}
+        <Card title="Leden uitnodigen voor de app">
+          <div className="p-5">
+            <InviteRunner intro="Stuur de leden nu een e-mail namens de club: download de app, log in met dit e-mailadres en vul de code in. Liever eerst controleren? Dat kan later via Leden → Uitnodigen voor de app." />
+          </div>
+        </Card>
         <Card title="Wat nu?">
           <ol className="list-decimal space-y-2 p-5 pl-10 text-[15px] text-stone-700">
             <li>Controleer een paar leden in de <Link href="/leden" className="font-bold text-brand-700 underline">ledenlijst</Link>.</li>
-            <li>Laat leden weten dat de app er is. Ze loggen in met hun e-mailadres en krijgen een code; een wachtwoord is niet nodig.</li>
-            <li>Leden zonder e-mailadres kunnen nog niet inloggen. Vul hun adres aan bij het lid.</li>
+            <li>Leden zonder e-mailadres kunnen nog niet inloggen. Vul hun adres aan bij het lid en stuur daarna een uitnodiging.</li>
           </ol>
         </Card>
         <div className="flex gap-2">

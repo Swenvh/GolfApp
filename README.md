@@ -131,6 +131,9 @@ CI (`.github/workflows/ci.yml`) draait dit allemaal bij elke push.
 
 1. **Supabase-project** aanmaken in regio EU (Frankfurt) → `supabase link` en `supabase db push`.
    Stel de e-mailtemplates uit `supabase/templates/` in (Authentication → Email Templates) en een eigen SMTP-server.
+   **Eigen SMTP is verplicht** (bijvoorbeeld Postmark of Resend, EU): de ingebouwde mail van Supabase haalt maar een paar
+   berichten per uur. Zet daarna de e-maillimiet (Authentication → Rate Limits) op minstens 1000 per uur: een club stuurt
+   bij de lancering alle leden een uitnodiging (template *Invite user*) en veel leden vragen dan tegelijk een code aan.
    **Beveiliging (verplicht):** Authentication → Providers → Email: *Allow new users to sign up* aan, **Confirm email aan**
    en *Secure email change* aan. Zonder bevestiging kan iemand een account op het e-mailadres van een lid aanmaken;
    `claim_my_accounts()` koppelt daarnaast alleen sessies die met een code of e-maillink zijn verkregen.

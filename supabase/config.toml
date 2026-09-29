@@ -21,12 +21,12 @@ enable_signup = true    # inloggen met een code maakt het account aan; het ziet 
 jwt_expiry = 3600                      # toegangstoken 1 uur geldig
 enable_refresh_token_rotation = true   # een gestolen verversingstoken werkt maar één keer
 refresh_token_reuse_interval = 10
-minimum_password_length = 10           # beheerders die met een wachtwoord inloggen
+minimum_password_length = 10           # alleen het reviewaccount heeft een wachtwoord
 password_requirements = "lower_upper_letters_digits"
 
 # Tegen raden van codes en massaal aanmelden (per uur, per IP-adres waar het kan)
 [auth.rate_limit]
-email_sent = 30
+email_sent = 1000         # hele project per uur: uitnodigingen aan alle leden + codes bij de lancering (vereist eigen SMTP)
 sign_in_sign_ups = 30
 token_verifications = 30
 token_refresh = 150
@@ -55,5 +55,5 @@ subject = "Je inlogcode voor Greenside"
 content_path = "./supabase/templates/magic_link.html"
 
 [auth.email.template.invite]
-subject = "Welkom bij Greenside, de ledenapp van je club"
+subject = "De app van je golfclub staat klaar"
 content_path = "./supabase/templates/invite.html"

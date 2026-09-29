@@ -48,6 +48,7 @@ export default async function LedenPage({ searchParams }: {
           <>
             <ButtonLink href={`/leden/export?${exportParams}`} variant="secondary">Exporteer CSV</ButtonLink>
             {hasRole(ctx, 'secretariat') && <ButtonLink href="/leden/importeren" variant="secondary">Importeren</ButtonLink>}
+            {hasRole(ctx, 'secretariat') && <ButtonLink href="/leden/uitnodigen" variant="secondary">Uitnodigen voor de app</ButtonLink>}
             {hasRole(ctx, 'secretariat') && <ButtonLink href="/leden/nieuw">+ Nieuw lid</ButtonLink>}
           </>
         }

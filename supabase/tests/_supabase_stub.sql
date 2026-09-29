@@ -10,7 +10,8 @@ create table auth.users (
   id uuid primary key, instance_id uuid, aud text, role text, email text, encrypted_password text,
   email_confirmed_at timestamptz, created_at timestamptz, updated_at timestamptz,
   raw_app_meta_data jsonb, raw_user_meta_data jsonb,
-  confirmation_token text, recovery_token text, email_change_token_new text, email_change text
+  confirmation_token text, recovery_token text, email_change_token_new text, email_change text,
+  last_sign_in_at timestamptz
 );
 create table auth.identities (
   id uuid primary key, user_id uuid references auth.users(id), provider_id text, provider text,

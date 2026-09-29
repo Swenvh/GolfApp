@@ -58,7 +58,8 @@ export default async function LidDetail({ params, searchParams }: {
       />
       {error && <Notice tone="error">{errors[error] ?? 'Er ging iets mis.'}</Notice>}
       {saved && <Notice tone="success">Opgeslagen.</Notice>}
-      {invited && <Notice tone="success">Uitnodiging verstuurd naar {m.email}.</Notice>}
+      {invited === 'bestaand' && <Notice tone="success">{m.first_name} had al een account met {m.email} en kan direct inloggen in de app.</Notice>}
+      {invited && invited !== 'bestaand' && <Notice tone="success">Uitnodiging verstuurd naar {m.email}.</Notice>}
       {m.handicart_pass_number && (
         <p className="-mt-4 mb-6 text-sm text-stone-600">
           <Badge tone="amber">Handicart-pas {m.handicart_pass_number}</Badge>{' '}
@@ -128,6 +129,13 @@ export default async function LidDetail({ params, searchParams }: {
         </div>
 
         <div className="space-y-6">
+          {m.user_id && (
+            <Card title="Toegang tot de app">
+              <p className="p-4 text-sm text-stone-600">
+                {m.app_invited_at ? `Uitgenodigd op ${formatDate(m.app_invited_at)}. ` : ''}{m.first_name} logt in met {m.email} en een code per e-mail.
+              </p>
+            </Card>
+          )}
           {!m.user_id && canEdit && (
             <Card title="Toegang tot de app">
               <form action={inviteMember} className="space-y-3 p-4 text-sm">

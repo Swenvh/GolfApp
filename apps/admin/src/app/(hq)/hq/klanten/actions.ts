@@ -40,3 +40,16 @@ export async function createClub(formData: FormData) {
   revalidatePath('/hq/verkoop');
   redirect(`/hq/klanten/${data as string}?nieuw=1`);
 }
+
+/** Downloadlinks van de clubapp; komen in de uitnodiging die de club naar leden stuurt. */
+export async function saveAppLinks(formData: FormData) {
+  await requirePlatformStaff();
+  const supabase = await createClient();
+  const club = String(formData.get('club_id') ?? '');
+  const { error } = await supabase.rpc('hq_set_app_links', {
+    p_club: club,
+    p_ios: str(formData.get('ios_url')) ?? '',
+    p_android: str(formData.get('android_url')) ?? '',
+  });
+  redirect(`/hq/klanten/${club}?${error ? `links=${encodeURIComponent(error.message)}` : 'links=ok'}#app`);
+}

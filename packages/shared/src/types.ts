@@ -32,6 +32,9 @@ export interface Club {
   guest_intro_limit: number;
   /** Democlub voor de keuring door Apple en Google */
   is_review: boolean;
+  /** Downloadlinks van de clubapp (zet Greenside) */
+  app_ios_url: string | null;
+  app_android_url: string | null;
 }
 
 export interface MembershipType {
@@ -78,6 +81,8 @@ export interface Member {
   notes: string | null;
   photo_url: string | null;
   show_in_directory: boolean;
+  /** Wanneer het lid een uitnodiging voor de app kreeg */
+  app_invited_at: string | null;
   handicart_pass_number: string | null;
   handicart_pass_type: HandicartPassType | null;
   handicart_valid_until: string | null;
