@@ -9,6 +9,8 @@ import type { ExpoConfig } from 'expo/config';
 const clubSlug = process.env.CLUB_SLUG ?? '';
 const name = process.env.APP_NAME ?? 'Greenside';
 const bundleId = process.env.BUNDLE_ID ?? 'nl.golfapp.leden';
+/** Het account waarmee Apple en Google de app keuren (zie scripts/app-review.mjs) */
+const reviewEmail = process.env.REVIEW_EMAIL ?? 'appreview@greenside.test';
 
 const config: ExpoConfig = {
   name,
@@ -42,7 +44,7 @@ const config: ExpoConfig = {
     ['expo-splash-screen', { image: './assets/splash-icon.png', backgroundColor: '#0B2A21', imageWidth: 180 }],
   ],
   experiments: { typedRoutes: false },
-  extra: { clubSlug },
+  extra: { clubSlug, reviewEmail },
 };
 
 export default config;

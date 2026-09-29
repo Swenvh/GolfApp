@@ -21,6 +21,8 @@ interface SessionState {
   selectMember: (id: string) => Promise<void>;
   refresh: () => Promise<void>;
   signOut: () => Promise<void>;
+  /** Inlog verwijderen; het lidmaatschap blijft bij de club */
+  deleteAccount: () => Promise<{ error?: string }>;
 }
 
 const SessionContext = createContext<SessionState | null>(null);
@@ -44,7 +46,8 @@ export function SessionProvider({ children }: { children: ReactNode }) {
       .eq('user_id', s.user.id)
       .in('status', ['active', 'suspended']);
     let rows = (data ?? []) as Membership[];
-    if (LOCKED_CLUB_SLUG) rows = rows.filter((m) => m.club.slug === LOCKED_CLUB_SLUG);
+    // De democlub van de keuring door Apple en Google is in elke clubapp te zien (alleen voor het reviewaccount)
+    if (LOCKED_CLUB_SLUG) rows = rows.filter((m) => m.club.slug === LOCKED_CLUB_SLUG || m.club.is_review);
     setMemberships(rows);
     const stored = await AsyncStorage.getItem(SELECTED_KEY);
     setSelectedId(rows.some((m) => m.id === stored) ? stored : rows.length === 1 ? rows[0]!.id : null);
@@ -80,6 +83,14 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     signOut: async () => {
       await AsyncStorage.removeItem(SELECTED_KEY);
       await supabase.auth.signOut();
+    },
+    deleteAccount: async () => {
+      const { error } = await supabase.rpc('delete_my_account');
+      if (error) return { error: error.message };
+      await AsyncStorage.removeItem(SELECTED_KEY);
+      // De sessie bestaat op de server niet meer: alleen lokaal opruimen
+      await supabase.auth.signOut({ scope: 'local' });
+      return {};
     },
   }), [loading, session, memberships, selectedId, loadMemberships]);
 

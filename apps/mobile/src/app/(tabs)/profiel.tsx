@@ -54,7 +54,8 @@ export default function Lidmaatschap() {
       </Group>
 
       <Group style={{ marginTop: space.md }}>
-        <ListRow icon="log-out-outline" title="Uitloggen" destructive onPress={signOut} last />
+        <ListRow icon="log-out-outline" title="Uitloggen" onPress={signOut} />
+        <ListRow icon="trash-outline" title="Account verwijderen" destructive onPress={() => router.push('/account-verwijderen')} last />
       </Group>
       <T variant="small" color={colors.mist} style={{ textAlign: 'center', marginTop: space.md }}>Greenside · versie 1.0</T>
     </Screen>

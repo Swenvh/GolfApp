@@ -10,7 +10,8 @@
     "build:admin": "pnpm --filter @golfapp/admin build",
     "demo": "bash scripts/demo.sh start",
     "demo:reset": "bash scripts/demo.sh reset",
-    "demo:stop": "bash scripts/demo.sh stop"
+    "demo:stop": "bash scripts/demo.sh stop",
+    "app-review": "node scripts/app-review.mjs"
   },
   "pnpm": {
     "overrides": {

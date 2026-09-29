@@ -1039,3 +1039,88 @@ select pg_temp.assert((select count(*) from sponsors where url !~ '^https://') =
 select set_config('request.jwt.claims', '', false);
 delete from clubs where id = current_setting('test.iso')::uuid;
 delete from auth.users where id in ('00000000-0000-0000-0000-00000000b0b1', '00000000-0000-0000-0000-00000000b0b2');
+
+-- 20. App Store: reviewaccount en account verwijderen --------------------------------------
+insert into auth.users (id, email, email_confirmed_at) values
+  ('00000000-0000-0000-0000-00000000c0c1', 'appreview@greenside.test', now());
+
+-- Alleen Greenside (of de service role) bouwt de democlub
+select set_config('request.jwt.claim.sub', '00000000-0000-0000-0000-00000000a001', false);  -- beheerder De Duinen
+set role authenticated;
+do $$ begin
+  begin perform review_club_reset('appreview@greenside.test');
+    raise exception 'expected failure'; exception when insufficient_privilege then null; end;
+  -- Van de eigen club een reviewclub maken: nee
+  begin update clubs set is_review = true where id = '00000000-0000-0000-0000-0000000c0001';
+    raise exception 'expected failure'; exception when others then if sqlerrm not like 'Het contract met Greenside%' then raise; end if; end;
+end $$;
+reset role;
+select pg_temp.assert(not has_function_privilege('anon', 'review_club_reset(text)', 'execute'), 'anoniem kan de democlub niet opbouwen');
+select pg_temp.assert(not has_function_privilege('anon', 'delete_my_account()', 'execute'), 'anoniem kan geen account verwijderen');
+
+select set_config('request.jwt.claim.sub', '00000000-0000-0000-0000-00000000a009', false);  -- Greenside
+set role authenticated;
+-- Een account van een echt lid mag nooit het reviewaccount worden
+do $$ begin
+  begin perform review_club_reset('jan@example.test');
+    raise exception 'expected failure'; exception when others then if sqlerrm not like 'Dit account hoort bij een echte club%' then raise; end if; end;
+end $$;
+select set_config('test.review', review_club_reset('AppReview@greenside.test')::text, false);
+select pg_temp.assert((select count(*) from hq_club_overview() where club_id = current_setting('test.review')::uuid) = 0,
+  'democlub telt niet mee als klant in HQ');
+reset role;
+select pg_temp.assert((select user_id from members where club_id = current_setting('test.review')::uuid and member_number = '1001')
+  = '00000000-0000-0000-0000-00000000c0c1', 'reviewaccount is gekoppeld aan het demolid');
+
+-- De keurder ziet de democlub en niets van echte clubs
+select set_config('test.dd_parents', pg_temp.parents('00000000-0000-0000-0000-0000000c0001')::text, false);
+select set_config('request.jwt.claim.sub', '00000000-0000-0000-0000-00000000c0c1', false);
+set role authenticated;
+select pg_temp.assert(pg_temp.leaks('00000000-0000-0000-0000-0000000c0001', current_setting('test.dd_parents')::jsonb) = '',
+  'reviewaccount ziet niets van De Duinen: ' || pg_temp.leaks('00000000-0000-0000-0000-0000000c0001', current_setting('test.dd_parents')::jsonb));
+select pg_temp.assert((select count(*) from members where club_id <> current_setting('test.review')::uuid) = 0, 'reviewaccount ziet alleen leden van de democlub');
+select pg_temp.assert((select count(*) from club_directory(current_setting('test.review')::uuid)) = 7, 'ledenlijst van de democlub');
+select pg_temp.assert((select count(*) from invoices where status = 'paid') = 1, 'keurder ziet een betaalde factuur');
+select pg_temp.assert((select count(*) from news_posts) = 3 and (select count(*) from competitions where status = 'open') = 2, 'nieuws en wedstrijden in de democlub');
+-- De keurder bestelt iets (zoals Apple dat test)
+select pg_temp.assert((select total_cents from place_order(
+  (select id from members where user_id = auth.uid()),
+  jsonb_build_array(jsonb_build_object('product_id', (select id from products where name = 'Privéles bij de pro (30 min)'), 'quantity', 1)),
+  null)) > 0, 'keurder kan bestellen in de democlub');
+reset role;
+
+-- Terugzetten werkt ook na bestellingen, en maakt alles weer schoon
+select set_config('request.jwt.claim.sub', '', false);
+select set_config('request.jwt.claims', '{"role":"service_role"}', false);
+select set_config('test.review', review_club_reset('appreview@greenside.test')::text, false);
+select set_config('request.jwt.claims', '', false);
+select pg_temp.assert((select count(*) from clubs where is_review) = 1, 'één democlub na opnieuw opbouwen');
+select pg_temp.assert((select count(*) from orders where club_id = current_setting('test.review')::uuid) = 0, 'bestellingen van de keurder zijn weg');
+
+-- Account verwijderen: een beheerder niet (club zonder beheerder), een lid wel
+select set_config('request.jwt.claim.sub', '00000000-0000-0000-0000-00000000a001', false);
+set role authenticated;
+do $$ begin
+  begin perform delete_my_account();
+    raise exception 'expected failure'; exception when others then if sqlerrm not like 'Je bent ook beheerder%' then raise; end if; end;
+end $$;
+reset role;
+select set_config('request.jwt.claim.sub', '00000000-0000-0000-0000-00000000c0c1', false);
+set role authenticated;
+select delete_my_account();
+reset role;
+select set_config('request.jwt.claim.sub', '', false);
+select pg_temp.assert(not exists (select 1 from auth.users where id = '00000000-0000-0000-0000-00000000c0c1'), 'inlog is verwijderd');
+select pg_temp.assert((select user_id from members where club_id = current_setting('test.review')::uuid and member_number = '1001') is null,
+  'lidmaatschap blijft bij de club, zonder inlog');
+select pg_temp.assert((select count(*) from invoices where club_id = current_setting('test.review')::uuid) = 1, 'facturen blijven bewaard');
+select pg_temp.assert((select count(*) from audit_log where action = 'ACCOUNT_DELETED' and club_id = current_setting('test.review')::uuid
+  and old_data is null and new_data is null) = 1, 'verwijderen vastgelegd, zonder persoonsgegevens');
+
+-- Opruimen
+delete from payments where club_id = current_setting('test.review')::uuid;
+delete from invoices where club_id = current_setting('test.review')::uuid;
+delete from journal_entries where club_id = current_setting('test.review')::uuid;
+delete from products where club_id = current_setting('test.review')::uuid;
+delete from finance_settings where club_id = current_setting('test.review')::uuid;
+delete from clubs where id = current_setting('test.review')::uuid;

@@ -30,6 +30,8 @@ export interface Club {
   greenside_fee_cents: number;
   /** Hoe vaak dezelfde introducé per kalenderjaar mag spelen */
   guest_intro_limit: number;
+  /** Democlub voor de keuring door Apple en Google */
+  is_review: boolean;
 }
 
 export interface MembershipType {

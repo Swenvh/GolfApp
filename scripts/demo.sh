@@ -26,6 +26,16 @@ kill_tree() {
   kill "$1" 2>/dev/null || true
 }
 
+# Reviewaccount van Apple/Google met de democlub "Golfclub De Proefbaan" (vast demowachtwoord)
+REVIEW_PASSWORD_DEMO="Proefbaan2026"
+review_account() {
+  local url key
+  url="$($SUPABASE status -o env | sed -n 's/^API_URL="\(.*\)"$/\1/p')"
+  key="$($SUPABASE status -o env | sed -n 's/^SERVICE_ROLE_KEY="\(.*\)"$/\1/p')"
+  NO_PROXY="127.0.0.1,localhost${NO_PROXY:+,$NO_PROXY}" SUPABASE_URL="$url" SUPABASE_SERVICE_ROLE_KEY="$key" \
+    REVIEW_PASSWORD="$REVIEW_PASSWORD_DEMO" node scripts/app-review.mjs >/dev/null
+}
+
 stop_servers() {
   for f in "$RUN_DIR"/*.pid; do
     [ -f "$f" ] || continue
@@ -44,6 +54,7 @@ case "${1:-start}" in
   reset)
     say "Demodata terugzetten"
     $SUPABASE db reset
+    review_account
     echo "Klaar: zes weken gebruik bij Golfclub De Duinen staat weer klaar."
     exit 0
     ;;
@@ -76,6 +87,9 @@ ANON_KEY="$($SUPABASE status -o env | sed -n 's/^ANON_KEY="\(.*\)"$/\1/p')"
 printf 'NEXT_PUBLIC_SUPABASE_URL=%s\nNEXT_PUBLIC_SUPABASE_ANON_KEY=%s\n' "$API_URL" "$ANON_KEY" > apps/admin/.env.local
 printf 'EXPO_PUBLIC_SUPABASE_URL=%s\nEXPO_PUBLIC_SUPABASE_ANON_KEY=%s\n' "$API_URL" "$ANON_KEY" > apps/mobile/.env.local
 
+say "Reviewaccount voor Apple en Google klaarzetten"
+review_account
+
 stop_servers
 
 say "Clubbeheer bouwen"
@@ -85,7 +99,7 @@ echo $! > "$RUN_DIR/admin.pid"
 
 say "Ledenapp bouwen (webversie)"
 (cd apps/mobile && EXPO_PUBLIC_SUPABASE_URL="$API_URL" EXPO_PUBLIC_SUPABASE_ANON_KEY="$ANON_KEY" \
-  npx expo export --platform web --output-dir "../../$RUN_DIR/app" >/dev/null)
+  npx expo export --platform web --clear --output-dir "../../$RUN_DIR/app" >/dev/null)
 nohup bash -c "cd $RUN_DIR/app && exec npx --yes serve -s -l $APP_PORT" > "$RUN_DIR/app.log" 2>&1 < /dev/null &
 echo $! > "$RUN_DIR/app.pid"
 
@@ -112,6 +126,7 @@ cat <<EOF
                jan@example.test     A-lid
                pieter@example.test  weekdaglid met Handicart-pas
                inlogcode: zie de testmailbox hieronder
+               appreview@greenside.test / $REVIEW_PASSWORD_DEMO  (keuring, democlub)
 
   Testmail     http://localhost:54324
 

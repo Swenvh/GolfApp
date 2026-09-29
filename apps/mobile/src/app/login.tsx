@@ -1,3 +1,4 @@
+import Constants from 'expo-constants';
 import { router } from 'expo-router';
 import { useRef, useState } from 'react';
 import { KeyboardAvoidingView, Platform, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
@@ -12,18 +13,26 @@ import { colors, fonts, radius, space } from '@/lib/theme';
  * Inloggen met een eenmalige code per e-mail: geen wachtwoorden om te vergeten,
  * en geen deep links nodig. Na inloggen koppelt de app het account aan het lid met
  * hetzelfde e-mailadres (claim_my_accounts), dus leden hoeven niet eerst uitgenodigd te worden.
+ *
+ * Uitzondering: het reviewaccount van Apple en Google logt in met een wachtwoord, want de
+ * keurder kan onze codemail niet lezen. Dat account ziet alleen de democlub met nepleden.
  */
+const reviewSetting: unknown = Constants.expoConfig?.extra?.reviewEmail;
+const REVIEW_EMAIL = typeof reviewSetting === 'string' ? reviewSetting.toLowerCase() : null;
+
 export default function Login() {
   const insets = useSafeAreaInsets();
   const [email, setEmail] = useState('');
   const [code, setCode] = useState('');
-  const [step, setStep] = useState<'email' | 'code'>('email');
+  const [password, setPassword] = useState('');
+  const [step, setStep] = useState<'email' | 'code' | 'password'>('email');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string>();
 
   const sendCode = async () => {
-    setBusy(true);
     setError(undefined);
+    if (REVIEW_EMAIL && email.trim().toLowerCase() === REVIEW_EMAIL) return setStep('password');
+    setBusy(true);
     const { error } = await supabase.auth.signInWithOtp({ email: email.trim(), options: { shouldCreateUser: true } });
     setBusy(false);
     if (error) { haptic.warn(); setError('Er ging iets mis bij het versturen. Controleer het e-mailadres en probeer het opnieuw.'); }
@@ -36,6 +45,15 @@ export default function Login() {
     const { error } = await supabase.auth.verifyOtp({ email: email.trim(), token: token.trim(), type: 'email' });
     setBusy(false);
     if (error) { haptic.warn(); setError('Deze code klopt niet of is verlopen.'); }
+    else { haptic.success(); router.replace('/'); }
+  };
+
+  const signInWithPassword = async () => {
+    setBusy(true);
+    setError(undefined);
+    const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
+    setBusy(false);
+    if (error) { haptic.warn(); setError('E-mailadres of wachtwoord klopt niet.'); }
     else { haptic.success(); router.replace('/'); }
   };
 
@@ -75,6 +93,18 @@ export default function Login() {
             />
             <ErrorText message={error} />
             <Button title="Stuur inlogcode" icon="arrow-forward" onPress={sendCode} loading={busy} disabled={!email.includes('@')} />
+          </>
+        ) : step === 'password' ? (
+          <>
+            <View style={{ gap: 4 }}>
+              <T variant="heading">Wachtwoord</T>
+              <T variant="small" color={colors.slate}>Voor het testaccount van de keuring.</T>
+            </View>
+            <Input label="Wachtwoord" value={password} onChangeText={setPassword} secureTextEntry autoCapitalize="none"
+              autoComplete="password" textContentType="password" onSubmitEditing={signInWithPassword} />
+            <ErrorText message={error} />
+            <Button title="Inloggen" onPress={signInWithPassword} loading={busy} disabled={!password} />
+            <Button title="Ander e-mailadres" variant="ghost" onPress={() => { setStep('email'); setPassword(''); }} />
           </>
         ) : (
           <>

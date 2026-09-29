@@ -144,6 +144,13 @@ CI (`.github/workflows/ci.yml`) draait dit allemaal bij elke push.
    De service-role-sleutel hoort alleen in de edge functions, nooit in clubbeheer of de app.
 4. **App** bouwen en indienen met EAS: `npx eas-cli build` / `eas submit`.
    White-label per club: zet `CLUB_SLUG`, `APP_NAME`, `BUNDLE_ID` in een EAS-profiel (zie `apps/mobile/app.config.ts`).
+   **Keuring door Apple en Google:** draai vóór elke indiening
+   `SUPABASE_URL=… SUPABASE_SERVICE_ROLE_KEY=… pnpm app-review`. Dat maakt of herstelt het reviewaccount
+   (`REVIEW_EMAIL`, standaard `appreview@greenside.test`) met een nieuw wachtwoord en bouwt de democlub
+   "Golfclub De Proefbaan" met nepleden opnieuw op. Plak de tekst die het script toont in App Store Connect
+   (App Review Information) en Play Console (App access). Het reviewaccount logt in met een wachtwoord in plaats van
+   een code, is in elke clubapp zichtbaar en ziet nooit echte ledengegevens. Leden kunnen hun account verwijderen via
+   Profiel → Account verwijderen (verplicht voor de App Store); het lidmaatschap en de facturen blijven bij de club.
 
 ### Beveiliging in het kort
 

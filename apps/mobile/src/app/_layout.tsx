@@ -57,6 +57,7 @@ export default function RootLayout() {
           <Stack.Screen name="handicart" options={{ title: 'Handicart-pas' }} />
           <Stack.Screen name="lidmaatschap" options={{ title: 'Lidmaatschap' }} />
           <Stack.Screen name="gezin" options={{ title: 'Gezinslid toevoegen' }} />
+          <Stack.Screen name="account-verwijderen" options={{ title: 'Account verwijderen' }} />
         </Stack>
       </SessionProvider>
     </SafeAreaProvider>
