@@ -3,7 +3,7 @@
 import { isValidIban, normalizeIban } from './iban';
 
 export type ImportField =
-  | 'member_number' | 'ngf_number' | 'first_name' | 'initials' | 'infix' | 'last_name' | 'gender'
+  | 'member_number' | 'ngf_number' | 'club_pass_number' | 'first_name' | 'initials' | 'infix' | 'last_name' | 'gender'
   | 'date_of_birth' | 'email' | 'phone' | 'street' | 'house_number' | 'postal_code' | 'city'
   | 'membership_type' | 'status' | 'join_date' | 'end_date' | 'handicap_index'
   | 'iban' | 'bic' | 'mandate_reference' | 'mandate_signed_on' | 'account_holder';
@@ -12,6 +12,7 @@ export type ImportField =
 export const importFields: { key: ImportField; label: string; aliases: string[] }[] = [
   { key: 'member_number', label: 'Lidnummer', aliases: ['lidnummer', 'lidnr', 'relatienummer', 'relatienr', 'nummer', 'membernumber', 'memberid'] },
   { key: 'ngf_number', label: 'NGF-nummer', aliases: ['ngfnummer', 'ngf', 'gsnnummer', 'gsn', 'federatienummer', 'ngfpasnummer', 'golfpasnummer'] },
+  { key: 'club_pass_number', label: 'Clubpasnummer', aliases: ['clubpasnummer', 'clubpas', 'clubkaart', 'clubkaartnummer', 'ledenpasnummer', 'ledenpas', 'pasnummer', 'kaartnummer', 'rangepas', 'ballenpas', 'drivingrangepas'] },
   { key: 'first_name', label: 'Voornaam', aliases: ['voornaam', 'roepnaam', 'firstname', 'givenname'] },
   { key: 'initials', label: 'Voorletters', aliases: ['voorletters', 'initialen', 'initials'] },
   { key: 'infix', label: 'Tussenvoegsel', aliases: ['tussenvoegsel', 'tussenvoegsels', 'voorvoegsel', 'prefix', 'infix'] },
@@ -162,6 +163,7 @@ export function parseMemberImport(text: string): ImportParseResult {
 
   // Controles over regels heen
   const numbers = new Map<string, number>();
+  const passes = new Map<string, number>();
   const emails = new Map<string, number[]>();
   for (const r of rows) {
     const n = r.values.member_number;
@@ -169,6 +171,12 @@ export function parseMemberImport(text: string): ImportParseResult {
       const first = numbers.get(n);
       if (first) r.errors.push(`Lidnummer ${n} staat ook op regel ${first}`);
       else numbers.set(n, r.line);
+    }
+    const pass = r.values.club_pass_number;
+    if (pass) {
+      const first = passes.get(pass);
+      if (first) r.errors.push(`Clubpasnummer ${pass} staat ook op regel ${first}`);
+      else passes.set(pass, r.line);
     }
     const e = r.values.email;
     if (e) emails.set(e, [...(emails.get(e) ?? []), r.line]);
@@ -228,6 +236,11 @@ function checkRow(line: number, raw: Partial<Record<ImportField, string>>): Impo
     else errors.push(`IBAN "${raw.iban}" klopt niet`);
   }
   if (v.bic) v.bic = v.bic.replace(/\s+/g, '').toUpperCase();
+  if (v.club_pass_number) {
+    // Zoals de ballenautomaat het leest: zonder spaties, letters in hoofdletters
+    v.club_pass_number = v.club_pass_number.replace(/\s+/g, '').toUpperCase();
+    if (!/^[A-Z0-9-]{1,40}$/.test(v.club_pass_number)) errors.push(`Clubpasnummer "${raw.club_pass_number}" mag alleen letters, cijfers en - bevatten`);
+  }
   const mandateParts = [v.mandate_reference, v.mandate_signed_on].filter(Boolean).length;
   if (mandateParts > 0 && (mandateParts < 2 || !v.iban)) {
     warnings.push('Machtiging onvolledig (IBAN, kenmerk en datum nodig): het lid wordt geïmporteerd, de machtiging niet');

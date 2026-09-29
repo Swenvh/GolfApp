@@ -1229,3 +1229,31 @@ reset role;
 select set_config('request.jwt.claim.sub', '', false);
 select pg_temp.assert(iban_is_valid('GB82 WEST 1234 5698 7654 32') and not iban_is_valid('NL00BANK0000000000'), 'IBAN-controle');
 update courses set status = 'open', status_note = null where id = '00000000-0000-0000-0000-0000000f0001';
+
+-- 23. Clubpas voor de ballenautomaat -------------------------------------------------------
+select set_config('request.jwt.claim.sub', '00000000-0000-0000-0000-00000000a001', false);  -- beheerder De Duinen
+set role authenticated;
+select import_members('00000000-0000-0000-0000-0000000c0001',
+  '[{"_line":"2","member_number":"1001","first_name":"Jan","last_name":"Vries","club_pass_number":"DUI-0001"},
+    {"_line":"3","member_number":"7001","first_name":"Pas","last_name":"Houder","club_pass_number":"DUI-7001"}]', true, false);
+select pg_temp.assert((select club_pass_number from members where id = '00000000-0000-0000-0000-0000000e0001') = 'DUI-0001', 'clubpas bijgewerkt via import');
+select pg_temp.assert((select club_pass_number from members where club_id = '00000000-0000-0000-0000-0000000c0001' and member_number = '7001') = 'DUI-7001', 'clubpas bij nieuw lid');
+do $$ begin
+  -- Ongeldig teken: de import weigert de regel
+  begin perform import_members('00000000-0000-0000-0000-0000000c0001', '[{"_line":"2","first_name":"X","last_name":"Y","club_pass_number":"12 34!"}]', true, false);
+    raise exception 'expected failure'; exception when others then if sqlerrm not like '%clubpasnummer mag alleen%' then raise; end if; end;
+  -- Twee leden met dezelfde pas: nee
+  begin update members set club_pass_number = 'DUI-0001' where id = '00000000-0000-0000-0000-0000000e0002';
+    raise exception 'expected failure'; exception when unique_violation then null; end;
+end $$;
+reset role;
+-- Een andere club mag hetzelfde pasnummer gebruiken (eigen ballenautomaat)
+update members set club_pass_number = 'DUI-0001' where id = (select id from members where club_id = '00000000-0000-0000-0000-0000000c0002' limit 1);
+select set_config('request.jwt.claim.sub', '00000000-0000-0000-0000-00000000a002', false);  -- lid Jan
+set role authenticated;
+select pg_temp.assert((select club_pass_number from members where id = '00000000-0000-0000-0000-0000000e0001') = 'DUI-0001', 'lid ziet de eigen clubpas');
+select pg_temp.assert((select count(*) from members where club_pass_number is not null and user_id is distinct from auth.uid()) = 0, 'lid ziet geen clubpassen van anderen');
+reset role;
+select set_config('request.jwt.claim.sub', '', false);
+update members set club_pass_number = null where club_pass_number in ('DUI-0001', 'DUI-7001');
+delete from members where club_id = '00000000-0000-0000-0000-0000000c0001' and member_number = '7001';

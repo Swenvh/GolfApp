@@ -16,6 +16,8 @@ import { MembershipCard } from './membership-card';
 const errors: Record<string, string> = {
   iban: 'Het IBAN is ongeldig.',
   dubbel: 'Dit lidnummer bestaat al.',
+  'pas-dubbel': 'Dit clubpasnummer heeft al een ander lid.',
+  'pas-ongeldig': 'Een clubpasnummer bestaat alleen uit letters, cijfers en -.',
   'mandaat-dubbel': 'Deze mandaatreferentie bestaat al.',
   opslaan: 'Opslaan mislukt.',
   lidmaatschap: 'Kies een lidmaatschap en een datum.',

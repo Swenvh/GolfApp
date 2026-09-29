@@ -20,6 +20,8 @@ export default async function NieuwLid({ searchParams }: { searchParams: Promise
       <PageHeader title="Nieuw lid" />
       {error === 'dubbel' && <Notice tone="error">Dit lidnummer bestaat al.</Notice>}
       {error === 'iban' && <Notice tone="error">Het IBAN is ongeldig.</Notice>}
+      {error === 'pas-dubbel' && <Notice tone="error">Dit clubpasnummer heeft al een ander lid.</Notice>}
+      {error === 'pas-ongeldig' && <Notice tone="error">Een clubpasnummer bestaat alleen uit letters, cijfers en -.</Notice>}
       {error === 'opslaan' && <Notice tone="error">Opslaan mislukt.</Notice>}
       <Card><MemberForm types={types ?? []} nextNumber={String(max + 1)} /></Card>
     </>

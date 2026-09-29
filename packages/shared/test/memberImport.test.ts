@@ -57,3 +57,14 @@ describe('ledenimport', () => {
     expect(parseMemberImport('Voornaam;Achternaam').error).toMatch(/geen leden/);
   });
 });
+
+describe('clubpasnummer', () => {
+  it('herkent de kolom, maakt het netjes en weigert dubbele passen', async () => {
+    const { parseMemberImport } = await import('../src');
+    const csv = 'Lidnummer;Voornaam;Achternaam;Clubpas\n1;An;Bos;ab 123\n2;Bo;Kok;AB123\n3;Cor;Dam;12 34!';
+    const res = parseMemberImport(csv);
+    expect(res.rows[0]!.values.club_pass_number).toBe('AB123');
+    expect(res.rows[1]!.errors.join()).toContain('staat ook op regel 2');
+    expect(res.rows[2]!.errors.join()).toContain('mag alleen letters');
+  });
+});

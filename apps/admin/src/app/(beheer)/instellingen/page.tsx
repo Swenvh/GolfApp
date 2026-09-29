@@ -152,6 +152,14 @@ export default async function InstellingenPage({ searchParams }: { searchParams:
             </div>
           </Card>
 
+          <Card title="Driving range">
+            <div className="space-y-3 p-4 text-sm text-stone-700">
+              <p>Leden tappen ballen met de QR-code in de app (Clubhuis, rechtsboven). Die code is het <strong>clubpasnummer</strong> van het lid, of het lidnummer als er geen clubpas is.</p>
+              <p>Zet de lijst hieronder in de software van de ballenautomaat en koppel daar de ledenkorting aan. Clubpasnummers vul je in bij het lid, of neem je mee bij het importeren (kolom &ldquo;Clubpas&rdquo;).</p>
+              <a href="/instellingen/clubpassen" className="inline-flex items-center justify-center rounded-full border border-stone-300 bg-white px-4 py-2 text-sm font-bold text-brand-700 hover:bg-brand-50">Lijst voor de ballenautomaat (CSV)</a>
+            </div>
+          </Card>
+
           <Card title="Beheerders">
             <table>
               <tbody>

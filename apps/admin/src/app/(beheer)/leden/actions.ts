@@ -21,6 +21,7 @@ export async function saveMember(formData: FormData) {
     club_id: ctx.club.id,
     member_number: str(formData.get('member_number')),
     ngf_number: str(formData.get('ngf_number')),
+    club_pass_number: str(formData.get('club_pass_number'))?.replace(/\s+/g, '').toUpperCase() ?? null,
     first_name: str(formData.get('first_name')),
     infix: str(formData.get('infix')),
     last_name: str(formData.get('last_name')),
@@ -46,7 +47,7 @@ export async function saveMember(formData: FormData) {
     : await supabase.from('members').insert(row).select('id').single();
 
   if (error) {
-    const code = error.code === '23505' ? 'dubbel' : 'opslaan';
+    const code = error.code === '23505' ? (error.message.includes('club_pass') ? 'pas-dubbel' : 'dubbel') : error.code === '23514' ? 'pas-ongeldig' : 'opslaan';
     redirect(`${back}?error=${code}`);
   }
   revalidatePath('/leden');

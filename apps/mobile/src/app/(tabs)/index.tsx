@@ -260,7 +260,7 @@ function RangeQr({ open, onClose }: { open: boolean; onClose: () => void }) {
           <Eyebrow color={colors.brassText}>Driving range</Eyebrow>
           <QrCode value={rangeCode(member)} size={240} />
           <T variant="heading">{member.first_name} {member.infix ? `${member.infix} ` : ''}{member.last_name}</T>
-          <T color={colors.slate}>Lidnummer {member.member_number}</T>
+          <T color={colors.slate}>{member.club_pass_number ? `Clubpas ${member.club_pass_number}` : `Lidnummer ${member.member_number}`}</T>
           <T variant="small" color={colors.slate} style={{ textAlign: 'center' }}>Houd je telefoon onder de scanner van de ballenautomaat. Zet je scherm op volle helderheid.</T>
           <Text style={styles.qrClose}>Tik om te sluiten</Text>
         </View>

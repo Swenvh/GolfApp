@@ -59,6 +59,8 @@ export interface Member {
   user_id: string | null;
   member_number: string;
   ngf_number: string | null;
+  /** Nummer van de clubpas voor de ballenautomaat; leeg = lidnummer */
+  club_pass_number: string | null;
   first_name: string;
   infix: string | null;
   last_name: string;

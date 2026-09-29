@@ -4,11 +4,11 @@ import Svg, { Path, Rect } from 'react-native-svg';
 import { colors } from '@/lib/theme';
 
 /**
- * Wat de ballenautomaat van de driving range leest: het lidnummer, net als op de ledenpas.
- * Gebruikt de club een ander formaat, dan hoeft alleen deze functie te veranderen.
+ * Wat de ballenautomaat van de driving range leest: het clubpasnummer, zoals de club het in de
+ * automaat heeft gezet (vaak het nummer van de fysieke pas). Zonder clubpasnummer het lidnummer.
  */
-export function rangeCode(member: { member_number: string }): string {
-  return member.member_number;
+export function rangeCode(member: { member_number: string; club_pass_number: string | null }): string {
+  return member.club_pass_number ?? member.member_number;
 }
 
 /** QR-code als vector, scherp op elk scherm. Donker op licht met een rustzone van 4 modules. */

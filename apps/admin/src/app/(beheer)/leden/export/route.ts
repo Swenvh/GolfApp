@@ -6,6 +6,7 @@ import { createClient } from '@/lib/supabase/server';
 const columns: [string, (m: Member & { membership_type: { name: string } | null }) => unknown][] = [
   ['Lidnummer', (m) => m.member_number],
   ['NGF-nummer', (m) => m.ngf_number],
+  ['Clubpasnummer', (m) => m.club_pass_number],
   ['Voornaam', (m) => m.first_name],
   ['Tussenvoegsel', (m) => m.infix],
   ['Achternaam', (m) => m.last_name],

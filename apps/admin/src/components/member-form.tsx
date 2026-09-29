@@ -37,6 +37,9 @@ export function MemberForm({ member, types, nextNumber }: {
       <fieldset className="grid gap-4 sm:grid-cols-3">
         <Field label="Lidnummer"><input name="member_number" defaultValue={m?.member_number ?? nextNumber} required /></Field>
         <Field label="NGF-nummer (GSN)"><input name="ngf_number" defaultValue={m?.ngf_number ?? ''} /></Field>
+        <Field label="Clubpasnummer" hint="Voor de ballenautomaat; leeg = lidnummer">
+          <input name="club_pass_number" defaultValue={m?.club_pass_number ?? ''} maxLength={40} autoComplete="off" />
+        </Field>
         <Field label="Handicap-index" hint="Plus-handicap als +1,2">
           <input name="handicap_index" defaultValue={m?.handicap_index != null ? String(m.handicap_index).replace('.', ',').replace(/^-/, '+') : ''} />
         </Field>
