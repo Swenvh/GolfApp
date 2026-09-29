@@ -7,7 +7,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { formatEuro, hasValidHandicart, localTime, priceInclVat, type Order, type Product } from '@golfapp/shared';
 import { Contours } from '@/components/brand';
 import { productIcon } from '@/components/offer';
-import { Button, ErrorText, Eyebrow, Group, ListRow, Loading, Row, Screen, T } from '@/components/ui';
+import { Button, ErrorText, Eyebrow, Group, Icon, ListRow, Loading, Row, Screen, T } from '@/components/ui';
 import { capitalize, formatDate } from '@/lib/format';
 import { haptic } from '@/lib/haptics';
 import { fetchAvailability, fulfilmentHint, placeOrder } from '@/lib/offers';
@@ -75,7 +75,7 @@ export default function Aanbod() {
       <Pressable hitSlop={12} onPress={() => router.back()} style={styles.back}>
         <Ionicons name="close" size={20} color={colors.onDark} />
       </Pressable>
-      <View style={styles.bigIcon}><Ionicons name={productIcon(product)} size={34} color={colors.brassLight} /></View>
+      <View style={styles.bigIcon}><Icon name={productIcon(product)} size={34} color={colors.brassLight} /></View>
       {context && <Eyebrow color={colors.brassLight}>{context}</Eyebrow>}
       <Text style={styles.title}>{product.name}</Text>
       <Text style={styles.price}>{formatEuro(unit)}{handicart ? '  ·  Handicart-tarief' : product.capacity_scope === 'season' ? '  ·  per seizoen' : product.grants_uses && product.grants_uses > 1 ? `  ·  ${product.grants_uses} keer` : ''}</Text>

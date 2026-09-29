@@ -21,6 +21,7 @@ export default function Starttijden() {
   const today = localDate();
   const [day, setDay] = useState(today);
   const [courseId, setCourseId] = useState<string>();
+  const [holes, setHoles] = useState<'18' | '9'>('18');
 
   const courses = useQuery(async () =>
     unwrap(await supabase.from('courses').select('*').eq('club_id', member.club_id).eq('active', true).order('name')) as Course[],
@@ -43,6 +44,15 @@ export default function Starttijden() {
     if (!course) return [] as TeeSheetRow[];
     return unwrap(await supabase.rpc('tee_sheet', { p_course: course.id, p_day: day })) as TeeSheetRow[];
   }, [course?.id, day]);
+  // Flights die voor 9 holes geboekt zijn: wie aansluit, speelt ook 9
+  const nineHole = useQuery(async () => {
+    if (!course || course.holes !== 18) return new Set<string>();
+    const from = new Date(`${day}T00:00:00Z`); from.setUTCDate(from.getUTCDate() - 1);
+    const to = new Date(`${day}T00:00:00Z`); to.setUTCDate(to.getUTCDate() + 2);
+    const { data } = await supabase.from('tee_bookings').select('id').eq('course_id', course.id).eq('holes', 9)
+      .gte('starts_at', from.toISOString()).lt('starts_at', to.toISOString());
+    return new Set((data ?? []).map((b) => b.id as string));
+  }, [course?.id, day, sheet.data]);
 
   const days = useMemo(
     () => Array.from({ length: (course?.booking_days_ahead ?? 7) + 1 }, (_, i) => addDays(today, i)),
@@ -122,6 +132,11 @@ export default function Starttijden() {
             );
           })}
         </ScrollView>
+        {course.holes === 18 && (
+          <View style={{ paddingHorizontal: space.lg }}>
+            <Segmented options={[{ key: '18', label: '18 holes' }, { key: '9', label: '9 holes' }]} value={holes} onChange={setHoles} />
+          </View>
+        )}
       </View>
 
       <View style={{ paddingHorizontal: space.lg, gap: space.sm, marginTop: space.md }}>
@@ -166,8 +181,12 @@ export default function Starttijden() {
               const mine = players.find((p) => p.member_id === member.id);
               const free = course.max_players - players.length;
               const full = free <= 0;
+              const flightId = bookingIds.get(slot.time);
+              const nine = !!flightId && players.length > 0 && !!nineHole.data?.has(flightId);
+              // Aansluiten bij een flight: je speelt wat die flight speelt
+              const playHoles = players.length > 0 ? (nine ? '9' : '18') : holes;
               const onPress = mine ? () => leave(mine) : !full
-                ? () => router.push({ pathname: '/boeken', params: { course: course.id, courseName: course.name, startsAt: slot.startsAt, bookingId: bookingIds.get(slot.time) ?? '' } })
+                ? () => router.push({ pathname: '/boeken', params: { course: course.id, courseName: course.name, startsAt: slot.startsAt, bookingId: flightId ?? '', holes: course.holes === 18 ? playHoles : '' } })
                 : undefined;
               return (
                 <Pressable
@@ -192,6 +211,7 @@ export default function Starttijden() {
                         ))}
                       </Row>
                     )}
+                    {nine && <T variant="small" color={mine ? colors.onDarkMuted : colors.slate}>9 holes</T>}
                     {mine && <T variant="small" color={colors.onDarkMuted}>Tik om je af te melden</T>}
                   </View>
                   <View style={{ alignItems: 'flex-end', gap: 6 }}>

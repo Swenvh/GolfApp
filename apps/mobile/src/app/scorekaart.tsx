@@ -3,7 +3,7 @@ import { router } from 'expo-router';
 import { useMemo, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
 import {
-  courseHandicap, localDate, playingHandicap, scoreDifferential, scoreRound,
+  courseHandicap, frontNine, localDate, playingHandicap, scoreDifferential, scoreRound,
   type Course, type CourseHole, type CourseTee, type Sponsor,
 } from '@golfapp/shared';
 import { Button, Empty, ErrorText, Eyebrow, Loading, Row, Screen, Segmented, T } from '@/components/ui';
@@ -25,36 +25,45 @@ export default function Scorekaart() {
   const [teeId, setTeeId] = useState<string>();
   const [scores, setScores] = useState<(number | null)[]>([]);
   const [qualifying, setQualifying] = useState(true);
+  const [nineChoice, setNineChoice] = useState<'18' | '9'>();
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string>();
 
   const { data, loading } = useQuery(async () => {
     const courses = unwrap(await supabase.from('courses').select('*').eq('club_id', member.club_id).eq('active', true)) as Course[];
     const ids = courses.map((c) => c.id);
-    const [tees, holes, sponsors] = await Promise.all([
+    const today = localDate();
+    const [tees, holes, sponsors, todays] = await Promise.all([
       supabase.from('course_tees').select('*').in('course_id', ids).order('course_rating', { ascending: false }),
       supabase.from('course_holes').select('*').in('course_id', ids).order('number'),
       supabase.from('sponsors').select('*').eq('club_id', member.club_id).eq('placement', 'scorecard').eq('active', true),
+      // Vandaag voor 9 holes geboekt? Dan staat de kaart meteen op 9 holes
+      supabase.from('tee_booking_players').select('booking:tee_bookings!inner(course_id, holes, starts_at)').eq('member_id', member.id)
+        .gte('booking.starts_at', `${today}T00:00:00`).lte('booking.starts_at', `${today}T23:59:59`),
     ]);
-    const today = localDate();
+    const booked = ((todays.data ?? []) as unknown as { booking: { course_id: string; holes: number | null } }[]).map((b) => b.booking)[0];
     return {
-      courses, tees: unwrap(tees) as CourseTee[], holes: unwrap(holes) as CourseHole[],
+      courses, tees: unwrap(tees) as CourseTee[], holes: unwrap(holes) as CourseHole[], booked,
       // Holesponsors horen bij de hoofdbaan (18 holes)
       holeSponsors: new Map(((sponsors.data ?? []) as Sponsor[]).filter((x) => x.hole_number && (!x.valid_until || x.valid_until >= today)).map((x) => [x.hole_number!, x])),
     };
   }, [member.club_id]);
 
   const withHoles = (data?.courses ?? []).filter((c) => data?.holes.some((h) => h.course_id === c.id));
-  const course = withHoles.find((c) => c.id === courseId) ?? withHoles[0];
-  const tees = (data?.tees ?? []).filter((x) => x.course_id === course?.id && (!member.gender || member.gender === 'other' || x.gender === member.gender));
+  const course = withHoles.find((c) => c.id === (courseId ?? data?.booked?.course_id)) ?? withHoles[0];
+  // Alle teekleuren van de baan: iedereen mag van elke tee slaan
+  const tees = (data?.tees ?? []).filter((x) => x.course_id === course?.id);
   const tee = tees.find((x) => x.id === teeId) ?? tees[0];
-  const holes = useMemo(() => (data?.holes ?? []).filter((h) => h.course_id === course?.id)
+  const allHoles = useMemo(() => (data?.holes ?? []).filter((h) => h.course_id === course?.id)
     .map((h) => ({ number: h.number, par: h.par, strokeIndex: h.stroke_index })), [data?.holes, course?.id]);
+  const nine = allHoles.length === 18 && (nineChoice ?? (data?.booked?.course_id === course?.id && data?.booked?.holes === 9 ? '9' : '18')) === '9';
 
   const ch = tee && member.handicap_index != null
     ? courseHandicap(Number(member.handicap_index), { courseRating: Number(tee.course_rating), slopeRating: tee.slope_rating, par: tee.par })
     : 0;
-  const ph = playingHandicap(ch, 95);
+  const ph18 = playingHandicap(ch, 95);
+  // Bij 9 holes op een 18-holesbaan: alleen de voorste negen, met aangepaste stroke index en halve handicap
+  const { holes, playingHcp: ph } = useMemo(() => (nine ? frontNine(allHoles, ph18) : { holes: allHoles, playingHcp: ph18 }), [nine, allHoles, ph18]);
   const result = useMemo(() => scoreRound(holes.map((_, i) => scores[i] ?? null), holes, ph), [holes, scores, ph]);
 
   const setScore = (i: number, delta: number) => {
@@ -92,7 +101,7 @@ export default function Scorekaart() {
     else { haptic.success(); router.back(); }
   };
 
-  const nines = holes.length > 9 ? [{ label: 'Uit', from: 0, to: 9 }, { label: 'In', from: 9, to: 18 }] : [{ label: 'Totaal', from: 0, to: holes.length }];
+  const nines = holes.length > 9 ? [{ label: 'Uit', from: 0, to: 9 }, { label: 'In', from: 9, to: 18 }] : [{ label: nine ? 'Uit' : 'Tot.', from: 0, to: holes.length }];
 
   return (
     <Screen footer={
@@ -106,6 +115,10 @@ export default function Scorekaart() {
     }>
       {withHoles.length > 1 && (
         <Segmented options={withHoles.map((c) => ({ key: c.id, label: c.name.replace(/\s*\(.*\)/, '') }))} value={course.id} onChange={(k) => { setCourseId(k); setScores([]); }} />
+      )}
+      {allHoles.length === 18 && (
+        <Segmented options={[{ key: '18', label: '18 holes' }, { key: '9', label: '9 holes' }]} value={nine ? '9' : '18'}
+          onChange={(k) => { setNineChoice(k); setScores([]); }} />
       )}
       <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: space.sm }}>
         {tees.map((x) => {
@@ -149,7 +162,7 @@ export default function Scorekaart() {
             {part.map((h, k) => {
               const i = nine.from + k;
               const hole = holes[i]!;
-              const sponsor = holes.length === 18 ? data?.holeSponsors.get(h.hole) : undefined;
+              const sponsor = allHoles.length === 18 ? data?.holeSponsors.get(h.hole) : undefined;
               return (
                 <View key={h.hole} style={k < part.length - 1 && styles.holeDivider}>
                 <View style={styles.hole}>

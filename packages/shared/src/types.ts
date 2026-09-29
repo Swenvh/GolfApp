@@ -103,7 +103,14 @@ export interface Course {
   /** Duur van een ronde; twee boekingen van hetzelfde lid mogen niet overlappen */
   round_minutes: number;
   active: boolean;
+  /** Baaninformatie voor leden */
+  status: CourseStatus;
+  status_note: string | null;
+  status_updated_at: string | null;
 }
+
+export type CourseStatus = 'open' | 'beperkt' | 'gesloten';
+export const courseStatusLabel: Record<CourseStatus, string> = { open: 'Open', beperkt: 'Beperkt open', gesloten: 'Gesloten' };
 
 export interface CourseTee {
   id: string;
@@ -191,6 +198,8 @@ export interface Invoice {
   paid_cents: number;
   created_at: string;
   finalized_at: string | null;
+  /** 'horeca' voor rekeningen van de bar; leeg voor contributie, aanbod of los */
+  category: 'horeca' | null;
 }
 
 export interface InvoiceLine {

@@ -1,10 +1,10 @@
 import Link from 'next/link';
-import { addDays, generateTeeSlots, localDate, localTime, type Course, type TeeSheetRow } from '@golfapp/shared';
-import { getStaffContext } from '@/lib/club';
+import { addDays, courseStatusLabel, generateTeeSlots, localDate, localTime, type Course, type CourseStatus, type TeeSheetRow } from '@golfapp/shared';
+import { getStaffContext, hasRole } from '@/lib/club';
 import { createClient } from '@/lib/supabase/server';
-import { Card, Empty, PageHeader } from '@/components/ui';
+import { Button, Card, Empty, Field, PageHeader } from '@/components/ui';
 import { formatHandicap } from '@/lib/format';
-import { cancelBooking, toggleCheckIn } from './actions';
+import { cancelBooking, saveCourseStatus, toggleCheckIn } from './actions';
 
 export const metadata = { title: 'Starttijden' };
 
@@ -46,6 +46,22 @@ export default async function StarttijdenPage({ searchParams }: { searchParams: 
           </div>
         }
       />
+      {hasRole(ctx, 'secretariat', 'marshal') && (
+        <Card title={`Baaninformatie · ${course.name}`} className="mb-6">
+          <form action={saveCourseStatus} className="grid gap-4 p-4 sm:grid-cols-[12rem_1fr_auto] sm:items-end">
+            <input type="hidden" name="course_id" value={course.id} />
+            <Field label="Baan is">
+              <select name="status" defaultValue={course.status}>
+                {(Object.keys(courseStatusLabel) as CourseStatus[]).map((k) => <option key={k} value={k}>{courseStatusLabel[k]}</option>)}
+              </select>
+            </Field>
+            <Field label="Toelichting voor leden" hint="Staat in de app onder Baaninformatie">
+              <input name="note" defaultValue={course.status_note ?? ''} maxLength={200} placeholder="Bijvoorbeeld: wintergreens op hole 3 en 7, buggy's alleen op de paden" />
+            </Field>
+            <Button type="submit">Opslaan</Button>
+          </form>
+        </Card>
+      )}
       <Card>
         <table>
           <thead className="bg-stone-50"><tr><th className="w-20">Tijd</th><th>Spelers</th><th className="w-24" /></tr></thead>

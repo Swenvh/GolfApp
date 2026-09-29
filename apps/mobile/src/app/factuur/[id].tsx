@@ -1,9 +1,11 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useLocalSearchParams } from 'expo-router';
+import * as Print from 'expo-print';
+import * as Sharing from 'expo-sharing';
 import * as WebBrowser from 'expo-web-browser';
 import { useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { formatEuro, invoiceStatusLabel, paymentMethodLabel, type Invoice, type InvoiceLine, type Payment } from '@golfapp/shared';
+import { Platform, StyleSheet, Text, View } from 'react-native';
+import { formatEuro, invoiceHtml, invoiceStatusLabel, paymentMethodLabel, type Invoice, type InvoiceLine, type Payment } from '@golfapp/shared';
 import { Perforation } from '@/components/brand';
 import { Button, ErrorText, Eyebrow, Loading, Pill, Row, Screen, T } from '@/components/ui';
 import { formatDate } from '@/lib/format';
@@ -17,6 +19,7 @@ export default function Factuur() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const member = useMember();
   const [paying, setPaying] = useState(false);
+  const [pdfBusy, setPdfBusy] = useState(false);
   const [error, setError] = useState<string>();
   const { data, loading, reload } = useQuery(async () => {
     const [inv, lines, payments] = await Promise.all([
@@ -43,8 +46,31 @@ export default function Factuur() {
     setTimeout(reload, 1500);
   };
 
+  // PDF voor de eigen administratie (zakelijke leden): op de telefoon delen of bewaren, op het web afdrukken
+  const downloadPdf = async () => {
+    setPdfBusy(true);
+    setError(undefined);
+    try {
+      const html = invoiceHtml({ club: member.club, member, invoice, lines });
+      if (Platform.OS === 'web') {
+        await Print.printAsync({ html });
+      } else {
+        const { uri } = await Print.printToFileAsync({ html });
+        await Sharing.shareAsync(uri, { mimeType: 'application/pdf', UTI: 'com.adobe.pdf', dialogTitle: `Factuur ${invoice.invoice_number ?? ''}` });
+      }
+    } catch {
+      setError('De PDF kon niet worden gemaakt. Probeer het opnieuw.');
+    }
+    setPdfBusy(false);
+  };
+
   return (
-    <Screen footer={canPay ? <Button title={`Betaal ${formatEuro(open)} met iDEAL`} icon="lock-closed" onPress={payWithIdeal} loading={paying} /> : undefined}>
+    <Screen footer={
+      <View style={{ gap: space.sm }}>
+        {canPay && <Button title={`Betaal ${formatEuro(open)} met iDEAL`} icon="lock-closed" onPress={payWithIdeal} loading={paying} />}
+        <Button title="Factuur als PDF" icon="document-text-outline" variant={canPay ? 'ghost' : 'secondary'} onPress={downloadPdf} loading={pdfBusy} />
+      </View>
+    }>
       <View style={[styles.receipt, shadow]}>
         <View style={{ padding: space.xl, gap: space.sm, alignItems: 'center' }}>
           <Eyebrow color={colors.slate}>{member.club.name}</Eyebrow>

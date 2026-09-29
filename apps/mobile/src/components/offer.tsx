@@ -3,7 +3,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { formatEuro, priceInclVat, type Product } from '@golfapp/shared';
 import { haptic } from '@/lib/haptics';
 import { colors, fonts, radius, space } from '@/lib/theme';
-import type { IconName } from './ui';
+import { Icon, type IconName } from './ui';
 
 export function productIcon(p: Pick<Product, 'icon'>): IconName {
   return (p.icon ?? 'pricetag-outline') as IconName;
@@ -20,7 +20,7 @@ export function OfferCard({ eyebrow, title, subtitle, price, icon, onPress, tone
       style={({ pressed }) => [styles.card, dark && styles.cardDark, pressed && { transform: [{ scale: 0.98 }], opacity: 0.9 }]}
     >
       <View style={[styles.iconWrap, dark && { backgroundColor: colors.onDarkLine }]}>
-        <Ionicons name={icon} size={22} color={dark ? colors.brassLight : colors.pine700} />
+        <Icon name={icon} size={22} color={dark ? colors.brassLight : colors.pine700} />
       </View>
       <View style={{ gap: 3, flex: 1 }}>
         <Text style={[styles.eyebrow, dark && { color: colors.brassLight }]}>{eyebrow}</Text>
@@ -54,7 +54,7 @@ export function AddOnRow({ product, quantity, onChange, remaining, max = 4, lock
   return (
     <View style={[styles.addOn, active && styles.addOnActive]}>
       <View style={[styles.addOnIcon, active && { backgroundColor: colors.pine700 }]}>
-        <Ionicons name={productIcon(product)} size={20} color={active ? colors.onDark : colors.pine700} />
+        <Icon name={productIcon(product)} size={20} color={active ? colors.onDark : colors.pine700} />
       </View>
       <View style={{ flex: 1, gap: 2 }}>
         <Text style={styles.addOnTitle}>{product.name}</Text>

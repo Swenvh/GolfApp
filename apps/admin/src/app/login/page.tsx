@@ -1,5 +1,7 @@
+import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
+import { TRUST_COOKIE, TRUST_SECONDS } from '@/lib/supabase/trust';
 import { Contours, Wordmark } from '@/components/brand';
 import { Button, Field, Notice } from '@/components/ui';
 
@@ -23,9 +25,16 @@ async function sendCode(formData: FormData) {
 async function verifyCode(formData: FormData) {
   'use server';
   const email = String(formData.get('email') ?? '').trim().toLowerCase();
-  const supabase = await createClient();
+  const trusted = formData.get('vertrouwd') === '1';
+  const supabase = await createClient({ trusted });
   const { error } = await supabase.auth.verifyOtp({ email, token: String(formData.get('code') ?? '').trim(), type: 'email' });
   if (error) redirect(`/login?stap=code&error=code&email=${encodeURIComponent(email)}`);
+  const store = await cookies();
+  if (trusted) {
+    store.set(TRUST_COOKIE, '1', { maxAge: TRUST_SECONDS, httpOnly: true, sameSite: 'lax', secure: process.env.NODE_ENV === 'production', path: '/' });
+  } else {
+    store.delete(TRUST_COOKIE);
+  }
   await supabase.rpc('claim_my_accounts');
   redirect('/');
 }
@@ -52,9 +61,6 @@ export default async function LoginPage({ searchParams }: {
           </h1>
           <p className="mt-4 text-lg text-chalk/65">Leden, starttijden, wedstrijden en de complete financiële administratie. Voor bestuur, secretariaat en penningmeester.</p>
         </div>
-        <div className="relative flex gap-8 text-sm text-chalk/55">
-          <span>SEPA-incasso</span><span>Dubbel boekhouden</span><span>AVG-proof</span>
-        </div>
       </section>
       <section className="flex items-center justify-center p-6">
         <div className="w-full max-w-sm space-y-5">
@@ -74,6 +80,10 @@ export default async function LoginPage({ searchParams }: {
                 <input name="code" inputMode="numeric" autoComplete="one-time-code" pattern="[0-9]{6}" maxLength={6} required autoFocus
                   className="py-3 text-center font-display text-2xl tracking-[0.5em] tabular-nums" />
               </Field>
+              <label className="flex items-start gap-3 text-sm text-stone-700">
+                <input type="checkbox" name="vertrouwd" value="1" className="mt-0.5 h-5 w-5 shrink-0" />
+                <span>Dit apparaat 30 dagen vertrouwen<span className="block text-stone-500">Alleen op je eigen computer. Anders log je uit zodra je de browser sluit.</span></span>
+              </label>
               <Button type="submit" className="w-full py-3">Inloggen</Button>
             </form>
           ) : (

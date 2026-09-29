@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Linking, View } from 'react-native';
 import { formatEuro, hasValidHandicart, localDate, priceInclVat, type HandicartPassType, type Product } from '@golfapp/shared';
 import { Contours } from '@/components/brand';
-import { Button, Card, ErrorText, Eyebrow, Input, Row, Screen, Segmented, T } from '@/components/ui';
+import { Button, Card, ErrorText, Eyebrow, Icon, Input, Row, Screen, Segmented, T } from '@/components/ui';
 import { formatDate } from '@/lib/format';
 import { haptic } from '@/lib/haptics';
 import { useMember, useSession } from '@/lib/session';
@@ -64,7 +64,7 @@ export default function Handicart() {
         </T>
         {buggy.data?.handicart_price_cents != null && (
           <Row gap={space.sm} style={{ marginTop: space.xs }}>
-            <Ionicons name="car-sport-outline" size={18} color={colors.brassLight} />
+            <Icon name="golf-cart" size={18} color={colors.brassLight} />
             <T color={colors.onDark}>
               Bij {member.club.name}: {formatEuro(priceInclVat(buggy.data.handicart_price_cents, Number(buggy.data.vat_rate)))} in plaats van {formatEuro(priceInclVat(buggy.data.price_cents, Number(buggy.data.vat_rate)))}
             </T>

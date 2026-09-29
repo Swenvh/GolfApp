@@ -64,7 +64,7 @@ export default async function FinancienPage({ searchParams }: {
         title="Financiën"
         subtitle={`Boekjaar ${year}`}
         actions={<>
-          <ButtonLink href="/financien/grootboek" variant="secondary">Grootboek</ButtonLink>
+          <ButtonLink href="/financien/horeca" variant="secondary">Horeca op rekening</ButtonLink>
           <ButtonLink href="/financien/facturen/nieuw">+ Factuur</ButtonLink>
         </>}
       />

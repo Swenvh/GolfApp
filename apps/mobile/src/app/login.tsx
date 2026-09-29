@@ -4,7 +4,7 @@ import { useRef, useState } from 'react';
 import { KeyboardAvoidingView, Platform, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Contours, Wordmark } from '@/components/brand';
-import { Button, ErrorText, Eyebrow, Input, T } from '@/components/ui';
+import { Button, ErrorText, Input, T } from '@/components/ui';
 import { haptic } from '@/lib/haptics';
 import { supabase } from '@/lib/supabase';
 import { colors, fonts, radius, space } from '@/lib/theme';
@@ -69,7 +69,6 @@ export default function Login() {
         <Contours seed={7} opacity={0.09} />
         <Wordmark />
         <View style={{ gap: space.md }}>
-          <Eyebrow color={colors.brassLight}>Ledenapp voor golfclubs</Eyebrow>
           <Text style={styles.headline}>
             Welkom op{'\n'}de <Text style={styles.headlineAccent}>club.</Text>
           </Text>

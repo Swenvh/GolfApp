@@ -1,12 +1,14 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { router } from 'expo-router';
-import { Pressable, RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useState } from 'react';
+import { Modal, Pressable, RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { formatEuro, hasValidHandicart, localDate, localTime, priceInclVat, type MembershipType, type NewsPost, type Product, type Sponsor, type TeeSheetRow } from '@golfapp/shared';
+import { courseStatusLabel, formatEuro, hasValidHandicart, localDate, localTime, priceInclVat, type Course, type MembershipType, type NewsPost, type Product, type Sponsor, type TeeSheetRow } from '@golfapp/shared';
 import { OfferCard, productIcon } from '@/components/offer';
 import { Contours, LogoMark } from '@/components/brand';
 import { TeeTicket } from '@/components/ticket';
-import { Card, Empty, ErrorText, Eyebrow, Row, Section, T, type IconName } from '@/components/ui';
+import { QrCode, rangeCode } from '@/components/qr';
+import { Card, Empty, ErrorText, Eyebrow, Icon, Row, Section, T, type IconName } from '@/components/ui';
 import { formatDate, formatHandicap } from '@/lib/format';
 import { haptic } from '@/lib/haptics';
 import { fetchEntitlements, usesLeft } from '@/lib/offers';
@@ -16,8 +18,6 @@ import { colors, fonts, radius, space } from '@/lib/theme';
 import { unwrap, useQuery } from '@/lib/useQuery';
 import { isSafeWebUrl, openWebUrl } from '@/lib/links';
 
-const wholeEuro = new Intl.NumberFormat('nl-NL', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 });
-
 function greeting() {
   const h = Number(new Intl.DateTimeFormat('nl-NL', { hour: 'numeric', hour12: false, timeZone: 'Europe/Amsterdam' }).format(new Date()));
   return h < 6 ? 'Goedenacht' : h < 12 ? 'Goedemorgen' : h < 18 ? 'Goedemiddag' : 'Goedenavond';
@@ -26,14 +26,15 @@ function greeting() {
 export default function Clubhuis() {
   const member = useMember();
   const insets = useSafeAreaInsets();
+  const [qrOpen, setQrOpen] = useState(false);
 
   const { data, error, refreshing, refresh } = useQuery(async () => {
-    const [news, bookings, invoices] = await Promise.all([
+    const [news, bookings, courses] = await Promise.all([
       supabase.from('news_posts').select('*').eq('club_id', member.club_id)
         .order('pinned', { ascending: false }).order('published_at', { ascending: false }).limit(20),
       supabase.from('tee_booking_players').select('booking:tee_bookings!inner(id, starts_at, course:courses(id, name, max_players))')
         .eq('member_id', member.id).gte('booking.starts_at', new Date().toISOString()),
-      supabase.from('invoices').select('total_cents, paid_cents').eq('member_id', member.id).eq('status', 'open'),
+      supabase.from('courses').select('id, name, holes, status, status_note').eq('club_id', member.club_id).eq('active', true).order('holes', { ascending: false }),
     ]);
     type B = { booking: { id: string; starts_at: string; course: { id: string; name: string; max_players: number } } };
     const upcoming = (unwrap(bookings) as unknown as B[]).map((b) => b.booking).sort((a, b) => a.starts_at.localeCompare(b.starts_at));
@@ -73,7 +74,8 @@ export default function Clubhuis() {
       next, flight, extras, upcomingCount: upcoming.length,
       products: ((products.data ?? []) as Product[]).filter((p) => !(p.capacity_scope === 'season' && owned.has(p.id))),
       myType: ((types.data ?? []) as MembershipType[]).find((t) => t.id === member.membership_type_id),
-      outstanding: (unwrap(invoices) ?? []).reduce((s, i) => s + i.total_cents - i.paid_cents, 0),
+      // De hoofdbaan (meeste holes) bepaalt wat er op het Clubhuis staat
+      course: (unwrap(courses) as Pick<Course, 'id' | 'name' | 'holes' | 'status' | 'status_note'>[])[0],
       guests: (guests.data ?? []) as { name: string; rounds: number }[],
       introLeft: introEnts.length ? usesLeft(introEnts) : 0,
       // Wisselend per bezoek, zodat elke partner zichtbaar is
@@ -131,6 +133,8 @@ export default function Clubhuis() {
 
 
   return (
+    <>
+    <RangeQr open={qrOpen} onClose={() => setQrOpen(false)} />
     <ScrollView
       style={{ flex: 1, backgroundColor: colors.chalk }}
       contentContainerStyle={{ paddingBottom: 40 }}
@@ -144,8 +148,10 @@ export default function Clubhuis() {
             <LogoMark size={30} />
             <Eyebrow color={colors.brassLight}>{member.club.name}</Eyebrow>
           </Row>
-          <Pressable hitSlop={12} onPress={() => { haptic.tap(); router.push('/(tabs)/profiel'); }} style={styles.memberChip}>
-            <Text style={styles.memberChipText}>#{member.member_number}</Text>
+          <Pressable hitSlop={12} onPress={() => { haptic.tap(); setQrOpen(true); }} style={styles.qrChip}
+            accessibilityRole="button" accessibilityLabel="QR-code voor de driving range">
+            <QrCode value={rangeCode(member)} size={26} />
+            <Text style={styles.qrChipText}>Range</Text>
           </Pressable>
         </Row>
         <View style={{ gap: 2, marginTop: space.xxl }}>
@@ -157,8 +163,8 @@ export default function Clubhuis() {
           <View style={styles.statDivider} />
           <HeroStat label="Gepland" value={String(data?.upcomingCount ?? 0)} onPress={() => router.push('/(tabs)/starttijden')} />
           <View style={styles.statDivider} />
-          <HeroStat label="Openstaand" value={wholeEuro.format(Math.round((data?.outstanding ?? 0) / 100))}
-            highlight={!!data?.outstanding} onPress={() => router.push('/facturen')} />
+          <HeroStat label="Baan" value={data?.course ? courseStatusLabel[data.course.status].replace(' open', '') : '–'}
+            highlight={!!data?.course && data.course.status !== 'open'} onPress={() => router.push('/baan')} />
         </Row>
       </View>
 
@@ -189,7 +195,7 @@ export default function Clubhuis() {
         <Row gap={space.sm} style={{ marginTop: space.xs }}>
           <Quick icon="add-circle-outline" label="Boeken" onPress={() => router.push('/(tabs)/starttijden')} />
           <Quick icon="create-outline" label="Scorekaart" onPress={() => router.push('/scorekaart')} />
-          <Quick icon="trophy-outline" label="Wedstrijden" onPress={() => router.push('/(tabs)/wedstrijden')} />
+          <Quick icon="school-outline" label="Golfles" onPress={() => router.push('/lessen')} />
           <Quick icon="people-outline" label="Leden" onPress={() => router.push('/ledenlijst')} />
         </Row>
 
@@ -240,6 +246,26 @@ export default function Clubhuis() {
         </Section>
       </View>
     </ScrollView>
+    </>
+  );
+}
+
+/** Groot en scherp in beeld, zodat de scanner van de ballenautomaat hem direct leest. */
+function RangeQr({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const member = useMember();
+  return (
+    <Modal visible={open} animationType="fade" transparent onRequestClose={onClose}>
+      <Pressable style={styles.qrBackdrop} onPress={onClose} accessibilityRole="button" accessibilityLabel="Sluiten">
+        <View style={styles.qrSheet}>
+          <Eyebrow color={colors.brassText}>Driving range</Eyebrow>
+          <QrCode value={rangeCode(member)} size={240} />
+          <T variant="heading">{member.first_name} {member.infix ? `${member.infix} ` : ''}{member.last_name}</T>
+          <T color={colors.slate}>Lidnummer {member.member_number}</T>
+          <T variant="small" color={colors.slate} style={{ textAlign: 'center' }}>Houd je telefoon onder de scanner van de ballenautomaat. Zet je scherm op volle helderheid.</T>
+          <Text style={styles.qrClose}>Tik om te sluiten</Text>
+        </View>
+      </Pressable>
+    </Modal>
   );
 }
 
@@ -255,7 +281,7 @@ function HeroStat({ label, value, onPress, highlight }: { label: string; value: 
 function Quick({ icon, label, onPress }: { icon: IconName; label: string; onPress: () => void }) {
   return (
     <Pressable onPress={() => { haptic.tap(); onPress(); }} style={({ pressed }) => [styles.quick, pressed && { opacity: 0.7 }]}>
-      <Ionicons name={icon} size={22} color={colors.pine700} />
+      <Icon name={icon} size={22} color={colors.pine700} />
       <Text style={styles.quickLabel}>{label}</Text>
     </Pressable>
   );
@@ -263,8 +289,14 @@ function Quick({ icon, label, onPress }: { icon: IconName; label: string; onPres
 
 const styles = StyleSheet.create({
   hero: { backgroundColor: colors.pine900, paddingHorizontal: space.xl, paddingBottom: space.xxxl + space.xxl },
-  memberChip: { borderWidth: 1, borderColor: colors.onDarkLine, borderRadius: radius.pill, paddingHorizontal: 10, paddingVertical: 4 },
-  memberChipText: { fontFamily: fonts.bodyBold, fontSize: 12, color: colors.onDarkMuted, letterSpacing: 0.5 },
+  qrChip: {
+    flexDirection: 'row', alignItems: 'center', gap: 8, minHeight: 44, paddingLeft: 6, paddingRight: 12,
+    borderWidth: 1, borderColor: colors.onDarkLine, borderRadius: radius.md,
+  },
+  qrChipText: { fontFamily: fonts.bodyBold, fontSize: 12, color: colors.onDark, letterSpacing: 0.5 },
+  qrBackdrop: { flex: 1, backgroundColor: colors.scrim, alignItems: 'center', justifyContent: 'center', padding: space.xl },
+  qrSheet: { backgroundColor: colors.paper, borderRadius: radius.xl, padding: space.xl, alignItems: 'center', gap: space.md, maxWidth: 360, width: '100%' },
+  qrClose: { fontFamily: fonts.bodyBold, fontSize: 13, color: colors.pine700, marginTop: space.xs },
   name: { fontFamily: fonts.display, fontSize: 44, lineHeight: 48, color: colors.onDark, letterSpacing: -1 },
   stats: { marginTop: space.xl, paddingTop: space.lg, borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: colors.onDarkLine },
   statDivider: { width: StyleSheet.hairlineWidth, alignSelf: 'stretch', backgroundColor: colors.onDarkLine, marginHorizontal: space.md },

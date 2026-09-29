@@ -17,7 +17,7 @@ type Relation = 'partner' | 'kind';
 export default function Gezin() {
   const member = useMember();
   const [relation, setRelation] = useState<Relation>('partner');
-  const [form, setForm] = useState({ name: '', dob: '', email: '' });
+  const [form, setForm] = useState({ name: '', dob: '', email: '', phone: '' });
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string>();
   const [sent, setSent] = useState<MembershipType>();
@@ -38,12 +38,15 @@ export default function Gezin() {
       : types.find((t) => fits(t) && t.id !== family?.id && (t.min_age != null || t.max_age != null)) ?? types.find((t) => fits(t) && t.id !== family?.id && t.can_book_weekend);
   const full = types.filter((t) => t.can_book_weekend).at(-1);
 
+  const validEmail = /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(form.email.trim());
+  const validPhone = form.phone.replace(/\D/g, '').length >= 10;
+
   const send = async () => {
     if (!suggestion) return;
     setBusy(true);
     setError(undefined);
     const { error } = await supabase.from('leads').insert({
-      club_id: member.club_id, member_id: member.id, type: 'family', name: form.name.trim(), email: form.email.trim() || null,
+      club_id: member.club_id, member_id: member.id, type: 'family', name: form.name.trim(), email: form.email.trim(), phone: form.phone.trim(),
       membership_type_id: suggestion.id, value_cents: suggestion.annual_fee_cents + suggestion.entrance_fee_cents,
       note: `${relation === 'partner' ? 'Partner' : 'Kind'} van ${fullName(member)}, geboren ${form.dob.trim()} (${years} jaar)`,
     });
@@ -68,7 +71,7 @@ export default function Gezin() {
   }
 
   return (
-    <Screen footer={<Button title="Aanmelden" icon="person-add-outline" onPress={send} loading={busy} disabled={!suggestion || form.name.trim().length < 2} />}>
+    <Screen footer={<Button title="Aanmelden" icon="person-add-outline" onPress={send} loading={busy} disabled={!suggestion || form.name.trim().length < 2 || !validEmail || !validPhone} />}>
       <Card tone="pine" style={{ padding: space.xl, gap: space.sm, marginTop: space.md }}>
         <Eyebrow color={colors.brassLight}>Samen lid</Eyebrow>
         <T variant="heading" color={colors.onDark} style={{ fontSize: 24, lineHeight: 29 }}>Golf met je gezin</T>
@@ -78,7 +81,9 @@ export default function Gezin() {
       <Segmented options={[{ key: 'partner', label: 'Partner' }, { key: 'kind', label: 'Kind' }]} value={relation} onChange={setRelation} />
       <Input label="Naam" value={form.name} onChangeText={(v) => setForm({ ...form, name: v })} placeholder="Voor- en achternaam" />
       <Input label="Geboortedatum" value={form.dob} onChangeText={(v) => setForm({ ...form, dob: v })} placeholder="dd-mm-jjjj" keyboardType="numbers-and-punctuation" />
-      <Input label="E-mailadres (optioneel)" value={form.email} onChangeText={(v) => setForm({ ...form, email: v })} keyboardType="email-address" autoCapitalize="none" />
+      <Input label="E-mailadres" value={form.email} onChangeText={(v) => setForm({ ...form, email: v })} keyboardType="email-address" autoCapitalize="none" autoComplete="email" />
+      <Input label="Telefoonnummer" value={form.phone} onChangeText={(v) => setForm({ ...form, phone: v })} keyboardType="phone-pad" autoComplete="tel" />
+      <T variant="small" color={colors.mist}>Met dit e-mailadres logt je gezinslid zelf in op de app.</T>
 
       {suggestion && (
         <Card style={{ gap: space.xs, borderColor: colors.pine600, borderWidth: 2 }}>

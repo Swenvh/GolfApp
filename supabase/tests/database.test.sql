@@ -1170,3 +1170,62 @@ do $$ begin
     raise exception 'expected failure'; exception when check_violation then null; end;
 end $$;
 update members set app_invited_at = null where id = '00000000-0000-0000-0000-0000000e0002';
+
+-- 22. Pilotreview: baaninformatie, 9 holes, horeca op rekening, IBAN, gezinslid -----------
+select set_config('request.jwt.claim.sub', '00000000-0000-0000-0000-00000000a001', false);  -- beheerder De Duinen
+set role authenticated;
+select set_course_status('00000000-0000-0000-0000-0000000f0001', 'beperkt', 'Wintergreens op hole 3 en 7');
+select pg_temp.assert((select status || '|' || status_note from courses where id = '00000000-0000-0000-0000-0000000f0001') = 'beperkt|Wintergreens op hole 3 en 7', 'baaninformatie gezet');
+-- Horeca: € 4,50 koffie (9%) en € 12,10 lunch (21%), per regel afgerond
+select set_config('test.horeca', horeca_invoice('00000000-0000-0000-0000-0000000e0001',
+  '[{"description":"Koffie en appeltaart","amount_incl_cents":450,"vat_rate":9},{"description":"Clubsandwich","amount_incl_cents":1210,"vat_rate":21}]')::text, false);
+select pg_temp.assert((select category = 'horeca' and status = 'open' and total_cents = 1660 and vat_cents = 247 from invoices where id = current_setting('test.horeca')::uuid),
+  'horeca op rekening: 4,13 + 0,37 en 10,00 + 2,10 = 16,60');
+do $$ begin
+  begin perform horeca_invoice('00000000-0000-0000-0000-0000000e0001', '[{"description":"","amount_incl_cents":100,"vat_rate":9}]');
+    raise exception 'expected failure'; exception when others then if sqlerrm not like 'Regel 1:%' then raise; end if; end;
+  begin perform horeca_invoice('00000000-0000-0000-0000-0000000e0001', '[{"description":"Bier","amount_incl_cents":500,"vat_rate":6}]');
+    raise exception 'expected failure'; exception when others then if sqlerrm not like 'Regel 1:%' then raise; end if; end;
+  -- Een lid van een andere club op rekening zetten: nee
+  begin perform horeca_invoice((select id from members where club_id = '00000000-0000-0000-0000-0000000c0002' limit 1),
+      '[{"description":"Bier","amount_incl_cents":500,"vat_rate":21}]');
+    raise exception 'expected failure'; exception when insufficient_privilege then null; end;
+end $$;
+reset role;
+
+select set_config('request.jwt.claim.sub', '00000000-0000-0000-0000-00000000a002', false);  -- lid Jan
+set role authenticated;
+do $$ begin
+  begin perform set_course_status('00000000-0000-0000-0000-0000000f0001', 'gesloten', null);
+    raise exception 'expected failure'; exception when insufficient_privilege then null; end;
+  begin perform horeca_invoice('00000000-0000-0000-0000-0000000e0001', '[{"description":"Bier","amount_incl_cents":500,"vat_rate":21}]');
+    raise exception 'expected failure'; exception when insufficient_privilege then null; end;
+end $$;
+select pg_temp.assert((select status from courses where id = '00000000-0000-0000-0000-0000000f0001') = 'beperkt', 'lid ziet de baaninformatie');
+-- 9 holes op de 18-holesbaan; 18 op de par-3 baan (9 holes) kan niet
+select set_config('test.nine', book_tee_time('00000000-0000-0000-0000-0000000f0001', pg_temp.at('15:14', current_date + 3),
+  array['00000000-0000-0000-0000-0000000e0001'::uuid], '{}', 9::smallint)::text, false);
+select pg_temp.assert((select holes from tee_bookings where id = current_setting('test.nine')::uuid) = 9, 'starttijd voor 9 holes');
+do $$ begin
+  begin perform book_tee_time('00000000-0000-0000-0000-0000000f0002', pg_temp.at('15:12', current_date + 4),
+      array['00000000-0000-0000-0000-0000000e0001'::uuid], '{}', 18::smallint);
+    raise exception 'expected failure'; exception when others then if sqlerrm not like 'Deze baan heeft 9 holes%' then raise; end if; end;
+end $$;
+-- IBAN: eigen nummer ja (gecontroleerd), van een ander nee
+select member_set_iban('00000000-0000-0000-0000-0000000e0001', 'nl91 abna 0417 1643 00');
+select pg_temp.assert((select iban from members where id = '00000000-0000-0000-0000-0000000e0001') = 'NL91ABNA0417164300', 'IBAN opgeslagen zonder spaties');
+do $$ begin
+  begin perform member_set_iban('00000000-0000-0000-0000-0000000e0001', 'NL91ABNA0417164301');
+    raise exception 'expected failure'; exception when others then if sqlerrm not like 'Dit IBAN klopt niet%' then raise; end if; end;
+  begin perform member_set_iban('00000000-0000-0000-0000-0000000e0002', 'NL91ABNA0417164300');
+    raise exception 'expected failure'; exception when insufficient_privilege then null; end;
+  -- Gezinslid zonder telefoonnummer
+  begin insert into leads (club_id, member_id, type, name, email)
+      values ('00000000-0000-0000-0000-0000000c0001', '00000000-0000-0000-0000-0000000e0001', 'family', 'Kind de Vries', 'kind@example.test');
+    raise exception 'expected failure'; exception when check_violation then null; end;
+end $$;
+select pg_temp.assert((select count(*) from invoices where category = 'horeca') = 1, 'lid ziet zijn horecarekening');
+reset role;
+select set_config('request.jwt.claim.sub', '', false);
+select pg_temp.assert(iban_is_valid('GB82 WEST 1234 5698 7654 32') and not iban_is_valid('NL00BANK0000000000'), 'IBAN-controle');
+update courses set status = 'open', status_note = null where id = '00000000-0000-0000-0000-0000000f0001';

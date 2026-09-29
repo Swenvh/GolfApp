@@ -1,4 +1,5 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import type { ComponentProps, ReactNode } from 'react';
 import {
   ActivityIndicator, Pressable, RefreshControl, ScrollView, StyleSheet, Text, TextInput, View,
@@ -8,7 +9,15 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { haptic } from '@/lib/haptics';
 import { colors, fonts, radius, shadow, space, type } from '@/lib/theme';
 
-export type IconName = ComponentProps<typeof Ionicons>['name'];
+export type IconName = ComponentProps<typeof Ionicons>['name'] | 'golf-cart';
+
+/** Buggy's zijn golfkarren, geen auto's: ook iconen uit de database ('car-sport-outline') tonen een golfkar. */
+const GOLF_CART = new Set<string>(['golf-cart', 'car-sport', 'car-sport-outline', 'car', 'car-outline']);
+
+export function Icon({ name, size, color }: { name: IconName; size: number; color: string }) {
+  if (GOLF_CART.has(name)) return <MaterialCommunityIcons name="golf-cart" size={Math.round(size * 1.1)} color={color} />;
+  return <Ionicons name={name as ComponentProps<typeof Ionicons>['name']} size={size} color={color} />;
+}
 
 // ---------------------------------------------------------------------------
 // Typografie
@@ -105,7 +114,7 @@ export function ListRow({ icon, title, subtitle, right, onPress, last, destructi
     <View style={[styles.row, !last && styles.rowDivider]}>
       {icon && (
         <View style={[styles.rowIcon, destructive && { backgroundColor: colors.flagSoft }]}>
-          <Ionicons name={icon} size={18} color={destructive ? colors.flag : colors.pine700} />
+          <Icon name={icon} size={18} color={destructive ? colors.flag : colors.pine700} />
         </View>
       )}
       <View style={{ flex: 1, gap: 1 }}>
@@ -152,7 +161,7 @@ export function Button({ title, onPress, variant = 'primary', icon, disabled, lo
     >
       {loading ? <ActivityIndicator color={c.fg} /> : (
         <>
-          {icon && <Ionicons name={icon} size={compact ? 16 : 18} color={c.fg} />}
+          {icon && <Icon name={icon} size={compact ? 16 : 18} color={c.fg} />}
           <Text style={[styles.buttonText, compact && { fontSize: 14 }, { color: c.fg }]}>{title}</Text>
         </>
       )}
@@ -192,7 +201,7 @@ export function Segmented<K extends string>({ options, value, onChange, dark }: 
 // ---------------------------------------------------------------------------
 const pillTones = {
   pine: { bg: colors.pine50, fg: colors.pine700 },
-  brass: { bg: colors.brassSoft, fg: '#7A5C22' },
+  brass: { bg: colors.brassSoft, fg: colors.brassText },
   flag: { bg: colors.flagSoft, fg: colors.flag },
   neutral: { bg: colors.chalk, fg: colors.slate },
   dark: { bg: colors.onDarkLine, fg: colors.onDark },
@@ -202,7 +211,7 @@ export function Pill({ label, tone = 'neutral', icon, style }: { label: string; 
   const c = pillTones[tone];
   return (
     <View style={[styles.pill, { backgroundColor: c.bg }, style]}>
-      {icon && <Ionicons name={icon} size={12} color={c.fg} />}
+      {icon && <Icon name={icon} size={12} color={c.fg} />}
       <Text style={[styles.pillText, { color: c.fg }]}>{label}</Text>
     </View>
   );
@@ -258,7 +267,7 @@ export function Empty({ icon = 'leaf-outline', title, children }: { icon?: IconN
   return (
     <View style={{ alignItems: 'center', paddingVertical: space.xxxl, paddingHorizontal: space.xl, gap: space.sm }}>
       <View style={{ width: 56, height: 56, borderRadius: 28, backgroundColor: colors.pine50, alignItems: 'center', justifyContent: 'center' }}>
-        <Ionicons name={icon} size={24} color={colors.pine600} />
+        <Icon name={icon} size={24} color={colors.pine600} />
       </View>
       <T variant="subheading" style={{ textAlign: 'center' }}>{title}</T>
       {children && <T variant="small" color={colors.slate} style={{ textAlign: 'center', maxWidth: 280 }}>{children}</T>}

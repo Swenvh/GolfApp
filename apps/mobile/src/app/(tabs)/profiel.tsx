@@ -33,10 +33,10 @@ export default function Lidmaatschap() {
       )}
 
       <Group>
-        <ListRow icon="ribbon-outline" title="Lidmaatschap wijzigen" subtitle="Upgraden, pauzeren, gezinslid toevoegen" onPress={() => router.push('/lidmaatschap')} />
+        <ListRow icon="ribbon-outline" title="Lidmaatschap wijzigen" subtitle="Upgraden of een gezinslid toevoegen" onPress={() => router.push('/lidmaatschap')} />
         <ListRow icon="receipt-outline" title="Facturen & betalingen" subtitle="Contributie, lessen en greenfees" onPress={() => router.push('/facturen')} />
         <ListRow icon="person-outline" title="Mijn gegevens" subtitle="Adres, telefoon en privacy" onPress={() => router.push('/gegevens')} />
-        <ListRow icon="car-sport-outline" title="Handicart-pas"
+        <ListRow icon="golf-cart" title="Handicart-pas"
           subtitle={member.handicart_pass_number ? `Pas ${member.handicart_pass_number} · Handicart-tarief voor je buggy` : 'Buggy tegen Handicart-tarief'}
           onPress={() => router.push('/handicart')} />
         <ListRow icon="people-outline" title="Ledenlijst" subtitle="Zoek een clubgenoot" onPress={() => router.push('/ledenlijst')} />

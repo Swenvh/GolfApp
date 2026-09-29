@@ -6,9 +6,8 @@ export default async function BeheerLayout({ children }: { children: React.React
   const nav = [
     { href: '/', label: 'Mission control', icon: 'dashboard' },
     { href: '/leden', label: 'Leden', icon: 'leden' },
-    ...(hasRole(ctx, 'secretariat') ? [{ href: '/leden/wijzigingen', label: 'Wijzigingen', icon: '', sub: true }] : []),
     { href: '/starttijden', label: 'Starttijden', icon: 'starttijden' },
-    ...(hasRole(ctx, 'secretariat', 'finance') ? [{ href: '/app-omzet', label: 'App-omzet', icon: 'omzet' }] : []),
+    ...(hasRole(ctx, 'secretariat', 'finance') ? [{ href: '/app-omzet', label: 'Bedrijfsstatistieken', icon: 'omzet' }] : []),
     ...(hasRole(ctx, 'finance')
       ? [
           { href: '/app-omzet/aanbod', label: 'Aanbod', icon: '', sub: true },
@@ -21,10 +20,11 @@ export default async function BeheerLayout({ children }: { children: React.React
       ? [
           { href: '/financien', label: 'Financiën', icon: 'financien' },
           { href: '/financien/facturen', label: 'Facturen', icon: '', sub: true },
-          { href: '/financien/incasso', label: 'Incasso', icon: '', sub: true },
-          { href: '/financien/grootboek', label: 'Grootboek', icon: '', sub: true },
+          { href: '/financien/horeca', label: 'Horeca op rekening', icon: '', sub: true },
         ]
       : []),
+    // Wie de bar doet maar niet bij financiën kan, zet hier bestellingen op rekening
+    ...(hasRole(ctx, 'secretariat') && !hasRole(ctx, 'finance') ? [{ href: '/financien/horeca', label: 'Horeca op rekening', icon: 'financien' }] : []),
     ...(hasRole(ctx) ? [{ href: '/instellingen', label: 'Instellingen', icon: 'instellingen' }] : []),
   ];
 

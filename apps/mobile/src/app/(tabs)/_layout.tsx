@@ -2,7 +2,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { Redirect } from 'expo-router';
 import { Tabs } from 'expo-router/js-tabs';
 import { View, type ColorValue } from 'react-native';
-import type { IconName } from '@/components/ui';
+import type { ComponentProps } from 'react';
 import { haptic } from '@/lib/haptics';
 import { useSession } from '@/lib/session';
 import { colors, fonts } from '@/lib/theme';
@@ -11,7 +11,8 @@ export default function TabsLayout() {
   const { member, loading } = useSession();
   if (!loading && !member) return <Redirect href="/" />;
 
-  const icon = (name: IconName, active: IconName) =>
+  type TabIcon = ComponentProps<typeof Ionicons>['name'];
+  const icon = (name: TabIcon, active: TabIcon) =>
     ({ color, focused }: { color: ColorValue; focused: boolean }) => (
       <View style={{ alignItems: 'center', gap: 4 }}>
         <Ionicons name={focused ? active : name} size={23} color={color} />

@@ -131,31 +131,3 @@ export async function registerPayment(formData: FormData) {
   revalidatePath(`/financien/facturen/${id}`);
   redirect(`/financien/facturen/${id}?paid=1`);
 }
-
-export async function createDebitBatch(formData: FormData) {
-  const ctx = await requireRole('finance');
-  const supabase = await createClient();
-  const { data, error } = await supabase.rpc('create_direct_debit_batch', {
-    p_club: ctx.club.id,
-    p_collection_date: String(formData.get('collection_date')),
-  });
-  if (error) redirect(`/financien/incasso?error=${encodeURIComponent(error.message)}`);
-  revalidatePath('/financien/incasso');
-  redirect(`/financien/incasso?created=${(data as { item_count: number }).item_count}`);
-}
-
-export async function processDebitBatch(formData: FormData) {
-  await requireRole('finance');
-  const supabase = await createClient();
-  const { error } = await supabase.rpc('process_direct_debit_batch', { p_batch: String(formData.get('batch_id')) });
-  if (error) redirect(`/financien/incasso?error=${encodeURIComponent(error.message)}`);
-  revalidatePath('/financien/incasso');
-  redirect('/financien/incasso?processed=1');
-}
-
-export async function deleteDebitBatch(formData: FormData) {
-  await requireRole('finance');
-  const supabase = await createClient();
-  await supabase.from('direct_debit_batches').delete().eq('id', String(formData.get('batch_id'))).neq('status', 'processed');
-  revalidatePath('/financien/incasso');
-}

@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import {
   formatEuro, formatIban, fullName, invoiceStatusLabel, memberStatusLabel,
-  type Invoice, type Member, type Round, type SepaMandate,
+  type Invoice, type Member, type MembershipChange, type Round, type SepaMandate,
 } from '@golfapp/shared';
 import { getStaffContext, hasRole } from '@/lib/club';
 import { createClient } from '@/lib/supabase/server';
@@ -11,12 +11,14 @@ import { Badge, Button, ButtonLink, Card, Empty, Field, Notice, PageHeader, Stat
 import { formatDate, formatHandicap } from '@/lib/format';
 import { revokeMandate, saveMandate } from '../actions';
 import { inviteMember } from './invite';
+import { MembershipCard } from './membership-card';
 
 const errors: Record<string, string> = {
   iban: 'Het IBAN is ongeldig.',
   dubbel: 'Dit lidnummer bestaat al.',
   'mandaat-dubbel': 'Deze mandaatreferentie bestaat al.',
   opslaan: 'Opslaan mislukt.',
+  lidmaatschap: 'Kies een lidmaatschap en een datum.',
   uitnodiging: 'Uitnodigen mislukt. Controleer het e-mailadres.',
 };
 
@@ -37,13 +39,15 @@ export default async function LidDetail({ params, searchParams }: {
   if (!member) notFound();
   const m = member as Member & { membership_type: { name: string; annual_fee_cents: number } | null };
 
-  const [types, invoices, mandates, rounds] = await Promise.all([
-    supabase.from('membership_types').select('id, name').eq('club_id', ctx.club.id).order('name'),
+  const [types, invoices, mandates, rounds, changes] = await Promise.all([
+    supabase.from('membership_types').select('id, name, annual_fee_cents, active').eq('club_id', ctx.club.id).order('name'),
     isFinance ? supabase.from('invoices').select('*').eq('member_id', id).order('issue_date', { ascending: false })
       : Promise.resolve({ data: [] }),
     isFinance ? supabase.from('sepa_mandates').select('*').eq('member_id', id).order('created_at', { ascending: false })
       : Promise.resolve({ data: [] }),
     supabase.from('rounds').select('*').eq('member_id', id).order('played_on', { ascending: false }).limit(10),
+    canEdit ? supabase.from('membership_changes').select('*').eq('member_id', id).in('status', ['requested', 'approved']).is('applied_at', null)
+      .order('created_at', { ascending: false }) : Promise.resolve({ data: [] }),
   ]);
   const inv = (invoices.data ?? []) as Invoice[];
   const outstanding = inv.filter((i) => i.status === 'open').reduce((s, i) => s + i.total_cents - i.paid_cents, 0);
@@ -56,7 +60,7 @@ export default async function LidDetail({ params, searchParams }: {
         subtitle={`Lidnummer ${m.member_number}${m.ngf_number ? ` · NGF ${m.ngf_number}` : ''} · lid sinds ${formatDate(m.join_date)}`}
         actions={isFinance && <ButtonLink href={`/financien/facturen/nieuw?member=${m.id}`}>+ Factuur</ButtonLink>}
       />
-      {error && <Notice tone="error">{errors[error] ?? 'Er ging iets mis.'}</Notice>}
+      {error && <Notice tone="error">{errors[error] ?? error}</Notice>}
       {saved && <Notice tone="success">Opgeslagen.</Notice>}
       {invited === 'bestaand' && <Notice tone="success">{m.first_name} had al een account met {m.email} en kan direct inloggen in de app.</Notice>}
       {invited && invited !== 'bestaand' && <Notice tone="success">Uitnodiging verstuurd naar {m.email}.</Notice>}
@@ -129,6 +133,11 @@ export default async function LidDetail({ params, searchParams }: {
         </div>
 
         <div className="space-y-6">
+          {canEdit && (
+            <MembershipCard memberId={m.id} currentTypeId={m.membership_type_id} endDate={m.end_date}
+              types={((types.data ?? []) as { id: string; name: string; annual_fee_cents: number; active: boolean }[]).filter((t) => t.active)}
+              changes={(changes.data ?? []) as MembershipChange[]} />
+          )}
           {m.user_id && (
             <Card title="Toegang tot de app">
               <p className="p-4 text-sm text-stone-600">

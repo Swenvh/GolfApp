@@ -7,3 +7,4 @@ export * from './sepa';
 export * from './types';
 export * from './labels';
 export * from './memberImport';
+export * from './invoicePdf';

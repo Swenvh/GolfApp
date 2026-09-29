@@ -1,7 +1,8 @@
 import { router } from 'expo-router';
 import { StyleSheet, Text, View } from 'react-native';
 import { formatEuro, invoiceStatusLabel, localDate, type Invoice } from '@golfapp/shared';
-import { Card, Empty, ErrorText, Eyebrow, Group, Pill, Row, Screen, T } from '@/components/ui';
+import { useState } from 'react';
+import { Card, Empty, ErrorText, Eyebrow, Group, Pill, Row, Screen, Segmented, T } from '@/components/ui';
 import { formatDate } from '@/lib/format';
 import { useMember } from '@/lib/session';
 import { supabase } from '@/lib/supabase';
@@ -14,8 +15,11 @@ export default function Facturen() {
   const { data, error, refreshing, refresh } = useQuery(async () =>
     unwrap(await supabase.from('invoices').select('*').eq('member_id', member.id)
       .order('issue_date', { ascending: false })) as Invoice[], [member.id]);
+  const [filter, setFilter] = useState<'alle' | 'open' | 'paid' | 'horeca'>('alle');
   const today = localDate();
   const open = (data ?? []).filter((i) => i.status === 'open');
+  const hasHoreca = (data ?? []).some((i) => i.category === 'horeca');
+  const shown = (data ?? []).filter((i) => filter === 'alle' || (filter === 'horeca' ? i.category === 'horeca' : i.status === filter));
   const due = open.reduce((s, i) => s + i.total_cents - i.paid_cents, 0);
 
   return (
@@ -28,14 +32,21 @@ export default function Facturen() {
         </T>
       </Card>
       <ErrorText message={error} />
-      {data?.length === 0 && <Empty icon="receipt-outline" title="Nog geen facturen" />}
       {!!data?.length && (
+        <Segmented value={filter} onChange={setFilter} options={[
+          { key: 'alle', label: 'Alle' }, { key: 'open', label: 'Open' }, { key: 'paid', label: 'Betaald' },
+          ...(hasHoreca ? [{ key: 'horeca' as const, label: 'Horeca' }] : []),
+        ]} />
+      )}
+      {data?.length === 0 && <Empty icon="receipt-outline" title="Nog geen facturen" />}
+      {!!data?.length && shown.length === 0 && <Empty icon="receipt-outline" title="Geen facturen in deze selectie" />}
+      {shown.length > 0 && (
         <Group>
-          {data.map((i, k) => {
+          {shown.map((i, k) => {
             const overdue = i.status === 'open' && i.due_date < today;
             return (
               <Pressable key={i.id} onPress={() => router.push({ pathname: '/factuur/[id]', params: { id: i.id } })}
-                style={({ pressed }) => [styles.row, k < data.length - 1 && styles.divider, pressed && { backgroundColor: colors.pine50 }]}>
+                style={({ pressed }) => [styles.row, k < shown.length - 1 && styles.divider, pressed && { backgroundColor: colors.pine50 }]}>
                 <View style={{ flex: 1, gap: 4 }}>
                   <T variant="bodyStrong" numberOfLines={1}>{i.description}</T>
                   <Row gap={6}>

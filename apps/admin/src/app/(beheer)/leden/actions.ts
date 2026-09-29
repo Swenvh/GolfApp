@@ -85,3 +85,43 @@ export async function revokeMandate(formData: FormData) {
   await supabase.from('sepa_mandates').update({ status: 'revoked' }).eq('id', String(formData.get('mandate_id')));
   revalidatePath(`/leden/${memberId}`);
 }
+
+const DATE = /^\d{4}-\d{2}-\d{2}$/;
+
+/** Verzoek uit de app goedkeuren of afwijzen; de database past het lidmaatschap aan op de ingangsdatum. */
+export async function decideChange(formData: FormData) {
+  await requireRole('secretariat');
+  const supabase = await createClient();
+  const back = str(formData.get('back')) ?? '/leden';
+  const { error } = await supabase.rpc('decide_membership_change', {
+    p_change: String(formData.get('id')), p_approve: formData.get('approve') === '1',
+  });
+  const target = back.startsWith('/leden') ? back : '/leden';
+  revalidatePath('/leden', 'layout');
+  redirect(`${target}${target.includes('?') ? '&' : '?'}${error ? `error=${encodeURIComponent(error.message)}` : 'saved=1'}`);
+}
+
+/**
+ * De club wijzigt of beëindigt het lidmaatschap van een lid. Loopt via dezelfde weg als een verzoek uit
+ * de app (vastgelegd en direct goedgekeurd), zodat het op de ingangsdatum wordt doorgevoerd.
+ */
+export async function changeMembership(formData: FormData) {
+  const ctx = await requireRole('secretariat');
+  const supabase = await createClient();
+  const member = String(formData.get('member_id') ?? '');
+  const kind = formData.get('kind') === 'cancel' ? 'cancel' : 'switch';
+  const effective = String(formData.get('effective_date') ?? '');
+  const target = kind === 'switch' ? str(formData.get('target')) : null;
+  const back = `/leden/${member}`;
+  if (!DATE.test(effective) || (kind === 'switch' && !target)) redirect(`${back}?error=lidmaatschap#lidmaatschap`);
+
+  const { data, error } = await supabase.from('membership_changes').insert({
+    club_id: ctx.club.id, member_id: member, kind, target_membership_type_id: target, effective_date: effective,
+    reason: str(formData.get('reason')) ?? 'Door de club', status: 'requested',
+  }).select('id').single();
+  if (error || !data) redirect(`${back}?error=${encodeURIComponent(error?.message ?? 'Opslaan mislukt')}#lidmaatschap`);
+  const { error: decideError } = await supabase.rpc('decide_membership_change', { p_change: data.id, p_approve: true });
+  if (decideError) redirect(`${back}?error=${encodeURIComponent(decideError.message)}#lidmaatschap`);
+  revalidatePath('/leden', 'layout');
+  redirect(`${back}?saved=1#lidmaatschap`);
+}

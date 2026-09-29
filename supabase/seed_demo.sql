@@ -118,8 +118,8 @@ insert into leads (club_id, member_id, type, name, email, phone, note, membershi
    'Wil werken aan zijn drive.', null, 4500, 'new', now() - interval '1 day');
 
 -- Gezinslid aangemeld via de app
-insert into leads (club_id, member_id, type, name, email, note, membership_type_id, value_cents, status, created_at) values
-  ('00000000-0000-0000-0000-0000000c0001', '00000000-0000-0000-0000-0000000e0001', 'family', 'Marieke de Vries', 'marieke@example.test',
+insert into leads (club_id, member_id, type, name, email, phone, note, membership_type_id, value_cents, status, created_at) values
+  ('00000000-0000-0000-0000-0000000c0001', '00000000-0000-0000-0000-0000000e0001', 'family', 'Marieke de Vries', 'marieke@example.test', '06-98765432',
    'Partner van Jan de Vries, geboren 03-09-1970 (56 jaar)', '00000000-0000-0000-0000-0000000d0005', 154500, 'new', now() - interval '3 days');
 
 -- Opzeggen in de app: twee leden kozen voor een alternatief, één zegde toch op

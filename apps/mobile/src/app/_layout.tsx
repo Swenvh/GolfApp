@@ -58,6 +58,8 @@ export default function RootLayout() {
           <Stack.Screen name="lidmaatschap" options={{ title: 'Lidmaatschap' }} />
           <Stack.Screen name="gezin" options={{ title: 'Gezinslid toevoegen' }} />
           <Stack.Screen name="account-verwijderen" options={{ title: 'Account verwijderen' }} />
+          <Stack.Screen name="baan" options={{ title: 'Baaninformatie' }} />
+          <Stack.Screen name="lessen" options={{ title: 'Golfles boeken' }} />
         </Stack>
       </SessionProvider>
     </SafeAreaProvider>

@@ -78,6 +78,19 @@ export function scoreRound(scores: (number | null)[], holes: Hole[], playingHcp:
   };
 }
 
+/**
+ * De eerste 9 holes van een 18-holesbaan als losse ronde: stroke indexes opnieuw genummerd 1-9
+ * (moeilijkste hole eerst) en de helft van de playing handicap, afgerond.
+ */
+export function frontNine(holes: Hole[], playingHcp: number): { holes: Hole[]; playingHcp: number } {
+  const nine = holes.filter((h) => h.number <= 9);
+  const order = [...nine].sort((a, b) => a.strokeIndex - b.strokeIndex).map((h) => h.number);
+  return {
+    holes: nine.map((h) => ({ ...h, strokeIndex: order.indexOf(h.number) + 1 })),
+    playingHcp: Math.round(playingHcp / 2),
+  };
+}
+
 /** Score differential = (113 / Slope) × (AGS − CR − PCC), afgerond op 1 decimaal. */
 export function scoreDifferential(adjustedGross: number, tee: Pick<TeeRating, 'courseRating' | 'slopeRating'>, pcc = 0): number {
   return round1((113 / tee.slopeRating) * (adjustedGross - tee.courseRating - pcc));

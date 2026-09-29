@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   buildSepaDirectDebitXml, courseHandicap, formatEuro, generateTeeSlots, handicapIndexFromDifferentials,
   invoiceTotals, isValidIban, parseEuro, playingHandicap, scoreDifferential, scoreRound, sepaText,
-  strokesReceived, fullName, localTime,
+  strokesReceived, fullName, localTime, frontNine,
 } from '../src';
 
 describe('money', () => {
@@ -117,5 +117,37 @@ describe('consumentenprijzen', () => {
     expect(priceInclVat(priceExclFromIncl(5000, 21), 21)).toBe(5000);
     // Twee greenfees van € 60,00 zijn € 120,00, niet € 120,01
     expect(priceInclVat(priceExclFromIncl(6000, 9), 9, 2)).toBe(12000);
+  });
+});
+
+describe('9 holes op een 18-holesbaan', () => {
+  it('nummert de stroke indexes van de voorste negen 1-9 en halveert de handicap', () => {
+    const holes = [7, 11, 17, 1, 5, 13, 15, 3, 9, 8, 18, 12, 2, 6, 10, 16, 4, 14].map((si, i) => ({ number: i + 1, par: 4, strokeIndex: si }));
+    const nine = frontNine(holes, 17);
+    expect(nine.holes.map((h) => h.strokeIndex)).toEqual([4, 6, 9, 1, 3, 7, 8, 2, 5]);
+    expect(nine.playingHcp).toBe(9);
+    // Met 9 slagen krijgt elke hole er één
+    expect(scoreRound(Array(9).fill(5), nine.holes, nine.playingHcp).stableford).toBe(18);
+  });
+});
+
+describe('factuur als PDF', () => {
+  it('toont btw per tarief en escapet tekst', async () => {
+    const { invoiceHtml, vatBreakdown } = await import('../src');
+    const lines = [
+      { description: 'Koffie <en> taart', quantity: 1, vat_rate: 9, line_total_cents: 413, vat_cents: 37 },
+      { description: 'Clubsandwich', quantity: 1, vat_rate: 21, line_total_cents: 1000, vat_cents: 210 },
+    ];
+    expect(vatBreakdown(lines)).toEqual([{ rate: 21, base: 1000, vat: 210 }, { rate: 9, base: 413, vat: 37 }]);
+    const html = invoiceHtml({
+      club: { name: 'Golfclub De Duinen', street: 'Duinweg', house_number: '1', postal_code: '2201 AA', city: 'Noordwijk', email: null, kvk_number: '40123456', vat_number: 'NL001234567B01', iban: 'NL91ABNA0417164300' },
+      member: { first_name: 'Jan', infix: 'de', last_name: 'Vries', street: 'Zeestraat', house_number: '12', postal_code: '2202 BB', city: 'Noordwijk', member_number: '1001' },
+      invoice: { invoice_number: '2026-00200', description: 'Horeca', issue_date: '2026-09-29', due_date: '2026-10-13', total_cents: 1660, paid_cents: 0, vat_cents: 247, subtotal_cents: 1413, status: 'open' },
+      lines,
+    });
+    expect(html).toContain('Koffie &lt;en&gt; taart');
+    expect(html).toContain('KvK 40123456');
+    expect(html).toContain('Jan de Vries');
+    expect(html.replace(/\s/g, ' ')).toContain('€ 16,60');
   });
 });

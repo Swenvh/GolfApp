@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import {
-  CalendarClock, ClipboardList, CreditCard, FileText, Handshake, Landmark, Mail, Newspaper, Receipt,
+  CalendarClock, ClipboardList, CreditCard, FileText, Handshake, Mail, Newspaper, Receipt,
   Settings, Trophy, UserPlus, Users,
 } from 'lucide-react';
 import {
@@ -47,9 +47,9 @@ export default async function MissionControl({ searchParams }: { searchParams: P
   const none = Promise.resolve({ data: null, count: null });
 
   const [
-    courses, bookings, buggies, members, newMembers, leaving, notInvited, handicart, mandates,
+    courses, bookings, buggies, members, newMembers, leaving, notInvited, handicart,
     requests, upcomingChanges, newLeads, competitions, sponsors, lastNews,
-    openInvoices, drafts, inBatch, batches, paidThisMonth, appRevenue,
+    openInvoices, drafts, paidThisMonth, appRevenue,
     recentOrders, recentLeads, recentChanges, recentPayments,
   ] = await Promise.all([
     supabase.from('courses').select('*').eq('club_id', clubId).eq('active', true).order('name'),
@@ -65,7 +65,6 @@ export default async function MissionControl({ searchParams }: { searchParams: P
       .eq('status', 'active').is('user_id', null).not('email', 'is', null) : none,
     supabase.from('members').select('id, first_name, infix, last_name, handicart_valid_until').eq('club_id', clubId)
       .not('handicart_pass_number', 'is', null).gte('handicart_valid_until', today).lte('handicart_valid_until', in30),
-    finance ? supabase.from('sepa_mandates').select('member_id').eq('club_id', clubId).eq('status', 'active') : none,
     secretariat ? supabase.from('membership_changes').select('id', { count: 'exact', head: true }).eq('club_id', clubId).eq('status', 'requested') : none,
     secretariat ? supabase.from('membership_changes').select('kind, effective_date, member:members(first_name, infix, last_name)')
       .eq('club_id', clubId).eq('status', 'approved').is('applied_at', null).order('effective_date').limit(5) : none,
@@ -80,10 +79,6 @@ export default async function MissionControl({ searchParams }: { searchParams: P
     finance ? supabase.from('invoices').select('id, due_date, total_cents, paid_cents, collect_by_direct_debit')
       .eq('club_id', clubId).eq('status', 'open') : none,
     finance ? supabase.from('invoices').select('id', { count: 'exact', head: true }).eq('club_id', clubId).eq('status', 'draft') : none,
-    finance ? supabase.from('direct_debit_items').select('invoice_id, batch:direct_debit_batches!inner(status, club_id)')
-      .eq('batch.club_id', clubId).in('batch.status', ['draft', 'exported']) : none,
-    finance ? supabase.from('direct_debit_batches').select('id, collection_date, status, total_cents, item_count')
-      .eq('club_id', clubId).in('status', ['draft', 'exported']).order('collection_date') : none,
     finance ? supabase.from('payments').select('amount_cents').eq('club_id', clubId).gte('paid_on', monthStart) : none,
     finance || secretariat ? supabase.from('app_revenue').select('revenue_incl_cents').eq('club_id', clubId)
       .gte('fulfil_on', monthStart).lte('fulfil_on', today) : none,
@@ -117,20 +112,11 @@ export default async function MissionControl({ searchParams }: { searchParams: P
   const outstanding = open.reduce((s, i) => s + i.total_cents - i.paid_cents, 0);
   const overdueList = open.filter((i) => i.due_date < today);
   const overdue = overdueList.reduce((s, i) => s + i.total_cents - i.paid_cents, 0);
-  const inBatchIds = new Set(((inBatch.data ?? []) as { invoice_id: string }[]).map((x) => x.invoice_id));
-  const readyForDebit = open.filter((i) => i.collect_by_direct_debit && !inBatchIds.has(i.id));
-  const readyAmount = readyForDebit.reduce((s, i) => s + i.total_cents - i.paid_cents, 0);
-  type Batch = { id: string; collection_date: string; status: 'draft' | 'exported'; total_cents: number; item_count: number };
-  const openBatches = (batches.data ?? []) as Batch[];
-  const toProcess = openBatches.filter((b) => b.status === 'exported' && b.collection_date < today);
-  const draftBatches = openBatches.filter((b) => b.status === 'draft');
-  const nextBatch = openBatches.find((b) => b.collection_date >= today);
   const received = ((paidThisMonth.data ?? []) as { amount_cents: number }[]).reduce((s, p) => s + Number(p.amount_cents), 0);
   const appMonth = ((appRevenue.data ?? []) as { revenue_incl_cents: number }[]).reduce((s, r) => s + Number(r.revenue_incl_cents), 0);
   const fee = Number(club.greenside_fee_cents ?? 0);
 
   // ── Leden
-  const mandateIds = new Set(((mandates.data ?? []) as { member_id: string }[]).map((m) => m.member_id));
   const expiringPasses = (handicart.data ?? []) as { id: string; first_name: string; infix: string | null; last_name: string; handicart_valid_until: string }[];
   type Change = { kind: 'pause' | 'switch' | 'cancel'; effective_date: string; member: { first_name: string; infix: string | null; last_name: string } };
   const upcoming = (upcomingChanges.data ?? []) as unknown as Change[];
@@ -142,21 +128,16 @@ export default async function MissionControl({ searchParams }: { searchParams: P
 
   // ── Takenlijst: wat moet er gebeuren, in gewone taal
   const tasks: Task[] = [];
-  if (hasRole(ctx) && (!club.iban || !club.sepa_creditor_id)) {
-    tasks.push({ key: 'setup', tone: 'urgent', icon: Settings, title: 'Bankgegevens van de club ontbreken',
-      explain: 'Zonder IBAN en incassant-ID kan de club geen contributie automatisch laten afschrijven. Je vindt het incassant-ID in de internetbankieromgeving van de club.',
+  if (hasRole(ctx) && !club.iban) {
+    tasks.push({ key: 'setup', tone: 'urgent', icon: Settings, title: 'IBAN van de club ontbreekt',
+      explain: 'Het IBAN staat op elke factuur, zodat leden weten waar ze naartoe kunnen overmaken.',
       href: '/instellingen', cta: 'Invullen' });
-  }
-  if (toProcess.length) {
-    tasks.push({ key: 'process', tone: 'urgent', icon: Landmark, title: `Incasso van ${formatDate(toProcess[0]!.collection_date)} verwerken`,
-      explain: `De bank heeft het geld (${euro(toProcess.reduce((s, b) => s + b.total_cents, 0))}) inmiddels afgeschreven. Zet de incasso op verwerkt, dan staan de facturen als betaald.`,
-      href: '/financien/incasso', cta: 'Verwerken' });
   }
   if ((requests.count ?? 0) > 0) {
     tasks.push({ key: 'requests', tone: 'urgent', icon: ClipboardList,
       title: `${plural(requests.count!, 'lid wil', 'leden willen')} het lidmaatschap wijzigen`,
-      explain: 'Pauzeren, omzetten of opzeggen, aangevraagd in de app. Keur goed of wijs af; de app regelt de rest op de ingangsdatum.',
-      href: '/leden/wijzigingen', cta: 'Bekijken' });
+      explain: 'Aangevraagd in de app. Keur goed of wijs af; de app regelt de rest op de ingangsdatum.',
+      href: '/leden?verzoeken=1', cta: 'Bekijken' });
   }
   if (overdueList.length) {
     tasks.push({ key: 'overdue', tone: 'urgent', icon: Receipt,
@@ -169,17 +150,6 @@ export default async function MissionControl({ searchParams }: { searchParams: P
       title: `${plural(newLeads.count!, 'nieuwe aanmelding', 'nieuwe aanmeldingen')} uit de app`,
       explain: 'Vrienden van leden, gezinsleden en leden die willen upgraden. Neem binnen een paar dagen contact op; dan is de kans het grootst dat ze lid worden.',
       href: '/app-omzet#leads', cta: 'Contact opnemen' });
-  }
-  if (readyForDebit.length) {
-    tasks.push({ key: 'debit', tone: 'todo', icon: Landmark,
-      title: `${euro(readyAmount)} staat klaar voor automatische incasso`,
-      explain: `${plural(readyForDebit.length, 'factuur', 'facturen')} van leden met een machtiging. Maak een incassobestand en lees het in bij de bank.`,
-      href: '/financien/incasso', cta: 'Incasso klaarmaken' });
-  }
-  if (draftBatches.length) {
-    tasks.push({ key: 'draftbatch', tone: 'todo', icon: Landmark, title: 'Incassobestand nog niet naar de bank',
-      explain: `De incasso van ${formatDate(draftBatches[0]!.collection_date)} is aangemaakt maar nog niet gedownload en ingelezen bij de bank.`,
-      href: '/financien/incasso', cta: 'Downloaden' });
   }
   if ((drafts.count ?? 0) > 0) {
     tasks.push({ key: 'drafts', tone: 'todo', icon: FileText,
@@ -202,8 +172,8 @@ export default async function MissionControl({ searchParams }: { searchParams: P
   if ((notInvited.count ?? 0) > 0) {
     tasks.push({ key: 'invite', tone: 'info', icon: Mail,
       title: `${plural(notInvited.count!, 'lid gebruikt', 'leden gebruiken')} de app nog niet`,
-      explain: 'Ze hebben wel een e-mailadres, maar zijn nog niet uitgenodigd. Open het lid en klik op "Uitnodiging versturen".',
-      href: '/leden', cta: 'Naar leden' });
+      explain: 'Ze hebben wel een e-mailadres, maar zijn nog niet uitgenodigd. Stuur ze in één keer een uitnodiging.',
+      href: '/leden/uitnodigen', cta: 'Uitnodigen' });
   }
   if (expiringPasses.length) {
     tasks.push({ key: 'handicart', tone: 'info', icon: CreditCard,
@@ -235,7 +205,7 @@ export default async function MissionControl({ searchParams }: { searchParams: P
     ...((recentLeads.data ?? []) as { created_at: string; name: string | null; type: string }[])
       .map((l) => ({ at: l.created_at, text: `Nieuwe aanmelding: ${l.name ?? 'onbekend'}`, href: '/app-omzet#leads' })),
     ...((recentChanges.data ?? []) as unknown as { created_at: string; kind: Change['kind']; member: never }[])
-      .map((c) => ({ at: c.created_at, text: `${who(c.member)} vroeg: ${membershipChangeKindLabel[c.kind].toLowerCase()}`, href: '/leden/wijzigingen' })),
+      .map((c) => ({ at: c.created_at, text: `${who(c.member)} vroeg: ${membershipChangeKindLabel[c.kind].toLowerCase()}`, href: '/leden?verzoeken=1' })),
     ...((recentPayments.data ?? []) as unknown as { created_at: string; amount_cents: number; invoice: { member: never } | null }[])
       .map((p) => ({ at: p.created_at, text: `Betaling ontvangen van ${who(p.invoice?.member)}: ${euro(Number(p.amount_cents))}`, href: '/financien/facturen' })),
   ].sort((a, b) => b.at.localeCompare(a.at)).slice(0, 8);
@@ -276,13 +246,11 @@ export default async function MissionControl({ searchParams }: { searchParams: P
 
       {finance && (
         <Section title="Geld" explain="Wat leden nog moeten betalen en wat er binnenkwam. Bedragen inclusief btw." href="/financien" linkLabel="Naar financiën">
-          <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+          <div className="grid grid-cols-2 gap-4 lg:grid-cols-3">
             <Figure label="Nog te ontvangen" value={euro(outstanding)} explain={`${plural(open.length, 'openstaande factuur', 'openstaande facturen')}`} href="/financien/facturen?status=open" />
             <Figure label="Te laat" value={euro(overdue)} tone={overdue ? 'warn' : 'good'}
               explain={overdue ? `${plural(overdueList.length, 'factuur', 'facturen')} over de betaaltermijn` : 'Niemand loopt achter met betalen'} href="/financien/facturen?overdue=1" />
-            <Figure label="Binnen deze maand" value={euro(received)} tone="good" explain="Alle betalingen: incasso, iDEAL, overboeking en pin" />
-            <Figure label="Volgende incasso" value={nextBatch ? formatDate(nextBatch.collection_date).replace(/ \d{4}$/, '') : '—'}
-              explain={nextBatch ? `${euro(nextBatch.total_cents)} bij ${plural(nextBatch.item_count, 'lid', 'leden')}` : readyForDebit.length ? `${euro(readyAmount)} staat klaar` : 'Er staat niets klaar'} href="/financien/incasso" />
+            <Figure label="Binnen deze maand" value={euro(received)} tone="good" explain="Alle betalingen: iDEAL, overboeking en pin" />
           </div>
         </Section>
       )}
@@ -291,12 +259,8 @@ export default async function MissionControl({ searchParams }: { searchParams: P
         <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
           <Figure label="Actieve leden" value={String(members.count ?? 0)} explain={`${newMembers.count ?? 0} nieuw sinds 1 januari`} href="/leden" />
           <Figure label="Stoppen dit jaar" value={String(leaving.count ?? 0)} tone={(leaving.count ?? 0) ? 'warn' : 'default'} explain="Leden met een einddatum voor 31 december" />
-          {finance && (
-            <Figure label="Zonder machtiging" value={String(Math.max(0, (members.count ?? 0) - mandateIds.size))}
-              explain="Betalen zelf, niet via automatische incasso" href="/leden" />
-          )}
           {secretariat && (
-            <Figure label="Nog zonder app" value={String(notInvited.count ?? 0)} explain="Actieve leden die nog geen uitnodiging hebben" href="/leden" />
+            <Figure label="Nog zonder app" value={String(notInvited.count ?? 0)} explain="Actieve leden die nog geen uitnodiging hebben" href="/leden/uitnodigen" />
           )}
         </div>
         {upcoming.length > 0 && (

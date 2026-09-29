@@ -45,7 +45,7 @@ export default async function KlantInrichten({ params, searchParams }: {
     { done: setup.payments_ready, title: 'iDEAL via Mollie',
       explain: 'De club opent een eigen Mollie-account; wij koppelen dat. Daarna betalen leden facturen en aankopen in de app.' },
     { done: setup.products_active > 0, title: 'Aanbod in de app aanzetten',
-      explain: setup.products_active > 0 ? `${setup.products_active} producten staan aan.` : 'Buggy, greenfees, introductiekaart en weekendrondes staan klaar. De club kijkt de prijzen na en zet ze aan bij App-omzet → Aanbod.' },
+      explain: setup.products_active > 0 ? `${setup.products_active} producten staan aan.` : 'Buggy, greenfees, introductiekaart en weekendrondes staan klaar. De club kijkt de prijzen na en zet ze aan bij Bedrijfsstatistieken → Aanbod.' },
     { done: club.active_30d > 0, title: 'Leden gebruiken de app',
       explain: club.active_30d > 0 ? `${club.active_30d} leden boekten of bestelden in de laatste 30 dagen.` : 'De club stuurt leden een uitnodiging via Leden → Uitnodigen voor de app. Ze loggen in met het e-mailadres dat de club van ze heeft.' },
   ];

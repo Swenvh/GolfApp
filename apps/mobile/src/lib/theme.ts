@@ -39,6 +39,8 @@ export const colors = {
   onDark: '#F4F5F0',
   onDarkMuted: 'rgba(244,245,240,0.62)',
   onDarkLine: 'rgba(244,245,240,0.12)',
+  /** Achtergrond achter een venster dat over het scherm ligt */
+  scrim: 'rgba(7,32,26,0.86)',
 } as const;
 
 export const fonts = {

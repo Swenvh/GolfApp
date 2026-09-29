@@ -20,7 +20,7 @@ type DirectoryEntry = { id: string; first_name: string; infix: string | null; la
 type Player = { memberId?: string; guestName?: string; label: string; hcp?: number | null };
 
 export default function Boeken() {
-  const { course, courseName, startsAt, bookingId } = useLocalSearchParams<{ course: string; courseName?: string; startsAt: string; bookingId?: string }>();
+  const { course, courseName, startsAt, bookingId, holes } = useLocalSearchParams<{ course: string; courseName?: string; startsAt: string; bookingId?: string; holes?: string }>();
   const member = useMember();
   const insets = useSafeAreaInsets();
   const [players, setPlayers] = useState<Player[]>([{ memberId: member.id, label: fullName(member), hcp: member.handicap_index }]);
@@ -107,6 +107,7 @@ export default function Boeken() {
         p_starts_at: startsAt,
         p_member_ids: players.flatMap((p) => (p.memberId ? [p.memberId] : [])),
         p_guest_names: players.flatMap((p) => (p.guestName ? [p.guestName] : [])),
+        p_holes: holes === '9' ? 9 : null,
       })) as string;
       // Introductiekaart eerst: wat de kaart niet dekt, gaat als greenfee op de rekening
       // Lukt afboeken van de kaart niet, dan gaat de greenfee gewoon op de rekening
@@ -152,7 +153,7 @@ export default function Boeken() {
       </Row>
       <Text style={styles.time}>{localTime(startsAt)}</Text>
       <T color={colors.onDarkMuted}>
-        {capitalize(formatDate(startsAt, { weekday: 'long', day: 'numeric', month: 'long' }))}{courseName ? ` · ${courseName}` : ''}
+        {capitalize(formatDate(startsAt, { weekday: 'long', day: 'numeric', month: 'long' }))}{courseName ? ` · ${courseName.replace(/\s*\(.*\)/, '')}` : ''}{holes === '9' ? ' · 9 holes' : ''}
       </T>
     </View>
   );
@@ -228,7 +229,7 @@ export default function Boeken() {
       {(extras.length > 0 || guests.length > 0) && (
         <>
           <View style={{ marginTop: space.lg, gap: 2 }}>
-            <T variant="heading">Regel het meteen</T>
+            <T variant="heading">Extra's</T>
             <T variant="small" color={colors.slate}>
               {handicart ? 'Je Handicart-pas staat in de app: je betaalt automatisch het Handicart-tarief.' : 'Geen telefoontje naar de receptie nodig. Het staat op je rekening.'}
             </T>

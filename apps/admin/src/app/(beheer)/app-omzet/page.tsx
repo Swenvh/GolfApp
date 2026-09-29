@@ -8,7 +8,7 @@ import { Badge, ButtonLink, Card, Empty, Notice, PageHeader, Stat } from '@/comp
 import { formatDate } from '@/lib/format';
 import { cancelOrderAction, setLeadStatus } from './actions';
 
-export const metadata = { title: 'App-omzet' };
+export const metadata = { title: 'Bedrijfsstatistieken' };
 
 type Row = { fulfil_on: string; category: ProductCategory; orders: number; items: number; revenue_incl_cents: number };
 type OpenOrder = {
@@ -26,7 +26,8 @@ export default async function AppOmzet({ searchParams }: { searchParams: Promise
   const from30 = addDays(today, -29);
   const from42 = addDays(today, -41);
 
-  const [revenue, bookings, open, leads, changes, sponsors, types] = await Promise.all([
+  const yearStart = `${today.slice(0, 4)}-01-01`;
+  const [revenue, bookings, open, leads, sponsors, yearBookings, players30] = await Promise.all([
     supabase.from('app_revenue').select('*').eq('club_id', ctx.club.id).gte('fulfil_on', from42).lte('fulfil_on', addDays(today, 14)),
     supabase.from('tee_bookings').select('id', { count: 'exact', head: true }).eq('club_id', ctx.club.id)
       .gte('starts_at', `${from30}T00:00:00Z`).lte('starts_at', `${today}T23:59:59Z`),
@@ -36,14 +37,13 @@ export default async function AppOmzet({ searchParams }: { searchParams: Promise
       .order('fulfil_on'),
     supabase.from('leads').select('*, member:members(first_name, infix, last_name)').eq('club_id', ctx.club.id)
       .order('created_at', { ascending: false }).limit(20),
-    supabase.from('membership_changes').select('kind, target_membership_type_id').eq('club_id', ctx.club.id)
-      .eq('from_cancel_flow', true).neq('status', 'rejected').neq('kind', 'cancel').gte('created_at', `${today.slice(0, 4)}-01-01`),
     supabase.from('sponsors').select('fee_cents, clicks').eq('club_id', ctx.club.id).eq('active', true),
-    supabase.from('membership_types').select('id, annual_fee_cents').eq('club_id', ctx.club.id),
+    // Alle boekingen dit jaar (ook die nog komen) en het aantal spelers in de laatste 30 dagen
+    supabase.from('tee_bookings').select('id', { count: 'exact', head: true }).eq('club_id', ctx.club.id)
+      .gte('starts_at', `${yearStart}T00:00:00Z`),
+    supabase.from('tee_booking_players').select('id, booking:tee_bookings!inner(club_id, starts_at)', { count: 'exact', head: true })
+      .eq('booking.club_id', ctx.club.id).gte('booking.starts_at', `${from30}T00:00:00Z`).lte('booking.starts_at', `${today}T23:59:59Z`),
   ]);
-  const feeByType = new Map((types.data ?? []).map((t) => [t.id as string, Number(t.annual_fee_cents)]));
-  const kept = (changes.data ?? []) as { target_membership_type_id: string | null }[];
-  const keptValue = kept.reduce((s, c) => s + (feeByType.get(c.target_membership_type_id ?? '') ?? 0), 0);
   const sponsorIncome = (sponsors.data ?? []).reduce((s, x) => s + Number(x.fee_cents), 0);
   const sponsorClicks = (sponsors.data ?? []).reduce((s, x) => s + Number(x.clicks), 0);
 
@@ -81,8 +81,8 @@ export default async function AppOmzet({ searchParams }: { searchParams: Promise
   return (
     <>
       <PageHeader
-        title="App-omzet"
-        subtitle="Wat leden via Greenside bestellen. Alles is direct gefactureerd en geboekt."
+        title="Bedrijfsstatistieken"
+        subtitle="Boekingen, wat leden via de app bestellen, aanmeldingen en sponsors."
         actions={<>
           <ButtonLink href="/app-omzet/sponsors" variant="secondary">Sponsors</ButtonLink>
           <ButtonLink href="/app-omzet/aanbod" variant="secondary">Aanbod beheren</ButtonLink>
@@ -90,14 +90,14 @@ export default async function AppOmzet({ searchParams }: { searchParams: Promise
       />
       {error && <Notice tone="error">{error}</Notice>}
 
-      <div className="grid grid-cols-2 gap-4 lg:grid-cols-3">
+      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+        <Stat label="Boekingen (30 dagen)" value={String(bookings.count ?? 0)} hint={`${players30.count ?? 0} spelers op de baan`} tone="good" />
+        <Stat label={`Boekingen in ${today.slice(0, 4)}`} value={String(yearBookings.count ?? 0)} hint="Alle flights sinds 1 januari, ook die nog komen" />
         <Stat label="Omzet via de app (30 dagen)" value={formatEuro(total30)} hint={`${orders30} bestellingen`} tone="good" />
         <Stat label="Extra per geboekte flight" value={formatEuro(perRound)} hint={`${bookings.count ?? 0} flights in 30 dagen`} />
         <Stat label="Terugverdiend" value={multiple ? `${multiple.toFixed(1).replace('.', ',')}×` : '—'}
           hint={fee ? `alle omzet via de app ÷ licentie van ${formatEuro(fee)} p/m` : 'Vul het abonnementsbedrag in bij Instellingen'} tone={multiple && multiple >= 1 ? 'good' : 'default'} />
         <Stat label="Leads in behandeling" value={formatEuro(pipeline)} hint="Verwachte jaarwaarde van upgrades, gezinsleden en nieuwe leden" />
-        <Stat label="Behouden via de app" value={formatEuro(keptValue).replace(/,\d\d$/, '')}
-          hint={`${kept.length} ${kept.length === 1 ? 'lid' : 'leden'} pauzeerden of zetten om in plaats van op te zeggen (contributie per jaar)`} tone={kept.length ? 'good' : 'default'} />
         <Stat label="Sponsorplekken in de app" value={formatEuro(sponsorIncome).replace(/,\d\d$/, '')} hint={`per jaar · ${sponsorClicks} kliks`} />
       </div>
 
