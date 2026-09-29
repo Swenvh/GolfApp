@@ -48,7 +48,8 @@ export default async function StarttijdenPage({ searchParams }: { searchParams: 
       />
       {hasRole(ctx, 'secretariat', 'marshal') && (
         <Card title={`Baaninformatie · ${course.name}`} className="mb-6">
-          <form action={saveCourseStatus} className="grid gap-4 p-4 sm:grid-cols-[12rem_1fr_auto] sm:items-end">
+          {/* Sleutel op de laatste wijziging: na opslaan toont het formulier de nieuwe stand (een reset valt anders terug op de oude) */}
+          <form key={`${course.id}-${course.status_updated_at ?? ''}`} action={saveCourseStatus} className="grid gap-4 p-4 sm:grid-cols-[12rem_1fr_auto] sm:items-end">
             <input type="hidden" name="course_id" value={course.id} />
             <Field label="Baan is">
               <select name="status" defaultValue={course.status}>
