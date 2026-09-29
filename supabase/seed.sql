@@ -205,6 +205,9 @@ insert into sponsors (club_id, name, tagline, url, placement, hole_number, fee_c
   ('00000000-0000-0000-0000-0000000c0001', 'Autobedrijf Van Leeuwen', 'Proefrit? Neem je golftas mee.', 'https://example.com/vanleeuwen', 'scorecard', 16, 150000, make_date(extract(year from current_date)::int, 12, 31)),
   ('00000000-0000-0000-0000-0000000c0001', 'Brasserie De Branding', 'Leden 10% korting op het diner', 'https://example.com/branding', 'home', null, 250000, make_date(extract(year from current_date)::int, 12, 31));
 
+-- Clubpassen voor de ballenautomaat van de driving range
+update members set club_pass_number = 'DUI' || member_number where club_id = '00000000-0000-0000-0000-0000000c0001';
+
 -- Pieter heeft een Handicart-pas
 update members set handicart_pass_number = 'HC-20417', handicart_pass_type = 'permanent',
        handicart_valid_until = make_date(extract(year from current_date)::int, 12, 31)
