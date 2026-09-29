@@ -126,28 +126,32 @@ export default async function InstellingenPage({ searchParams }: { searchParams:
           <Card title="Lidmaatschapsvormen & contributie">
             <div className="divide-y divide-stone-100">
               {((types ?? []) as MembershipType[]).map((t) => (
-                <form key={t.id} action={saveMembershipType} className="grid grid-cols-2 items-end gap-3 p-4 sm:grid-cols-5">
+                <form key={t.id} action={saveMembershipType} className="grid grid-cols-2 gap-3 p-4">
                   <input type="hidden" name="id" value={t.id} />
-                  <Field label="Naam"><input name="name" defaultValue={t.name} /></Field>
-                  <Field label="Contributie/jaar"><input name="annual_fee" defaultValue={euro(t.annual_fee_cents)} /></Field>
-                  <Field label="Entreegeld"><input name="entrance_fee" defaultValue={euro(t.entrance_fee_cents)} /></Field>
-                  <div className="space-y-1 text-sm">
-                    <label className="flex items-center gap-2 font-normal"><input type="checkbox" name="can_book_weekend" defaultChecked={t.can_book_weekend} /> Weekend</label>
-                    <label className="flex items-center gap-2 font-normal" title="Uit = rustend lidmaatschap: wel lid, niet spelen"><input type="checkbox" name="can_play" defaultChecked={t.can_play} /> Speelrecht</label>
-                    <label className="flex items-center gap-2 font-normal"><input type="checkbox" name="active" defaultChecked={t.active} /> Actief</label>
+                  <div className="col-span-2"><Field label="Naam"><input name="name" defaultValue={t.name} /></Field></div>
+                  <Field label="Contributie per jaar"><input name="annual_fee" defaultValue={euro(t.annual_fee_cents)} inputMode="decimal" /></Field>
+                  <Field label="Entreegeld"><input name="entrance_fee" defaultValue={euro(t.entrance_fee_cents)} inputMode="decimal" /></Field>
+                  <div className="col-span-2 flex flex-wrap items-center justify-between gap-3">
+                    <div className="flex flex-wrap gap-x-5 gap-y-2 text-sm">
+                      <label className="flex items-center gap-2 font-normal"><input type="checkbox" name="can_book_weekend" defaultChecked={t.can_book_weekend} /> Weekend</label>
+                      <label className="flex items-center gap-2 font-normal" title="Uit = rustend lidmaatschap: wel lid, niet spelen"><input type="checkbox" name="can_play" defaultChecked={t.can_play} /> Speelrecht</label>
+                      <label className="flex items-center gap-2 font-normal"><input type="checkbox" name="active" defaultChecked={t.active} /> Actief</label>
+                    </div>
+                    <Button variant="secondary">Opslaan</Button>
                   </div>
-                  <Button variant="secondary">Opslaan</Button>
                 </form>
               ))}
-              <form action={saveMembershipType} className="grid grid-cols-2 items-end gap-3 bg-stone-50/50 p-4 sm:grid-cols-5">
-                <Field label="Nieuwe vorm"><input name="name" required placeholder="bv. Gezinslid" /></Field>
-                <Field label="Contributie/jaar"><input name="annual_fee" placeholder={formatEuro(0)} /></Field>
-                <Field label="Entreegeld"><input name="entrance_fee" placeholder={formatEuro(0)} /></Field>
-                <div className="space-y-1 text-sm">
-                  <label className="flex items-center gap-2 font-normal"><input type="checkbox" name="can_book_weekend" defaultChecked /> Weekend</label>
-                  <label className="flex items-center gap-2 font-normal"><input type="checkbox" name="can_play" defaultChecked /> Speelrecht</label>
+              <form action={saveMembershipType} className="grid grid-cols-2 gap-3 bg-stone-50/50 p-4">
+                <div className="col-span-2"><Field label="Nieuwe lidmaatschapsvorm"><input name="name" required placeholder="bv. Gezinslid" /></Field></div>
+                <Field label="Contributie per jaar"><input name="annual_fee" placeholder={formatEuro(0)} inputMode="decimal" /></Field>
+                <Field label="Entreegeld"><input name="entrance_fee" placeholder={formatEuro(0)} inputMode="decimal" /></Field>
+                <div className="col-span-2 flex flex-wrap items-center justify-between gap-3">
+                  <div className="flex flex-wrap gap-x-5 gap-y-2 text-sm">
+                    <label className="flex items-center gap-2 font-normal"><input type="checkbox" name="can_book_weekend" defaultChecked /> Weekend</label>
+                    <label className="flex items-center gap-2 font-normal"><input type="checkbox" name="can_play" defaultChecked /> Speelrecht</label>
+                  </div>
+                  <Button>Toevoegen</Button>
                 </div>
-                <Button>Toevoegen</Button>
               </form>
             </div>
           </Card>
