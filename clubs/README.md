@@ -10,7 +10,7 @@ alle clubs dezelfde (de basis is `pilot-v1`); een club toevoegen raakt dus nooit
 | `club.json` | Naam in de store, app-ID, gekoppelde club (slug in de database), kleuren voor icoon en opstartscherm |
 | `logo.svg` of `logo.png` | Volledig logo van de club (mag breed zijn, transparante achtergrond). Zonder logo wordt het een monogram |
 | `mark.svg` of `mark.png` | Optioneel: compact beeldmerk voor het app-icoon en kleine plekken (anders het logo) |
-| `icon.png`, `android-icon-*.png`, `splash-icon.png`, `favicon.png`, `logo-light.png`, `mark-light.png` | Gemaakt door `pnpm club:assets <club>`; niet met de hand aanpassen. De `-light`-versies zijn voor donkere achtergronden |
+| `icon.png`, `android-icon-*.png`, `splash-icon.png`, `favicon.png`, `logo-light.png`, `mark-light.png`, `mark-color.png` | Gemaakt door `pnpm club:assets <club>`; niet met de hand aanpassen. De `-light`-versies zijn voor donkere achtergronden |
 
 Het clubbeheer krijgt `logo-light.png` via `apps/admin/public/brands/<merk>/` (ook door het script).
 

@@ -12,7 +12,8 @@
  * Zonder logo maakt het script een monogram in de clubkleuren uit club.json.
  *
  * Uitvoer in clubs/<club>/: icon.png, android-icon-*.png, splash-icon.png, favicon.png en, met een logo,
- * logo-light.png en mark-light.png (donkere delen licht gemaakt, voor donkere achtergronden).
+ * mark-color.png (beeldmerk in de clubkleuren, voor licht papier) en logo-light.png en mark-light.png
+ * (donkere delen licht gemaakt, voor donkere achtergronden).
  * Het clubbeheer krijgt logo-light.png in apps/admin/public/brands/<merk>/.
  */
 import fs from 'node:fs';
@@ -53,7 +54,8 @@ const hex = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
 const luminance = (h) => { const [r, g, b] = hex(h); return (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255; };
 
 /** Bron als PNG-buffer, passend in w × h (verhouding blijft) */
-const load = (file, w, h) => sharp(file, { density: 600 }).resize(w, h, { fit: 'contain', background: clear }).ensureAlpha().png().toBuffer();
+// SVG's van het logo hebben al een grote viewBox; kleine SVG's krijgen een hogere dichtheid
+const load = (file, w, h) => sharp(file, { density: file.endsWith('.svg') && fs.statSync(file).size < 4000 ? 600 : 72 }).resize(w, h, { fit: 'contain', background: clear }).ensureAlpha().png().toBuffer();
 
 /** Lichte versie voor een donkere ondergrond: donkere pixels krijgen de papierkleur, kleur blijft */
 async function lighten(buf) {
@@ -108,7 +110,9 @@ if (logoFile) {
   const logo = await load(logoFile, 1600, 1600);
   const logoLight = await lighten(logo);
   await sharp(logoLight).trim().png().toFile(out('logo-light.png'));
-  await sharp(await lighten(await load(markFile, 1024, 1024))).trim().png().toFile(out('mark-light.png'));
+  const markBuf = await load(markFile, 1024, 1024);
+  await sharp(markBuf).trim().png().toFile(out('mark-color.png'));
+  await sharp(await lighten(markBuf)).trim().png().toFile(out('mark-light.png'));
   await sharp(logoLight).trim().resize(1024, 1024, { fit: 'contain', background: clear }).png().toFile(out('splash-icon.png'));
   const pub = path.join(root, 'apps/admin/public/brands', club.brand);
   fs.mkdirSync(pub, { recursive: true });

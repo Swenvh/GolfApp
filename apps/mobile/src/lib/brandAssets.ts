@@ -21,7 +21,7 @@ const logos: Record<string, ClubLogos> = {
   zwolle: {
     logoLight: require('../../../../clubs/zwolle/logo-light.png'),
     markLight: require('../../../../clubs/zwolle/mark-light.png'),
-    mark: require('../../../../clubs/zwolle/mark.png'),
+    mark: require('../../../../clubs/zwolle/mark-color.png'),
     logoAspect: 4.0,
   },
 };
