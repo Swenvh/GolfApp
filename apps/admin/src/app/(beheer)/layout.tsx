@@ -36,7 +36,7 @@ export default async function BeheerLayout({ children }: { children: React.React
   return (
     <div className="flex min-h-screen bg-chalk" style={brandCssVars(brand) as CSSProperties}>
       <Sidebar
-        brand={{ key: brand.key, name: brand.name, monogram: brand.monogram }}
+        brand={{ key: brand.key, name: brand.name, monogram: brand.monogram, hasLogo: brand.hasLogo }}
         nav={nav}
         clubs={ctx.clubs}
         currentClubId={ctx.club.id}

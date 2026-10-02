@@ -4,9 +4,12 @@
   "appName": "Golfclub Zwolle",
   "bundleId": "nl.greenside.zwolle",
   "scheme": "gczwolle",
-  "splashBackground": "#0B2140",
-  "primaryColor": "#173F73",
-  "backgroundColor": "#F4F6F8",
-  "accentColor": "#E2C77E",
-  "monogram": "GZ"
+  "splashBackground": "#2A2926",
+  "primaryColor": "#46453F",
+  "backgroundColor": "#F6F6F4",
+  "accentColor": "#4CC3DF",
+  "monogram": "GZ",
+  "iconBackground": "#FFFFFF",
+  "splashImageWidth": 260,
+  "iconMarkSize": 1024
 }

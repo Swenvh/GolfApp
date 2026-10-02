@@ -23,8 +23,13 @@ export function Monogram({ letters, size = 36 }: { letters: string; size?: numbe
 }
 
 /** Merknaam met beeldmerk: Greenside, of de club bij een eigen merk */
-export function Wordmark({ className = '', brand }: { className?: string; brand?: { key: string; name: string; monogram: string } }) {
+export function Wordmark({ className = '', brand }: { className?: string; brand?: { key: string; name: string; monogram: string; hasLogo: boolean } }) {
   const club = brand && brand.key !== 'greenside' ? brand : null;
+  if (club?.hasLogo) {
+    // Logo van de club, licht gemaakt voor de donkere zijbalk (pnpm club:assets zet het in public/brands)
+    // eslint-disable-next-line @next/next/no-img-element
+    return <img src={`/brands/${club.key}/logo-light.png`} alt={club.name} className={`h-12 w-auto ${className}`} />;
+  }
   return (
     <span className={`inline-flex items-center gap-2.5 ${className}`}>
       {club ? <Monogram letters={club.monogram} size={36} /> : <LogoMark size={34} />}

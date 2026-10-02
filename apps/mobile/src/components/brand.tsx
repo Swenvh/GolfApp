@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { Image, StyleSheet, Text, View, type StyleProp, type ViewStyle } from 'react-native';
 import Svg, { Circle, Line, Path } from 'react-native-svg';
-import { clubLogo } from '@/lib/brandAssets';
+import { clubLogos } from '@/lib/brandAssets';
 import { brand, colors, fonts } from '@/lib/theme';
 
 /**
@@ -10,8 +10,10 @@ import { brand, colors, fonts } from '@/lib/theme';
  */
 export function LogoMark({ size = 40, tone = 'light' }: { size?: number; tone?: 'light' | 'dark' }) {
   const ring = tone === 'light' ? colors.onDark : colors.pine800;
-  if (clubLogo) {
-    return <Image source={clubLogo} style={{ width: size, height: size }} resizeMode="contain" accessibilityIgnoresInvertColors />;
+  if (clubLogos) {
+    // Beeldmerk van de club (4:3), even hoog als het Greenside-merk
+    return <Image source={tone === 'light' ? clubLogos.markLight : clubLogos.mark} style={{ width: size * 1.34, height: size }}
+      resizeMode="contain" accessibilityIgnoresInvertColors accessibilityLabel={brand.name} />;
   }
   if (brand.key !== 'greenside') {
     return (
@@ -33,6 +35,11 @@ export function LogoMark({ size = 40, tone = 'light' }: { size?: number; tone?: 
 
 export function Wordmark({ tone = 'light', size = 22 }: { tone?: 'light' | 'dark'; size?: number }) {
   const color = tone === 'light' ? colors.onDark : colors.pine900;
+  if (clubLogos && tone === 'light') {
+    const h = size * 2.3;
+    return <Image source={clubLogos.logoLight} style={{ width: h * clubLogos.logoAspect, height: h }} resizeMode="contain"
+      accessibilityIgnoresInvertColors accessibilityLabel={brand.name} />;
+  }
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
       <LogoMark size={size * 1.55} tone={tone} />

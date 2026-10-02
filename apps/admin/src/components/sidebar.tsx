@@ -16,7 +16,7 @@ const icons: Record<string, LucideIcon> = {
 
 export function Sidebar({ nav, clubs, currentClubId, clubName, email, eyebrow = 'Clubbeheer', brand }: {
   /** Merk van de club; bij een eigen merk staat de clubnaam bovenaan in plaats van Greenside */
-  brand?: { key: string; name: string; monogram: string };
+  brand?: { key: string; name: string; monogram: string; hasLogo: boolean };
   /** Kopje boven de naam: 'Clubbeheer' of 'Greenside HQ' */
   eyebrow?: string;
   nav: NavItem[];

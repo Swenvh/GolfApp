@@ -20,6 +20,8 @@ interface ClubPackage {
   /** Hoofdkleur (pine700) en papierkleur (chalk) van het merk, voor de systeembalken */
   primaryColor: string;
   backgroundColor: string;
+  /** Breedte van het logo op het opstartscherm (breed logo: groter) */
+  splashImageWidth?: number;
 }
 
 const clubDir = process.env.CLUB ? path.resolve(__dirname, '../../clubs', process.env.CLUB) : null;
@@ -65,7 +67,7 @@ const config: ExpoConfig = {
   plugins: [
     'expo-router',
     'expo-secure-store',
-    ['expo-splash-screen', { image: asset('splash-icon.png'), backgroundColor: splashBackground, imageWidth: 180 }],
+    ['expo-splash-screen', { image: asset('splash-icon.png'), backgroundColor: splashBackground, imageWidth: club?.splashImageWidth ?? 180 }],
   ],
   experiments: { typedRoutes: false },
   extra: { clubSlug, brand, reviewEmail },

@@ -22,6 +22,12 @@ describe('clubmappen (clubs/<club>/club.json)', () => {
       expect(club.accentColor).toBe(brand!.colors.brassLight);
       expect(club.clubSlug).toMatch(/^[a-z0-9-]+$/);
       expect(club.bundleId).toMatch(/^[a-z][a-z0-9]*(\.[a-z][a-z0-9]*){2,}$/);
+      if (brand!.hasLogo) {
+        for (const f of ['logo-light.png', 'mark-light.png', 'mark.png']) {
+          expect(fs.existsSync(path.join(dir, name, f)), `${f} ontbreekt: draai pnpm club:assets ${name}`).toBe(true);
+        }
+        expect(fs.existsSync(path.resolve(dir, '../apps/admin/public/brands', brand!.key, 'logo-light.png')), 'logo voor het clubbeheer ontbreekt').toBe(true);
+      }
       for (const f of ['icon.png', 'android-icon-foreground.png', 'android-icon-background.png', 'android-icon-monochrome.png', 'splash-icon.png', 'favicon.png']) {
         expect(fs.existsSync(path.join(dir, name, f)), `${f} ontbreekt: draai pnpm club:assets ${name}`).toBe(true);
       }

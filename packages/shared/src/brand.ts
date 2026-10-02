@@ -50,6 +50,8 @@ export interface Brand {
   monogram: string;
   /** true = kleuren nog niet door de club bevestigd */
   provisional: boolean;
+  /** true = de club heeft een logo in clubs/<club>/ (anders toont de app een monogram) */
+  hasLogo: boolean;
   colors: BrandColors;
 }
 
@@ -59,6 +61,7 @@ export const greenside: Brand = {
   shortName: 'Greenside',
   monogram: 'G',
   provisional: false,
+  hasLogo: false,
   colors: {
     pine950: '#07201A',
     pine900: '#0B2A21',
@@ -88,40 +91,42 @@ export const greenside: Brand = {
 };
 
 /**
- * Golfclub Zwolle — VOORLOPIG: marineblauw met goud als werkpalet.
- * Vervangen door de officiële clubkleuren zodra de club die aanlevert (hexcodes of huisstijlgids).
+ * Golfclub Zwolle — kleuren uit het clublogo: antraciet #363531 (letters en toren) en blauw #00A0C4
+ * (vlaggetjes en water). Antraciet is de hoofdkleur, het blauw het accent; voor tekst op licht papier
+ * is het blauw verdiept tot #00718B, zodat het leesbaar blijft (puur #00A0C4 haalt op wit maar 3:1).
  */
 export const zwolle: Brand = {
   key: 'zwolle',
   name: 'Golfclub Zwolle',
   shortName: 'GC Zwolle',
   monogram: 'GZ',
-  provisional: true,
+  provisional: false,
+  hasLogo: true,
   colors: {
-    pine950: '#071628',
-    pine900: '#0B2140',
-    pine800: '#10305A',
-    pine700: '#173F73',
-    pine600: '#23558F',
-    pine400: '#5F86B5',
-    pine100: '#DCE6F2',
-    pine50: '#EEF3F9',
-    brass: '#C2A04A',
-    brassLight: '#E2C77E',
-    brassSoft: '#F6EDD6',
-    brassText: '#7E6220',
-    brassInk: '#715716',
-    brassDeep: '#574313',
-    chalk: '#F4F6F8',
-    ink: '#111B26',
-    slate: '#525F6C',
-    mist: '#5A6774',
-    line: '#E1E5EA',
-    lineStrong: '#C8D0D9',
-    stone100: '#EBEEF2',
-    stone400: '#8A96A3',
-    stone700: '#3B4652',
-    stone800: '#252F3A',
+    pine950: '#1F1E1B',
+    pine900: '#2A2926',
+    pine800: '#363531',
+    pine700: '#46453F',
+    pine600: '#5A5852',
+    pine400: '#8F8D86',
+    pine100: '#E6E5E1',
+    pine50: '#F3F2EF',
+    brass: '#00A0C4',
+    brassLight: '#4CC3DF',
+    brassSoft: '#DFF2F7',
+    brassText: '#00718B',
+    brassInk: '#005F75',
+    brassDeep: '#004A5C',
+    chalk: '#F6F6F4',
+    ink: '#1E1D1B',
+    slate: '#5A5852',
+    mist: '#64625C',
+    line: '#E4E3DF',
+    lineStrong: '#CDCBC5',
+    stone100: '#EDECE8',
+    stone400: '#9A9890',
+    stone700: '#41403B',
+    stone800: '#2C2B28',
   },
 };
 
