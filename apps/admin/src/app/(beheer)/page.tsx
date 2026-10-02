@@ -216,7 +216,7 @@ export default async function MissionControl({ searchParams }: { searchParams: P
     <div className="mx-auto max-w-6xl space-y-10 text-base">
       <header className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <div className="text-[13px] font-extrabold uppercase tracking-[0.14em] text-[#7a5c22]">Mission control · {club.name}</div>
+          <div className="text-[13px] font-extrabold uppercase tracking-[0.14em] text-brass-ink">Mission control · {club.name}</div>
           <h1 className="mt-1 font-display text-[40px] font-semibold leading-tight tracking-tight text-stone-900">{greeting()}</h1>
           <p className="mt-1 text-lg text-stone-600">Het is {dateLine}. Hier zie je in één keer hoe het met de club gaat.</p>
         </div>
@@ -295,7 +295,7 @@ export default async function MissionControl({ searchParams }: { searchParams: P
                       </div>
                       <div className="mt-2 text-[15px] text-stone-700">
                         {plural(entries(c), 'deelnemer', 'deelnemers')}{c.max_participants ? ` van de ${c.max_participants}` : ''}
-                        {c.status === 'draft' && <span className="ml-2 rounded-full bg-brass-soft px-2 py-0.5 text-xs font-bold text-[#6b4f1b]">Nog niet open</span>}
+                        {c.status === 'draft' && <span className="ml-2 rounded-full bg-brass-soft px-2 py-0.5 text-xs font-bold text-brass-ink">Nog niet open</span>}
                       </div>
                       {pct != null && (
                         <div className="mt-2 h-2 overflow-hidden rounded-full bg-stone-200" aria-hidden>

@@ -32,6 +32,8 @@ export interface Club {
   guest_intro_limit: number;
   /** Democlub voor de keuring door Apple en Google */
   is_review: boolean;
+  /** Merk (packages/shared/src/brand.ts); leeg = Greenside. Alleen Greenside zet dit. */
+  brand: string | null;
   /** Downloadlinks van de clubapp (zet Greenside) */
   app_ios_url: string | null;
   app_android_url: string | null;

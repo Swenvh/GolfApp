@@ -1,3 +1,5 @@
+import type { CSSProperties } from 'react';
+import { brandCssVars, getBrand } from '@golfapp/shared';
 import { getStaffContext, hasRole } from '@/lib/club';
 import { Sidebar } from '@/components/sidebar';
 
@@ -28,9 +30,13 @@ export default async function BeheerLayout({ children }: { children: React.React
     ...(hasRole(ctx) ? [{ href: '/instellingen', label: 'Instellingen', icon: 'instellingen' }] : []),
   ];
 
+  // Club met een eigen merk: dezelfde schermen in de kleuren van de club
+  const brand = getBrand(ctx.club.brand);
+
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen bg-chalk" style={brandCssVars(brand) as CSSProperties}>
       <Sidebar
+        brand={{ key: brand.key, name: brand.name, monogram: brand.monogram }}
         nav={nav}
         clubs={ctx.clubs}
         currentClubId={ctx.club.id}

@@ -4,7 +4,7 @@ Ledenapp (Expo, `apps/mobile`) en clubbeheer (Next.js, `apps/admin`) voor Nederl
 
 ## Merk
 
-Greenside heeft één vast thema: dennengroen, messing en krijtwit, met Fraunces (koppen) en Manrope (tekst). Kleuren en maten komen alleen uit `apps/mobile/src/lib/theme.ts` en `apps/admin/src/app/globals.css`; schermen gebruiken geen losse hexwaarden. Messing als tekst op licht papier is `brassText`, niet `brass`.
+Standaard is het Greenside-thema: dennengroen, messing en krijtwit, met Fraunces (koppen) en Manrope (tekst). Een club met een eigen app krijgt een eigen merk: kleuren in `packages/shared/src/brand.ts`, naam, app-ID en iconen in `clubs/<club>/` (zie `clubs/README.md`). De tokennamen zijn rollen (`pine*` = hoofdkleur, `brass*` = accent). Kleuren komen alleen uit `brand.ts`, `apps/mobile/src/lib/theme.ts` en `apps/admin/src/app/globals.css`; schermen gebruiken geen losse hexwaarden. Accent als tekst op licht papier is `brassText` (admin: `brass-text`), op een accentvlak `brassInk`/`brass-ink`. Elk merk moet de contrasttest in `brand.test.ts` halen. De basis van de pilot staat vast als `pilot-v1`; clubwerk verandert de code voor alle clubs, dus Greenside moet er precies hetzelfde uit blijven zien.
 
 ## UI/UX-skill
 

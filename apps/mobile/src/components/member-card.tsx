@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { fullName } from '@golfapp/shared';
 import type { Membership } from '@/lib/session';
 import { formatDate, formatHandicap } from '@/lib/format';
-import { colors, fonts, radius, space } from '@/lib/theme';
+import { colors, fonts, radius, space, withAlpha } from '@/lib/theme';
 import { Contours, LogoMark } from './brand';
 
 /** De digitale lidmaatschapskaart: bankpasformaat, laat zich tonen bij de caddiemaster. */
@@ -14,7 +14,7 @@ export function MemberCard({ member }: { member: Membership }) {
       <LinearGradient colors={[colors.pine700, colors.pine900, colors.pine950]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.card}>
         <Contours seed={member.member_number.length + 4} opacity={0.09} />
         <LinearGradient
-          colors={['transparent', 'rgba(217,188,130,0.18)', 'transparent']}
+          colors={['transparent', withAlpha(colors.brassLight, 0.18), 'transparent']}
           start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}
           style={StyleSheet.absoluteFill}
         />

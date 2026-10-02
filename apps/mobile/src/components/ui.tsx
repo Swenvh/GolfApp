@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { haptic } from '@/lib/haptics';
-import { colors, fonts, radius, shadow, space, type } from '@/lib/theme';
+import { colors, fonts, radius, shadow, space, type, withAlpha } from '@/lib/theme';
 
 export type IconName = ComponentProps<typeof Ionicons>['name'] | 'golf-cart';
 
@@ -221,7 +221,7 @@ export function Avatar({ name, size = 36, tone = 'pine' }: { name: string; size?
   const parts = name.replace(/\(.*\)/, '').trim().split(/\s+/);
   const initials = ((parts[0]?.[0] ?? '') + (parts.length > 1 ? parts[parts.length - 1]![0] : '')).toUpperCase();
   const bg = tone === 'brass' ? colors.brassSoft : tone === 'dark' ? colors.pine700 : colors.pine100;
-  const fg = tone === 'brass' ? '#7A5C22' : tone === 'dark' ? colors.onDark : colors.pine800;
+  const fg = tone === 'brass' ? colors.brassInk : tone === 'dark' ? colors.onDark : colors.pine800;
   return (
     <View style={{ width: size, height: size, borderRadius: size / 2, backgroundColor: bg, alignItems: 'center', justifyContent: 'center' }}>
       <Text style={{ fontFamily: fonts.bodyBold, fontSize: size * 0.36, color: fg, letterSpacing: 0.3 }}>{initials}</Text>
@@ -280,7 +280,7 @@ const styles = StyleSheet.create({
   sectionHead: { flexDirection: 'row', alignItems: 'baseline', justifyContent: 'space-between' },
   footer: {
     position: 'absolute', left: 0, right: 0, bottom: 0, paddingHorizontal: space.lg, paddingTop: space.md,
-    backgroundColor: 'rgba(244,245,240,0.96)', borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: colors.line,
+    backgroundColor: withAlpha(colors.chalk, 0.96), borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: colors.line,
   },
   card: { borderRadius: radius.lg, padding: space.lg, gap: space.sm, overflow: 'hidden' },
   cardBorder: { borderWidth: StyleSheet.hairlineWidth, borderColor: colors.line },

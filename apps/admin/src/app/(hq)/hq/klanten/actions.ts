@@ -2,7 +2,7 @@
 
 import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
-import { parseEuro } from '@golfapp/shared';
+import { brands, parseEuro } from '@golfapp/shared';
 import { requirePlatformStaff } from '@/lib/hq';
 import { str } from '@/lib/format';
 import { createClient } from '@/lib/supabase/server';
@@ -52,4 +52,16 @@ export async function saveAppLinks(formData: FormData) {
     p_android: str(formData.get('android_url')) ?? '',
   });
   redirect(`/hq/klanten/${club}?${error ? `links=${encodeURIComponent(error.message)}` : 'links=ok'}#app`);
+}
+
+/** Merk van de club: eigen kleuren en naam in het clubbeheer (en de basis voor de branded app) */
+export async function saveBrand(formData: FormData) {
+  await requirePlatformStaff();
+  const supabase = await createClient();
+  const club = String(formData.get('club_id') ?? '');
+  const brand = String(formData.get('brand') ?? '');
+  // Alleen merken die in de code bestaan; leeg = Greenside
+  const key = brand === '' || brand === 'greenside' || !(brand in brands) ? '' : brand;
+  const { error } = await supabase.rpc('hq_set_brand', { p_club: club, p_brand: key });
+  redirect(`/hq/klanten/${club}?${error ? `merk=${encodeURIComponent(error.message)}` : 'merk=ok'}#merk`);
 }

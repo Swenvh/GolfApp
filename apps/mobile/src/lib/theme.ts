@@ -1,46 +1,61 @@
 /**
- * Greenside — merkthema.
+ * Thema van de ledenapp.
  *
- * Eén vast thema: diep dennengroen van de baan, warm messing van de vlaggenstok,
- * krijtwit papier van de scorekaart. Kleuren, typografie en maten komen alleen
- * hiervandaan; schermen gebruiken nooit losse hexwaarden.
+ * Standaard het Greenside-merk: diep dennengroen, warm messing, krijtwit. Een branded clubapp
+ * (CLUB=<map> bij het bouwen, zie clubs/) krijgt de kleuren van de club uit packages/shared/src/brand.ts.
+ * De tokennamen zijn rollen: pine* = hoofdkleur, brass* = accent. Schermen gebruiken nooit losse hexwaarden.
  */
+import Constants from 'expo-constants';
 import { Platform } from 'react-native';
+import { getBrand } from '@golfapp/shared';
+
+const brandSetting: unknown = Constants.expoConfig?.extra?.brand;
+/** Het merk van deze app (Greenside, of de club bij een branded app) */
+export const brand = getBrand(typeof brandSetting === 'string' ? brandSetting : null);
+const b = brand.colors;
+
+/** Hexkleur met doorzichtigheid, voor tinten van de merkkleuren */
+export function withAlpha(hex: string, alpha: number): string {
+  const v = hex.replace('#', '');
+  return `rgba(${parseInt(v.slice(0, 2), 16)},${parseInt(v.slice(2, 4), 16)},${parseInt(v.slice(4, 6), 16)},${alpha})`;
+}
 
 export const colors = {
-  // Dennengroen
-  pine950: '#07201A',
-  pine900: '#0B2A21',
-  pine800: '#10392D',
-  pine700: '#174A3A',
-  pine600: '#23604B',
-  pine400: '#5E8F7B',
-  pine100: '#DCE8E0',
-  pine50: '#EEF4EF',
-  // Messing
-  brass: '#B8924A',
-  brassLight: '#D9BC82',
-  brassSoft: '#F4ECDB',
-  /** Messing als tekst op licht papier (contrast ≥ 4,5:1) */
-  brassText: '#86652A',
+  // Hoofdkleur
+  pine950: b.pine950,
+  pine900: b.pine900,
+  pine800: b.pine800,
+  pine700: b.pine700,
+  pine600: b.pine600,
+  pine400: b.pine400,
+  pine100: b.pine100,
+  pine50: b.pine50,
+  // Accent
+  brass: b.brass,
+  brassLight: b.brassLight,
+  brassSoft: b.brassSoft,
+  /** Accent als tekst op licht papier (contrast ≥ 4,5:1) */
+  brassText: b.brassText,
+  /** Accent als tekst op brassSoft */
+  brassInk: b.brassInk,
   // Papier en inkt
-  chalk: '#F4F5F0',
+  chalk: b.chalk,
   paper: '#FFFFFF',
-  ink: '#12201A',
-  slate: '#56655D',
+  ink: b.ink,
+  slate: b.slate,
   /** Bijschriften en placeholders; donker genoeg voor 4,5:1 op wit en krijtwit */
-  mist: '#5F6E66',
-  line: '#E3E7E0',
-  lineStrong: '#CBD3CC',
-  // Signaal
+  mist: b.mist,
+  line: b.line,
+  lineStrong: b.lineStrong,
+  // Signaal (voor elk merk gelijk)
   flag: '#B8412E',
   flagSoft: '#F7E4DF',
   // Op donkere ondergrond
-  onDark: '#F4F5F0',
-  onDarkMuted: 'rgba(244,245,240,0.62)',
-  onDarkLine: 'rgba(244,245,240,0.12)',
+  onDark: b.chalk,
+  onDarkMuted: withAlpha(b.chalk, 0.62),
+  onDarkLine: withAlpha(b.chalk, 0.12),
   /** Achtergrond achter een venster dat over het scherm ligt */
-  scrim: 'rgba(7,32,26,0.86)',
+  scrim: withAlpha(b.pine950, 0.86),
 } as const;
 
 export const fonts = {
@@ -70,7 +85,7 @@ export const type = {
 } as const;
 
 export const shadow = Platform.select({
-  web: { boxShadow: '0 1px 2px rgba(11,42,33,0.05), 0 8px 24px -12px rgba(11,42,33,0.18)' } as object,
+  web: { boxShadow: `0 1px 2px ${withAlpha(b.pine900, 0.05)}, 0 8px 24px -12px ${withAlpha(b.pine900, 0.18)}` } as object,
   default: {
     shadowColor: colors.pine900,
     shadowOpacity: 0.1,

@@ -43,7 +43,7 @@ function health(c: Club, today: string): { level: 'goed' | 'let-op' | 'risico'; 
 const levelRank = { risico: 0, 'let-op': 1, goed: 2 } as const;
 const healthStyle = {
   goed: { cls: 'bg-brand-50 text-brand-700', label: 'Goed', Icon: CheckCircle2 },
-  'let-op': { cls: 'bg-brass-soft text-[#6b4f1b]', label: 'Let op', Icon: AlertTriangle },
+  'let-op': { cls: 'bg-brass-soft text-brass-ink', label: 'Let op', Icon: AlertTriangle },
   risico: { cls: 'bg-red-50 text-red-800', label: 'Risico', Icon: AlertTriangle },
 } as const;
 
@@ -135,7 +135,7 @@ export default async function HqMissionControl() {
     <div className="mx-auto max-w-6xl space-y-10 text-base">
       <header className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <div className="text-[13px] font-extrabold uppercase tracking-[0.14em] text-[#7a5c22]">Mission control · Greenside HQ</div>
+          <div className="text-[13px] font-extrabold uppercase tracking-[0.14em] text-brass-ink">Mission control · Greenside HQ</div>
           <h1 className="mt-1 font-display text-[40px] font-semibold leading-tight tracking-tight text-stone-900">Hoe gaat het met Greenside?</h1>
           <p className="mt-1 text-lg text-stone-600">
             {now.toLocaleDateString('nl-NL', { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'Europe/Amsterdam' })}.

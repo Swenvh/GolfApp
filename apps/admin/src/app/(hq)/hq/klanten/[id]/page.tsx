@@ -1,12 +1,12 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { CheckCircle2, Circle } from 'lucide-react';
-import { formatEuro } from '@golfapp/shared';
+import { brands, formatEuro } from '@golfapp/shared';
 import { Button, Field, Notice } from '@/components/ui';
 import { formatDate } from '@/lib/format';
 import { requirePlatformStaff } from '@/lib/hq';
 import { createClient } from '@/lib/supabase/server';
-import { saveAppLinks } from '../actions';
+import { saveAppLinks, saveBrand } from '../actions';
 
 export const metadata = { title: 'Klant inrichten' };
 
@@ -17,15 +17,16 @@ type Setup = {
 type Overview = { club_id: string; name: string; city: string | null; status: string; pilot_until: string | null; fee_cents: number; active_30d: number };
 
 export default async function KlantInrichten({ params, searchParams }: {
-  params: Promise<{ id: string }>; searchParams: Promise<{ nieuw?: string; links?: string }>;
+  params: Promise<{ id: string }>; searchParams: Promise<{ nieuw?: string; links?: string; merk?: string }>;
 }) {
   await requirePlatformStaff();
-  const [{ id }, { nieuw, links }] = await Promise.all([params, searchParams]);
+  const [{ id }, { nieuw, links, merk }] = await Promise.all([params, searchParams]);
   const supabase = await createClient();
-  const [{ data: setupRows }, { data: overview }, { data: linkRows }] = await Promise.all([
+  const [{ data: setupRows }, { data: overview }, { data: linkRows }, { data: brandKey }] = await Promise.all([
     supabase.rpc('hq_club_setup', { p_club: id }),
     supabase.rpc('hq_club_overview'),
     supabase.rpc('hq_app_links', { p_club: id }),
+    supabase.rpc('hq_club_brand', { p_club: id }),
   ]);
   const appLinks = (linkRows as { ios_url: string | null; android_url: string | null }[] | null)?.[0];
   const setup = (setupRows as Setup[] | null)?.[0];
@@ -68,7 +69,7 @@ Team Greenside`;
   return (
     <div className="mx-auto max-w-4xl space-y-8 text-base">
       <header>
-        <div className="text-[13px] font-extrabold uppercase tracking-[0.14em] text-[#7a5c22]">Greenside HQ · klant inrichten</div>
+        <div className="text-[13px] font-extrabold uppercase tracking-[0.14em] text-brass-ink">Greenside HQ · klant inrichten</div>
         <h1 className="mt-1 font-display text-[40px] font-semibold leading-tight tracking-tight text-stone-900">{club.name}</h1>
         <p className="mt-1 text-lg text-stone-600">
           {club.city ? `${club.city} · ` : ''}
@@ -119,6 +120,26 @@ Team Greenside`;
           <Field label="App Store (iPhone)"><input name="ios_url" type="url" placeholder="https://apps.apple.com/nl/app/…" defaultValue={appLinks?.ios_url ?? ''} /></Field>
           <Field label="Google Play (Android)"><input name="android_url" type="url" placeholder="https://play.google.com/store/apps/details?id=…" defaultValue={appLinks?.android_url ?? ''} /></Field>
           <div className="sm:col-span-2"><Button type="submit">Links opslaan</Button></div>
+        </form>
+      </section>
+
+      <section id="merk" className="space-y-4 rounded-2xl border border-stone-200 bg-white p-6" aria-labelledby="merk-titel">
+        <div>
+          <h2 id="merk-titel" className="font-display text-2xl font-semibold">Merk van de club</h2>
+          <p className="text-[15px] text-stone-600">Met een eigen merk ziet het clubbeheer er in de kleuren en met de naam van de club uit. De branded app wordt apart gebouwd uit de clubmap (clubs/&lt;club&gt;).</p>
+        </div>
+        {merk === 'ok' && <Notice tone="success">Merk opgeslagen.</Notice>}
+        {merk && merk !== 'ok' && <Notice tone="error">{merk}</Notice>}
+        <form action={saveBrand} className="flex flex-wrap items-end gap-4">
+          <input type="hidden" name="club_id" value={id} />
+          <Field label="Merk">
+            <select name="brand" defaultValue={(brandKey as string | null) ?? 'greenside'}>
+              {Object.values(brands).map((b) => (
+                <option key={b.key} value={b.key}>{b.key === 'greenside' ? 'Greenside (standaard)' : `${b.name}${b.provisional ? ' · kleuren voorlopig' : ''}`}</option>
+              ))}
+            </select>
+          </Field>
+          <Button type="submit">Merk opslaan</Button>
         </form>
       </section>
 

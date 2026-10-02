@@ -14,7 +14,9 @@ const icons: Record<string, LucideIcon> = {
   nieuws: Newspaper, financien: Landmark, instellingen: Settings, omzet: TrendingUp, klanten: Building2, verkoop: Handshake, nieuw: CirclePlus,
 };
 
-export function Sidebar({ nav, clubs, currentClubId, clubName, email, eyebrow = 'Clubbeheer' }: {
+export function Sidebar({ nav, clubs, currentClubId, clubName, email, eyebrow = 'Clubbeheer', brand }: {
+  /** Merk van de club; bij een eigen merk staat de clubnaam bovenaan in plaats van Greenside */
+  brand?: { key: string; name: string; monogram: string };
   /** Kopje boven de naam: 'Clubbeheer' of 'Greenside HQ' */
   eyebrow?: string;
   nav: NavItem[];
@@ -41,7 +43,7 @@ export function Sidebar({ nav, clubs, currentClubId, clubName, email, eyebrow = 
       >
         <Contours seed={4} opacity={0.07} className="text-chalk" />
         <div className="relative px-6 pb-5 pt-7">
-          <Wordmark />
+          <Wordmark brand={brand} />
           <div className="mt-6 text-[10px] font-extrabold uppercase tracking-[0.16em] text-brass-light">{eyebrow}</div>
           {clubs.length > 1 ? (
             <form action={selectClub}>
@@ -54,7 +56,8 @@ export function Sidebar({ nav, clubs, currentClubId, clubName, email, eyebrow = 
                 {clubs.map((c) => <option key={c.id} value={c.id} className="text-stone-900">{c.name}</option>)}
               </select>
             </form>
-          ) : (
+          ) : brand && brand.key !== 'greenside' ? null : (
+            // Bij een eigen merk staat de clubnaam al bovenaan
             <div className="mt-1 font-display text-lg italic">{clubName}</div>
           )}
         </div>

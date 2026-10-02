@@ -1,11 +1,25 @@
 import { useMemo } from 'react';
-import { StyleSheet, Text, View, type StyleProp, type ViewStyle } from 'react-native';
+import { Image, StyleSheet, Text, View, type StyleProp, type ViewStyle } from 'react-native';
 import Svg, { Circle, Line, Path } from 'react-native-svg';
-import { colors, fonts } from '@/lib/theme';
+import { clubLogo } from '@/lib/brandAssets';
+import { brand, colors, fonts } from '@/lib/theme';
 
-/** Beeldmerk: de hole met vlaggenstok, in een cirkel. */
+/**
+ * Beeldmerk. Greenside: de hole met vlaggenstok in een cirkel. Een branded clubapp toont het logo
+ * van de club (clubs/<club>/logo.png), of zolang dat er niet is een monogram in de clubkleuren.
+ */
 export function LogoMark({ size = 40, tone = 'light' }: { size?: number; tone?: 'light' | 'dark' }) {
   const ring = tone === 'light' ? colors.onDark : colors.pine800;
+  if (clubLogo) {
+    return <Image source={clubLogo} style={{ width: size, height: size }} resizeMode="contain" accessibilityIgnoresInvertColors />;
+  }
+  if (brand.key !== 'greenside') {
+    return (
+      <View style={{ width: size, height: size, borderRadius: size / 2, borderWidth: Math.max(1, size / 32), borderColor: tone === 'light' ? colors.brassLight : colors.brassText, alignItems: 'center', justifyContent: 'center' }}>
+        <Text style={{ fontFamily: fonts.display, fontSize: size * (brand.monogram.length > 1 ? 0.36 : 0.5), color: ring, letterSpacing: -0.5 }}>{brand.monogram}</Text>
+      </View>
+    );
+  }
   return (
     <Svg width={size} height={size} viewBox="0 0 48 48">
       <Circle cx={24} cy={24} r={22.5} stroke={ring} strokeOpacity={0.35} strokeWidth={1.5} fill="none" />
@@ -22,7 +36,7 @@ export function Wordmark({ tone = 'light', size = 22 }: { tone?: 'light' | 'dark
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
       <LogoMark size={size * 1.55} tone={tone} />
-      <Text style={{ fontFamily: fonts.displayItalic, fontSize: size, color, letterSpacing: -0.3 }}>Greenside</Text>
+      <Text style={{ fontFamily: fonts.displayItalic, fontSize: size, color, letterSpacing: -0.3 }}>{brand.name}</Text>
     </View>
   );
 }

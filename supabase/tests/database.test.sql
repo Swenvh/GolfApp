@@ -1257,3 +1257,35 @@ reset role;
 select set_config('request.jwt.claim.sub', '', false);
 update members set club_pass_number = null where club_pass_number in ('DUI-0001', 'DUI-7001');
 delete from members where club_id = '00000000-0000-0000-0000-0000000c0001' and member_number = '7001';
+
+-- 24. Merk per club (branded app en clubbeheer) ---------------------------------------------
+select set_config('request.jwt.claim.sub', '00000000-0000-0000-0000-00000000a001', false);  -- beheerder De Duinen
+set role authenticated;
+do $$ begin
+  -- De club kiest haar merk niet zelf, niet direct en niet via HQ
+  begin update clubs set brand = 'zwolle' where id = '00000000-0000-0000-0000-0000000c0001';
+    raise exception 'expected failure'; exception when insufficient_privilege then null; end;
+  begin perform hq_set_brand('00000000-0000-0000-0000-0000000c0001', 'zwolle');
+    raise exception 'expected failure'; exception when insufficient_privilege then null; end;
+end $$;
+select pg_temp.assert(hq_club_brand('00000000-0000-0000-0000-0000000c0001') is null, 'clubbeheer leest HQ-merk niet');
+reset role;
+select set_config('request.jwt.claim.sub', '00000000-0000-0000-0000-00000000a009', false);  -- Greenside
+set role authenticated;
+select hq_set_brand('00000000-0000-0000-0000-0000000c0001', 'zwolle');
+select pg_temp.assert(hq_club_brand('00000000-0000-0000-0000-0000000c0001') = 'zwolle', 'Greenside zet het merk');
+do $$ begin
+  begin perform hq_set_brand('00000000-0000-0000-0000-0000000c0001', 'Zwolle; drop');
+    raise exception 'expected failure'; exception when others then if sqlerrm <> 'Ongeldig merk' then raise; end if; end;
+end $$;
+reset role;
+select set_config('request.jwt.claim.sub', '00000000-0000-0000-0000-00000000a001', false);  -- beheerder ziet het merk van de eigen club
+set role authenticated;
+select pg_temp.assert((select brand from clubs where id = '00000000-0000-0000-0000-0000000c0001') = 'zwolle', 'clubbeheer leest het eigen merk');
+reset role;
+select set_config('request.jwt.claim.sub', '00000000-0000-0000-0000-00000000a009', false);
+set role authenticated;
+select hq_set_brand('00000000-0000-0000-0000-0000000c0001', '');
+select pg_temp.assert(hq_club_brand('00000000-0000-0000-0000-0000000c0001') is null, 'leeg = Greenside');
+reset role;
+select set_config('request.jwt.claim.sub', '', false);

@@ -51,7 +51,7 @@ export default async function Verkoop({ searchParams }: { searchParams: Promise<
   return (
     <div className="mx-auto max-w-6xl space-y-8 text-base">
       <header>
-        <div className="text-[13px] font-extrabold uppercase tracking-[0.14em] text-[#7a5c22]">Greenside HQ</div>
+        <div className="text-[13px] font-extrabold uppercase tracking-[0.14em] text-brass-ink">Greenside HQ</div>
         <h1 className="mt-1 font-display text-[40px] font-semibold leading-tight tracking-tight text-stone-900">Verkoop</h1>
         <p className="mt-1 max-w-[70ch] text-lg text-stone-600">
           Alle clubs waarmee we in gesprek zijn. Zet bij elke club een volgende stap met een datum: die verschijnt dan vanzelf in Mission control.

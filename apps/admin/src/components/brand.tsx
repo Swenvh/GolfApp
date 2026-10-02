@@ -12,11 +12,23 @@ export function LogoMark({ size = 36, className = '' }: { size?: number; classNa
   );
 }
 
-export function Wordmark({ className = '' }: { className?: string }) {
+/** Monogram van een club met een eigen merk, zolang er geen logo is */
+export function Monogram({ letters, size = 36 }: { letters: string; size?: number }) {
+  return (
+    <span aria-hidden className="inline-flex shrink-0 items-center justify-center rounded-full border-[1.5px] border-brass-light font-display"
+      style={{ width: size, height: size, fontSize: size * (letters.length > 1 ? 0.36 : 0.5) }}>
+      {letters}
+    </span>
+  );
+}
+
+/** Merknaam met beeldmerk: Greenside, of de club bij een eigen merk */
+export function Wordmark({ className = '', brand }: { className?: string; brand?: { key: string; name: string; monogram: string } }) {
+  const club = brand && brand.key !== 'greenside' ? brand : null;
   return (
     <span className={`inline-flex items-center gap-2.5 ${className}`}>
-      <LogoMark size={34} />
-      <span className="font-display text-[22px] italic tracking-tight">Greenside</span>
+      {club ? <Monogram letters={club.monogram} size={36} /> : <LogoMark size={34} />}
+      <span className="font-display text-[22px] italic tracking-tight">{club ? club.name : 'Greenside'}</span>
     </span>
   );
 }

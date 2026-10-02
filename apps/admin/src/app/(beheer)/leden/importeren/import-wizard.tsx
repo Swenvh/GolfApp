@@ -133,7 +133,7 @@ export function ImportWizard({ types }: { types: string[] }) {
               </div>
 
               {unknownTypes.length > 0 && (
-                <div className="rounded-xl border border-brass/40 bg-brass-soft/60 p-4 text-sm text-[#5f4818]">
+                <div className="rounded-xl border border-brass/40 bg-brass-soft/60 p-4 text-sm text-brass-deep">
                   <p>
                     Deze lidmaatschappen bestaan nog niet bij de club: <strong>{unknownTypes.join(', ')}</strong>.
                     Maak ze aan, of pas de namen in het bestand aan zodat ze overeenkomen met{' '}
@@ -176,7 +176,7 @@ export function ImportWizard({ types }: { types: string[] }) {
                       <td className="text-sm">
                         {r.errors.length === 0 && r.warnings.length === 0 && <Badge tone="green">In orde</Badge>}
                         {r.errors.map((e) => <div key={e} className="text-red-700">✕ {e}</div>)}
-                        {r.warnings.map((w) => <div key={w} className="text-[#7a5c22]">! {w}</div>)}
+                        {r.warnings.map((w) => <div key={w} className="text-brass-ink">! {w}</div>)}
                       </td>
                     </tr>
                   ))}

@@ -1,0 +1,12 @@
+{
+  "brand": "zwolle",
+  "clubSlug": "golfclub-zwolle",
+  "appName": "Golfclub Zwolle",
+  "bundleId": "nl.greenside.zwolle",
+  "scheme": "gczwolle",
+  "splashBackground": "#0B2140",
+  "primaryColor": "#173F73",
+  "backgroundColor": "#F4F6F8",
+  "accentColor": "#E2C77E",
+  "monogram": "GZ"
+}

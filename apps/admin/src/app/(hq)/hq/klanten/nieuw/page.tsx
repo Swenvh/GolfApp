@@ -20,7 +20,7 @@ export default async function NieuweKlant({ searchParams }: { searchParams: Prom
   return (
     <div className="mx-auto max-w-3xl space-y-8 text-base">
       <header>
-        <div className="text-[13px] font-extrabold uppercase tracking-[0.14em] text-[#7a5c22]">Greenside HQ · nieuwe klant</div>
+        <div className="text-[13px] font-extrabold uppercase tracking-[0.14em] text-brass-ink">Greenside HQ · nieuwe klant</div>
         <h1 className="mt-1 font-display text-[40px] font-semibold leading-tight tracking-tight text-stone-900">Club aanmaken</h1>
         <p className="mt-1 text-lg text-stone-600">
           De club krijgt meteen een werkende inrichting: lidmaatschappen, de baan, het rekenschema en het aanbod in de app (nog uit).

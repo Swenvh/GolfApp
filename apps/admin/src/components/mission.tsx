@@ -18,7 +18,7 @@ export interface Task {
 
 const toneStyle: Record<TaskTone, { ring: string; badge: string; label: string; Icon: LucideIcon }> = {
   urgent: { ring: 'border-red-200 bg-red-50/60', badge: 'bg-red-100 text-red-800', label: 'Vandaag doen', Icon: AlertTriangle },
-  todo: { ring: 'border-brass/40 bg-brass-soft/50', badge: 'bg-brass-soft text-[#6b4f1b]', label: 'Deze week', Icon: Info },
+  todo: { ring: 'border-brass/40 bg-brass-soft/50', badge: 'bg-brass-soft text-brass-ink', label: 'Deze week', Icon: Info },
   info: { ring: 'border-stone-200 bg-white', badge: 'bg-stone-100 text-stone-700', label: 'Ter info', Icon: Info },
 };
 
@@ -30,7 +30,7 @@ export function StatusBanner({ urgent, todo, name }: { urgent: number; todo: num
     : `${urgent + todo} ${urgent + todo === 1 ? 'ding vraagt' : 'dingen vragen'} je aandacht${urgent ? `, waarvan ${urgent} vandaag` : ''}.`;
   return (
     <div className={`flex items-start gap-4 rounded-2xl border p-5 md:p-6 ${calm ? 'border-brand-100 bg-brand-50' : urgent ? 'border-red-200 bg-red-50' : 'border-brass/40 bg-brass-soft'}`} role="status">
-      <Icon size={30} strokeWidth={1.75} className={`mt-0.5 shrink-0 ${calm ? 'text-brand-600' : urgent ? 'text-red-700' : 'text-[#7a5c22]'}`} aria-hidden />
+      <Icon size={30} strokeWidth={1.75} className={`mt-0.5 shrink-0 ${calm ? 'text-brand-600' : urgent ? 'text-red-700' : 'text-brass-ink'}`} aria-hidden />
       <div className="space-y-1">
         <p className="font-display text-2xl font-semibold leading-tight text-stone-900 md:text-[28px]">{text}</p>
         <p className="text-base text-stone-600">

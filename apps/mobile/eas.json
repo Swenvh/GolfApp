@@ -1,0 +1,11 @@
+{
+  "cli": { "version": ">= 16.0.0", "appVersionSource": "remote" },
+  "build": {
+    "base": { "node": "22.20.0" },
+    "greenside": { "extends": "base", "env": {} },
+    "zwolle": { "extends": "base", "env": { "CLUB": "zwolle" } }
+  },
+  "submit": {
+    "zwolle": {}
+  }
+}

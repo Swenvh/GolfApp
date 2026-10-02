@@ -45,7 +45,7 @@ export function Stat({ label, value, hint, tone = 'default' }: {
 const badgeTones = {
   gray: 'bg-stone-100 text-stone-700',
   green: 'bg-brand-50 text-brand-700',
-  amber: 'bg-brass-soft text-[#7a5c22]',
+  amber: 'bg-brass-soft text-brass-ink',
   red: 'bg-red-50 text-red-700',
   blue: 'bg-stone-100 text-brand-700',
 } as const;
@@ -94,6 +94,6 @@ export function Empty({ children }: { children: ReactNode }) {
 export function Notice({ tone = 'info', children }: { tone?: 'info' | 'error' | 'success'; children: ReactNode }) {
   const cls = tone === 'error' ? 'border-red-200 bg-red-50 text-red-800'
     : tone === 'success' ? 'border-brand-100 bg-brand-50 text-brand-700'
-    : 'border-brass/30 bg-brass-soft text-[#5f4818]';
+    : 'border-brass/30 bg-brass-soft text-brass-deep';
   return <div className={`mb-5 rounded-xl border px-4 py-3 text-sm ${cls}`}>{children}</div>;
 }

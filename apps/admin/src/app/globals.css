@@ -1,6 +1,8 @@
 @import "tailwindcss";
 
-/* Greenside — hetzelfde merk als de ledenapp: dennengroen, messing, krijtwit. */
+/* Greenside — hetzelfde merk als de ledenapp: dennengroen, messing, krijtwit.
+   Een club met een eigen merk krijgt in het clubbeheer haar eigen kleuren: de beheer-layout
+   overschrijft deze variabelen met brandCssVars() uit packages/shared/src/brand.ts. */
 @theme {
   --color-brand-50: #eef4ef;
   --color-brand-100: #dce8e0;
@@ -14,6 +16,8 @@
   --color-brass-light: #d9bc82;
   --color-brass-soft: #f4ecdb;
   --color-brass-text: #86652a;  /* messing als tekst op licht papier (contrast ≥ 4,5:1) */
+  --color-brass-ink: #7a5c22;   /* messing als tekst op brass-soft */
+  --color-brass-deep: #5f4818;  /* donkerste messing, tekst in een messingvlak */
   --color-chalk: #f4f5f0;
 
   /* Neutrale tinten met een groene zweem in plaats van warm grijs */
