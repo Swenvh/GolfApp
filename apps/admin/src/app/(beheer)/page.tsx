@@ -295,7 +295,7 @@ export default async function MissionControl({ searchParams }: { searchParams: P
                       </div>
                       <div className="mt-2 text-[15px] text-stone-700">
                         {plural(entries(c), 'deelnemer', 'deelnemers')}{c.max_participants ? ` van de ${c.max_participants}` : ''}
-                        {c.status === 'draft' && <span className="ml-2 rounded-full bg-brass-soft px-2 py-0.5 text-xs font-bold text-brass-ink">Nog niet open</span>}
+                        {c.status === 'draft' && <span className="ml-2 rounded-full bg-brass-soft px-2 py-0.5 text-xs font-bold text-brass-badge">Nog niet open</span>}
                       </div>
                       {pct != null && (
                         <div className="mt-2 h-2 overflow-hidden rounded-full bg-stone-200" aria-hidden>

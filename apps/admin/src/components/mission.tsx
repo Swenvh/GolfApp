@@ -18,7 +18,7 @@ export interface Task {
 
 const toneStyle: Record<TaskTone, { ring: string; badge: string; label: string; Icon: LucideIcon }> = {
   urgent: { ring: 'border-red-200 bg-red-50/60', badge: 'bg-red-100 text-red-800', label: 'Vandaag doen', Icon: AlertTriangle },
-  todo: { ring: 'border-brass/40 bg-brass-soft/50', badge: 'bg-brass-soft text-brass-ink', label: 'Deze week', Icon: Info },
+  todo: { ring: 'border-brass/40 bg-brass-soft/50', badge: 'bg-brass-soft text-brass-badge', label: 'Deze week', Icon: Info },
   info: { ring: 'border-stone-200 bg-white', badge: 'bg-stone-100 text-stone-700', label: 'Ter info', Icon: Info },
 };
 

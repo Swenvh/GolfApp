@@ -27,6 +27,8 @@ export interface BrandColors {
   brassInk: string;
   /** Donkerste accenttint, voor tekst in een accentvlak */
   brassDeep: string;
+  /** Accent als tekst in een klein label op brassSoft (badges) */
+  brassBadge: string;
   chalk: string;
   ink: string;
   slate: string;
@@ -77,6 +79,7 @@ export const greenside: Brand = {
     brassText: '#86652A',
     brassInk: '#7A5C22',
     brassDeep: '#5F4818',
+    brassBadge: '#6B4F1B',
     chalk: '#F4F5F0',
     ink: '#12201A',
     slate: '#56655D',
@@ -117,6 +120,7 @@ export const zwolle: Brand = {
     brassText: '#00718B',
     brassInk: '#005F75',
     brassDeep: '#004A5C',
+    brassBadge: '#00566A',
     chalk: '#F6F6F4',
     ink: '#1E1D1B',
     slate: '#5A5852',
@@ -165,6 +169,7 @@ export function brandContrastPairs(c: BrandColors): [string, string, string][] {
     ['brassText op chalk', c.brassText, c.chalk],
     ['brassInk op brassSoft', c.brassInk, c.brassSoft],
     ['brassDeep op brassSoft', c.brassDeep, c.brassSoft],
+    ['brassBadge op brassSoft', c.brassBadge, c.brassSoft],
     ['wit op pine700 (knop)', white, c.pine700],
     ['wit op pine600', white, c.pine600],
     ['pine700 op papier', c.pine700, white],
@@ -195,6 +200,7 @@ export function brandCssVars(brand: Brand): Record<string, string> {
     '--color-brass-text': c.brassText,
     '--color-brass-ink': c.brassInk,
     '--color-brass-deep': c.brassDeep,
+    '--color-brass-badge': c.brassBadge,
     '--color-chalk': c.chalk,
     '--color-stone-50': c.chalk,
     '--color-stone-100': c.stone100,

@@ -43,7 +43,7 @@ function health(c: Club, today: string): { level: 'goed' | 'let-op' | 'risico'; 
 const levelRank = { risico: 0, 'let-op': 1, goed: 2 } as const;
 const healthStyle = {
   goed: { cls: 'bg-brand-50 text-brand-700', label: 'Goed', Icon: CheckCircle2 },
-  'let-op': { cls: 'bg-brass-soft text-brass-ink', label: 'Let op', Icon: AlertTriangle },
+  'let-op': { cls: 'bg-brass-soft text-brass-badge', label: 'Let op', Icon: AlertTriangle },
   risico: { cls: 'bg-red-50 text-red-800', label: 'Risico', Icon: AlertTriangle },
 } as const;
 

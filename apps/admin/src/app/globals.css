@@ -18,6 +18,7 @@
   --color-brass-text: #86652a;  /* messing als tekst op licht papier (contrast ≥ 4,5:1) */
   --color-brass-ink: #7a5c22;   /* messing als tekst op brass-soft */
   --color-brass-deep: #5f4818;  /* donkerste messing, tekst in een messingvlak */
+  --color-brass-badge: #6b4f1b; /* messing in kleine labels op brass-soft */
   --color-chalk: #f4f5f0;
 
   /* Neutrale tinten met een groene zweem in plaats van warm grijs */
