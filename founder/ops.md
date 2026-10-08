@@ -18,7 +18,8 @@ re-run):
 
 Result: contribution € 318.50 per club-month (was € 290), fixed costs € 398 (was € 373),
 break-even with € 2,500 pay for each founder **16 clubs** (10 founding + 6 list; was 18). After the
-switch to a price per member (8 October 2026): contribution € 410.20, break-even **13 clubs**.
+switch to a price per member with pioneer tier and guarantees (8 October 2026): break-even with pay
+**15 clubs** (3 pioneers + 7 founding + 5 list), fixed costs € 533 incl. escrow and IT partner.
 
 ## 1. The daily cycle
 
@@ -62,7 +63,7 @@ to four weeks after (routine 4.2). That is where most founder hours go (~40 per 
 ## 3. People
 
 Two founders, no staff. Pay: **€ 2,000–2,500 each a month** is the target (the founders' own
-number); until ~13 clubs pay, pay grows with revenue (`founder/cfo.md`). What that costs the company
+number); until ~15 clubs pay, pay grows with revenue (`founder/cfo.md`). What that costs the company
 depends on the legal form: in a BV a director-shareholder must take a minimum "customary" salary,
 in a VOF or sole proprietorship there is no payroll and you pay income tax on the profit. **Ask an
 accountant before choosing**; payroll costs, pension and VAT are not in these numbers.
@@ -91,7 +92,7 @@ About 45 hours a week each; most of it is selling (B) and finishing the product 
 | B | support, calls | onboarding meetings | visits | onboarding meetings | invoicing, week review | helpline if a club is in its first 4 weeks |
 
 **Support load is the limit to watch.** Assume ~2 hours a week per live club after its first month
-(an estimate; measure it at Zwolle). At 10 clubs that is ~20 hours a week; at 13 clubs ~26 hours,
+(an estimate; measure it at Zwolle). At 10 clubs that is ~20 hours a week; at 15 clubs ~30 hours,
 most of one founder. So the "~25 clubs" capacity in the CFO only holds if support per club stays
 low; Zwolle's first three months tell you.
 
@@ -220,3 +221,30 @@ advice.
 7. Ask Apple App Review how they treat per-club builds of the same app (4.2.6 and 4.3) before the
    first submission ([Apple developer forum thread](https://developer.apple.com/forums/thread/840982)).
 8. Mollie's actual SEPA direct debit rate for the licence.
+
+## 8. Added with the breakthrough offer (8 October 2026)
+
+**New suppliers** (quotes needed; estimates in `founder/cfo.md`):
+- **Source-code escrow**: a Dutch escrow agent or a notary holds the code and releases it to the clubs if
+  Greenside stops. Estimate ~€ 1,000 a year.
+- **IT partner on standby**: a small Dutch software firm that knows the stack (Supabase, Expo, Next.js),
+  with a written agreement to keep the platform running for 12 months if the founders stop. Estimate
+  ~€ 50 a month retainer.
+
+**New routines**
+1. **Weekly copy during the pilot** (owner A, every Monday, ~1 hour per club): the club sends the CSV
+   export from its old system → import in Greenside with "update existing members" on → check counts →
+   short note to the contact person. Nothing is deleted; members who left are flagged by hand.
+2. **Monthly export to the club's own storage** (automatic, first working day): full export of members,
+   invoices and bookings to the club's chosen storage; check it arrived.
+3. **E-Golf4U safety net** (only if a pilot fails its criteria): within four weeks, deliver the club's
+   members, invoices and bookings in the import format of Nexxchange or IntoGolf, and help their
+   implementation team once. Ask both vendors for their import format before the first E-Golf4U pilot.
+4. **Contract start date** (owner B): the licence starts on the day the club cancels its old system, at
+   most 6 months after the pilot; the first invoice falls in the club's next budget year. Record both
+   dates in Greenside HQ.
+5. **Yearly member count** (owner B, January): ask each club for its number of NGF-registered members on
+   1 January; set the yearly amount (minimum and maximum per tier); invoice.
+
+**More open questions:** escrow quote; IT partner agreement; import formats of Nexxchange and IntoGolf;
+the SEPA direct debit file (pain.008) to build before the first club goes live.

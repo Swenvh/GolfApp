@@ -140,3 +140,32 @@ draait. Wat te veranderen:
 
 Dit zijn gesimuleerde kopers: gebruik de bezwaren, niet de aantallen, en toets het bij echte
 clubbesturen.
+
+## 6. Het huidige aanbod (na het doorbraakplan, 8 oktober 2026)
+
+Het pakket hierboven is na panelronde 2 uitgebreid (bijlage Doorbraakplan) en opnieuw getest in
+panelronde 3 (0 van 20 kopen; de bezwaren waar het op gericht was zijn grotendeels weg, bewijs blijft).
+
+**Greenside Pionier en Founding Club**
+- **Kern:** de eigen app van de club in de stores, met clubbeheer erachter.
+- **Wij doen het werk:** import, tijdens de pilot elke week de ledenlijst uit het oude systeem
+  overzetten, uitnodigingen, papieren handleiding, twee app-spreekuren op zaterdag, een hulplijn, en de
+  balie kan alles voor een lid doen zonder app.
+- **Geen dubbele rekening:** de licentie start als de club het oude systeem opzegt (uiterlijk 6 maanden
+  na de pilot); de eerste factuur valt in het volgende begrotingsjaar van de club.
+- **Vangnet voor E-Golf4U-clubs:** Greenside vervangt E-Golf4U direct; mislukt de pilot, dan zetten wij
+  de gegevens kosteloos over naar Nexxchange of IntoGolf.
+- **Continuïteit:** maandelijkse export naar eigen opslag van de club, broncode in escrow, een IT-partner
+  als vangnet, 12 maanden opzegtermijn.
+- **ALV-pakket:** voorstel, presentatie, kostenvergelijking met de eigen factuur van de club, antwoorden,
+  en een oprichter komt mee.
+- **Product:** SEPA-incassobestand voor de eigen bank van de club; handicaps blijven in GOLF.NL, met een
+  knop in de app.
+- **Prijs:** € 0,65 per lid per maand (NGF-geregistreerde leden op 1 januari, vast jaarbedrag, minimaal
+  € 249, maximaal € 899); **pioniers** (eerste 3 clubs, vóór 1 juni 2027) € 0,39 voor drie jaar;
+  **oprichters** (club 4–10) € 0,49 voor twee jaar.
+- **Garantie:** stoppen na de pilot = niets betalen.
+
+**Moet bestaan vóór de eerste handtekening:** escrowovereenkomst en IT-partner (offertes), de
+contractclausules voor overlap, begrotingsjaar en vangnet, het SEPA-bestand, het ALV-pakket, de routine
+voor de wekelijkse kopie. Kosten staan in De cijfers.

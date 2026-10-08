@@ -5,7 +5,8 @@ de prijs dan zo laag, ook al gaat het panel maar langs 20 mensen?"*
 
 **Besluit (8 oktober 2026): doorgevoerd.** De oprichters kozen het per-lidmodel uit hoofdstuk 5: € 0,65
 per lid per maand (minimaal € 249), oprichters € 0,49 per lid (minimaal € 189). Prijzen, De cijfers, de
-pitch en het plan zijn bijgewerkt.
+pitch en het plan zijn bijgewerkt. Later dezelfde dag aangevuld met een pioniersprijs (€ 0,39 voor de
+eerste drie clubs), een maximum van € 899 per maand en de telling via de NGF-registratie (zie Prijzen).
 
 Kort antwoord: **de vraag is terecht.** De huidige prijs is gebaseerd op wat gesimuleerde kopers
 "software" vinden kosten, niet op wat Greenside een club oplevert. Gemeten aan de waarde voor de club is

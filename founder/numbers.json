@@ -1,11 +1,15 @@
 {
   "business": "Greenside (licence for Dutch golf clubs; one unit = one paying club for one month; 'per day' in this report means 'clubs at once')",
   "unit": "club-month",
-  "price": 455.7,
+  "price": 362.7,
   "variable": [
     {
       "label": "Onboarding, free pilot and walk-away guarantee, spread over the 24-month founding term (estimate, updated by /founder-ops: printed guide ~EUR 300)",
       "cost": 35
+    },
+    {
+      "label": "Overlap and budget-year guarantee: on average ~4 months later start of the licence after the pilot, spread over 24 months (estimate)",
+      "cost": 67
     },
     {
       "label": "Hosting share per club: database growth, e-mail above the bundle, app builds (estimate)",
@@ -60,6 +64,14 @@
     {
       "label": "Greenside's own Apple developer account, EUR 99 a year (public price)",
       "cost": 8
+    },
+    {
+      "label": "Source-code escrow, ~EUR 1,000 a year (estimate, quote needed)",
+      "cost": 85
+    },
+    {
+      "label": "IT partner on standby for continuity (estimate, quote needed)",
+      "cost": 50
     }
   ],
   "startup": [

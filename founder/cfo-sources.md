@@ -5,10 +5,11 @@ USD prices converted at about € 0.90 per USD (an estimate; check the rate on t
 All amounts excl. VAT.
 
 ## Price
-- **€ 455.70 per club-month** (since 8 October 2026): founding price **€ 0.49 per member per month**
-  (minimum € 189) for a typical club per segment (`founder/customer.json`: 25% 9 holes with ~550 members,
-  55% 18 holes with ~950, 20% 27+ holes with ~1,350): 0.25 × 269.50 + 0.55 × 465.50 + 0.20 × 661.50.
-  Before: € 344 (first price per size) and € 364 (after `/founder-pricing`).
+- **€ 362.70 per club-month** (model price for year 1): the first three clubs are **pioneers at € 0.39
+  per member per month** (minimum € 169, maximum € 539), for a typical club per segment
+  (`founder/customer.json`: 25% 9 holes with ~550 members, 55% 18 holes with ~950, 20% 27+ with ~1,350;
+  930 members on average): 0.39 × 930. Founding (clubs 4–10): € 0.49 → € 455.70. Before: € 344, € 364,
+  € 455.70.
 - List-price what-if **€ 604.50**: € 0.65 per member (minimum € 249), same mix.
 - Member counts per segment are the panel's segment descriptions, not measured; a club's real count
   sets its real price.
@@ -27,6 +28,11 @@ Payment costs of members (iDEAL etc.) are **not** Greenside's: each club uses it
 account (`club_payment_settings`, README "Naar productie"), so those fees land with the club.
 
 ## Estimates (not facts; replace with quotes)
+- **Overlap and budget-year guarantee, € 67 per club-month**: the licence starts when the club cancels
+  its old system (max. 6 months after the pilot) and the first invoice falls in the next budget year.
+  Assumed average ~4 months later start × ~€ 400 = ~€ 1,600 per club, spread over 24 months.
+- **Escrow € 85 a month** (~€ 1,000 a year) and **IT partner on standby € 50 a month**: guesses, quotes
+  needed.
 - **Onboarding, pilot and walk-away guarantee, € 35 per club-month** (updated by `/founder-ops`).
   Cash per new club: printed guide ~€ 300 (an 8-page A5 booklet costs about £ 0.24 a copy at 1,000
   copies, [UK price list](https://ep.dev.shout-loud.co.uk/promo-print/brochure-printing/a5-brochures);

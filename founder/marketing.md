@@ -83,7 +83,8 @@ meeting). Move all dates if L moves. **Ask Zwolle's board in writing** before us
 logo or numbers anywhere: they are a real club, not a prop.
 
 The offer throughout: **Greenside Founding Club** (`founder/pricing.md`): ten clubs, founding price
-€ 0.49 per member (minimum € 189) fixed for two years, no migration fee, free three-month pilot with written
+pioneers (first 3 clubs, before 1 June 2027) € 0.39 per member fixed for three years, founding clubs € 0.49 fixed
+for two years, no migration fee, free three-month pilot with written
 success criteria; **for pilots starting before 1 July 2027**. Say "ten places" only while it's true,
 and publish how many are left only as an exact number.
 
@@ -146,12 +147,13 @@ First three months, estimates (no quotes yet):
 | **Total** | **€ 1,600** + NVG |
 
 **The most you can pay to win one club.** From the CFO (`founder/numbers.json`): a founding club
-leaves **€ 410.20 a month** on average, fixed for 24 months → **€ 9,845** over the founding term, after its own
+leaves **€ 343.20 a month** (pioneers € 250.20 for 36 months → € 9,007), fixed for 24 months →
+**€ 8,237** over the founding term, after its own
 running, onboarding and pilot costs. The panel's buy rate is 0%, so it cannot give a conversion
 rate; the cap comes from cash instead. Two rules:
-- **Spend at most 3 months of contribution, about € 1,230 cash per club won**, so a club pays back
+- **Spend at most 3 months of contribution, about € 1,030 cash per club won (€ 750 for a pioneer)**, so a club pays back
   its own acquisition in its first quarter after the pilot.
-- **Never spend more than you have**: with the founders unpaid, total cash need is about € 11,600
+- **Never spend more than you have**: with the founders unpaid, total cash need is about € 14,000
   (`founder/cfo.md`); this campaign adds € 1,600.
 The real cost is founder time: ~40 hours of onboarding per club, plus selling.
 

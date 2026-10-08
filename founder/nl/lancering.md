@@ -21,13 +21,13 @@ De passende test voor een abonnement dat aan besturen verkocht wordt: **echte be
 een handtekening.**
 
 **Test 1 — vóór de pentest geboekt wordt (12 oktober – 18 december 2026)**
-- Zwolle tekent het pilotcontract: succescriteria op papier, en de oprichtersprijs (€ 0,49 per lid per maand)
+- Zwolle tekent het pilotcontract: succescriteria op papier, en als **pionier** (€ 0,39 per lid per maand, drie jaar vast)
   **vanaf maand 4 als de criteria gehaald zijn**.
 - 15 brieven naar clubs die nog op E-Golf4U zitten of in de buurt van Zwolle liggen (marketinghaak 1).
   Geen beweringen over Zwolle.
 - **Succeslijn: Zwolle getekend vóór 13 november, en vóór 18 december minstens 5 gesprekken met besturen
   en 2 getekende intentieverklaringen** ("als Zwolle zijn criteria haalt, starten wij in 2027 een pilot
-  tegen € 0,49 per lid").
+  tegen de pioniersprijs van € 0,39 per lid").
 - Vergelijking met het panel: het panel zegt dat 0 van de 20 nu kopen en 19 van de 20 op Zwolle wachten.
   **Geen harde bestellingen is dus te verwachten**; voorwaardelijke verklaringen zijn de eerlijke maat.
   Minder dan 5 gesprekken uit 15 brieven betekent dat de boodschap of het kanaal niet klopt, niet de
@@ -133,7 +133,7 @@ campagne naar buiten (Marketing): alle aandacht naar Zwolle.
 | Supporturen voor Zwolle | eigen logboek | daalt elke week | boven 10 uur per week na week 2 → handleiding of app is onduidelijk; oplossen wat terugkomt |
 | Geboekte gesprekken met besturen | marketinglogboek | 3 per week | twee weken onder 2 per week → brief herschrijven, eerst bellen, Zwolle om een introductie vragen |
 | Pilotaanvragen / intentieverklaringen | marketinglogboek | 3 vóór 30 mei | 0 na 10 gesprekken → terug naar het aanbod |
-| Betalende clubs tegenover break-even | CFO | 0 in de eerste 30 dagen (Zwolle zit in de gratis pilot); break-even 1 club onbetaald, 13 met salaris | — de geldtest is test 2, niet de eerste maand |
+| Betalende clubs tegenover break-even | CFO | 0 in de eerste 30 dagen (Zwolle zit in de gratis pilot); break-even 3 pioniersclubs onbetaald, 15 clubs met salaris | — de geldtest is test 2, niet de eerste maand |
 
 **Evaluaties** (A+B, één uur, met notities):
 

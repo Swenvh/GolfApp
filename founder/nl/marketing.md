@@ -88,10 +88,11 @@ voorjaarsvergadering voor). Schuif alle data mee als L verschuift. **Vraag het b
 schriftelijk om toestemming** voordat je hun naam, logo of cijfers ergens gebruikt: het is een echte
 club, geen decor.
 
-Het aanbod de hele periode: **Greenside Founding Club** (Prijzen): tien clubs, oprichtersprijs € 0,49
-per lid (minimaal € 189) twee jaar vast, geen migratiekosten, gratis pilot van drie maanden met schriftelijke
-succescriteria; **voor pilots die vóór 1 juli 2027 starten**. Zeg alleen "tien plaatsen" zolang het
-waar is, en noem het aantal dat nog over is alleen als exact getal.
+Het aanbod de hele periode: **Greenside Pionier en Founding Club** (Prijzen): **pioniers** (de eerste 3
+clubs, tekenen vóór 1 juni 2027) € 0,39 per lid drie jaar vast; **oprichters** (club 4–10) € 0,49 per lid
+twee jaar vast; geen migratiekosten, gratis pilot van drie maanden met schriftelijke succescriteria, geen
+dubbele rekening, vangnet voor E-Golf4U-clubs. Zeg alleen hoeveel plaatsen er nog zijn als exact getal en
+alleen zolang het waar is.
 
 | datum | kanaal | wat er uitgaat | boodschap |
 | --- | --- | --- | --- |
@@ -161,13 +162,14 @@ Eerste drie maanden, schattingen (nog geen offertes):
 | **Totaal** | **€ 1.600** + NVG |
 
 **Het meeste dat je mag uitgeven om één club te winnen.** Volgens de CFO laat een oprichtersclub
-gemiddeld **€ 410,20 per maand** over, 24 maanden vast → **€ 9.845** over de oprichtersperiode, na zijn eigen
+**€ 343,20 per maand** over (pioniers € 250,20 gedurende 36 maanden → € 9.007), 24 maanden vast →
+**€ 8.237** over de oprichtersperiode, na zijn eigen
 kosten voor draaien, overstap en pilot. De koopbereidheid in het panel is 0%, dus het geeft geen
 conversie; de grens komt daarom uit de kas. Twee regels:
-- **Geef maximaal 3 maanden bijdrage uit, ongeveer € 1.230 contant per gewonnen club**, zodat een club
+- **Geef maximaal 3 maanden bijdrage uit, ongeveer € 1.030 contant per gewonnen club (€ 750 voor een pionier)**, zodat een club
   zijn eigen werving in het eerste kwartaal na de pilot terugbetaalt.
 - **Geef nooit meer uit dan je hebt**: met onbetaalde oprichters is de totale geldbehoefte ongeveer
-  € 11.600 (De cijfers); deze campagne voegt € 1.600 toe.
+  € 14.000 (De cijfers); deze campagne voegt € 1.600 toe.
 De echte kosten zitten in de tijd van de oprichters: ~40 uur overstapwerk per club, plus verkopen.
 
 ## 5. Drie cijfers om wekelijks te volgen

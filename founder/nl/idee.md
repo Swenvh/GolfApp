@@ -6,8 +6,8 @@
   Het bestuur koopt; het secretariaat, de financiële vrijwilliger en de marshal werken er dagelijks mee.
   De leden (golfers) gebruiken de app.
 - **Wat het verkoopt, tegen welke prijs** (het oorspronkelijke idee; de huidige prijzen staan in het
-  hoofdstuk Prijzen: € 0,65 per lid per maand (minimaal € 249), oprichters € 0,49 per lid (minimaal
-  € 189), geen "twee maanden gratis"): een maandlicentie naar clubgrootte: € 249 (9 holes, tot ±700 leden), € 449 (18 holes,
+  hoofdstuk Prijzen: € 0,65 per lid per maand (min. € 249, max. € 899), pioniers € 0,39, oprichters € 0,49 per
+  lid, geen "twee maanden gratis"): een maandlicentie naar clubgrootte: € 249 (9 holes, tot ±700 leden), € 449 (18 holes,
   ±700–1.100 leden, de standaard), € 599 (27+ holes). Oprichtersprijs € 399 per maand, twee jaar vast,
   voor de eerste tien clubs. Eenmalige migratie € 750 (9 holes) tot € 1.500 (18+ holes). Drie maanden
   pilot, daarna een jaarcontract; twee maanden gratis bij vooruitbetaling per jaar. Geen commissie op

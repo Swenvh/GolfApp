@@ -138,3 +138,32 @@ reference club. What to change:
 
 These are simulated buyers: use the objections, not the numbers, and confirm with real
 club boards.
+
+## 6. The current offer (after the breakthrough plan, 8 October 2026)
+
+The stack above was extended after panel round 2 (`founder/nl/doorbraakplan.md`) and re-tested in panel
+round 3 (`founder/panel-v3/`, 0 of 20 buy; the targeted objections largely disappeared, proof remains).
+
+**Greenside Pioneer and Founding Club**
+- **Core:** the club's own app in the stores, with club management behind it.
+- **We do the work:** import, a weekly copy of the old system's member list during the pilot,
+  invitations, printed guide, two Saturday app clinics, a helpline, and the desk can do anything for a
+  member without the app.
+- **No double bill:** the licence starts when the club cancels its old system (at most 6 months after the
+  pilot); the first invoice falls in the club's next budget year.
+- **Safety net for E-Golf4U clubs:** Greenside replaces E-Golf4U directly; if the pilot fails, we move the
+  data free of charge to Nexxchange or IntoGolf.
+- **Continuity:** monthly export to the club's own storage, source code in escrow, an IT partner on
+  standby, 12 months' notice.
+- **Members' meeting pack:** proposal, presentation, cost comparison with the club's own invoice, answers,
+  and a founder comes along.
+- **Product:** SEPA direct debit file for the club's own bank; handicaps stay in GOLF.NL with a button in
+  the app.
+- **Price:** € 0.65 per member per month (NGF-registered members on 1 January, fixed yearly amount,
+  minimum € 249, maximum € 899); **pioneers** (first 3 clubs, before 1 June 2027) € 0.39 for three years;
+  **founding** (clubs 4–10) € 0.49 for two years.
+- **Guarantee:** stop after the pilot and pay nothing.
+
+**Must exist before the first signature:** escrow agreement and IT partner (quotes), the contract clauses
+for overlap, budget year and safety net, the SEPA file, the members' meeting pack, the weekly-copy
+routine. Costs are in `founder/cfo.md`.

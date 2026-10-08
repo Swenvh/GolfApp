@@ -18,7 +18,8 @@ opnieuw berekend):
 
 Resultaat: bijdrage € 318,50 per club per maand (was € 290), vaste kosten € 398 (was € 373),
 break-even met € 2.500 salaris per oprichter **16 clubs** (10 oprichters + 6 normaal; was 18). Na de
-overstap op een prijs per lid (8 oktober 2026): bijdrage € 410,20, break-even **13 clubs**.
+overstap op een prijs per lid met pionierslaag en garanties (8 oktober 2026): break-even met salaris
+**15 clubs** (3 pioniers + 7 oprichters + 5 normaal), vaste kosten € 533 incl. escrow en IT-partner.
 
 ## 1. De dagelijkse cyclus
 
@@ -62,7 +63,7 @@ tot vier weken erna (routine 4.2). Daar gaan de meeste uren van de oprichters na
 ## 3. Mensen
 
 Twee oprichters, geen personeel. Salaris: **€ 2.000–2.500 per persoon per maand** is het doel (het eigen
-getal van de oprichters); tot ~13 clubs betalen, groeit het salaris mee met de omzet (De cijfers). Wat
+getal van de oprichters); tot ~15 clubs betalen, groeit het salaris mee met de omzet (De cijfers). Wat
 dat het bedrijf kost hangt af van de rechtsvorm: in een bv moet een directeur-grootaandeelhouder een
 minimaal "gebruikelijk loon" nemen; in een vof of eenmanszaak is er geen loonadministratie en betaal je
 inkomstenbelasting over de winst. **Vraag een boekhouder voordat je kiest**; loonkosten, pensioen en btw
@@ -93,7 +94,7 @@ Ongeveer 45 uur per week elk; het meeste is verkopen (B) en de naden van het pro
 | B | support, bellen | overstapgesprekken | bezoeken | overstapgesprekken | facturatie, weekevaluatie | hulplijn als een club in zijn eerste 4 weken zit |
 
 **De supportlast is de grens om te bewaken.** Ga uit van ~2 uur per week per live club na de eerste
-maand (een schatting; meet het bij Zwolle). Bij 10 clubs is dat ~20 uur per week; bij 13 clubs ~26 uur,
+maand (een schatting; meet het bij Zwolle). Bij 10 clubs is dat ~20 uur per week; bij 15 clubs ~30 uur,
 het grootste deel van één oprichter. De capaciteit van "~25 clubs" in de CFO-berekening geldt dus alleen
 als de support per club laag blijft; de eerste drie maanden van Zwolle wijzen het uit.
 
@@ -233,3 +234,32 @@ Geen juridisch advies.
 7. Apple App Review vragen hoe ze apps per club van dezelfde app behandelen (4.2.6 en 4.3) vóór de eerste
    indiening ([Apple-forum](https://developer.apple.com/forums/thread/840982)).
 8. Het werkelijke tarief van Mollie voor SEPA-incasso van de licentie.
+
+## 8. Toegevoegd met het doorbraakaanbod (8 oktober 2026)
+
+**Nieuwe leveranciers** (offertes nodig; schattingen in De cijfers):
+- **Broncode-escrow**: een Nederlandse escrowpartij of notaris bewaart de code en geeft hem vrij aan de
+  clubs als Greenside stopt. Schatting ~€ 1.000 per jaar.
+- **IT-partner als vangnet**: een klein Nederlands softwarebedrijf dat de techniek kent (Supabase, Expo,
+  Next.js), met een schriftelijke afspraak om het platform 12 maanden draaiend te houden als de oprichters
+  stoppen. Schatting ~€ 50 per maand.
+
+**Nieuwe routines**
+1. **Wekelijkse kopie tijdens de pilot** (eigenaar A, elke maandag, ~1 uur per club): de club stuurt de
+   CSV-export uit het oude systeem → importeren in Greenside met "bestaande leden bijwerken" aan →
+   aantallen controleren → kort berichtje aan de contactpersoon. Er wordt niets gewist; vertrokken leden
+   worden met de hand gemarkeerd.
+2. **Maandelijkse export naar eigen opslag van de club** (automatisch, eerste werkdag): volledige export
+   van leden, facturen en boekingen naar de opslag die de club kiest; controleren dat hij aankwam.
+3. **Vangnet E-Golf4U** (alleen als een pilot de criteria niet haalt): binnen vier weken de leden,
+   facturen en boekingen van de club aanleveren in het importformaat van Nexxchange of IntoGolf, en hun
+   implementatieteam één keer helpen. Vraag beide leveranciers vóór de eerste E-Golf4U-pilot om hun
+   importformaat.
+4. **Startdatum van het contract** (eigenaar B): de licentie start op de dag dat de club het oude systeem
+   opzegt, uiterlijk 6 maanden na de pilot; de eerste factuur valt in het volgende begrotingsjaar van de
+   club. Leg beide data vast in Greenside HQ.
+5. **Jaarlijkse ledentelling** (eigenaar B, januari): vraag elke club om het aantal NGF-geregistreerde
+   leden op 1 januari; stel het jaarbedrag vast (minimum en maximum per laag); factureren.
+
+**Extra open vragen:** offerte escrow; afspraak met een IT-partner; importformaten van Nexxchange en
+IntoGolf; het SEPA-incassobestand (pain.008) bouwen vóór de eerste club live gaat.

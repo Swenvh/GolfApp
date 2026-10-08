@@ -1,5 +1,9 @@
 # Doorbraakplan: wat zorgt ervoor dat de meerderheid wél koopt?
 
+**Besluit (8 oktober 2026): doorgevoerd.** De taken uit hoofdstuk 4, de pioniersprijs, het vangnet voor
+E-Golf4U-clubs, het maximum en de telling via de NGF staan nu in Prijzen, Het aanbod (hoofdstuk 6), De
+cijfers en Operatie (hoofdstuk 8). De resultaatgarantie (taak 10) wacht op de cijfers van Zwolle.
+
 Vraag van de oprichters (8 oktober 2026): *voorbeelden en doorslaggevende taken waardoor de meerderheid
 van de clubs wel koopt, met de denkwijze van Alex Hormozi en Naval Ravikant.*
 
