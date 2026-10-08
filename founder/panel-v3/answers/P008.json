@@ -1,0 +1,13 @@
+{
+  "id": "P008",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "habit",
+  "reason": "Our system has worked for years and the vendor knows us; members already book and pay through GOLF.NL for free. For a 9-hole club run by volunteers, adding roughly 270 to 360 euros a month for a nicer app is hard to sell to the members' meeting when the real complaint is just finding the booking link on the phone.",
+  "objection": "Two founders and a brand-new product. Even with escrow and exports, I don't want our volunteers to be the guinea pigs, and I can't justify a new monthly cost to fix something a home-screen shortcut could fix.",
+  "would_change_my_mind": "Seeing a club our size, not Zwolle, live for a full season with older members actually using it, and the total cost coming out at or below what we pay our current vendor.",
+  "price_too_cheap": 0.15,
+  "price_cheap": 0.3,
+  "price_expensive": 0.5,
+  "price_too_expensive": 0.7
+}

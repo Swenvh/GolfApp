@@ -1,0 +1,13 @@
+{
+  "id": "P005",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "trust",
+  "reason": "The pilot costing nothing is nice, but in the end it's another 465 to 618 euros a month on top of what we already pay, and I'm not putting two founders nobody has heard of in front of the board before Zwolle has actually shown it works. I'll wait for their results page and the next budget round.",
+  "objection": "We would only save money if we really drop our current system, and I don't know what that costs us or whether the board and members will let go of it. Otherwise it's simply an extra bill every year, from a two-person company.",
+  "would_change_my_mind": "A call with the Zwolle board after a season live, plus a side-by-side sum showing that cancelling our current vendor makes Greenside cheaper or no more expensive in total.",
+  "price_too_cheap": 150,
+  "price_cheap": 300,
+  "price_expensive": 500,
+  "price_too_expensive": 750
+}

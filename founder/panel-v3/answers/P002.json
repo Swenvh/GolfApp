@@ -1,0 +1,13 @@
+{
+  "id": "P002",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "timing",
+  "reason": "We left E-Golf4U less than a year ago and the volunteers and members are only just used to the new system. Even a free pilot means a second switch on the horizon, and I can't take that to the board or the members' meeting right now.",
+  "objection": "Another migration so soon would burn out my volunteers and annoy members, and two founders with Zwolle as the only live club is a thin track record for something we'd be stuck with.",
+  "would_change_my_mind": "Our current vendor letting us down badly, plus a year of Golfclub Zwolle and a few more clubs running on it with results I can check and a board I can call.",
+  "price_too_cheap": 0.2,
+  "price_cheap": 0.45,
+  "price_expensive": 0.85,
+  "price_too_expensive": 1.25
+}

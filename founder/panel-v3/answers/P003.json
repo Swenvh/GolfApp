@@ -1,0 +1,13 @@
+{
+  "id": "P003",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "habit",
+  "reason": "Our current system works well enough and the vendor knows our club; I'm not going to put a switch to a two-founder startup on the board agenda before Zwolle has shown it actually works. The pilot without double work is a fair offer, but nobody here is asking for a new app right now.",
+  "objection": "Another six hundred euros a month on top of what we already pay, from two people who could stop tomorrow, and I'd be the one who has to defend it at the members' meeting if it goes wrong.",
+  "would_change_my_mind": "Golfclub Zwolle live for a full season, with their board telling me on the phone that members use it and the desk saved time, and a cost comparison showing we pay less in total than we do now.",
+  "price_too_cheap": 150,
+  "price_cheap": 300,
+  "price_expensive": 500,
+  "price_too_expensive": 750
+}
