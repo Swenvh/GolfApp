@@ -155,8 +155,8 @@ panelronde 3 (0 van 20 kopen; de bezwaren waar het op gericht was zijn grotendee
   na de pilot); de eerste factuur valt in het volgende begrotingsjaar van de club.
 - **Vangnet voor E-Golf4U-clubs:** Greenside vervangt E-Golf4U direct; mislukt de pilot, dan zetten wij
   de gegevens kosteloos over naar Nexxchange of IntoGolf.
-- **Continuïteit:** maandelijkse export naar eigen opslag van de club, broncode in escrow, een IT-partner
-  als vangnet, 12 maanden opzegtermijn.
+- **Continuïteit:** maandelijkse export naar eigen opslag van de club, broncode in escrow en een
+  IT-partner als vangnet (geregeld voordat de derde club start), 12 maanden opzegtermijn.
 - **ALV-pakket:** voorstel, presentatie, kostenvergelijking met de eigen factuur van de club, antwoorden,
   en een oprichter komt mee.
 - **Product:** SEPA-incassobestand voor de eigen bank van de club; handicaps blijven in GOLF.NL, met een
@@ -166,6 +166,7 @@ panelronde 3 (0 van 20 kopen; de bezwaren waar het op gericht was zijn grotendee
   **oprichters** (club 4–10) € 0,49 voor twee jaar.
 - **Garantie:** stoppen na de pilot = niets betalen.
 
-**Moet bestaan vóór de eerste handtekening:** escrowovereenkomst en IT-partner (offertes), de
+**Moet bestaan vóór de eerste handtekening:** de
 contractclausules voor overlap, begrotingsjaar en vangnet, het SEPA-bestand, het ALV-pakket, de routine
-voor de wekelijkse kopie. Kosten staan in De cijfers.
+voor de wekelijkse kopie. Escrow en de IT-partner moeten geregeld zijn voordat de derde club start
+(eerst offertes). Kosten staan in De cijfers.

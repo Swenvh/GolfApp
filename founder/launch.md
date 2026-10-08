@@ -20,8 +20,10 @@ decides **whether to start paying yourselves or raise money**, not whether to go
 The fitting test for a subscription sold to boards: **real boards, the real price, a signature.**
 
 **Test 1 — before the pentest is booked (12 October – 18 December 2026)**
-- Zwolle signs the pilot contract: success criteria in writing, and as a **pioneer** (€ 0.39 per member a month, fixed three years) **from month 4 if the criteria
-  are met**.
+- Zwolle signs the pilot contract: success criteria in writing, and as a **pioneer** (€ 0.39 per member a month, fixed three years)
+  **paying from month 1** (go-live). In return Zwolle is the reference club and keeps the pioneer price;
+  if the success criteria are not met at week 12, Zwolle can still stop. Negotiate this; it is worth
+  ~€ 1,100 in year 1 (`founder/cfo.md`).
 - 15 letters to clubs still on E-Golf4U or near Zwolle (marketing hook 1). No claims about Zwolle.
 - **Success line: Zwolle signed by 13 November, and by 18 December at least 5 board conversations and
   2 signed letters of intent** ("if Zwolle meets its criteria, we start a pilot in 2027 at the pioneer price of € 0.39 per member").
@@ -129,7 +131,7 @@ campaign today (`marketing.md`): all attention on Zwolle.
 | Support hours for Zwolle | own log | falls each week | above 10 hours a week after week 2 → the guide or the app is unclear; fix what repeats |
 | Board conversations booked | marketing log | 3 a week | below 2 a week for two weeks → rewrite the letter, phone first, ask Zwolle for an intro |
 | Pilot requests / letters of intent | marketing log | 3 by 30 May | 0 after 10 conversations → back to `/founder-offer` |
-| Paying clubs vs break-even | CFO | 0 in the first 30 days (Zwolle is in its free pilot); break-even 3 pioneer clubs unpaid, 15 clubs with pay | — the money test is Test 2, not the first month |
+| Paying clubs vs break-even | CFO | 1 (Zwolle pays from month 1); break-even 2 pioneer clubs unpaid, 15 clubs with pay | — the money test is Test 2, not the first month |
 
 **Reviews** (A+B, one hour, written notes):
 

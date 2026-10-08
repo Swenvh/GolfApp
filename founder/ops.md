@@ -19,7 +19,8 @@ re-run):
 Result: contribution € 318.50 per club-month (was € 290), fixed costs € 398 (was € 373),
 break-even with € 2,500 pay for each founder **16 clubs** (10 founding + 6 list; was 18). After the
 switch to a price per member with pioneer tier and guarantees (8 October 2026): break-even with pay
-**15 clubs** (3 pioneers + 7 founding + 5 list), fixed costs € 533 incl. escrow and IT partner.
+**15 clubs** (3 pioneers + 7 founding + 5 list), fixed costs € 533 incl. escrow and IT partner. Year 1
+runs on Expo Starter (USD 19) and starts escrow and the IT partner at the third club: € 326 a month.
 
 ## 1. The daily cycle
 
@@ -225,7 +226,7 @@ advice.
 ## 8. Added with the breakthrough offer (8 October 2026)
 
 **New suppliers** (quotes needed; estimates in `founder/cfo.md`):
-- **Source-code escrow**: a Dutch escrow agent or a notary holds the code and releases it to the clubs if
+- **Source-code escrow** (in place before the third club starts): a Dutch escrow agent or a notary holds the code and releases it to the clubs if
   Greenside stops. Estimate ~€ 1,000 a year.
 - **IT partner on standby**: a small Dutch software firm that knows the stack (Supabase, Expo, Next.js),
   with a written agreement to keep the platform running for 12 months if the founders stop. Estimate

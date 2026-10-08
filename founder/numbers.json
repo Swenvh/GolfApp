@@ -30,8 +30,8 @@
       "cost": 0
     },
     {
-      "label": "Expo EAS Production, USD 99 (public price)",
-      "cost": 89
+      "label": "Expo EAS Starter, USD 19 (public price; Production USD 99 from ~5 apps)",
+      "cost": 17
     },
     {
       "label": "Supabase Pro + Small compute + staging project, ~USD 40 (public price)",
@@ -64,14 +64,6 @@
     {
       "label": "Greenside's own Apple developer account, EUR 99 a year (public price)",
       "cost": 8
-    },
-    {
-      "label": "Source-code escrow, ~EUR 1,000 a year (estimate, quote needed)",
-      "cost": 85
-    },
-    {
-      "label": "IT partner on standby for continuity (estimate, quote needed)",
-      "cost": 50
     }
   ],
   "startup": [
@@ -100,9 +92,9 @@
   "capacity_per_day": 25,
   "plan_per_day": 10,
   "ramp_per_day": [
-    0,
-    0,
-    0,
+    1,
+    1,
+    1,
     1,
     1,
     1,

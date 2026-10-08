@@ -169,7 +169,7 @@ conversie; de grens komt daarom uit de kas. Twee regels:
 - **Geef maximaal 3 maanden bijdrage uit, ongeveer € 1.030 contant per gewonnen club (€ 750 voor een pionier)**, zodat een club
   zijn eigen werving in het eerste kwartaal na de pilot terugbetaalt.
 - **Geef nooit meer uit dan je hebt**: met onbetaalde oprichters is de totale geldbehoefte ongeveer
-  € 14.000 (De cijfers); deze campagne voegt € 1.600 toe.
+  € 11.200 (De cijfers); deze campagne voegt € 1.600 toe.
 De echte kosten zitten in de tijd van de oprichters: ~40 uur overstapwerk per club, plus verkopen.
 
 ## 5. Drie cijfers om wekelijks te volgen

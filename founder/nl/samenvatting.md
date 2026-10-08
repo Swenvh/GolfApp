@@ -8,16 +8,15 @@ van de 263 NGF-clubs, eerst de clubs die van E-Golf4U af moeten.
 de vier toetsen slagen, twee niet:
 - ✓ **Marge**: elke betalende club laat **€ 250,20 per maand (69%)** over bij de pioniersprijs van
   € 0,39 per lid (gemiddeld € 362,70), na de kosten van de nieuwe garanties.
-- ✓ **Break-even**: **3 betalende clubs** zonder salaris, ruim binnen de ~25 clubs die twee mensen
+- ✓ **Break-even**: **2 betalende clubs** zonder salaris, ruim binnen de ~25 clubs die twee mensen
   kunnen bedienen.
-- ✗ **Jaar 1**: een verlies van **€ 3.394**: de pionierskorting, escrow en IT-partner en de
-  overlapgarantie kosten in jaar 1 ~€ 3.500 (De cijfers). Met alle drie de knoppen daar (escrow vanaf
-  club 3, Zwolle betaalt vanaf maand 1, Expo Starter) komt jaar 1 op **€ -159**.
+- ✗ **Jaar 1**: een verlies van maar **€ 159**, met de drie knoppen in de cijfers (Zwolle betaalt vanaf
+  maand 1, Expo Starter, escrow en IT-partner vanaf de derde club). Zonder was het € -3.394.
 - ✗ **Kopers**: **0 van de 20** gesimuleerde kopers kopen (de lat ligt op 25%), met de oude pitch én
   met het verbeterde Founding Club-aanbod.
 
 Met € 2.500 salaris per oprichter ligt de break-even op **15 clubs** (3 pioniers + 7 oprichters + 5
-normaal) en is het verlies in jaar 1 **€ 63.394**.
+normaal) en zou het verlies in jaar 1 met salaris vanaf maand 1 **€ 62.643** zijn.
 
 **Wat er moet veranderen, en welke stap dat doet.**
 1. **Bewijs, geen betere pitch.** 19 van de 20 kopers zeggen wat ze over de streep trekt: Zwolle een
@@ -41,12 +40,12 @@ anders. Aanpak: een lanceerpakket (import voor ze gedaan, papieren handleiding, 
 groepjes, hulplijn op zaterdag), wekelijks tellen hoeveel leden actief zijn, en direct stoppen met
 verkopen als in week 4 minder dan 20% actief is.
 
-**Wat er nodig is om te starten.** Ongeveer **€ 14.000** zonder salaris (pentest € 7.500, jurist
+**Wat er nodig is om te starten.** Ongeveer **€ 11.200** zonder salaris (pentest € 7.500, jurist
 € 2.500, vaste kosten), en **test 1**: Zwolle tekent vóór 13 november een pilotcontract met betaald
 vervolg, plus 2 intentieverklaringen van andere besturen vóór 18 december (`founder/launch.md`).
 
 **Deze week:** ga om tafel met het bestuur van Zwolle. Leg de livedatum, de succescriteria en de
-pioniersprijs (€ 0,39 per lid) vanaf maand 4 vast in een pilotcontract, en vraag toestemming om hun naam later te
+pioniersprijs (€ 0,39 per lid) **vanaf maand 1** vast in een pilotcontract, en vraag toestemming om hun naam later te
 gebruiken.
 
 _Het panel bestaat uit gesimuleerde kopers en de cijfers zijn prognoses; echte besturen en echte

@@ -3,18 +3,18 @@
 **Verdict: Not yet**
 
 - ✓ Each club-month earns € 250.20 before fixed costs (69% contribution).
-- ✗ Year 1 operating LOSS: € 3,394.
-- ✓ Break-even is 3 clubs paying at once against a capacity of 25.
+- ✗ Year 1 operating LOSS: € 159.
+- ✓ Break-even is 2 clubs paying at once against a capacity of 25.
 - ✗ 0 of 20 simulated buyers buy (0%, the bar is 25%).
 
 | key number | |
 | --- | ---: |
 | Price | € 362.70 a club-month |
-| Profit margin at plan | 54% per club-month |
-| Break-even | 3 clubs paying at once |
-| Year 1 operating profit | € -3,394 |
+| Profit margin at plan | 60% per club-month |
+| Break-even | 2 clubs paying at once |
+| Year 1 operating profit | € -159 |
 | Startup spend | € 10,423 |
-| Cash needed before it pays for itself | € 14,034 |
+| Cash needed before it pays for itself | € 11,181 |
 | Startup money earned back | not in year 1 |
 | Buyer panel | 0 buy · 20 pass |
 
@@ -36,15 +36,14 @@ boards of the 263 NGF clubs, first those that must leave E-Golf4U.
 Two of four checks pass, two fail:
 - ✓ **Margin**: each paying club leaves **€ 250.20 a month (69%)** at the pioneer price of € 0.39 per
   member (€ 362.70 on average), after the cost of the new guarantees.
-- ✓ **Break-even**: **3 paying clubs** with the founders unpaid, within the ~25 clubs two people can serve.
-- ✗ **Year 1**: an operating loss of **€ 3,394**: the pioneer discount, escrow and IT partner and the
-  overlap guarantee cost ~€ 3,500 in year 1 (`founder/cfo.md`). With all three levers there (escrow from
-  club 3, Zwolle paying from month 1, Expo Starter) year 1 comes to **€ -159**.
+- ✓ **Break-even**: **2 paying clubs** with the founders unpaid, within the ~25 clubs two people can serve.
+- ✗ **Year 1**: an operating loss of only **€ 159**, with the three levers in the numbers (Zwolle pays from
+  month 1, Expo Starter, escrow and IT partner from the third club). Without them it was € -3,394.
 - ✗ **Buyers**: **0 of 20** simulated buyers buy (bar 25%), with the old pitch and with the improved
   Founding Club offer.
 
 With the founders paid € 2,500 each, break-even is **15 clubs** (3 pioneers + 7 founding + 5 list) and
-year 1 loses **€ 63,394**.
+year 1 would lose **€ 62,643** with pay from month 1.
 
 **What has to change, and which skill changes it.**
 1. **Proof, not a better pitch.** 19 of 20 buyers say what would change their mind: Zwolle live for a
@@ -65,12 +64,12 @@ value for a club (a green fee costs € 50–74; € 0.65 per member is less tha
 Plan: launch kit (import done for them, printed guide, invitations in groups, Saturday helpline),
 a weekly count of active members, and a hard stop on outreach if fewer than 20% are active by week 4.
 
-**What it takes to start.** About **€ 14,000** cash with the founders unpaid (pentest € 7,500,
+**What it takes to start.** About **€ 11,200** cash with the founders unpaid (pentest € 7,500,
 lawyer € 2,500, running costs), and **Test 1**: Zwolle signs a pilot contract with a paid follow-on
 by 13 November, plus 2 letters of intent from other boards by 18 December (`founder/launch.md`).
 
 **This week:** meet Zwolle's board. Fix the go-live date, the success criteria and the founding
-price (pioneer, € 0.39 per member) from month 4 in a pilot contract, and ask permission to use their name later.
+price (pioneer, € 0.39 per member) **from month 1** in a pilot contract, and ask permission to use their name later.
 
 _The panel is simulated buyers and the numbers are projections; real boards and real quotes confirm
 them. Not financial, legal or tax advice._
@@ -438,8 +437,8 @@ Why per member:
 - **Safety net for clubs that must leave E-Golf4U:** Greenside replaces E-Golf4U directly. If the pilot
   does not meet its criteria, we move the club's data free of charge to Nexxchange or IntoGolf, in their
   import format.
-- **Continuity:** monthly automatic export to the club's own storage, source code in escrow, an IT
-  partner on standby, 12 months' notice.
+- **Continuity:** monthly automatic export to the club's own storage, source code in escrow and an
+  IT partner on standby (in place before the third club starts), 12 months' notice.
 - **Stop after the pilot, pay nothing.** No commission on what members buy. Migration fee only for
   clubs after the first ten (€ 750 under 700 members, € 1,500 from 700).
 
@@ -660,8 +659,8 @@ round 3 (`founder/panel-v3/`, 0 of 20 buy; the targeted objections largely disap
   pilot); the first invoice falls in the club's next budget year.
 - **Safety net for E-Golf4U clubs:** Greenside replaces E-Golf4U directly; if the pilot fails, we move the
   data free of charge to Nexxchange or IntoGolf.
-- **Continuity:** monthly export to the club's own storage, source code in escrow, an IT partner on
-  standby, 12 months' notice.
+- **Continuity:** monthly export to the club's own storage, source code in escrow and an IT partner
+  on standby (in place before the third club starts), 12 months' notice.
 - **Members' meeting pack:** proposal, presentation, cost comparison with the club's own invoice, answers,
   and a founder comes along.
 - **Product:** SEPA direct debit file for the club's own bank; handicaps stay in GOLF.NL with a button in
@@ -671,78 +670,70 @@ round 3 (`founder/panel-v3/`, 0 of 20 buy; the targeted objections largely disap
   **founding** (clubs 4–10) € 0.49 for two years.
 - **Guarantee:** stop after the pilot and pay nothing.
 
-**Must exist before the first signature:** escrow agreement and IT partner (quotes), the contract clauses
+**Must exist before the first signature:** the contract clauses
 for overlap, budget year and safety net, the SEPA file, the members' meeting pack, the weekly-copy
-routine. Costs are in `founder/cfo.md`.
+routine. Escrow and the IT partner must be in place before the third club starts (quotes first). Costs
+are in `founder/cfo.md`.
 
 ## The numbers
 
 **Read this first.** The tool prints `€ ` and "a day"; here every amount is in **euros, excl.
 21% VAT**, and "at once" means **clubs paying at the same time**. One unit = one paying club for
-one month. Inputs: `founder/numbers.json` (founders unpaid, today's reality) and
-`founder/numbers-met-salaris.json` (same, plus € 2,500 a month for each founder). Prices from
-`founder/pricing.md` (price per member, three tiers); guarantees from `founder/offer.md` section 6;
-costs checked by `/founder-ops`. Sources and estimates: `founder/cfo-sources.md`. Not financial, tax or
-legal advice: have an accountant check the structure, payroll costs and VAT before money moves.
+one month. Inputs: `founder/numbers.json` (year 1, founders unpaid, with the three levers below) and
+`founder/numbers-met-salaris.json` (the business at ~15 clubs: € 2,500 a month for each founder, escrow,
+IT partner and Expo Production included). Prices from `founder/pricing.md` (price per member, three
+tiers); guarantees from `founder/offer.md` section 6; costs checked by `/founder-ops`. Sources and
+estimates: `founder/cfo-sources.md`. Not financial, tax or legal advice: have an accountant check the
+structure, payroll costs and VAT before money moves.
 
 ### The CFO's note
 
-**What year 1 is.** The first three clubs (Zwolle and two more) are **pioneers at € 0.39 per member**,
-on average **€ 362.70** a club-month. That is the price in the model below. Each pioneer club leaves
-**€ 250.20 a month** (69%) after onboarding and pilot (€ 35), the overlap and budget-year guarantee
-(€ 67, an estimate: on average ~4 months later start, spread over 24 months) and hosting (€ 10).
-Founding clubs (€ 0.49) leave € 343.20, list clubs (€ 0.65) € 492. Running costs without pay are
-**€ 533 a month** (now including escrow ~€ 85 and an IT partner on standby ~€ 50), so **3 pioneer
-clubs cover them**.
+**The three levers, now in the numbers (decided 8 October 2026):**
+1. **Zwolle pays from month 1** at the pioneer price, instead of after a free three-month pilot. Zwolle is
+   the reference club, not a prospect; agree it in the pilot contract (`founder/launch.md`, Test 1).
+2. **Expo Starter (USD 19) instead of Production (USD 99)** while there are fewer than ~5 apps.
+3. **Escrow and IT partner from the third club**, not from day one. On this ramp that is month 12; from
+   then on ~€ 135 a month is added (year 1 € -294 instead of € -159 if you count that last month).
 
-**What the guarantees cost.** Year 1 goes from € +146 (per-member price without the new guarantees and
-without the pioneer tier) to **€ -3,394**: ~€ 1,100 from the pioneer discount, ~€ 1,600 from escrow and
-the IT partner, ~€ 800 from the overlap guarantee (each over the 12 paying club-months of year 1). That is the price of taking the risk off the clubs.
+**The margin.** The first three clubs (Zwolle and two more) are **pioneers at € 0.39 per member**, on
+average **€ 362.70** a club-month. Each leaves **€ 250.20 a month** (69%) after onboarding and pilot
+(€ 35), the overlap and budget-year guarantee (€ 67, estimate) and hosting (€ 10). Founding clubs (€ 0.49)
+leave € 343.20, list clubs (€ 0.65) € 492. Running costs without pay in year 1 are **€ 326 a month**, so
+**2 pioneer clubs cover them**.
 
-**The line to watch: founder pay.** € 2,500 each makes fixed costs € 5,533 a month. The real path is
-**3 pioneers + 7 founding + 5 list = 15 clubs** (6% of the 263 NGF clubs, within the ~25 two people can
-serve). At 3 clubs you still lose about € 4,800 a month with pay.
+**Year 1.** Zwolle pays from month 1; the next clubs sign once Zwolle has proof (month 11: 2, month 12:
+3). Year 1 brings in **€ 5,440** and ends at **€ -159**, almost break-even. Without the levers it was
+€ -3,394.
 
-**The ramp.** Zwolle runs a free pilot in months 1–3 and pays from month 4; the next clubs sign once
-Zwolle has proof (month 11: 2, month 12: 3). The panel backs this: 0 of 20 buy now, 20 of 20 wait for
-Zwolle. Year 1 brings in **€ 4,352**. The overlap guarantee can push real first payments later than
-this ramp; the € 67 a month above is the estimate for that.
+**The line to watch: founder pay.** At scale, with € 2,500 each, escrow, IT partner and Expo Production,
+fixed costs are € 5,533 a month. The real path is **3 pioneers + 7 founding + 5 list = 15 clubs** (6% of
+the 263 NGF clubs, within the ~25 two people can serve). With pay from month 1, year 1 would cost
+**€ 73,066**.
 
 **Cash.**
-- Founders unpaid: you need **€ 14,034** before it pays for itself (start-up € 10,423: security test
-  € 7,500, lawyer € 2,500). Year 1 operating result: **€ -3,394**.
-- Founders paid € 2,500 each from month 1: **€ 73,817** in year 1.
-- The middle way: **pay grows with the clubs.** At 3 pioneer clubs there is about € 220 a month above
-  costs; full pay comes at ~15 clubs, on this ramp in year 2 to 3.
+- Founders unpaid: you need **€ 11,181** before it pays for itself, almost all of it the start-up spend
+  of € 10,423 (security test € 7,500, lawyer € 2,500).
+- The middle way: **pay grows with the clubs.** At 3 pioneer clubs there is about € 425 a month above
+  costs (month 12); full pay comes at ~15 clubs, on this ramp in year 2 to 3.
 
-**Ways to improve it** (what-ifs; unpaid):
-1. **Escrow and IT partner from club 3 instead of day one** (Zwolle knows you): year 1 € -3,394 →
-   **€ -1,774**.
-2. **Zwolle pays from month 1** (it is the reference club, not a prospect) **and Expo Starter** while there
-   are few apps: year 1 → **€ -1,779**. Each on its own: € -2,643 and € -2,530.
-   **All of 1 and 2 together: year 1 € -159.**
-3. **No overlap guarantee for E-Golf4U clubs** (they have no old contract to overlap): saves part of the
-   € 67; without it entirely, year 1 → € -2,590.
-Giving the first clubs the founding price (€ 0.49) instead of the pioneer price would give € -2,278; the
-pioneer discount costs ~€ 1,100 in year 1 and is the one lever aimed straight at "nobody wants to be
-first".
+**What is left to pull.** No overlap guarantee for E-Golf4U clubs (they have no old contract to overlap)
+saves part of the € 67 per club-month. The pioneer discount costs ~€ 1,100 in year 1 and stays: it is the
+one lever aimed straight at "nobody wants to be first".
 
 **The board's money conditions** (`founder/board.md`):
 - *Cost to win one club, cost to run one club, clubs to break even:* **answered, as estimates.** Winning a
   club costs ~€ 560 cash plus ~40 founder hours (~€ 830 per paying club with 1 in 3 pilots walking away),
   plus ~€ 1,600 of later start from the overlap guarantee. Running one costs ~€ 11 a month in cash.
-  Break-even: 3 pioneer clubs unpaid, 15 clubs with € 2,500 each.
-- *A guarantee the business can afford:* **met**, with the costs above in the numbers. The revenue
-  guarantee from the breakthrough plan stays off until Zwolle's numbers exist.
+  Break-even: 2 pioneer clubs unpaid, 15 clubs with € 2,500 each.
+- *A guarantee the business can afford:* **met**, with its costs in the numbers.
 - *At least 3 founding clubs signed before building further:* **not met**; month 12 at the earliest.
 
-**Verdict.** Every tier is profitable per club, but the guarantees and the pioneer discount put year 1 at
-**€ -3,394** and push full pay to ~15 clubs. That is a deliberate trade: money now for removing every
-objection except proof. Decide which levers above to pull before signing the first contract.
+**Verdict.** With the three levers, year 1 is almost break-even (€ -159) with every guarantee in place.
+The money question is founder pay (~15 clubs); the business question is still proof.
 
 ---
 
-### Scenario A: founders unpaid (today)
+### Scenario A: year 1, founders unpaid, three levers
 
 
 #### One club-month
@@ -759,51 +750,51 @@ objection except proof. Decide which levers above to pull before signing the fir
 
 #### The margin that matters
 
-Fixed costs: € 533 a month (Founder pay (none today: founders unpaid; see the second scenario) € 0, Expo EAS Production, USD 99 (public price) € 89, Supabase Pro + Small compute + staging project, ~USD 40 (public price) € 36, Vercel Pro, 1 seat, USD 20 (public price) € 18, Resend Pro, 50,000 e-mails, USD 20 (public price) € 18, Accountant and bookkeeping (estimate) € 100, Liability (BAV, ~EUR 61 indication) and cyber insurance (estimate) € 100, E-mail accounts for 2 founders (estimate) € 14, Helpline phone number (estimate) € 15, Greenside's own Apple developer account, EUR 99 a year (public price) € 8, Source-code escrow, ~EUR 1,000 a year (estimate, quote needed) € 85, IT partner on standby for continuity (estimate, quote needed) € 50).
+Fixed costs: € 326 a month (Founder pay (none today: founders unpaid; see the second scenario) € 0, Expo EAS Starter, USD 19 (public price; Production USD 99 from ~5 apps) € 17, Supabase Pro + Small compute + staging project, ~USD 40 (public price) € 36, Vercel Pro, 1 seat, USD 20 (public price) € 18, Resend Pro, 50,000 e-mails, USD 20 (public price) € 18, Accountant and bookkeeping (estimate) € 100, Liability (BAV, ~EUR 61 indication) and cyber insurance (estimate) € 100, E-mail accounts for 2 founders (estimate) € 14, Helpline phone number (estimate) € 15, Greenside's own Apple developer account, EUR 99 a year (public price) € 8).
 
-- **Break-even: 3 club-months at once.** Below that you lose money every month.
-- **Profit margin at your plan** (10 at once): **54%** of every sale, after every cost.
+- **Break-even: 2 club-months at once.** Below that you lose money every month.
+- **Profit margin at your plan** (10 at once): **60%** of every sale, after every cost.
 - Capacity: 25 at once.
 
 #### Year 1, month by month
 
 | month | club-months at once | revenue | profit | cumulative (after € 10,423 startup) |
 | ---: | ---: | ---: | ---: | ---: |
-| 1 | 0 | € 0 | € -533 | € -10,956 |
-| 2 | 0 | € 0 | € -533 | € -11,489 |
-| 3 | 0 | € 0 | € -533 | € -12,022 |
-| 4 | 1 | € 363 | € -283 | € -12,305 |
-| 5 | 1 | € 363 | € -283 | € -12,588 |
-| 6 | 1 | € 363 | € -283 | € -12,870 |
-| 7 | 1 | € 363 | € -283 | € -13,153 |
-| 8 | 1 | € 363 | € -283 | € -13,436 |
-| 9 | 1 | € 363 | € -283 | € -13,719 |
-| 10 | 1 | € 363 | € -283 | € -14,002 |
-| 11 | 2 | € 725 | € -33 | € -14,034 |
-| 12 | 3 | € 1,088 | € 218 | € -13,817 |
+| 1 | 1 | € 363 | € -76 | € -10,499 |
+| 2 | 1 | € 363 | € -76 | € -10,575 |
+| 3 | 1 | € 363 | € -76 | € -10,650 |
+| 4 | 1 | € 363 | € -76 | € -10,726 |
+| 5 | 1 | € 363 | € -76 | € -10,802 |
+| 6 | 1 | € 363 | € -76 | € -10,878 |
+| 7 | 1 | € 363 | € -76 | € -10,954 |
+| 8 | 1 | € 363 | € -76 | € -11,029 |
+| 9 | 1 | € 363 | € -76 | € -11,105 |
+| 10 | 1 | € 363 | € -76 | € -11,181 |
+| 11 | 2 | € 725 | € 174 | € -11,007 |
+| 12 | 3 | € 1,088 | € 425 | € -10,582 |
 
-- **Year 1 operating profit: € -3,394** on € 4,352 of revenue.
-- After the € 10,423 startup spend: € -13,817.
+- **Year 1 operating profit: € -159** on € 5,440 of revenue.
+- After the € 10,423 startup spend: € -10,582.
 - Startup money earned back: not within year 1.
-- Cash you need before it pays for itself: **€ 14,034**.
+- Cash you need before it pays for itself: **€ 11,181**.
 
 #### What if
 
 | scenario | margin at plan | break-even at once | year 1 profit |
 | --- | ---: | ---: | ---: |
-| Base plan | 54% | 3 | € -3,394 |
-| Price -10% | 49% | 3 | € -3,829 |
-| Volume -20% | 51% | 3 | € -3,994 |
-| Unit costs +15% | 50% | 3 | € -3,596 |
+| Base plan | 60% | 2 | € -159 |
+| Price -10% | 56% | 2 | € -703 |
+| Volume -20% | 58% | 2 | € -910 |
+| Unit costs +15% | 55% | 2 | € -412 |
 
 #### Red flags
 
-- Year 1 loses money on operations (€ -3,394).
+- Year 1 loses money on operations (€ -159).
 - The startup spend is not earned back within year 1.
 
 ---
 
-### Scenario B: founders paid € 2,500 a month each
+### Scenario B: at scale, founders paid € 2,500 a month each
 
 
 #### One club-month
@@ -830,36 +821,36 @@ Fixed costs: € 5,533 a month (Founder pay: 2 founders x EUR 2,500 a month (the
 
 | month | club-months at once | revenue | profit | cumulative (after € 10,423 startup) |
 | ---: | ---: | ---: | ---: | ---: |
-| 1 | 0 | € 0 | € -5,533 | € -15,956 |
-| 2 | 0 | € 0 | € -5,533 | € -21,489 |
-| 3 | 0 | € 0 | € -5,533 | € -27,022 |
-| 4 | 1 | € 363 | € -5,283 | € -32,305 |
-| 5 | 1 | € 363 | € -5,283 | € -37,588 |
-| 6 | 1 | € 363 | € -5,283 | € -42,870 |
-| 7 | 1 | € 363 | € -5,283 | € -48,153 |
-| 8 | 1 | € 363 | € -5,283 | € -53,436 |
-| 9 | 1 | € 363 | € -5,283 | € -58,719 |
-| 10 | 1 | € 363 | € -5,283 | € -64,002 |
-| 11 | 2 | € 725 | € -5,033 | € -69,034 |
-| 12 | 3 | € 1,088 | € -4,782 | € -73,817 |
+| 1 | 1 | € 363 | € -5,283 | € -15,706 |
+| 2 | 1 | € 363 | € -5,283 | € -20,989 |
+| 3 | 1 | € 363 | € -5,283 | € -26,271 |
+| 4 | 1 | € 363 | € -5,283 | € -31,554 |
+| 5 | 1 | € 363 | € -5,283 | € -36,837 |
+| 6 | 1 | € 363 | € -5,283 | € -42,120 |
+| 7 | 1 | € 363 | € -5,283 | € -47,403 |
+| 8 | 1 | € 363 | € -5,283 | € -52,685 |
+| 9 | 1 | € 363 | € -5,283 | € -57,968 |
+| 10 | 1 | € 363 | € -5,283 | € -63,251 |
+| 11 | 2 | € 725 | € -5,033 | € -68,284 |
+| 12 | 3 | € 1,088 | € -4,782 | € -73,066 |
 
-- **Year 1 operating profit: € -63,394** on € 4,352 of revenue.
-- After the € 10,423 startup spend: € -73,817.
+- **Year 1 operating profit: € -62,643** on € 5,440 of revenue.
+- After the € 10,423 startup spend: € -73,066.
 - Startup money earned back: not within year 1.
-- Cash you need before it pays for itself: **€ 73,817**.
+- Cash you need before it pays for itself: **€ 73,066**.
 
 #### What if
 
 | scenario | margin at plan | break-even at once | year 1 profit |
 | --- | ---: | ---: | ---: |
-| Base plan | -84% | 23 | € -63,394 |
-| Price -10% | -104% | 26 | € -63,829 |
-| Volume -20% | -122% | 23 | € -63,994 |
-| Unit costs +15% | -88% | 24 | € -63,596 |
+| Base plan | -84% | 23 | € -62,643 |
+| Price -10% | -104% | 26 | € -63,187 |
+| Volume -20% | -122% | 23 | € -63,394 |
+| Unit costs +15% | -88% | 24 | € -62,896 |
 
 #### Red flags
 
-- Year 1 loses money on operations (€ -63,394).
+- Year 1 loses money on operations (€ -62,643).
 - The startup spend is not earned back within year 1.
 
 ## Marketing
@@ -1017,7 +1008,7 @@ running, onboarding and pilot costs. The panel's buy rate is 0%, so it cannot gi
 rate; the cap comes from cash instead. Two rules:
 - **Spend at most 3 months of contribution, about € 1,030 cash per club won (€ 750 for a pioneer)**, so a club pays back
   its own acquisition in its first quarter after the pilot.
-- **Never spend more than you have**: with the founders unpaid, total cash need is about € 14,000
+- **Never spend more than you have**: with the founders unpaid, total cash need is about € 11,200
   (`founder/cfo.md`); this campaign adds € 1,600.
 The real cost is founder time: ~40 hours of onboarding per club, plus selling.
 
@@ -1236,7 +1227,8 @@ re-run):
 Result: contribution € 318.50 per club-month (was € 290), fixed costs € 398 (was € 373),
 break-even with € 2,500 pay for each founder **16 clubs** (10 founding + 6 list; was 18). After the
 switch to a price per member with pioneer tier and guarantees (8 October 2026): break-even with pay
-**15 clubs** (3 pioneers + 7 founding + 5 list), fixed costs € 533 incl. escrow and IT partner.
+**15 clubs** (3 pioneers + 7 founding + 5 list), fixed costs € 533 incl. escrow and IT partner. Year 1
+runs on Expo Starter (USD 19) and starts escrow and the IT partner at the third club: € 326 a month.
 
 ### 1. The daily cycle
 
@@ -1442,7 +1434,7 @@ advice.
 ### 8. Added with the breakthrough offer (8 October 2026)
 
 **New suppliers** (quotes needed; estimates in `founder/cfo.md`):
-- **Source-code escrow**: a Dutch escrow agent or a notary holds the code and releases it to the clubs if
+- **Source-code escrow** (in place before the third club starts): a Dutch escrow agent or a notary holds the code and releases it to the clubs if
   Greenside stops. Estimate ~€ 1,000 a year.
 - **IT partner on standby**: a small Dutch software firm that knows the stack (Supabase, Expo, Next.js),
   with a written agreement to keep the platform running for 12 months if the founders stop. Estimate
@@ -1488,8 +1480,10 @@ decides **whether to start paying yourselves or raise money**, not whether to go
 The fitting test for a subscription sold to boards: **real boards, the real price, a signature.**
 
 **Test 1 — before the pentest is booked (12 October – 18 December 2026)**
-- Zwolle signs the pilot contract: success criteria in writing, and as a **pioneer** (€ 0.39 per member a month, fixed three years) **from month 4 if the criteria
-  are met**.
+- Zwolle signs the pilot contract: success criteria in writing, and as a **pioneer** (€ 0.39 per member a month, fixed three years)
+  **paying from month 1** (go-live). In return Zwolle is the reference club and keeps the pioneer price;
+  if the success criteria are not met at week 12, Zwolle can still stop. Negotiate this; it is worth
+  ~€ 1,100 in year 1 (`founder/cfo.md`).
 - 15 letters to clubs still on E-Golf4U or near Zwolle (marketing hook 1). No claims about Zwolle.
 - **Success line: Zwolle signed by 13 November, and by 18 December at least 5 board conversations and
   2 signed letters of intent** ("if Zwolle meets its criteria, we start a pilot in 2027 at the pioneer price of € 0.39 per member").
@@ -1597,7 +1591,7 @@ campaign today (`marketing.md`): all attention on Zwolle.
 | Support hours for Zwolle | own log | falls each week | above 10 hours a week after week 2 → the guide or the app is unclear; fix what repeats |
 | Board conversations booked | marketing log | 3 a week | below 2 a week for two weeks → rewrite the letter, phone first, ask Zwolle for an intro |
 | Pilot requests / letters of intent | marketing log | 3 by 30 May | 0 after 10 conversations → back to `/founder-offer` |
-| Paying clubs vs break-even | CFO | 0 in the first 30 days (Zwolle is in its free pilot); break-even 3 pioneer clubs unpaid, 15 clubs with pay | — the money test is Test 2, not the first month |
+| Paying clubs vs break-even | CFO | 1 (Zwolle pays from month 1); break-even 2 pioneer clubs unpaid, 15 clubs with pay | — the money test is Test 2, not the first month |
 
 **Reviews** (A+B, one hour, written notes):
 

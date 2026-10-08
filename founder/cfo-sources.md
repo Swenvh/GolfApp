@@ -63,7 +63,8 @@ account (`club_payment_settings`, README "Naar productie"), so those fees land w
 
 ## The ramp, and how it was checked
 `ramp_per_day` = paying clubs at once in each month of year 1: `0,0,0,1,1,1,1,1,1,1,2,3`.
-- Month 1 = Zwolle goes live. Months 1–3 are Zwolle's free pilot; Zwolle pays from month 4
+- Month 1 = Zwolle goes live and pays from month 1 (lever decided 8 October 2026; before: free pilot
+  in months 1–3, paying from month 4)
   (assumes Zwolle takes the founding offer; not agreed).
 - Panel check: v1 and v2 both 0 of 20 buy today (`founder/panel/results.md`,
   `founder/panel-v2/results.md`), and 19 of 20 v2 buyers say they would look again after Zwolle

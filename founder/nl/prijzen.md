@@ -60,8 +60,8 @@ Waarom per lid:
 - **Vangnet voor clubs die van E-Golf4U af moeten:** Greenside vervangt E-Golf4U direct. Haalt de pilot
   de criteria niet, dan zetten wij de gegevens van de club kosteloos over naar Nexxchange of IntoGolf, in
   hun importformaat.
-- **Continuïteit:** maandelijks automatisch een export naar opslag van de club zelf, broncode in escrow,
-  een IT-partner als vangnet, 12 maanden opzegtermijn.
+- **Continuïteit:** maandelijks automatisch een export naar opslag van de club zelf, broncode in escrow
+  en een IT-partner als vangnet (geregeld voordat de derde club start), 12 maanden opzegtermijn.
 - **Stoppen na de pilot = niets betalen.** Geen commissie op wat leden kopen. Migratiekosten alleen voor
   clubs na de eerste tien (€ 750 onder 700 leden, € 1.500 vanaf 700).
 

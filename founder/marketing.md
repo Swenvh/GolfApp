@@ -153,7 +153,7 @@ running, onboarding and pilot costs. The panel's buy rate is 0%, so it cannot gi
 rate; the cap comes from cash instead. Two rules:
 - **Spend at most 3 months of contribution, about € 1,030 cash per club won (€ 750 for a pioneer)**, so a club pays back
   its own acquisition in its first quarter after the pilot.
-- **Never spend more than you have**: with the founders unpaid, total cash need is about € 14,000
+- **Never spend more than you have**: with the founders unpaid, total cash need is about € 11,200
   (`founder/cfo.md`); this campaign adds € 1,600.
 The real cost is founder time: ~40 hours of onboarding per club, plus selling.
 

@@ -1,6 +1,6 @@
 # Greenside · one page
 
-**Verdict: Not yet.** Every club is profitable, but the guarantees put year 1 at a small loss, and the proof (a live club, buyers who sign) does not exist yet.
+**Verdict: Not yet.** Every club is profitable and year 1 is almost break-even (€ -159), and the proof (a live club, buyers who sign) does not exist yet.
 
 **The problem.** Dutch golf clubs run their members, tee times and invoices on club software, and
 most give their members only a web page saved to the home screen. E-Golf4U is being retired, so its
@@ -25,16 +25,16 @@ system is cancelled), and a safety net for clubs leaving E-Golf4U.
 | key number | |
 | --- | ---: |
 | Price | € 362.70 a club-month (pioneer, average) |
-| Profit margin at plan | 54% per club-month |
-| Break-even | 3 clubs paying |
-| Year 1 operating profit | € -3,394 |
+| Profit margin at plan | 60% per club-month |
+| Break-even | 2 clubs paying |
+| Year 1 operating profit | € -159 |
 | Startup spend | € 10,423 |
-| Cash needed before it pays for itself | € 14,034 |
+| Cash needed before it pays for itself | € 11,181 |
 | Startup money earned back | not in year 1 |
 | Buyer panel | 0 buy · 20 pass |
 
 With the founders paid € 2,500 each: break-even **15 clubs** (3 pioneers + 7 founding + 5 list),
-year 1 **€ -63,394**, cash needed **€ 73,817**.
+year 1 **€ -62,643**, cash needed **€ 73,066**.
 
 **The evidence**
 - **Product**: working and frozen as `pilot-v1`; the first club's branded app (Golfclub Zwolle) is
@@ -51,9 +51,9 @@ year 1 **€ -63,394**, cash needed **€ 73,817**.
 
 **What the money is for.** € 10,423 start-up: an external security test (€ 7,500), the lawyer for the
 data processing agreement, privacy statement and contracts (€ 2,500), registration and set-up; plus
-running costs of € 533 a month (incl. escrow and an IT partner) until three clubs pay.
+running costs of € 326 a month until two clubs pay (escrow and IT partner, ~€ 135 a month, from the third club).
 
-**The ask.** None yet, on purpose: the founders cover the € 14,034 themselves and go live at Zwolle
+**The ask.** None yet, on purpose: the founders cover the € 11,181 themselves and go live at Zwolle
 first. After Zwolle's pilot (end of May 2027), with real adoption numbers, the question becomes
 whether to bridge founder pay (€ 5,000 a month) until ~15 clubs pay.
 

@@ -153,8 +153,8 @@ round 3 (`founder/panel-v3/`, 0 of 20 buy; the targeted objections largely disap
   pilot); the first invoice falls in the club's next budget year.
 - **Safety net for E-Golf4U clubs:** Greenside replaces E-Golf4U directly; if the pilot fails, we move the
   data free of charge to Nexxchange or IntoGolf.
-- **Continuity:** monthly export to the club's own storage, source code in escrow, an IT partner on
-  standby, 12 months' notice.
+- **Continuity:** monthly export to the club's own storage, source code in escrow and an IT partner
+  on standby (in place before the third club starts), 12 months' notice.
 - **Members' meeting pack:** proposal, presentation, cost comparison with the club's own invoice, answers,
   and a founder comes along.
 - **Product:** SEPA direct debit file for the club's own bank; handicaps stay in GOLF.NL with a button in
@@ -164,6 +164,7 @@ round 3 (`founder/panel-v3/`, 0 of 20 buy; the targeted objections largely disap
   **founding** (clubs 4–10) € 0.49 for two years.
 - **Guarantee:** stop after the pilot and pay nothing.
 
-**Must exist before the first signature:** escrow agreement and IT partner (quotes), the contract clauses
+**Must exist before the first signature:** the contract clauses
 for overlap, budget year and safety net, the SEPA file, the members' meeting pack, the weekly-copy
-routine. Costs are in `founder/cfo.md`.
+routine. Escrow and the IT partner must be in place before the third club starts (quotes first). Costs
+are in `founder/cfo.md`.

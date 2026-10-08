@@ -3,18 +3,18 @@
 **Oordeel: Nog niet**
 
 - ✓ Elke club levert per maand € 250,20 op vóór vaste kosten (69% bijdrage, pioniersprijs).
-- ✗ Bedrijfsresultaat jaar 1: VERLIES van € 3.394.
-- ✓ Break-even ligt bij 3 betalende clubs, tegenover een capaciteit van 25.
+- ✗ Bedrijfsresultaat jaar 1: VERLIES van € 159.
+- ✓ Break-even ligt bij 2 betalende clubs, tegenover een capaciteit van 25.
 - ✗ 0 van de 20 gesimuleerde kopers kopen (0%, de lat ligt op 25%).
 
 | kerncijfer | |
 | --- | ---: |
 | Prijs | € 362,70 per club per maand (pioniers, gemiddeld) |
-| Winstmarge bij het plan | 54% per club per maand |
-| Break-even | 3 betalende clubs |
-| Bedrijfsresultaat jaar 1 | € -3.394 |
+| Winstmarge bij het plan | 60% per club per maand |
+| Break-even | 2 betalende clubs |
+| Bedrijfsresultaat jaar 1 | € -159 |
 | Startkosten | € 10.423 |
-| Benodigd geld tot het zichzelf betaalt | € 14.034 |
+| Benodigd geld tot het zichzelf betaalt | € 11.181 |
 | Startkosten terugverdiend | niet in jaar 1 |
 | Kooppanel | 0 kopen · 20 niet |
 
@@ -51,16 +51,15 @@ van de 263 NGF-clubs, eerst de clubs die van E-Golf4U af moeten.
 de vier toetsen slagen, twee niet:
 - ✓ **Marge**: elke betalende club laat **€ 250,20 per maand (69%)** over bij de pioniersprijs van
   € 0,39 per lid (gemiddeld € 362,70), na de kosten van de nieuwe garanties.
-- ✓ **Break-even**: **3 betalende clubs** zonder salaris, ruim binnen de ~25 clubs die twee mensen
+- ✓ **Break-even**: **2 betalende clubs** zonder salaris, ruim binnen de ~25 clubs die twee mensen
   kunnen bedienen.
-- ✗ **Jaar 1**: een verlies van **€ 3.394**: de pionierskorting, escrow en IT-partner en de
-  overlapgarantie kosten in jaar 1 ~€ 3.500 (De cijfers). Met alle drie de knoppen daar (escrow vanaf
-  club 3, Zwolle betaalt vanaf maand 1, Expo Starter) komt jaar 1 op **€ -159**.
+- ✗ **Jaar 1**: een verlies van maar **€ 159**, met de drie knoppen in de cijfers (Zwolle betaalt vanaf
+  maand 1, Expo Starter, escrow en IT-partner vanaf de derde club). Zonder was het € -3.394.
 - ✗ **Kopers**: **0 van de 20** gesimuleerde kopers kopen (de lat ligt op 25%), met de oude pitch én
   met het verbeterde Founding Club-aanbod.
 
 Met € 2.500 salaris per oprichter ligt de break-even op **15 clubs** (3 pioniers + 7 oprichters + 5
-normaal) en is het verlies in jaar 1 **€ 63.394**.
+normaal) en zou het verlies in jaar 1 met salaris vanaf maand 1 **€ 62.643** zijn.
 
 **Wat er moet veranderen, en welke stap dat doet.**
 1. **Bewijs, geen betere pitch.** 19 van de 20 kopers zeggen wat ze over de streep trekt: Zwolle een
@@ -84,12 +83,12 @@ anders. Aanpak: een lanceerpakket (import voor ze gedaan, papieren handleiding, 
 groepjes, hulplijn op zaterdag), wekelijks tellen hoeveel leden actief zijn, en direct stoppen met
 verkopen als in week 4 minder dan 20% actief is.
 
-**Wat er nodig is om te starten.** Ongeveer **€ 14.000** zonder salaris (pentest € 7.500, jurist
+**Wat er nodig is om te starten.** Ongeveer **€ 11.200** zonder salaris (pentest € 7.500, jurist
 € 2.500, vaste kosten), en **test 1**: Zwolle tekent vóór 13 november een pilotcontract met betaald
 vervolg, plus 2 intentieverklaringen van andere besturen vóór 18 december (`founder/launch.md`).
 
 **Deze week:** ga om tafel met het bestuur van Zwolle. Leg de livedatum, de succescriteria en de
-pioniersprijs (€ 0,39 per lid) vanaf maand 4 vast in een pilotcontract, en vraag toestemming om hun naam later te
+pioniersprijs (€ 0,39 per lid) **vanaf maand 1** vast in een pilotcontract, en vraag toestemming om hun naam later te
 gebruiken.
 
 _Het panel bestaat uit gesimuleerde kopers en de cijfers zijn prognoses; echte besturen en echte
@@ -473,8 +472,8 @@ Waarom per lid:
 - **Vangnet voor clubs die van E-Golf4U af moeten:** Greenside vervangt E-Golf4U direct. Haalt de pilot
   de criteria niet, dan zetten wij de gegevens van de club kosteloos over naar Nexxchange of IntoGolf, in
   hun importformaat.
-- **Continuïteit:** maandelijks automatisch een export naar opslag van de club zelf, broncode in escrow,
-  een IT-partner als vangnet, 12 maanden opzegtermijn.
+- **Continuïteit:** maandelijks automatisch een export naar opslag van de club zelf, broncode in escrow
+  en een IT-partner als vangnet (geregeld voordat de derde club start), 12 maanden opzegtermijn.
 - **Stoppen na de pilot = niets betalen.** Geen commissie op wat leden kopen. Migratiekosten alleen voor
   clubs na de eerste tien (€ 750 onder 700 leden, € 1.500 vanaf 700).
 
@@ -722,8 +721,8 @@ panelronde 3 (0 van 20 kopen; de bezwaren waar het op gericht was zijn grotendee
   na de pilot); de eerste factuur valt in het volgende begrotingsjaar van de club.
 - **Vangnet voor E-Golf4U-clubs:** Greenside vervangt E-Golf4U direct; mislukt de pilot, dan zetten wij
   de gegevens kosteloos over naar Nexxchange of IntoGolf.
-- **Continuïteit:** maandelijkse export naar eigen opslag van de club, broncode in escrow, een IT-partner
-  als vangnet, 12 maanden opzegtermijn.
+- **Continuïteit:** maandelijkse export naar eigen opslag van de club, broncode in escrow en een
+  IT-partner als vangnet (geregeld voordat de derde club start), 12 maanden opzegtermijn.
 - **ALV-pakket:** voorstel, presentatie, kostenvergelijking met de eigen factuur van de club, antwoorden,
   en een oprichter komt mee.
 - **Product:** SEPA-incassobestand voor de eigen bank van de club; handicaps blijven in GOLF.NL, met een
@@ -733,83 +732,74 @@ panelronde 3 (0 van 20 kopen; de bezwaren waar het op gericht was zijn grotendee
   **oprichters** (club 4–10) € 0,49 voor twee jaar.
 - **Garantie:** stoppen na de pilot = niets betalen.
 
-**Moet bestaan vóór de eerste handtekening:** escrowovereenkomst en IT-partner (offertes), de
+**Moet bestaan vóór de eerste handtekening:** de
 contractclausules voor overlap, begrotingsjaar en vangnet, het SEPA-bestand, het ALV-pakket, de routine
-voor de wekelijkse kopie. Kosten staan in De cijfers.
+voor de wekelijkse kopie. Escrow en de IT-partner moeten geregeld zijn voordat de derde club start
+(eerst offertes). Kosten staan in De cijfers.
 
 ## De cijfers
 
 **Lees dit eerst.** Alle bedragen zijn in **euro, excl. 21% btw**. Eén eenheid = één betalende club
 gedurende één maand; "tegelijk" betekent **clubs die op hetzelfde moment betalen**. Invoer:
-`founder/numbers.json` (oprichters onbetaald, de situatie nu) en `founder/numbers-met-salaris.json`
-(hetzelfde, plus € 2.500 per maand voor elke oprichter). Prijzen uit Prijzen (prijs per lid, drie lagen);
+`founder/numbers.json` (jaar 1, oprichters onbetaald, met de drie knoppen hieronder) en
+`founder/numbers-met-salaris.json` (het bedrijf bij ~15 clubs: € 2.500 per maand voor elke oprichter,
+escrow, IT-partner en Expo Production inbegrepen). Prijzen uit Prijzen (prijs per lid, drie lagen);
 garanties uit Het aanbod, hoofdstuk 6; kosten gecontroleerd bij Operatie. Bronnen en schattingen:
 `founder/cfo-sources.md`. Geen financieel, fiscaal of juridisch advies: laat een boekhouder de
 rechtsvorm, loonkosten en btw controleren voordat er geld uitgaat.
 
 ### De toelichting van de CFO
 
-**Wat jaar 1 is.** De eerste drie clubs (Zwolle en nog twee) zijn **pioniers tegen € 0,39 per lid**,
-gemiddeld **€ 362,70** per club per maand. Dat is de prijs in het model hieronder. Elke pioniersclub laat
-**€ 250,20 per maand** (69%) over na overstap en pilot (€ 35), de overlap- en begrotingsjaargarantie
-(€ 67, een schatting: gemiddeld ~4 maanden later starten, verdeeld over 24 maanden) en hosting (€ 10).
+**De drie knoppen, nu in de cijfers (besloten op 8 oktober 2026):**
+1. **Zwolle betaalt vanaf maand 1** tegen de pioniersprijs, in plaats van na een gratis pilot van drie
+   maanden. Zwolle is de referentieclub, geen prospect; leg het vast in het pilotcontract (Lanceerplan,
+   test 1).
+2. **Expo Starter (USD 19) in plaats van Production (USD 99)** zolang er minder dan ~5 apps zijn.
+3. **Escrow en IT-partner vanaf de derde club**, niet vanaf dag één. Bij deze groei is dat maand 12;
+   vanaf dan komt er ~€ 135 per maand bij (jaar 1 € -294 in plaats van € -159 als je die laatste maand
+   meetelt).
+
+**De marge.** De eerste drie clubs (Zwolle en nog twee) zijn **pioniers tegen € 0,39 per lid**,
+gemiddeld **€ 362,70** per club per maand. Elke pioniersclub laat **€ 250,20 per maand** (69%) over na
+overstap en pilot (€ 35), de overlap- en begrotingsjaargarantie (€ 67, schatting) en hosting (€ 10).
 Oprichtersclubs (€ 0,49) laten € 343,20 over, clubs tegen de normale prijs (€ 0,65) € 492. De vaste
-kosten zonder salaris zijn **€ 533 per maand** (nu inclusief escrow ~€ 85 en een IT-partner als vangnet
-~€ 50), dus **3 pioniersclubs dekken ze**.
+kosten zonder salaris zijn in jaar 1 **€ 326 per maand**, dus **2 pioniersclubs dekken ze**.
 
-**Wat de garanties kosten.** Jaar 1 gaat van € +146 (prijs per lid zonder de nieuwe garanties en zonder
-pionierslaag) naar **€ -3.394**: ~€ 1.100 door de pionierskorting, ~€ 1.600 door escrow en de IT-partner,
-~€ 800 door de overlapgarantie (elk over de 12 betalende clubmaanden in jaar 1). Dat is de prijs van het
-risico bij de clubs weghalen.
+**Jaar 1.** Zwolle betaalt vanaf maand 1; de volgende clubs tekenen als Zwolle bewijs heeft (maand 11: 2,
+maand 12: 3). Jaar 1 levert **€ 5.440** omzet op en eindigt op **€ -159**, bijna quitte. Zonder de knoppen
+was het € -3.394.
 
-**De regel om in de gaten te houden: salaris voor de oprichters.** Met € 2.500 elk worden de vaste
-kosten € 5.533 per maand. De echte route is **3 pioniers + 7 oprichters + 5 normaal = 15 clubs** (6% van
-de 263 NGF-clubs, binnen de ~25 die twee mensen kunnen bedienen). Bij 3 clubs verlies je met salaris nog
-ongeveer € 4.800 per maand.
-
-**De groei.** Zwolle draait in maand 1–3 een gratis pilot en betaalt vanaf maand 4; de volgende clubs
-tekenen als Zwolle bewijs heeft (maand 11: 2, maand 12: 3). Het panel ondersteunt dat: 0 van de 20 kopen
-nu, 20 van de 20 wachten op Zwolle. Jaar 1 levert **€ 4.352** omzet op. De overlapgarantie kan de echte
-eerste betalingen later maken dan deze groei; de € 67 per maand hierboven is de schatting daarvoor.
+**De regel om in de gaten te houden: salaris voor de oprichters.** Op schaal, met € 2.500 elk, escrow,
+IT-partner en Expo Production, zijn de vaste kosten € 5.533 per maand. De echte route is **3 pioniers +
+7 oprichters + 5 normaal = 15 clubs** (6% van de 263 NGF-clubs, binnen de ~25 die twee mensen kunnen
+bedienen). Met salaris vanaf maand 1 zou jaar 1 **€ 73.066** kosten.
 
 **Geld.**
-- Oprichters onbetaald: je hebt **€ 14.034** nodig tot het zichzelf betaalt (startkosten € 10.423:
-  beveiligingstest € 7.500, jurist € 2.500). Bedrijfsresultaat jaar 1: **€ -3.394**.
-- Oprichters vanaf maand 1 € 2.500 elk: **€ 73.817** in jaar 1.
-- De middenweg: **het salaris groeit mee met de clubs.** Bij 3 pioniersclubs is er ongeveer € 220 per
-  maand boven de kosten; het volle salaris komt bij ~15 clubs, bij deze groei in jaar 2 à 3.
+- Oprichters onbetaald: je hebt **€ 11.181** nodig tot het zichzelf betaalt, bijna helemaal de
+  startkosten van € 10.423 (beveiligingstest € 7.500, jurist € 2.500).
+- De middenweg: **het salaris groeit mee met de clubs.** Bij 3 pioniersclubs is er ongeveer € 425 per
+  maand boven de kosten (maand 12); het volle salaris komt bij ~15 clubs, bij deze groei in jaar 2 à 3.
 
-**Manieren om het te verbeteren** (wat-als, onbetaald):
-1. **Escrow en IT-partner vanaf club 3 in plaats van vanaf dag één** (Zwolle kent jullie): jaar 1
-   € -3.394 → **€ -1.774**.
-2. **Zwolle betaalt vanaf maand 1** (het is de referentieclub, geen prospect) **en Expo Starter** zolang er
-   weinig apps zijn: jaar 1 → **€ -1.779**. Elk apart: € -2.643 en € -2.530.
-   **1 en 2 samen: jaar 1 € -159.**
-3. **Geen overlapgarantie voor E-Golf4U-clubs** (die hebben geen oud contract dat doorloopt): bespaart een
-   deel van de € 67; helemaal zonder wordt jaar 1 € -2.590.
-De eerste clubs de oprichtersprijs (€ 0,49) geven in plaats van de pioniersprijs zou € -2.278 geven; de
-pionierskorting kost in jaar 1 ~€ 1.100 en is de enige knop die direct mikt op "niemand wil de eerste
-zijn".
+**Wat er nog te halen valt.** Geen overlapgarantie voor E-Golf4U-clubs (die hebben geen oud contract dat
+doorloopt) bespaart een deel van de € 67 per club per maand. De pionierskorting kost in jaar 1 ~€ 1.100 en
+blijft: het is de enige knop die direct mikt op "niemand wil de eerste zijn".
 
 **De geldvoorwaarden van de board:**
 - *Kosten om een club te winnen, kosten om een club te bedienen, clubs voor de break-even:* **beantwoord,
   als schatting.** Een club winnen kost ~€ 560 contant plus ~40 uur van de oprichters (~€ 830 per
   betalende club als 1 op de 3 pilots stopt), plus ~€ 1.600 later starten door de overlapgarantie. Eén
-  club bedienen kost ~€ 11 per maand contant. Break-even: 3 pioniersclubs onbetaald, 15 clubs met € 2.500
+  club bedienen kost ~€ 11 per maand contant. Break-even: 2 pioniersclubs onbetaald, 15 clubs met € 2.500
   elk.
-- *Een garantie die het bedrijf kan betalen:* **gehaald**, met de kosten hierboven in de cijfers. De
-  resultaatgarantie uit het doorbraakplan blijft uit tot de cijfers van Zwolle er zijn.
+- *Een garantie die het bedrijf kan betalen:* **gehaald**, met de kosten in de cijfers.
 - *Minstens 3 oprichtersclubs getekend voordat er verder gebouwd wordt:* **niet gehaald**; op zijn vroegst
   in maand 12.
 
-**Oordeel.** Elke laag is per club winstgevend, maar de garanties en de pionierskorting zetten jaar 1 op
-**€ -3.394** en schuiven het volle salaris naar ~15 clubs. Dat is een bewuste ruil: geld nu, voor het
-wegnemen van elk bezwaar behalve bewijs. Beslis welke knoppen hierboven je gebruikt voordat het eerste
-contract getekend wordt.
+**Oordeel.** Met de drie knoppen is jaar 1 bijna quitte (€ -159), met alle garanties erin. De geldvraag is
+het salaris van de oprichters (~15 clubs); de bedrijfsvraag is nog steeds bewijs.
 
 ---
 
-### Scenario A: oprichters onbetaald (nu)
+### Scenario A: jaar 1, oprichters onbetaald, drie knoppen
 
 
 #### Eén club per maand
@@ -826,10 +816,10 @@ contract getekend wordt.
 
 #### De marge die telt
 
-Vaste kosten: **€ 533 per maand**:
+Vaste kosten: **€ 326 per maand**:
 
 - Salaris oprichters (nu geen: onbetaald; zie scenario B): € 0
-- Expo EAS Production, USD 99 (openbare prijs): € 89
+- Expo EAS Starter, USD 19 (openbare prijs; Production USD 99 vanaf ~5 apps): € 17
 - Supabase Pro + Small compute + testproject, ~USD 40 (openbare prijs): € 36
 - Vercel Pro, 1 gebruiker, USD 20 (openbare prijs): € 18
 - Resend Pro, 50.000 e-mails, USD 20 (openbare prijs): € 18
@@ -838,52 +828,50 @@ Vaste kosten: **€ 533 per maand**:
 - E-mailaccounts voor 2 oprichters (schatting): € 14
 - Telefoonnummer hulplijn (schatting): € 15
 - Eigen Apple-ontwikkelaarsaccount van Greenside, € 99 per jaar (openbare prijs): € 8
-- Broncode-escrow, ~€ 1.000 per jaar (schatting, offerte nodig): € 85
-- IT-partner als vangnet voor continuïteit (schatting, offerte nodig): € 50
 
-- **Break-even: 3 betalende clubs tegelijk.** Daaronder verlies je elke maand geld.
-- **Winstmarge bij het plan** (10 clubs tegelijk): **54%** van elke verkoop, na alle kosten.
+- **Break-even: 2 betalende clubs tegelijk.** Daaronder verlies je elke maand geld.
+- **Winstmarge bij het plan** (10 clubs tegelijk): **60%** van elke verkoop, na alle kosten.
 - Capaciteit: 25 clubs tegelijk.
 
 #### Jaar 1, per maand
 
 | maand | betalende clubs | omzet | resultaat | cumulatief (na € 10.423 startkosten) |
 | ---: | ---: | ---: | ---: | ---: |
-| 1 | 0 | € 0 | € -533 | € -10.956 |
-| 2 | 0 | € 0 | € -533 | € -11.489 |
-| 3 | 0 | € 0 | € -533 | € -12.022 |
-| 4 | 1 | € 363 | € -283 | € -12.305 |
-| 5 | 1 | € 363 | € -283 | € -12.588 |
-| 6 | 1 | € 363 | € -283 | € -12.870 |
-| 7 | 1 | € 363 | € -283 | € -13.153 |
-| 8 | 1 | € 363 | € -283 | € -13.436 |
-| 9 | 1 | € 363 | € -283 | € -13.719 |
-| 10 | 1 | € 363 | € -283 | € -14.002 |
-| 11 | 2 | € 725 | € -33 | € -14.034 |
-| 12 | 3 | € 1.088 | € 218 | € -13.817 |
+| 1 | 1 | € 363 | € -76 | € -10.499 |
+| 2 | 1 | € 363 | € -76 | € -10.575 |
+| 3 | 1 | € 363 | € -76 | € -10.650 |
+| 4 | 1 | € 363 | € -76 | € -10.726 |
+| 5 | 1 | € 363 | € -76 | € -10.802 |
+| 6 | 1 | € 363 | € -76 | € -10.878 |
+| 7 | 1 | € 363 | € -76 | € -10.954 |
+| 8 | 1 | € 363 | € -76 | € -11.029 |
+| 9 | 1 | € 363 | € -76 | € -11.105 |
+| 10 | 1 | € 363 | € -76 | € -11.181 |
+| 11 | 2 | € 725 | € 174 | € -11.007 |
+| 12 | 3 | € 1.088 | € 425 | € -10.582 |
 
-- **Bedrijfsresultaat jaar 1: € -3.394** op € 4.352 omzet.
-- Na de startkosten van € 10.423: € -13.817.
+- **Bedrijfsresultaat jaar 1: € -159** op € 5.440 omzet.
+- Na de startkosten van € 10.423: € -10.582.
 - Startkosten terugverdiend: niet binnen jaar 1.
-- Geld dat je nodig hebt tot het zichzelf betaalt: **€ 14.034**.
+- Geld dat je nodig hebt tot het zichzelf betaalt: **€ 11.181**.
 
 #### Wat als
 
 | scenario | marge bij het plan | break-even (clubs) | resultaat jaar 1 |
 | --- | ---: | ---: | ---: |
-| Basisplan | 54% | 3 | € -3.394 |
-| Prijs -10% | 49% | 3 | € -3.829 |
-| Volume -20% | 51% | 3 | € -3.994 |
-| Kosten per club +15% | 50% | 3 | € -3.596 |
+| Basisplan | 60% | 2 | € -159 |
+| Prijs -10% | 56% | 2 | € -703 |
+| Volume -20% | 58% | 2 | € -910 |
+| Kosten per club +15% | 55% | 2 | € -412 |
 
 #### Waarschuwingen
 
-- Jaar 1 maakt verlies op de bedrijfsvoering (€ -3.394).
+- Jaar 1 maakt verlies op de bedrijfsvoering (€ -159).
 - De startkosten worden niet binnen jaar 1 terugverdiend.
 
 ---
 
-### Scenario B: oprichters krijgen elk € 2.500 per maand
+### Scenario B: op schaal, oprichters krijgen elk € 2.500 per maand
 
 
 #### Eén club per maand
@@ -923,36 +911,36 @@ Vaste kosten: **€ 5.533 per maand**:
 
 | maand | betalende clubs | omzet | resultaat | cumulatief (na € 10.423 startkosten) |
 | ---: | ---: | ---: | ---: | ---: |
-| 1 | 0 | € 0 | € -5.533 | € -15.956 |
-| 2 | 0 | € 0 | € -5.533 | € -21.489 |
-| 3 | 0 | € 0 | € -5.533 | € -27.022 |
-| 4 | 1 | € 363 | € -5.283 | € -32.305 |
-| 5 | 1 | € 363 | € -5.283 | € -37.588 |
-| 6 | 1 | € 363 | € -5.283 | € -42.870 |
-| 7 | 1 | € 363 | € -5.283 | € -48.153 |
-| 8 | 1 | € 363 | € -5.283 | € -53.436 |
-| 9 | 1 | € 363 | € -5.283 | € -58.719 |
-| 10 | 1 | € 363 | € -5.283 | € -64.002 |
-| 11 | 2 | € 725 | € -5.033 | € -69.034 |
-| 12 | 3 | € 1.088 | € -4.782 | € -73.817 |
+| 1 | 1 | € 363 | € -5.283 | € -15.706 |
+| 2 | 1 | € 363 | € -5.283 | € -20.989 |
+| 3 | 1 | € 363 | € -5.283 | € -26.271 |
+| 4 | 1 | € 363 | € -5.283 | € -31.554 |
+| 5 | 1 | € 363 | € -5.283 | € -36.837 |
+| 6 | 1 | € 363 | € -5.283 | € -42.120 |
+| 7 | 1 | € 363 | € -5.283 | € -47.403 |
+| 8 | 1 | € 363 | € -5.283 | € -52.685 |
+| 9 | 1 | € 363 | € -5.283 | € -57.968 |
+| 10 | 1 | € 363 | € -5.283 | € -63.251 |
+| 11 | 2 | € 725 | € -5.033 | € -68.284 |
+| 12 | 3 | € 1.088 | € -4.782 | € -73.066 |
 
-- **Bedrijfsresultaat jaar 1: € -63.394** op € 4.352 omzet.
-- Na de startkosten van € 10.423: € -73.817.
+- **Bedrijfsresultaat jaar 1: € -62.643** op € 5.440 omzet.
+- Na de startkosten van € 10.423: € -73.066.
 - Startkosten terugverdiend: niet binnen jaar 1.
-- Geld dat je nodig hebt tot het zichzelf betaalt: **€ 73.817**.
+- Geld dat je nodig hebt tot het zichzelf betaalt: **€ 73.066**.
 
 #### Wat als
 
 | scenario | marge bij het plan | break-even (clubs) | resultaat jaar 1 |
 | --- | ---: | ---: | ---: |
-| Basisplan | -84% | 23 | € -63.394 |
-| Prijs -10% | -104% | 26 | € -63.829 |
-| Volume -20% | -122% | 23 | € -63.994 |
-| Kosten per club +15% | -88% | 24 | € -63.596 |
+| Basisplan | -84% | 23 | € -62.643 |
+| Prijs -10% | -104% | 26 | € -63.187 |
+| Volume -20% | -122% | 23 | € -63.394 |
+| Kosten per club +15% | -88% | 24 | € -62.896 |
 
 #### Waarschuwingen
 
-- Jaar 1 maakt verlies op de bedrijfsvoering (€ -63.394).
+- Jaar 1 maakt verlies op de bedrijfsvoering (€ -62.643).
 - De startkosten worden niet binnen jaar 1 terugverdiend.
 
 ## Marketing
@@ -1126,7 +1114,7 @@ conversie; de grens komt daarom uit de kas. Twee regels:
 - **Geef maximaal 3 maanden bijdrage uit, ongeveer € 1.030 contant per gewonnen club (€ 750 voor een pionier)**, zodat een club
   zijn eigen werving in het eerste kwartaal na de pilot terugbetaalt.
 - **Geef nooit meer uit dan je hebt**: met onbetaalde oprichters is de totale geldbehoefte ongeveer
-  € 14.000 (De cijfers); deze campagne voegt € 1.600 toe.
+  € 11.200 (De cijfers); deze campagne voegt € 1.600 toe.
 De echte kosten zitten in de tijd van de oprichters: ~40 uur overstapwerk per club, plus verkopen.
 
 ### 5. Drie cijfers om wekelijks te volgen
@@ -1346,6 +1334,7 @@ Resultaat: bijdrage € 318,50 per club per maand (was € 290), vaste kosten �
 break-even met € 2.500 salaris per oprichter **16 clubs** (10 oprichters + 6 normaal; was 18). Na de
 overstap op een prijs per lid met pionierslaag en garanties (8 oktober 2026): break-even met salaris
 **15 clubs** (3 pioniers + 7 oprichters + 5 normaal), vaste kosten € 533 incl. escrow en IT-partner.
+Jaar 1 draait op Expo Starter (USD 19) en start escrow en IT-partner bij de derde club: € 326 per maand.
 
 ### 1. De dagelijkse cyclus
 
@@ -1564,7 +1553,7 @@ Geen juridisch advies.
 ### 8. Toegevoegd met het doorbraakaanbod (8 oktober 2026)
 
 **Nieuwe leveranciers** (offertes nodig; schattingen in De cijfers):
-- **Broncode-escrow**: een Nederlandse escrowpartij of notaris bewaart de code en geeft hem vrij aan de
+- **Broncode-escrow** (geregeld voordat de derde club start): een Nederlandse escrowpartij of notaris bewaart de code en geeft hem vrij aan de
   clubs als Greenside stopt. Schatting ~€ 1.000 per jaar.
 - **IT-partner als vangnet**: een klein Nederlands softwarebedrijf dat de techniek kent (Supabase, Expo,
   Next.js), met een schriftelijke afspraak om het platform 12 maanden draaiend te houden als de oprichters
@@ -1614,7 +1603,9 @@ een handtekening.**
 
 **Test 1 — vóór de pentest geboekt wordt (12 oktober – 18 december 2026)**
 - Zwolle tekent het pilotcontract: succescriteria op papier, en als **pionier** (€ 0,39 per lid per maand, drie jaar vast)
-  **vanaf maand 4 als de criteria gehaald zijn**.
+  **betalend vanaf maand 1** (de livegang). In ruil daarvoor is Zwolle de referentieclub en houdt het de
+  pioniersprijs; worden de succescriteria in week 12 niet gehaald, dan kan Zwolle alsnog stoppen.
+  Onderhandel hierover; het is in jaar 1 ~€ 1.100 waard (De cijfers).
 - 15 brieven naar clubs die nog op E-Golf4U zitten of in de buurt van Zwolle liggen (marketinghaak 1).
   Geen beweringen over Zwolle.
 - **Succeslijn: Zwolle getekend vóór 13 november, en vóór 18 december minstens 5 gesprekken met besturen
@@ -1725,7 +1716,7 @@ campagne naar buiten (Marketing): alle aandacht naar Zwolle.
 | Supporturen voor Zwolle | eigen logboek | daalt elke week | boven 10 uur per week na week 2 → handleiding of app is onduidelijk; oplossen wat terugkomt |
 | Geboekte gesprekken met besturen | marketinglogboek | 3 per week | twee weken onder 2 per week → brief herschrijven, eerst bellen, Zwolle om een introductie vragen |
 | Pilotaanvragen / intentieverklaringen | marketinglogboek | 3 vóór 30 mei | 0 na 10 gesprekken → terug naar het aanbod |
-| Betalende clubs tegenover break-even | CFO | 0 in de eerste 30 dagen (Zwolle zit in de gratis pilot); break-even 3 pioniersclubs onbetaald, 15 clubs met salaris | — de geldtest is test 2, niet de eerste maand |
+| Betalende clubs tegenover break-even | CFO | 1 (Zwolle betaalt vanaf maand 1); break-even 2 pioniersclubs onbetaald, 15 clubs met salaris | — de geldtest is test 2, niet de eerste maand |
 
 **Evaluaties** (A+B, één uur, met notities):
 

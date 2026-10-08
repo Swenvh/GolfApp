@@ -20,6 +20,7 @@ Resultaat: bijdrage € 318,50 per club per maand (was € 290), vaste kosten �
 break-even met € 2.500 salaris per oprichter **16 clubs** (10 oprichters + 6 normaal; was 18). Na de
 overstap op een prijs per lid met pionierslaag en garanties (8 oktober 2026): break-even met salaris
 **15 clubs** (3 pioniers + 7 oprichters + 5 normaal), vaste kosten € 533 incl. escrow en IT-partner.
+Jaar 1 draait op Expo Starter (USD 19) en start escrow en IT-partner bij de derde club: € 326 per maand.
 
 ## 1. De dagelijkse cyclus
 
@@ -238,7 +239,7 @@ Geen juridisch advies.
 ## 8. Toegevoegd met het doorbraakaanbod (8 oktober 2026)
 
 **Nieuwe leveranciers** (offertes nodig; schattingen in De cijfers):
-- **Broncode-escrow**: een Nederlandse escrowpartij of notaris bewaart de code en geeft hem vrij aan de
+- **Broncode-escrow** (geregeld voordat de derde club start): een Nederlandse escrowpartij of notaris bewaart de code en geeft hem vrij aan de
   clubs als Greenside stopt. Schatting ~€ 1.000 per jaar.
 - **IT-partner als vangnet**: een klein Nederlands softwarebedrijf dat de techniek kent (Supabase, Expo,
   Next.js), met een schriftelijke afspraak om het platform 12 maanden draaiend te houden als de oprichters

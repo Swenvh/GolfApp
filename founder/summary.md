@@ -8,15 +8,14 @@ boards of the 263 NGF clubs, first those that must leave E-Golf4U.
 Two of four checks pass, two fail:
 - ✓ **Margin**: each paying club leaves **€ 250.20 a month (69%)** at the pioneer price of € 0.39 per
   member (€ 362.70 on average), after the cost of the new guarantees.
-- ✓ **Break-even**: **3 paying clubs** with the founders unpaid, within the ~25 clubs two people can serve.
-- ✗ **Year 1**: an operating loss of **€ 3,394**: the pioneer discount, escrow and IT partner and the
-  overlap guarantee cost ~€ 3,500 in year 1 (`founder/cfo.md`). With all three levers there (escrow from
-  club 3, Zwolle paying from month 1, Expo Starter) year 1 comes to **€ -159**.
+- ✓ **Break-even**: **2 paying clubs** with the founders unpaid, within the ~25 clubs two people can serve.
+- ✗ **Year 1**: an operating loss of only **€ 159**, with the three levers in the numbers (Zwolle pays from
+  month 1, Expo Starter, escrow and IT partner from the third club). Without them it was € -3,394.
 - ✗ **Buyers**: **0 of 20** simulated buyers buy (bar 25%), with the old pitch and with the improved
   Founding Club offer.
 
 With the founders paid € 2,500 each, break-even is **15 clubs** (3 pioneers + 7 founding + 5 list) and
-year 1 loses **€ 63,394**.
+year 1 would lose **€ 62,643** with pay from month 1.
 
 **What has to change, and which skill changes it.**
 1. **Proof, not a better pitch.** 19 of 20 buyers say what would change their mind: Zwolle live for a
@@ -37,12 +36,12 @@ value for a club (a green fee costs € 50–74; € 0.65 per member is less tha
 Plan: launch kit (import done for them, printed guide, invitations in groups, Saturday helpline),
 a weekly count of active members, and a hard stop on outreach if fewer than 20% are active by week 4.
 
-**What it takes to start.** About **€ 14,000** cash with the founders unpaid (pentest € 7,500,
+**What it takes to start.** About **€ 11,200** cash with the founders unpaid (pentest € 7,500,
 lawyer € 2,500, running costs), and **Test 1**: Zwolle signs a pilot contract with a paid follow-on
 by 13 November, plus 2 letters of intent from other boards by 18 December (`founder/launch.md`).
 
 **This week:** meet Zwolle's board. Fix the go-live date, the success criteria and the founding
-price (pioneer, € 0.39 per member) from month 4 in a pilot contract, and ask permission to use their name later.
+price (pioneer, € 0.39 per member) **from month 1** in a pilot contract, and ask permission to use their name later.
 
 _The panel is simulated buyers and the numbers are projections; real boards and real quotes confirm
 them. Not financial, legal or tax advice._

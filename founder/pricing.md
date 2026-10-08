@@ -60,8 +60,8 @@ Why per member:
 - **Safety net for clubs that must leave E-Golf4U:** Greenside replaces E-Golf4U directly. If the pilot
   does not meet its criteria, we move the club's data free of charge to Nexxchange or IntoGolf, in their
   import format.
-- **Continuity:** monthly automatic export to the club's own storage, source code in escrow, an IT
-  partner on standby, 12 months' notice.
+- **Continuity:** monthly automatic export to the club's own storage, source code in escrow and an
+  IT partner on standby (in place before the third club starts), 12 months' notice.
 - **Stop after the pilot, pay nothing.** No commission on what members buy. Migration fee only for
   clubs after the first ten (€ 750 under 700 members, € 1,500 from 700).
 

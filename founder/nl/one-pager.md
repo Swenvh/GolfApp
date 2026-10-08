@@ -1,6 +1,6 @@
 # Greenside op één pagina
 
-**Oordeel: Nog niet.** Elke club is winstgevend, maar de garanties zetten jaar 1 op een klein verlies, en het bewijs (een club die live is, kopers die tekenen) bestaat nog niet.
+**Oordeel: Nog niet.** Elke club is winstgevend en jaar 1 is bijna quitte (€ -159), en het bewijs (een club die live is, kopers die tekenen) bestaat nog niet.
 
 **Het probleem.** Nederlandse golfclubs regelen leden, starttijden en facturen in clubsoftware, en de
 meeste geven hun leden alleen een webpagina die ze op hun beginscherm moeten zetten. E-Golf4U stopt,
@@ -25,16 +25,16 @@ het oude systeem is opgezegd), en een vangnet voor clubs die van E-Golf4U af moe
 | kerncijfer | |
 | --- | ---: |
 | Prijs | € 362,70 per club per maand (pioniers, gemiddeld) |
-| Winstmarge bij het plan | 54% per club per maand |
-| Break-even | 3 betalende clubs |
-| Bedrijfsresultaat jaar 1 | € -3.394 |
+| Winstmarge bij het plan | 60% per club per maand |
+| Break-even | 2 betalende clubs |
+| Bedrijfsresultaat jaar 1 | € -159 |
 | Startkosten | € 10.423 |
-| Benodigd geld tot het zichzelf betaalt | € 14.034 |
+| Benodigd geld tot het zichzelf betaalt | € 11.181 |
 | Startkosten terugverdiend | niet in jaar 1 |
 | Kooppanel | 0 kopen · 20 niet |
 
 Met € 2.500 salaris per oprichter: break-even bij **15 clubs** (3 pioniers + 7 oprichters + 5
-normaal), jaar 1 **€ -63.394**, benodigd geld **€ 73.817**.
+normaal), jaar 1 **€ -62.643**, benodigd geld **€ 73.066**.
 
 **Het bewijs**
 - **Product**: werkt en staat vast als `pilot-v1`; de app van de eerste club (Golfclub Zwolle) is gebouwd
@@ -51,10 +51,11 @@ normaal), jaar 1 **€ -63.394**, benodigd geld **€ 73.817**.
   vanaf 1 maart 2027 (40% van de leden actief in week 12).
 
 **Waar het geld voor is.** € 10.423 startkosten: een externe beveiligingstest (€ 7.500), de jurist voor
-verwerkersovereenkomst, privacyverklaring en contracten (€ 2.500), inschrijving en opstart; plus € 533
-per maand aan vaste kosten (incl. escrow en IT-partner) tot er drie clubs betalen.
+verwerkersovereenkomst, privacyverklaring en contracten (€ 2.500), inschrijving en opstart; plus € 326
+per maand aan vaste kosten tot er twee clubs betalen (escrow en IT-partner, ~€ 135 per maand, vanaf de
+derde club).
 
-**De vraag.** Nog geen, bewust: de oprichters betalen de € 14.034 zelf en gaan eerst live bij Zwolle. Na
+**De vraag.** Nog geen, bewust: de oprichters betalen de € 11.181 zelf en gaan eerst live bij Zwolle. Na
 de pilot van Zwolle (eind mei 2027), met echte gebruikscijfers, wordt de vraag of het salaris van de
 oprichters (€ 5.000 per maand) overbrugd moet worden tot ongeveer 15 clubs betalen.
 
