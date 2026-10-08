@@ -1,7 +1,7 @@
 {
-  "business": "Greenside, with founder pay (licence for Dutch golf clubs; one unit = one paying club for one month; 'per day' in this report means 'clubs at once')",
+  "business": "Greenside, with founder pay of EUR 2,500 each (licence for Dutch golf clubs; one unit = one paying club for one month; 'per day' in this report means 'clubs at once')",
   "unit": "club-month",
-  "price": 344,
+  "price": 364,
   "variable": [
     {
       "label": "Onboarding, free pilot and walk-away guarantee, spread over the 24-month founding term (estimate, see cfo-sources.md)",
@@ -22,8 +22,8 @@
   ],
   "fixed_monthly": [
     {
-      "label": "Founder pay: 2 founders x EUR 4,000 a month incl. employer costs (estimate, to be set by the founders)",
-      "cost": 8000
+      "label": "Founder pay: 2 founders x EUR 2,500 a month (the founders' target; what it costs the company depends on the legal form, check with an accountant)",
+      "cost": 5000
     },
     {
       "label": "Expo EAS Production, USD 99 (public price)",

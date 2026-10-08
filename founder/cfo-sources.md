@@ -5,10 +5,10 @@ USD prices converted at about € 0.90 per USD (an estimate; check the rate on t
 All amounts excl. VAT.
 
 ## Price
-- **€ 344 per club-month**: blended founding price from `founder/pitch.md` (€ 179 for 9 holes,
-  € 399 for 18+ holes) weighted by the segment shares in `founder/customer.json`
-  (25% 9 holes, 55% 18 holes, 20% 27+ holes): 0.25 × 179 + 0.75 × 399.
-- List-price what-if **€ 429**: 0.25 × 249 + 0.55 × 449 + 0.20 × 599.
+- **€ 364 per club-month**: blended founding price from `founder/pricing.md` (€ 179 for 9 holes,
+  € 399 for 18 holes, € 499 for 27+ holes) weighted by the segment shares in
+  `founder/customer.json` (25% / 55% / 20%). Was € 344 before `/founder-pricing`.
+- List-price what-if **€ 416.50**: 0.25 × 199 + 0.55 × 449 + 0.20 × 599 (was € 429 with € 249 for 9 holes).
 
 ## Public prices (check before paying)
 | item | price | source |
@@ -41,8 +41,10 @@ account (`club_payment_settings`, README "Naar productie"), so those fees land w
 - **Security test € 5,000 once**: an external pentest before the first real member data, in line
   with the founders' rule that clubs must be 100% safe.
 - **Printed guide design € 300, Chamber of Commerce and set-up € 100.**
-- **Founder pay € 4,000 per founder per month incl. employer costs** (scenario B only). Only the
-  founders can set this.
+- **Founder pay € 2,500 per founder per month** (scenario B only): the founders' own target
+  (€ 2,000–2,500 each). Modelled as € 5,000 a month cost to the company. If € 2,500 is meant as
+  take-home pay, the cost to the company is higher (income tax, and in a BV the rules on a
+  director's salary): ask an accountant.
 - **Capacity 25 clubs**: what two founders can onboard and support next to sales. A guess.
 
 ## The ramp, and how it was checked
