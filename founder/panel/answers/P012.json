@@ -1,0 +1,13 @@
+{
+  "id": "P012",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "trust",
+  "reason": "With 950 members and 1.8 million in turnover I can't put the whole club's administration on two founders whose first pilot isn't even live yet. I also see nothing here that brings in more green fee, buggy, lesson or sponsor revenue. It's mostly an app with our logo on it.",
+  "objection": "What happens to our member data, invoices and tee sheet if those two founders stop or one of them gets sick? I have no exit plan, no escrow and no reference club that has run a full season on it.",
+  "would_change_my_mind": "A comparable 18-hole club that has run a full season on it live, plus a written guarantee that we get a full export of all our data and a transition period if they stop.",
+  "price_too_cheap": 150,
+  "price_cheap": 300,
+  "price_expensive": 550,
+  "price_too_expensive": 800
+}

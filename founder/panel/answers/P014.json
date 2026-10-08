@@ -1,0 +1,13 @@
+{
+  "id": "P014",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "trust",
+  "reason": "We are a 9-hole volunteer club and GOLF.NL already handles tee times and payments for free. Two founders and not a single live club yet is not something I can put in front of the ALV as a safe choice.",
+  "objection": "No references: Zwolle isn't even live yet. If two founders stop, our member administration and bar tab are stuck with an unknown party, and I have to explain that to 550 members.",
+  "would_change_my_mind": "Two or three comparable 9-hole clubs that have used it for a full season and that I can call myself, plus a contract that lets us take our data out and stop after the pilot without penalty.",
+  "price_too_cheap": 50,
+  "price_cheap": 125,
+  "price_expensive": 225,
+  "price_too_expensive": 325
+}

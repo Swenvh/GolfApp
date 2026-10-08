@@ -1,0 +1,13 @@
+{
+  "id": "P017",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "habit",
+  "reason": "We've run on our current system for years, the vendor knows us and it works well enough. Switching means migrating 550 members, retraining volunteers and getting a lot of people over 60 to install yet another app, and that's a lot of grief for a small volunteer board to take on for software that isn't live anywhere yet, built by two founders.",
+  "objection": "Our older members won't install and use a new app, and they won't log in with codes by e-mail. If half of them end up phoning the secretary to book a tee time, I've made things worse. On top of that, two founders and no club live yet: what happens to our member data and invoicing if they stop?",
+  "would_change_my_mind": "Seeing a club like ours, 9 holes with older members, actually running on it for a full season with most members using the app, plus a guarantee that we can export everything and go back without losing data.",
+  "price_too_cheap": 75,
+  "price_cheap": 150,
+  "price_expensive": 249,
+  "price_too_expensive": 350
+}

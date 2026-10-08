@@ -1,0 +1,13 @@
+{
+  "id": "P013",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "trust",
+  "reason": "We are a 9-hole club run by volunteers; I am not moving our whole member administration to two founders whose first pilot club isn't even live yet. And it doesn't say whether it handles the NGF handicap link or our direct debit, which is how most of our contributions come in.",
+  "objection": "Does it work with the NGF handicap system and our direct debit (incasso)? If not, we'd run two systems and pay twice. And what happens to our data if two founders stop?",
+  "would_change_my_mind": "A live reference club of our size that runs NGF handicaps and direct debit through it for a full season, plus a price I can show the board is no higher than what we pay now, so it fits in next year's budget.",
+  "price_too_cheap": 49,
+  "price_cheap": 125,
+  "price_expensive": 225,
+  "price_too_expensive": 325
+}

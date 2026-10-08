@@ -1,0 +1,13 @@
+{
+  "id": "P020",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "trust",
+  "reason": "An app with our own name would fix the desk complaints, and € 449 a month is small money for a club our size. But two founders with no club live yet, plus a migration of 950 members, is not something I take to the board in a normal month.",
+  "objection": "No club is actually running on it. If the import or the iDEAL payments go wrong I have 950 members at my desk, and GOLF.NL already books tee times for free. I also see nothing here that brings in more green fee, buggy or bar revenue.",
+  "would_change_my_mind": "Golfclub Zwolle running live for a full season, with a manager I can call, and figures showing more guest bookings or extra spend through the app.",
+  "price_too_cheap": 100,
+  "price_cheap": 250,
+  "price_expensive": 550,
+  "price_too_expensive": 850
+}

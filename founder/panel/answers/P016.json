@@ -1,0 +1,13 @@
+{
+  "id": "P016",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "trust",
+  "reason": "Two founders and a first pilot club that isn't even live yet: I can't take that to our ALV with 1,350 members' data and invoicing on the line. Our current system works well enough, and €599 a month plus migration is real money on top of what we already pay.",
+  "objection": "No reference club running it for a full season. If two founders stop or get sick, my members' bookings and billing are stuck, and I'm the one who has to explain that to the members' meeting.",
+  "would_change_my_mind": "Two or three comparable clubs of our size running it live for at least a season, that I can call myself, plus a clear exit clause and data export if it doesn't work.",
+  "price_too_cheap": 150,
+  "price_cheap": 350,
+  "price_expensive": 600,
+  "price_too_expensive": 850
+}

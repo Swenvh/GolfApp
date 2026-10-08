@@ -1,0 +1,13 @@
+{
+  "id": "P011",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "trust",
+  "reason": "With 1,350 members and 27 holes I can't move us onto software from two founders that isn't live at a single club yet, and nothing here says it talks to the NGF handicap system or runs our direct debit. Besides, any new contract has to go through next year's budget at the spring members' meeting.",
+  "objection": "Does it link to the NGF handicap and competition results and handle our SEPA direct debit, or will I end up running two systems and doing double work while 1,350 members call me when it goes wrong?",
+  "would_change_my_mind": "Seeing it live at a club our size for a full season, with the NGF handicap link and direct debit working, and a reference call with their manager before the spring budget meeting.",
+  "price_too_cheap": 150,
+  "price_cheap": 350,
+  "price_expensive": 650,
+  "price_too_expensive": 900
+}
