@@ -1,0 +1,13 @@
+{
+  "id": "P013",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "trust",
+  "reason": "A free pilot sounds harmless, but for 550 members even the founding price comes to about €270 a month, over €3,200 a year, and I don't know yet whether that beats what we pay now. I'm not putting our club on software from two people that no club is running yet. Let Zwolle go first, and I'll call their board in a year.",
+  "objection": "It doesn't really link to the NGF handicap, that's just a button to GOLF.NL. For direct debit we still have to upload a file to the bank ourselves. So what does a small volunteer club actually gain for €3,000 a year more, and what if those two founders are gone in two years?",
+  "would_change_my_mind": "Zwolle's results after a full season, plus a side-by-side cost comparison with our current vendor's real invoice showing we pay no more in total than today.",
+  "price_too_cheap": 0.15,
+  "price_cheap": 0.3,
+  "price_expensive": 0.55,
+  "price_too_expensive": 0.8
+}
