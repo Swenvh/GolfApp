@@ -1,0 +1,58 @@
+# Greenside · one page
+
+**Verdict: Not yet.** The unit economics work; the proof does not exist yet.
+
+**The problem.** Dutch golf clubs run their members, tee times and invoices on club software, and
+most give their members only a web page saved to the home screen. E-Golf4U is being retired, so its
+clubs must choose a new system now, and their volunteers dread the switch.
+
+**The customer.** Boards and club managers of the 263 NGF clubs, first those leaving E-Golf4U
+(9-hole volunteer clubs to 27-hole commercial courses).
+
+**The offer: Greenside Founding Club.** The club's own app in the App Store and Google Play under its
+own name, plus the club management software. We do the switch (import, invitations, printed guide
+for older members, Saturday helpline). Three-month pilot next to the current system, with success
+criteria in writing; miss them or want to stop, pay nothing. Data export at any time; 12 months'
+notice and full handover if Greenside stops.
+
+**Price per month (excl. VAT).** € 199 (9 holes), € 449 (18 holes), € 599 (27+ holes). The first ten
+clubs, pilot starting before 1 July 2027: € 179 / € 399 / € 499, fixed for two years, no migration fee.
+No commission on what members buy.
+
+| key number | |
+| --- | ---: |
+| Price | € 364.00 a club-month |
+| Profit margin at plan | 77% per club-month |
+| Break-even | 2 clubs paying at once |
+| Year 1 operating profit | € -954 |
+| Startup spend | € 10,423 |
+| Cash needed before it pays for itself | € 12,174 |
+| Startup money earned back | not in year 1 |
+| Buyer panel | 0 buy · 20 pass |
+
+With the founders paid € 2,500 each: break-even **16 clubs**, year 1 **€ -60,954**, cash needed
+**€ 71,377**.
+
+**The evidence**
+- **Product**: working and frozen as `pilot-v1`; the first club's branded app (Golfclub Zwolle) is
+  built, not yet live.
+- **Buyer panel** (20 simulated club decision-makers, run twice): **0 buy**. Main reason: no live
+  reference club and only two founders. 19 of 20 say a call with Zwolle's board after a season would
+  change their mind. Price is not the blocker for 18 and 27+ holes.
+- **Competitor gap**: most Dutch members get a web app (E-Golf4U, Golfdashboard, Nexxchange portal);
+  the one vendor with branded store apps rates about 2 out of 5. A club system costs about
+  € 350–450 a month for an 18-hole club (Nexxchange's listed € 200 + € 50 per user, an estimate).
+- **Real test**: not run yet. Test 1 (Zwolle's signed pilot with a paid follow-on, 2 letters of
+  intent from other boards) runs until 18 December 2026; Test 2 is Zwolle's pilot from 1 March 2027
+  (40% of members active by week 12).
+
+**What the money is for.** € 10,423 start-up: an external security test (€ 7,500), the lawyer for the
+data processing agreement, privacy statement and contracts (€ 2,500), registration and set-up; plus
+running costs of € 398 a month until 2 clubs pay.
+
+**The ask.** None yet, on purpose: the founders cover the € 12,174 themselves and go live at Zwolle
+first. After Zwolle's pilot (end of May 2027), with real adoption numbers, the question becomes
+whether to bridge founder pay (€ 5,000 a month) until ~16 clubs pay.
+
+_Simulated buyers and projected numbers; real boards and real quotes confirm them. Not financial,
+legal or tax advice._
