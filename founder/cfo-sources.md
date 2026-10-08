@@ -24,22 +24,27 @@ Payment costs of members (iDEAL etc.) are **not** Greenside's: each club uses it
 account (`club_payment_settings`, README "Naar productie"), so those fees land with the club.
 
 ## Estimates (not facts; replace with quotes)
-- **Onboarding, pilot and walk-away guarantee, € 55 per club-month.** Cash per new club: printed
-  guide for ~950 members ~€ 600, travel ~€ 200, three free months of running costs ~€ 56
-  → ~€ 856. Assumes 1 in 3 pilots walks away (guarantee C), so per paying club ~€ 1,284,
-  spread over the 24-month founding term → € 53.50, rounded to € 55. Founder hours (~40 per club:
-  import, invites, Saturday helpline) are not in cash; they are the real limit.
+- **Onboarding, pilot and walk-away guarantee, € 35 per club-month** (updated by `/founder-ops`).
+  Cash per new club: printed guide ~€ 300 (an 8-page A5 booklet costs about £ 0.24 a copy at 1,000
+  copies, [UK price list](https://ep.dev.shout-loud.co.uk/promo-print/brochure-printing/a5-brochures);
+  get a Dutch quote), travel ~€ 200, three free months of running costs ~€ 33 → ~€ 533; with 1 in 3
+  pilots walking away (guarantee C) ~€ 800 per paying club, spread over 24 months → € 33, rounded
+  to € 35. Was € 55 with a € 600 guess for printing. Founder hours (~40 per club) are not in cash.
 - **Hosting share € 10 per club-month**: database growth, e-mail above the Resend bundle
   (950 members × ~2 login codes a month ≈ 1,900 e-mails), extra app builds.
-- **Apple account € 8.25 per club-month**: € 99 / 12, if Greenside pays the club's developer
-  account. € 0 if the club enrols itself (it must anyway: Apple lists the app under the
-  owner's legal entity).
+- **Apple account € 0 for Greenside.** Apple guideline 4.2.6: apps built from a template must be
+  submitted by the content owner, so each club enrols in the Apple Developer Program itself
+  (€ 99 a year; non-profits can ask for a fee waiver). Was € 8.25 when Greenside paid it.
 - **SEPA collection € 0.50 per club-month**.
-- **Accountant € 100, insurance € 75, e-mail accounts € 14, helpline number € 15 a month.**
+- **Accountant € 100** (Moneybird € 15–29 a month plus a year-end accountant), **insurance € 100**
+  (professional liability ~€ 61 a month as an indication from Univé, plus cyber cover by quote;
+  was € 75), **e-mail accounts € 14, helpline number € 15 a month.**
 - **Lawyer € 2,500 once**: processing agreement (AVG), privacy statement, terms, and the contract
   with the pilot, walk-away and data clauses (`founder/offer.md`).
-- **Security test € 5,000 once**: an external pentest before the first real member data, in line
-  with the founders' rule that clubs must be 100% safe.
+- **Security test € 7,500 once** (was € 5,000): SMB web-app pentests run € 5,000–14,000 for 5–10
+  test days ([Kolonell](https://kolonell.com/en/blog/web-application-penetration-test-price-smb-dublin-2026)),
+  plus fixing and a retest. Before the first real member data, in line with the founders' rule that
+  clubs must be 100% safe.
 - **Printed guide design € 300, Chamber of Commerce and set-up € 100.**
 - **Founder pay € 2,500 per founder per month** (scenario B only): the founders' own target
   (€ 2,000–2,500 each). Modelled as € 5,000 a month cost to the company. If € 2,500 is meant as

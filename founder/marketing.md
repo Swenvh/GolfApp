@@ -146,12 +146,12 @@ First three months, estimates (no quotes yet):
 | **Total** | **€ 1,600** + NVG |
 
 **The most you can pay to win one club.** From the CFO (`founder/numbers.json`): a founding club
-leaves **€ 290 a month**, fixed for 24 months → **€ 6,966** over the founding term, after its own
+leaves **€ 318.50 a month**, fixed for 24 months → **€ 7,644** over the founding term, after its own
 running, onboarding and pilot costs. The panel's buy rate is 0%, so it cannot give a conversion
 rate; the cap comes from cash instead. Two rules:
-- **Spend at most 3 months of contribution, about € 870 cash per club won**, so a club pays back
+- **Spend at most 3 months of contribution, about € 955 cash per club won**, so a club pays back
   its own acquisition in its first quarter after the pilot.
-- **Never spend more than you have**: with the founders unpaid, total cash need is about € 9,600
+- **Never spend more than you have**: with the founders unpaid, total cash need is about € 12,200
   (`founder/cfo.md`); this campaign adds € 1,600.
 The real cost is founder time: ~40 hours of onboarding per club, plus selling.
 

@@ -4,16 +4,16 @@
   "price": 364,
   "variable": [
     {
-      "label": "Onboarding, free pilot and walk-away guarantee, spread over the 24-month founding term (estimate, see cfo-sources.md)",
-      "cost": 55
+      "label": "Onboarding, free pilot and walk-away guarantee, spread over the 24-month founding term (estimate, updated by /founder-ops: printed guide ~EUR 300)",
+      "cost": 35
     },
     {
       "label": "Hosting share per club: database growth, e-mail above the bundle, app builds (estimate)",
       "cost": 10
     },
     {
-      "label": "Apple developer account for the club's own app, EUR 99 a year (public price; EUR 0 if the club enrols itself)",
-      "cost": 8.25
+      "label": "Apple developer account: EUR 0 for Greenside, the club enrols itself (Apple guideline 4.2.6; see ops.md)",
+      "cost": 0
     },
     {
       "label": "Collecting the licence by SEPA direct debit (estimate)",
@@ -46,8 +46,8 @@
       "cost": 100
     },
     {
-      "label": "Liability and cyber insurance (estimate)",
-      "cost": 75
+      "label": "Liability (BAV, ~EUR 61 indication) and cyber insurance (estimate)",
+      "cost": 100
     },
     {
       "label": "E-mail accounts for 2 founders (estimate)",
@@ -68,8 +68,8 @@
       "cost": 2500
     },
     {
-      "label": "External security test (pentest) before the first real member data (estimate)",
-      "cost": 5000
+      "label": "External security test (pentest) before the first real member data, mid of EUR 5,000-14,000 quotes for SMB web apps (estimate)",
+      "cost": 7500
     },
     {
       "label": "Design of the printed member guide (estimate)",

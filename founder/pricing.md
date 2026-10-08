@@ -41,17 +41,17 @@ and also the risk:
 - If it runs **next to** the current system, it doubles the software bill, and treasurers say no.
   Without the NGF handicap link and direct debit, many clubs cannot fully replace it (`founder/offer.md`, K).
 
-**The margin** (tool output, per club-month):
+**The margin** (tool output, per club-month; costs as updated by `/founder-ops`):
 
 | price | contribution | break-even, unpaid | break-even, 2 × € 2,500 |
 | --- | ---: | ---: | ---: |
-| Founding mix € 364 | € 290 (80%) | 2 clubs | 19 clubs |
-| List mix € 416.50 | € 343 (82%) | 2 clubs | 16 clubs |
-| Old list mix € 429 | € 355 (83%) | 2 clubs | 16 clubs |
+| Founding mix € 364 | € 318.50 (88%) | 2 clubs | 17 clubs |
+| List mix € 416.50 | € 371 (89%) | 2 clubs | 15 clubs |
+| Old list mix € 429 | € 383.50 (89%) | 2 clubs | 15 clubs |
 
-Only ten clubs get the founding price, so the real path is **10 founding clubs + 8 at list price =
-18 clubs** to pay both founders € 2,500 (5,373 − 10 × 290.25 = 2,470.50; ÷ 342.75 = 7.2 → 8).
-That is 7% of the 263 NGF clubs, and below the 25 clubs two people can serve.
+Only ten clubs get the founding price, so the real path is **10 founding clubs + 6 at list price =
+16 clubs** to pay both founders € 2,500 (5,398 − 10 × 318.50 = 2,213; ÷ 371 = 6.0 → 6).
+That is 6% of the 263 NGF clubs, and below the 25 clubs two people can serve.
 
 ## 2. The ladder
 
