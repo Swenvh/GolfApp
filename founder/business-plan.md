@@ -388,7 +388,9 @@ in green fees, is in `founder/nl/casus-prijs.md`.
 ### 1. The price
 
 **€ 0.65 per member per month, minimum € 249.**
+
 **Founding clubs (the first ten, fixed two years): € 0.49 per member per month, minimum € 189.**
+
 Members = the members in the club's administration on 1 January, set once a year.
 
 | club | members | list price | founding price | list price per year |
