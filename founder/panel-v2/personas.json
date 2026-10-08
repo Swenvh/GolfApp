@@ -1,0 +1,222 @@
+[
+ {
+  "id": "P001",
+  "name": "Talia",
+  "age": 64,
+  "segment": "Board member or paid club manager of an 18-hole club (±950 members, turnover around 1.8 million euro)",
+  "income": 69000,
+  "behaviour": "Still on E-Golf4U, must choose a new system now",
+  "behaviour_how": "E-Golf4U is being retired; your club has to pick Nexxchange, IntoGolf, the Golfspot/TeeControl/Parrow stack or something else soon.",
+  "objection": "No other club uses it yet: where are the references?",
+  "habit": "the average member at your club is over 60"
+ },
+ {
+  "id": "P002",
+  "name": "Cole",
+  "age": 39,
+  "segment": "Board member or paid club manager of an 18-hole club (±950 members, turnover around 1.8 million euro)",
+  "income": 97000,
+  "behaviour": "Just migrated, tired of switching",
+  "behaviour_how": "Your club moved off E-Golf4U in the last year; the volunteers are worn out and members only just got used to the new system.",
+  "objection": "Does it work with our current system, the NGF handicap and our direct debit?",
+  "habit": "you already pay a yearly fee to your current software vendor and do not know the exact amount by heart"
+ },
+ {
+  "id": "P003",
+  "name": "Quinn",
+  "age": 49,
+  "segment": "Board member or paid club manager of an 18-hole club (±950 members, turnover around 1.8 million euro)",
+  "income": 62000,
+  "behaviour": "Loyal to the current vendor",
+  "behaviour_how": "Your club has run IntoGolf or Nexxchange for years; it works well enough and the vendor knows your club.",
+  "objection": "Another few hundred euros a month on top of what we already pay",
+  "habit": "your club still settles the bar tab with cash and a card machine at the bar"
+ },
+ {
+  "id": "P004",
+  "name": "Hugo",
+  "age": 59,
+  "segment": "Board member or paid club manager of an 18-hole club (±950 members, turnover around 1.8 million euro)",
+  "income": 107000,
+  "behaviour": "Just migrated, tired of switching",
+  "behaviour_how": "Your club moved off E-Golf4U in the last year; the volunteers are worn out and members only just got used to the new system.",
+  "objection": "Two founders and an AI-built product: what happens to our data if they stop?",
+  "habit": "your club still settles the bar tab with cash and a card machine at the bar"
+ },
+ {
+  "id": "P005",
+  "name": "Sienna",
+  "age": 68,
+  "segment": "Board member or paid club manager of an 18-hole club (±950 members, turnover around 1.8 million euro)",
+  "income": 79000,
+  "behaviour": "Treasurer, every euro counts",
+  "behaviour_how": "You guard the budget; any new yearly cost needs a clear return and usually waits for the next budget round.",
+  "objection": "Another few hundred euros a month on top of what we already pay",
+  "habit": "you already pay a yearly fee to your current software vendor and do not know the exact amount by heart"
+ },
+ {
+  "id": "P006",
+  "name": "Rafael",
+  "age": 58,
+  "segment": "Club manager or commercial manager of a 27+ hole club or a commercially run course (±1,350 members)",
+  "income": 68000,
+  "behaviour": "Overloaded secretary / volunteer",
+  "behaviour_how": "You spend evenings on member administration, invoices and tee-time questions and want less work, not a new project.",
+  "objection": "No other club uses it yet: where are the references?",
+  "habit": "the average member at your club is over 60"
+ },
+ {
+  "id": "P007",
+  "name": "Oscar",
+  "age": 45,
+  "segment": "Board member or paid club manager of an 18-hole club (±950 members, turnover around 1.8 million euro)",
+  "income": 104000,
+  "behaviour": "Still on E-Golf4U, must choose a new system now",
+  "behaviour_how": "E-Golf4U is being retired; your club has to pick Nexxchange, IntoGolf, the Golfspot/TeeControl/Parrow stack or something else soon.",
+  "objection": "Our older members will not install and use a new app",
+  "habit": "you already pay a yearly fee to your current software vendor and do not know the exact amount by heart"
+ },
+ {
+  "id": "P008",
+  "name": "Caleb",
+  "age": 69,
+  "segment": "Volunteer board member of a 9-hole club (±550 members, mostly volunteers)",
+  "income": 62000,
+  "behaviour": "Loyal to the current vendor",
+  "behaviour_how": "Your club has run IntoGolf or Nexxchange for years; it works well enough and the vendor knows your club.",
+  "objection": "GOLF.NL is free and already books tee times and takes payment, so why would our members need another app?",
+  "habit": "members complain at the desk that the booking web app is hard to find on their phone"
+ },
+ {
+  "id": "P009",
+  "name": "Ethan",
+  "age": 43,
+  "segment": "Volunteer board member of a 9-hole club (±550 members, mostly volunteers)",
+  "income": 68000,
+  "behaviour": "Just migrated, tired of switching",
+  "behaviour_how": "Your club moved off E-Golf4U in the last year; the volunteers are worn out and members only just got used to the new system.",
+  "objection": "Our older members will not install and use a new app",
+  "habit": "your club lost members last year while the number of golfers in the Netherlands grew"
+ },
+ {
+  "id": "P010",
+  "name": "Adrian",
+  "age": 58,
+  "segment": "Board member or paid club manager of an 18-hole club (±950 members, turnover around 1.8 million euro)",
+  "income": 52000,
+  "behaviour": "Treasurer, every euro counts",
+  "behaviour_how": "You guard the budget; any new yearly cost needs a clear return and usually waits for the next budget round.",
+  "objection": "Another few hundred euros a month on top of what we already pay",
+  "habit": "your club lost members last year while the number of golfers in the Netherlands grew"
+ },
+ {
+  "id": "P011",
+  "name": "Nia",
+  "age": 67,
+  "segment": "Club manager or commercial manager of a 27+ hole club or a commercially run course (±1,350 members)",
+  "income": 122000,
+  "behaviour": "Overloaded secretary / volunteer",
+  "behaviour_how": "You spend evenings on member administration, invoices and tee-time questions and want less work, not a new project.",
+  "objection": "Does it work with our current system, the NGF handicap and our direct debit?",
+  "habit": "the budget for next year is decided at the members' meeting in spring"
+ },
+ {
+  "id": "P012",
+  "name": "Yusuf",
+  "age": 59,
+  "segment": "Board member or paid club manager of an 18-hole club (±950 members, turnover around 1.8 million euro)",
+  "income": 47000,
+  "behaviour": "Commercially minded manager",
+  "behaviour_how": "You look for more revenue per member and per guest: green fees, buggies, lessons, the bar, sponsors.",
+  "objection": "Two founders and an AI-built product: what happens to our data if they stop?",
+  "habit": "you already pay a yearly fee to your current software vendor and do not know the exact amount by heart"
+ },
+ {
+  "id": "P013",
+  "name": "Diego",
+  "age": 63,
+  "segment": "Volunteer board member of a 9-hole club (±550 members, mostly volunteers)",
+  "income": 54000,
+  "behaviour": "Treasurer, every euro counts",
+  "behaviour_how": "You guard the budget; any new yearly cost needs a clear return and usually waits for the next budget round.",
+  "objection": "Does it work with our current system, the NGF handicap and our direct debit?",
+  "habit": "you already pay a yearly fee to your current software vendor and do not know the exact amount by heart"
+ },
+ {
+  "id": "P014",
+  "name": "Farah",
+  "age": 58,
+  "segment": "Volunteer board member of a 9-hole club (±550 members, mostly volunteers)",
+  "income": 75000,
+  "behaviour": "Cautious chair, goes through the members' meeting",
+  "behaviour_how": "Bigger decisions go to the general members' meeting (ALV); you avoid risk and want references from other clubs.",
+  "objection": "GOLF.NL is free and already books tee times and takes payment, so why would our members need another app?",
+  "habit": "your club still settles the bar tab with cash and a card machine at the bar"
+ },
+ {
+  "id": "P015",
+  "name": "Lena",
+  "age": 38,
+  "segment": "Club manager or commercial manager of a 27+ hole club or a commercially run course (±1,350 members)",
+  "income": 101000,
+  "behaviour": "Overloaded secretary / volunteer",
+  "behaviour_how": "You spend evenings on member administration, invoices and tee-time questions and want less work, not a new project.",
+  "objection": "Our older members will not install and use a new app",
+  "habit": "the average member at your club is over 60"
+ },
+ {
+  "id": "P016",
+  "name": "Ana",
+  "age": 62,
+  "segment": "Club manager or commercial manager of a 27+ hole club or a commercially run course (±1,350 members)",
+  "income": 71000,
+  "behaviour": "Cautious chair, goes through the members' meeting",
+  "behaviour_how": "Bigger decisions go to the general members' meeting (ALV); you avoid risk and want references from other clubs.",
+  "objection": "Another few hundred euros a month on top of what we already pay",
+  "habit": "your club still settles the bar tab with cash and a card machine at the bar"
+ },
+ {
+  "id": "P017",
+  "name": "Marco",
+  "age": 54,
+  "segment": "Volunteer board member of a 9-hole club (±550 members, mostly volunteers)",
+  "income": 54000,
+  "behaviour": "Loyal to the current vendor",
+  "behaviour_how": "Your club has run IntoGolf or Nexxchange for years; it works well enough and the vendor knows your club.",
+  "objection": "Our older members will not install and use a new app",
+  "habit": "the average member at your club is over 60"
+ },
+ {
+  "id": "P018",
+  "name": "Owen",
+  "age": 57,
+  "segment": "Board member or paid club manager of an 18-hole club (±950 members, turnover around 1.8 million euro)",
+  "income": 47000,
+  "behaviour": "Still on E-Golf4U, must choose a new system now",
+  "behaviour_how": "E-Golf4U is being retired; your club has to pick Nexxchange, IntoGolf, the Golfspot/TeeControl/Parrow stack or something else soon.",
+  "objection": "GOLF.NL is free and already books tee times and takes payment, so why would our members need another app?",
+  "habit": "you already pay a yearly fee to your current software vendor and do not know the exact amount by heart"
+ },
+ {
+  "id": "P019",
+  "name": "Ines",
+  "age": 35,
+  "segment": "Board member or paid club manager of an 18-hole club (±950 members, turnover around 1.8 million euro)",
+  "income": 77000,
+  "behaviour": "Still on E-Golf4U, must choose a new system now",
+  "behaviour_how": "E-Golf4U is being retired; your club has to pick Nexxchange, IntoGolf, the Golfspot/TeeControl/Parrow stack or something else soon.",
+  "objection": "GOLF.NL is free and already books tee times and takes payment, so why would our members need another app?",
+  "habit": "members complain at the desk that the booking web app is hard to find on their phone"
+ },
+ {
+  "id": "P020",
+  "name": "Anya",
+  "age": 61,
+  "segment": "Board member or paid club manager of an 18-hole club (±950 members, turnover around 1.8 million euro)",
+  "income": 104000,
+  "behaviour": "Commercially minded manager",
+  "behaviour_how": "You look for more revenue per member and per guest: green fees, buggies, lessons, the bar, sponsors.",
+  "objection": "GOLF.NL is free and already books tee times and takes payment, so why would our members need another app?",
+  "habit": "members complain at the desk that the booking web app is hard to find on their phone"
+ }
+]

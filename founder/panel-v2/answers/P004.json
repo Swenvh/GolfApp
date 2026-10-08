@@ -1,0 +1,13 @@
+{
+  "id": "P004",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "timing",
+  "reason": "We moved off E-Golf4U less than a year ago and the volunteers and members are only just used to the new system; even a free pilot means another round of explaining, and I can't sell the board a second switch now, especially to two founders with no club live yet.",
+  "objection": "Two founders and a product nobody runs yet: 12 months' notice and a spreadsheet export are fine on paper, but if they stop we migrate again, and I'm not putting 950 members through that twice.",
+  "would_change_my_mind": "In about two years, a handful of comparable 18-hole clubs running it for a full season whose boards I can call, and proof the team has grown beyond two people.",
+  "price_too_cheap": 150,
+  "price_cheap": 300,
+  "price_expensive": 550,
+  "price_too_expensive": 800
+}

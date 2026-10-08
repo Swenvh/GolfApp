@@ -1,0 +1,13 @@
+{
+  "id": "P010",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "timing",
+  "reason": "The free pilot is fair, but € 399 a month is close to € 5,000 a year on top of what we already pay, and nothing new goes in until the next budget round. I'm not putting it to the board before I've heard from a club that actually runs it.",
+  "objection": "Two founders and not one club live yet. If they stop or one of them leaves, I'm the one who explains to 950 members why the app is gone and why we paid for two systems.",
+  "would_change_my_mind": "A call with the Golfclub Zwolle board after a few months live, showing members actually use it and it saves us real money or staff hours, so I can replace a cost instead of adding one.",
+  "price_too_cheap": 100,
+  "price_cheap": 200,
+  "price_expensive": 400,
+  "price_too_expensive": 550
+}

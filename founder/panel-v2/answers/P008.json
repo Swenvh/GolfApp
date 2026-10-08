@@ -1,0 +1,13 @@
+{
+  "id": "P008",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "habit",
+  "reason": "We have run on our current vendor for years and it works well enough. A free pilot is nice, but our volunteer board would have to run two systems side by side and talk 550 members into another app, and members already have GOLF.NL for tee times on their phone.",
+  "objection": "Two founders and no club live yet. If they stop or get bought, I'm the volunteer who has to explain to the members why we're switching again. Our current vendor knows us and isn't going anywhere.",
+  "would_change_my_mind": "Seeing Golfclub Zwolle live for a season and hearing from their board that members actually use it and the bar tab and invoices run without problems, plus our current vendor failing to fix the phone booking complaints.",
+  "price_too_cheap": 50,
+  "price_cheap": 120,
+  "price_expensive": 200,
+  "price_too_expensive": 300
+}
