@@ -1,0 +1,144 @@
+{
+ "business": "Greenside: white-label member app + club management software for Dutch golf clubs",
+ "seed": 682799,
+ "dealt": 20,
+ "answered": 20,
+ "skipped": [],
+ "buys": 0,
+ "passes": 20,
+ "buy_rate": 0.0,
+ "by_segment": [
+  [
+   "Board member or paid club manager of an 18-hole club (±950 members, turnover around 1.8 million euro)",
+   11,
+   0.0
+  ],
+  [
+   "Club manager or commercial manager of a 27+ hole club or a commercially run course (±1,350 members)",
+   4,
+   0.0
+  ],
+  [
+   "Volunteer board member of a 9-hole club (±550 members, mostly volunteers)",
+   5,
+   0.0
+  ]
+ ],
+ "by_behaviour": [
+  [
+   "Still on E-Golf4U, must choose a new system now",
+   4,
+   0.0
+  ],
+  [
+   "Just migrated, tired of switching",
+   3,
+   0.0
+  ],
+  [
+   "Loyal to the current vendor",
+   3,
+   0.0
+  ],
+  [
+   "Treasurer, every euro counts",
+   3,
+   0.0
+  ],
+  [
+   "Overloaded secretary / volunteer",
+   3,
+   0.0
+  ],
+  [
+   "Commercially minded manager",
+   2,
+   0.0
+  ],
+  [
+   "Cautious chair, goes through the members' meeting",
+   2,
+   0.0
+  ]
+ ],
+ "by_income": [
+  [
+   "$62,000 to $79,000",
+   8,
+   0.0
+  ],
+  [
+   "$79,000 and up",
+   7,
+   0.0
+  ],
+  [
+   "under $62,000",
+   5,
+   0.0
+  ]
+ ],
+ "why_not": [
+  [
+   "trust",
+   15,
+   [
+    "We have 950 members, most over 60, and E-Golf4U is going away, so this migration has to work the first time. I can't take a two-founder product with zero live clubs to my board when Nexxchange and IntoGolf run hundreds of clubs already.",
+    "We have run our current system for years and it works well enough; I'm not moving 950 members, our tee sheet and our invoicing to two founders whose first pilot club isn't even live yet. A nice app in our own colours doesn't outweigh the risk of a messy season."
+   ],
+   [
+    "P001",
+    "P003"
+   ]
+  ],
+  [
+   "timing",
+   3,
+   [
+    "We just dragged 950 members and a worn-out volunteer team through a migration off E-Golf4U; I'm not putting them through another one within a year for a product whose first pilot club isn't even live yet.",
+    "We just finished moving off E-Golf4U, the volunteers are exhausted and the members have only just learned the new system. I'm not putting the club through another migration within a year, least of all onto something that isn't even live at its first pilot club."
+   ],
+   [
+    "P002",
+    "P004"
+   ]
+  ],
+  [
+   "habit",
+   2,
+   [
+    "We've run on our current system for years, it works well enough and the vendor knows us. Switching 550 members to a new app from two founders whose first club isn't even live yet is a headache our volunteer board doesn't need for €249 a month.",
+    "We've run on our current system for years, the vendor knows us and it works well enough. Switching means migrating 550 members, retraining volunteers and getting a lot of people over 60 to install yet another app, and that's a lot of grief for a small volunteer board to take on for software that isn't live anywhere yet, built by two founders."
+   ],
+   [
+    "P008",
+    "P017"
+   ]
+  ]
+ ],
+ "why_yes": [],
+ "flip": [
+  "Seeing Golfclub Zwolle or another 18-hole club actually live for a full season, with a manager I can call, plus a written guarantee that we can export all our data if Greenside stops.",
+  "A comparable 18-hole club running it live for a full season with a working NGF/handicap link and direct debit, and a contract that lets us exit after the pilot with our data exported at no cost.",
+  "Seeing a comparable 18-hole club running it live for a full season without problems, and a clear way to get our data out if they go under.",
+  "A few clubs our size running on it for a full season without trouble, plus a contractual escrow or full data-export guarantee if they stop, and then talk to me again when our current contract comes up for renewal.",
+  "Seeing Golfclub Zwolle actually live for a full season, with their treasurer telling me invoicing and iDEAL work and that it replaced their old package instead of adding to it.",
+  "Two or three comparable clubs running it live for a full season, that I can phone and visit, plus a contract that guarantees our data and support if the company stops.",
+  "Seeing Golfclub Zwolle live for a full season, plus a call with their secretary about how the older members and the migration went, and an escrow or data-export guarantee in the contract.",
+  "Seeing a comparable 9-hole volunteer club running on it for a full season without trouble, and our current vendor raising prices or dropping support.",
+  "Our current system failing badly in the next year or two, plus seeing Golfclub Zwolle running live for a full season with older members actually using the app, and you doing the whole migration for free.",
+  "Golfclub Zwolle running live for a full season with a treasurer I can call, plus a pilot we can walk away from at no cost and a written guarantee we get our data back if they stop.",
+  "Seeing it live at a club our size for a full season, with the NGF handicap link and direct debit working, and a reference call with their manager before the spring budget meeting.",
+  "A comparable 18-hole club that has run a full season on it live, plus a written guarantee that we get a full export of all our data and a transition period if they stop.",
+  "A live reference club of our size that runs NGF handicaps and direct debit through it for a full season, plus a price I can show the board is no higher than what we pay now, so it fits in next year's budget.",
+  "Two or three comparable 9-hole clubs that have used it for a full season and that I can call myself, plus a contract that lets us take our data out and stop after the pilot without penalty.",
+  "Seeing Golfclub Zwolle running on it for a full season, with their manager telling me how many older members actually use it and how many support calls it cost them.",
+  "Two or three comparable clubs of our size running it live for at least a season, that I can call myself, plus a clear exit clause and data export if it doesn't work.",
+  "Seeing a club like ours, 9 holes with older members, actually running on it for a full season with most members using the app, plus a guarantee that we can export everything and go back without losing data.",
+  "Seeing Golfclub Zwolle running on it for a full season, with their manager telling me personally that the migration and the invoicing went fine, plus a contract clause that hands over all our data in a standard format if Greenside stops.",
+  "Seeing Golfclub Zwolle live for a full season on tee times and invoicing, with a reference call from their manager, plus an escrow or exit guarantee that our data and the members' bookings keep working if Greenside stops.",
+  "Golfclub Zwolle running live for a full season, with a manager I can call, and figures showing more guest bookings or extra spend through the app."
+ ],
+ "purchases_first_month_per_buyer": null,
+ "price_answers": 20
+}
