@@ -1,0 +1,13 @@
+{
+  "id": "P013",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "timing",
+  "reason": "Nothing in this offer tells me it works with the NGF handicap system or our direct debit, and without that it is two systems side by side for my volunteers. Even with a free pilot, a new yearly cost of over two thousand euros goes to the next budget round, not this month.",
+  "objection": "Does it link to the NGF handicap registration and our direct debit collections? If members have to enter scores twice or I have to run direct debits somewhere else, it costs us more work than it saves.",
+  "would_change_my_mind": "Written confirmation that the NGF handicap link and direct debit work, plus a talk with the Zwolle board once they are live, and a price that is lower than what we pay our current vendor now.",
+  "price_too_cheap": 40,
+  "price_cheap": 100,
+  "price_expensive": 180,
+  "price_too_expensive": 260
+}

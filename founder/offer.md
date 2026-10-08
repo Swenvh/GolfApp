@@ -98,4 +98,43 @@ The weakest score stays **likelihood**: no offer replaces a live reference club.
 Same 20 simulated decision-makers (seed 682799), new pitch (`founder/pitch.md`; the old
 one is `founder/pitch-v1.md`). Results in `founder/panel-v2/`.
 
-_(filled in after the run)_
+**Result: 0 buy · 20 pass, before and after.** The new offer did not move the buy rate.
+Language models lean agreeable, so a 0 here is a strong signal, not noise.
+
+| | Pitch v1 | Founding Club (v2) |
+| --- | ---: | ---: |
+| Buy | 0 / 20 | 0 / 20 |
+| Reason: trust | 15 | 11 |
+| Reason: timing | 3 | 6 |
+| Reason: habit | 2 | 3 |
+
+What moved (counted across the 20 answers)
+- **Data and continuity fear dropped:** export or escrow demanded in 10 answers before,
+  3 after. Bonus D works on paper; buyers now call it "paper safeguards" but stop asking for it.
+- **Trust became timing:** four buyers moved from "I don't trust it" to "not now / next
+  budget round / next contract renewal". The offer made Greenside plausible later, not now.
+- **Zwolle is the whole case:** 10 answers named Zwolle before, **19 of 20** after. Almost
+  every "what would change my mind" is: *Zwolle live for a season, its board on the phone,
+  older members actually using it.*
+
+What did not move, or got worse
+- **Double work during the pilot:** 2 answers before, 9 after. "Pilot next to the current
+  system" reads as two systems and extra volunteer work, not as safety.
+- **Cost on top of the current vendor:** 7 both times. Treasurers want to see that
+  Greenside *replaces* a bill, not adds one.
+- **NGF handicap and direct debit:** still named as a must (5 and 3 answers). Not promised (K).
+- **Two founders:** still in almost every answer; no offer element can fix it.
+- **9-hole price:** median "getting expensive" fell from € 225 to € 200, "too expensive"
+  € 300; the € 179 founding price sits just under it. 18 holes: € 399 is inside the range
+  (median bargain € 250, expensive € 550). 27+ holes: unchanged (expensive € 650).
+
+Conclusion: the problem is not the offer but **proof**. No stack replaces a live
+reference club. What to change:
+1. Get Zwolle live and measured first (the board's condition); every other sale waits on it.
+2. Reword the pilot as "we run it, your volunteers don't" and show which current costs it
+   replaces (a side-by-side of the club's software bill), instead of "next to your system".
+3. Decide on NGF handicap and direct debit (product), because they block "replace".
+4. Price questions go to `/founder-pricing`; the guarantee and support cost to `/founder-cfo`.
+
+These are simulated buyers: use the objections, not the numbers, and confirm with real
+club boards.

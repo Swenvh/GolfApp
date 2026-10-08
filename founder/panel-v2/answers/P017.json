@@ -1,0 +1,13 @@
+{
+  "id": "P017",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "habit",
+  "reason": "Our current system works well enough and the vendor knows us; I'm not going to ask a volunteer board to run a pilot with two founders nobody has heard of while our members are mostly over 60. The free pilot is nice, but our time and goodwill aren't free.",
+  "objection": "Our older members will not install and use a new app, and if half of them get stuck it's me and the other volunteers who get the phone calls, not some helpline for four weeks.",
+  "would_change_my_mind": "Calling the board of Golfclub Zwolle after a year live and hearing that their older members actually use it and the switch didn't land on the volunteers.",
+  "price_too_cheap": 50,
+  "price_cheap": 120,
+  "price_expensive": 220,
+  "price_too_expensive": 300
+}
