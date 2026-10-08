@@ -147,3 +147,67 @@ overbrugging langer. **Laat de CFO dit doorrekenen voordat het in contracten gaa
 
 _Gesimuleerde kopers en geschatte kosten; echte besturen en echte offertes moeten ze bevestigen. Geen
 financieel of juridisch advies._
+
+## 10. Uitkomst: het kooppanel met dit aanbod (ronde 3, 8 oktober 2026)
+
+Dezelfde 20 gesimuleerde beslissers (seed 682799) kregen de nieuwe pitch (`founder/pitch.md`; de vorige
+staat in `founder/pitch-v2.md`). Resultaten in `founder/panel-v3/`.
+
+**Uitkomst: 0 kopen · 20 niet.** Ook dit aanbod haalt in de simulatie geen enkele koper over.
+
+| | ronde 1 (oude pitch) | ronde 2 (Founding Club) | ronde 3 (doorbraakaanbod) |
+| --- | ---: | ---: | ---: |
+| Kopen | 0 / 20 | 0 / 20 | 0 / 20 |
+| Reden: vertrouwen | 15 | 11 | 14 |
+| Reden: timing | 3 | 6 | 3 |
+| Reden: gewoonte | 2 | 3 | 3 |
+| Noemt Zwolle als voorwaarde | 10 | 19 | **20** |
+| Noemt dubbel werk | 2 | 9 | **3** |
+| Noemt NGF-handicap | 4 | 5 | **1** |
+
+**Wat werkte** (de bezwaren die we gericht aanpakten, zijn grotendeels weg):
+- **Dubbel werk** van 9 naar 3 antwoorden: de wekelijkse synchronisatie overtuigt.
+- **Handicap** van 5 naar 1: "scores blijven in GOLF.NL" is genoeg.
+- **Continuïteit** wordt nu vaak positief genoemd: "de pilotvoorwaarden en de escrow zijn echt goed"
+  (P001). Een paar zeggen dat het het risico niet helemaal wegneemt: "als de oprichters stoppen, moet ik
+  950 leden alsnog laten verhuizen" (P004, P012).
+- **Prijs per lid wordt geaccepteerd.** Omgerekend naar per lid per maand (sommige kopers antwoordden
+  per club, die zijn omgerekend):
+
+  | | 9 holes (n=5) | 18 holes (n=11) | 27+ holes (n=4) | allemaal |
+  | --- | ---: | ---: | ---: | ---: |
+  | te goedkoop | € 0,15 | € 0,20 | € 0,25 | € 0,20 |
+  | koopje | € 0,30 | € 0,45 | € 0,45 | € 0,40 |
+  | wordt duur | € 0,55 | € 0,75 | € 0,75 | € 0,75 |
+  | te duur | € 0,80 | € 1,10 | € 1,10 | € 1,05 |
+
+  € 0,65 ligt onder "wordt duur" voor 18 en 27+ holes; € 0,49 ligt bij "koopje". Alleen voor 9 holes ligt
+  € 0,65 boven "wordt duur" (€ 0,55) maar onder "te duur" (€ 0,80). Niemand zei nee om de prijs.
+
+**Wat niet werkte, en vier nieuwe inzichten:**
+1. **Bewijs blijft de muur: 20 van 20 willen eerst Zwolle zien.** Geen aanbod in een simulatie lost dat
+   op; de gesimuleerde kopers zijn ook zo opgezet dat "geen referenties" hun twijfel is. Alleen Zwolle
+   live en echte gesprekken veranderen dit.
+2. **Voor clubs die van E-Golf4U af móéten klopt de pilot niet.** "De pilot gaat ervan uit dat ik in mijn
+   huidige systeem blijf werken, maar dat systeem verdwijnt" (P018, P019). Voor hen moet het aanbod zijn:
+   **Greenside vervangt E-Golf4U direct, met een vangnet**: lukt het niet, dan zetten wij uw gegevens
+   kosteloos over naar Nexxchange of IntoGolf, in hun importformaat.
+3. **Wachten kost niets.** "De oprichtersplaatsen zijn open tot juli 2027, dus ik kan op Zwolle wachten
+   en toch € 0,49 krijgen" (P020). De schaarste beloont wachten in plaats van durven. Oplossing: een
+   **pioniersprijs voor de eerste drie clubs die tekenen vóór de resultaten van Zwolle** (bijvoorbeeld
+   € 0,39 per lid, drie jaar vast). Dat is echte schaarste en beloont het risico dat zij nemen.
+4. **Ze willen hun eigen rekensom en een club van hun soort.** Penningmeesters willen een vergelijking met
+   de *echte* factuur van hun huidige leverancier (P005, P010, P013, P016). 9-holesclubs willen een
+   9-holesclub als referentie, niet Zwolle (P008, P014). Oplossing: in elk gesprek de factuur van de club
+   naast Greenside leggen, en een tweede pilotclub met 9 holes zoeken.
+
+Ook genoemd: de wekelijkse kopie hangt af van medewerking van de huidige leverancier (P011; een gewone
+CSV-export is genoeg, zeg dat erbij), en het verhaal over extra omzet ontbreekt nog (P012, P020; dat komt
+uit de meting bij Zwolle).
+
+**Conclusie.** Het doorbraakaanbod doet wat het moest doen: de bezwaren over moeite, dubbel werk,
+handicap, continuïteit en prijs zijn grotendeels weg. Wat overblijft is één ding: **niemand wil de eerste
+zijn.** Dat los je niet op met een beter aanbod in een simulatie, maar met (1) Zwolle live en meetbaar, (2)
+een pioniersprijs die de eerste drie clubs beloont voor het risico, (3) een vangnet voor E-Golf4U-clubs,
+en (4) echte gesprekken met besturen (test 1). Een gesimuleerd panel kan niet laten zien dat mensen
+kopen; het laat zien dat er geen andere bezwaren meer in de weg staan.
