@@ -1,0 +1,13 @@
+{
+  "id": "P001",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "trust",
+  "reason": "We have 950 members, most over 60, and E-Golf4U is going away, so this migration has to work the first time. I can't take a two-founder product with zero live clubs to my board when Nexxchange and IntoGolf run hundreds of clubs already.",
+  "objection": "No other club uses it yet, and even Zwolle isn't live. Where are the references? And what happens to our members, invoices and tee sheet if one of the two founders gets sick or the company stops?",
+  "would_change_my_mind": "Seeing Golfclub Zwolle or another 18-hole club actually live for a full season, with a manager I can call, plus a written guarantee that we can export all our data if Greenside stops.",
+  "price_too_cheap": 150,
+  "price_cheap": 300,
+  "price_expensive": 550,
+  "price_too_expensive": 800
+}

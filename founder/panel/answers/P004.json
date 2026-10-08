@@ -1,0 +1,13 @@
+{
+  "id": "P004",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "timing",
+  "reason": "We just finished moving off E-Golf4U, the volunteers are exhausted and the members have only just learned the new system. I'm not putting the club through another migration within a year, least of all onto something that isn't even live at its first pilot club.",
+  "objection": "Two founders, an AI-built product and no club actually running on it yet. If they quit or get hit by a bus, what happens to the data of 950 members, our invoicing and our tee sheet? I'd be explaining that to the general meeting.",
+  "would_change_my_mind": "A few clubs our size running on it for a full season without trouble, plus a contractual escrow or full data-export guarantee if they stop, and then talk to me again when our current contract comes up for renewal.",
+  "price_too_cheap": 150,
+  "price_cheap": 300,
+  "price_expensive": 550,
+  "price_too_expensive": 800
+}

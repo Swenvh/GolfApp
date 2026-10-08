@@ -1,0 +1,13 @@
+{
+  "id": "P007",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "trust",
+  "reason": "We have to move off E-Golf4U once and get it right for 950 members, and two founders with no club live yet is too big a bet for the board. I'd rather pay a bit more for Nexxchange or IntoGolf, which other clubs already run on, than have to explain a failed migration at the members' meeting.",
+  "objection": "Nobody is actually live on this yet, and our older members won't install a new app. If two people run support and one of them leaves, the club has nothing, and all our tee times, invoices and the bar tab depend on it.",
+  "would_change_my_mind": "Seeing Golfclub Zwolle live for a full season, plus a call with their secretary about how the older members and the migration went, and an escrow or data-export guarantee in the contract.",
+  "price_too_cheap": 150,
+  "price_cheap": 300,
+  "price_expensive": 550,
+  "price_too_expensive": 800
+}

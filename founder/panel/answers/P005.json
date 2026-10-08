@@ -1,0 +1,13 @@
+{
+  "id": "P005",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "trust",
+  "reason": "For a club our size the 449 a month is not the problem by itself, but this sits on top of what we already pay, with two founders and not a single club live yet. I am not putting a yearly contract for our members' invoices and bar tab in the hands of something nobody has run in practice.",
+  "objection": "Two people, no live club, and it touches our invoicing and payments. If they stop or fall behind, we are stuck with 950 unhappy members and a migration back, and I still have to pay the old vendor in the meantime.",
+  "would_change_my_mind": "Seeing Golfclub Zwolle actually live for a full season, with their treasurer telling me invoicing and iDEAL work and that it replaced their old package instead of adding to it.",
+  "price_too_cheap": 150,
+  "price_cheap": 300,
+  "price_expensive": 500,
+  "price_too_expensive": 750
+}

@@ -1,0 +1,13 @@
+{
+  "id": "P003",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "trust",
+  "reason": "We have run our current system for years and it works well enough; I'm not moving 950 members, our tee sheet and our invoicing to two founders whose first pilot club isn't even live yet. A nice app in our own colours doesn't outweigh the risk of a messy season.",
+  "objection": "Two people building and supporting it, no club live yet: if they stop or get overwhelmed, I'm the one explaining to the board and 950 members why the tee sheet is down. And it's another few hundred euros a month plus a migration fee on top of what we already pay.",
+  "would_change_my_mind": "Seeing a comparable 18-hole club running it live for a full season without problems, and a clear way to get our data out if they go under.",
+  "price_too_cheap": 99,
+  "price_cheap": 249,
+  "price_expensive": 449,
+  "price_too_expensive": 650
+}

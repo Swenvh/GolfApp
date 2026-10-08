@@ -1,0 +1,13 @@
+{
+  "id": "P010",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "trust",
+  "reason": "We're losing members, so a nice app in our own colours is tempting, but I'm not moving our whole member and invoice administration to two founders whose first pilot club isn't even live yet. €449 a month plus migration is a new yearly cost I'd have to defend in the next budget round, and there's no proof yet that it keeps a single member.",
+  "objection": "Two people, no live club yet. If they stop or one of them leaves, our members, tee times and invoices are stuck in their system, and I'm the treasurer who signed for it. On top of that we'd likely still be paying our current software during the switch.",
+  "would_change_my_mind": "Golfclub Zwolle running live for a full season with a treasurer I can call, plus a pilot we can walk away from at no cost and a written guarantee we get our data back if they stop.",
+  "price_too_cheap": 100,
+  "price_cheap": 200,
+  "price_expensive": 400,
+  "price_too_expensive": 600
+}

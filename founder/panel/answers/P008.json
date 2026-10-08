@@ -1,0 +1,13 @@
+{
+  "id": "P008",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "habit",
+  "reason": "We've run on our current system for years, it works well enough and the vendor knows us. Switching 550 members to a new app from two founders whose first club isn't even live yet is a headache our volunteer board doesn't need for €249 a month.",
+  "objection": "Members already book and pay through GOLF.NL for free, and I don't want to bet our club on two people with no live club yet. If they stop, we're the ones explaining it at the desk.",
+  "would_change_my_mind": "Seeing a comparable 9-hole volunteer club running on it for a full season without trouble, and our current vendor raising prices or dropping support.",
+  "price_too_cheap": 50,
+  "price_cheap": 100,
+  "price_expensive": 200,
+  "price_too_expensive": 300
+}

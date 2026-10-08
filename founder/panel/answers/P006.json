@@ -1,0 +1,13 @@
+{
+  "id": "P006",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "trust",
+  "reason": "We have 1,350 members, most of them over 60, and a running system. I'm not moving all of that to two founders whose only pilot club isn't even live yet, and I don't have the evenings to babysit a migration.",
+  "objection": "No other club uses it yet: where are the references? If two people get sick or quit, my members can't book a tee time and I'm the one taking the calls.",
+  "would_change_my_mind": "Two or three comparable clubs running it live for a full season, that I can phone and visit, plus a contract that guarantees our data and support if the company stops.",
+  "price_too_cheap": 150,
+  "price_cheap": 350,
+  "price_expensive": 650,
+  "price_too_expensive": 900
+}

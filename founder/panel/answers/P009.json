@@ -1,0 +1,13 @@
+{
+  "id": "P009",
+  "buys": false,
+  "purchases_first_month": 0,
+  "reason_code": "timing",
+  "reason": "We just finished migrating off E-Golf4U and our volunteers are exhausted; I cannot go back to the board and members asking for another switch a year later. On top of that, €249 a month plus a migration fee is real money for a 9-hole club that is losing members, from two founders with no club live yet.",
+  "objection": "Our older members will not install and use yet another new app, and the volunteers who would have to run a second migration are already burned out. If these two founders stop, we are stuck again.",
+  "would_change_my_mind": "Our current system failing badly in the next year or two, plus seeing Golfclub Zwolle running live for a full season with older members actually using the app, and you doing the whole migration for free.",
+  "price_too_cheap": 50,
+  "price_cheap": 120,
+  "price_expensive": 220,
+  "price_too_expensive": 300
+}
