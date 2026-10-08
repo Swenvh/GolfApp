@@ -53,7 +53,7 @@ vooral tijd van de oprichters).
 | E | **Wij doen de migratie en de lancering bij de leden**: import, uitnodigingen, papieren handleiding voor oudere leden | 13, 14, 17 | 4 | 2 | ✔ bonus |
 | F | **Hulplijn in de eerste vier weken, ook op zaterdagochtend** | 15, 16, 17 | 4 | 3 (tijd van de oprichters in het weekend) | ✔ bonus |
 | G | **Referentiegesprek met het bestuur van Zwolle** vóór de beslissing, zodra Zwolle live is | 1, 3 | 5 | 1 | ✔ (pas waar als Zwolle live is) |
-| H | **Oprichtersprijs 9 holes € 179** (was € 249) | 7 | 4 | 2 (minder omzet) | ✔ testen; Prijzen beslist |
+| H | **Oprichtersprijs 9 holes € 179** (was € 249; sinds 8 okt 2026 vervangen door de prijs per lid, zie Prijzen) | 7 | 4 | 2 (minder omzet) | ✔ testen; Prijzen beslist |
 | I | **Geen migratiekosten voor oprichtersclubs** | 8 | 3 | 2 | ✔ |
 | J | Broncode-escrow bij een derde partij | 2, 19 | 4 | 4 (jaarlijkse kosten, onbekend) | ✘ voorlopig: D dekt het meeste; later met de CFO bekijken |
 | K | NGF-handicapkoppeling en automatische incasso in het product | 9 | 4 | 5 (niet gebouwd; incasso is uit de pilot gehaald) | ✘ niet beloven; productbesluit |
@@ -77,8 +77,8 @@ de hulplijn.
   2. *Wij doen het werk*: import, uitnodigingen, een papieren handleiding voor oudere leden (E). Neemt
      13 en 14 weg.
   3. *Hulplijn op zaterdagochtend* in de eerste vier weken (F). Neemt 15–17 weg.
-- **Urgentie en schaarste (echt):** tien oprichtersclubs tegen de oprichtersprijs, twee jaar vast, geen
-  migratiekosten (H, I). De andere echte urgentie komt van buiten: E-Golf4U stopt, dus veel clubs moeten
+- **Urgentie en schaarste (echt):** tien oprichtersclubs tegen de oprichtersprijs (€ 0,49 per lid, minimaal € 189), twee jaar
+  vast, geen migratiekosten (H, I). De andere echte urgentie komt van buiten: E-Golf4U stopt, dus veel clubs moeten
   nu kiezen.
 - **Bewijs:** een gesprek met het bestuur van Zwolle zodra Zwolle live is (G). Niet eerder; de pitch zegt
   dat ook.

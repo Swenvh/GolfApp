@@ -21,10 +21,10 @@ The fitting test for a subscription sold to boards: **real boards, the real pric
 
 **Test 1 — before the pentest is booked (12 October – 18 December 2026)**
 - Zwolle signs the pilot contract: success criteria in writing, and the founding price
-  (€ 399 a month) **from month 4 if the criteria are met**.
+  (€ 0.49 per member a month) **from month 4 if the criteria are met**.
 - 15 letters to clubs still on E-Golf4U or near Zwolle (marketing hook 1). No claims about Zwolle.
 - **Success line: Zwolle signed by 13 November, and by 18 December at least 5 board conversations and
-  2 signed letters of intent** ("if Zwolle meets its criteria, we start a pilot in 2027 at € 399").
+  2 signed letters of intent** ("if Zwolle meets its criteria, we start a pilot in 2027 at € 0.49 per member").
 - Panel comparison: the panel says 0 of 20 buy now and 19 of 20 wait for Zwolle. So **zero firm
   orders is expected**; conditional letters are the honest measure. Fewer than 5 conversations from
   15 letters means the message or the channel is wrong, not the market: rewrite and try 15 more.
@@ -129,7 +129,7 @@ campaign today (`marketing.md`): all attention on Zwolle.
 | Support hours for Zwolle | own log | falls each week | above 10 hours a week after week 2 → the guide or the app is unclear; fix what repeats |
 | Board conversations booked | marketing log | 3 a week | below 2 a week for two weeks → rewrite the letter, phone first, ask Zwolle for an intro |
 | Pilot requests / letters of intent | marketing log | 3 by 30 May | 0 after 10 conversations → back to `/founder-offer` |
-| Paying clubs vs break-even | CFO | 0 in the first 30 days (Zwolle is in its free pilot); break-even 2 clubs unpaid, 16 with pay | — the money test is Test 2, not the first month |
+| Paying clubs vs break-even | CFO | 0 in the first 30 days (Zwolle is in its free pilot); break-even 1 club unpaid, 13 with pay | — the money test is Test 2, not the first month |
 
 **Reviews** (A+B, one hour, written notes):
 

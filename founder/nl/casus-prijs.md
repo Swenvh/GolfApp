@@ -3,6 +3,10 @@
 Vraag van de oprichters (8 oktober 2026): *"Een greenfee voor 9 holes kost al zo'n € 50. Waarom houden we
 de prijs dan zo laag, ook al gaat het panel maar langs 20 mensen?"*
 
+**Besluit (8 oktober 2026): doorgevoerd.** De oprichters kozen het per-lidmodel uit hoofdstuk 5: € 0,65
+per lid per maand (minimaal € 249), oprichters € 0,49 per lid (minimaal € 189). Prijzen, De cijfers, de
+pitch en het plan zijn bijgewerkt.
+
 Kort antwoord: **de vraag is terecht.** De huidige prijs is gebaseerd op wat gesimuleerde kopers
 "software" vinden kosten, niet op wat Greenside een club oplevert. Gemeten aan de waarde voor de club is
 € 449 voor 18 holes laag. Maar een hogere prijs lost het echte probleem niet op (vertrouwen: geen club
@@ -73,9 +77,9 @@ dezelfde kosten. "Salaris" = € 2.500 per oprichter.
 
 | prijsmodel | gemiddelde prijs per club | bijdrage per club | jaar 1 zonder salaris | break-even met salaris |
 | --- | ---: | ---: | ---: | ---: |
-| **Huidig**: oprichters € 179 / € 399 / € 499 | € 364 | € 318,50 | € -954 | 17 clubs (16 met de mix) |
-| **Per lid, oprichtersprijs** € 0,49 per lid | € 454 | € 408,50 | € +126 | 14 clubs (13 met de mix) |
-| **Per lid, normale prijs** € 0,65 per lid | € 605 | € 559,50 | € +1.938 | 10 clubs |
+| **Oud** (per grootte): oprichters € 179 / € 399 / € 499 | € 364 | € 318,50 | € -954 | 17 clubs (16 met de mix) |
+| **Per lid, oprichtersprijs** € 0,49 per lid (gekozen) | € 454 | € 408,50 | € +126 | 14 clubs (13 met de mix) |
+| **Per lid, normale prijs** € 0,65 per lid (gekozen) | € 605 | € 559,50 | € +1.938 | 10 clubs |
 | **Waardeprijs, oprichters** € 249 / € 599 / € 799 | € 551,50 | € 506 | € +1.296 | 11 clubs |
 | **Waardeprijs, normaal** € 299 / € 749 / € 999 | € 686,50 | € 641 | € +2.916 | 9 clubs |
 

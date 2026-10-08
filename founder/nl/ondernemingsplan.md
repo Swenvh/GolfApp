@@ -2,19 +2,19 @@
 
 **Oordeel: Nog niet**
 
-- ✓ Elke club levert per maand € 318,50 op vóór vaste kosten (88% bijdrage).
-- ✗ Bedrijfsresultaat jaar 1: VERLIES van € 954.
-- ✓ Break-even ligt bij 2 betalende clubs tegelijk, tegenover een capaciteit van 25.
+- ✓ Elke club levert per maand € 410,20 op vóór vaste kosten (90% bijdrage).
+- ✓ Bedrijfsresultaat jaar 1: winst van € 146.
+- ✓ Break-even ligt bij 1 betalende club, tegenover een capaciteit van 25.
 - ✗ 0 van de 20 gesimuleerde kopers kopen (0%, de lat ligt op 25%).
 
 | kerncijfer | |
 | --- | ---: |
-| Prijs | € 364,00 per club per maand |
-| Winstmarge bij het plan | 77% per club per maand |
-| Break-even | 2 betalende clubs tegelijk |
-| Bedrijfsresultaat jaar 1 | € -954 |
+| Prijs | € 455,70 per club per maand (oprichters, gemiddeld) |
+| Winstmarge bij het plan | 81% per club per maand |
+| Break-even | 1 betalende club |
+| Bedrijfsresultaat jaar 1 | € 146 |
 | Startkosten | € 10.423 |
-| Benodigd geld tot het zichzelf betaalt | € 12.174 |
+| Benodigd geld tot het zichzelf betaalt | € 11.617 |
 | Startkosten terugverdiend | niet in jaar 1 |
 | Kooppanel | 0 kopen · 20 niet |
 
@@ -26,8 +26,8 @@
   Het bestuur koopt; het secretariaat, de financiële vrijwilliger en de marshal werken er dagelijks mee.
   De leden (golfers) gebruiken de app.
 - **Wat het verkoopt, tegen welke prijs** (het oorspronkelijke idee; de huidige prijzen staan in het
-  hoofdstuk Prijzen: € 199 / € 449 / € 599, oprichters € 179 / € 399 / € 499, geen "twee maanden
-  gratis"): een maandlicentie naar clubgrootte: € 249 (9 holes, tot ±700 leden), € 449 (18 holes,
+  hoofdstuk Prijzen: € 0,65 per lid per maand (minimaal € 249), oprichters € 0,49 per lid (minimaal
+  € 189), geen "twee maanden gratis"): een maandlicentie naar clubgrootte: € 249 (9 holes, tot ±700 leden), € 449 (18 holes,
   ±700–1.100 leden, de standaard), € 599 (27+ holes). Oprichtersprijs € 399 per maand, twee jaar vast,
   voor de eerste tien clubs. Eenmalige migratie € 750 (9 holes) tot € 1.500 (18+ holes). Drie maanden
   pilot, daarna een jaarcontract; twee maanden gratis bij vooruitbetaling per jaar. Geen commissie op
@@ -47,19 +47,19 @@
 Play, plus de clubbeheersoftware erachter, en doet de overstap voor de club. Het is voor de besturen
 van de 263 NGF-clubs, eerst de clubs die van E-Golf4U af moeten.
 
-**Oordeel: Nog niet** (berekend door `compile.py` uit `founder/numbers.json` en het kooppanel). Twee van
-de vier toetsen slagen, twee niet:
-- ✓ **Marge**: elke betalende club laat **€ 318,50 per maand (88%)** over bij de gemiddelde
-  oprichtersprijs van € 364.
-- ✓ **Break-even**: **2 betalende clubs** zonder salaris, ruim binnen de ~25 clubs die twee mensen
+**Oordeel: Nog niet** (berekend door `compile.py` uit `founder/numbers.json` en het kooppanel). Drie van
+de vier toetsen slagen, één niet:
+- ✓ **Marge**: elke betalende club laat **€ 410,20 per maand (90%)** over bij de oprichtersprijs van
+  € 0,49 per lid (gemiddeld € 455,70; op 8 oktober 2026 omgezet naar een prijs per lid).
+- ✓ **Break-even**: **1 betalende club** zonder salaris, ruim binnen de ~25 clubs die twee mensen
   kunnen bedienen.
-- ✗ **Jaar 1**: een verlies van **€ 954**, omdat alleen Zwolle vanaf maand 4 betaalt en de volgende
-  clubs wachten op het bewijs van Zwolle (3 betalende clubs in maand 12).
+- ✓ **Jaar 1**: een winst van **€ 146**, ook al betaalt alleen Zwolle vanaf maand 4 en wachten de
+  volgende clubs op het bewijs van Zwolle (3 betalende clubs in maand 12).
 - ✗ **Kopers**: **0 van de 20** gesimuleerde kopers kopen (de lat ligt op 25%), met de oude pitch én
   met het verbeterde Founding Club-aanbod.
 
-Met € 2.500 salaris per oprichter ligt de break-even op **16 clubs** en is het verlies in jaar 1
-**€ 60.954**.
+Met € 2.500 salaris per oprichter ligt de break-even op **13 clubs** (10 oprichters + 3 tegen de
+normale prijs) en is het verlies in jaar 1 **€ 59.854**.
 
 **Wat er moet veranderen, en welke stap dat doet.**
 1. **Bewijs, geen betere pitch.** 19 van de 20 kopers zeggen wat ze over de streep trekt: Zwolle een
@@ -67,28 +67,29 @@ Met € 2.500 salaris per oprichter ligt de break-even op **16 clubs** en is het
    de koopbereidheid (`/founder-offer` is twee keer gedraaid). Alleen echte cijfers van Zwolle kunnen
    dat; draai daarna `/founder-consumer` opnieuw met die cijfers, en vertrouw echte besturen meer dan
    het panel.
-2. **Jaar 1 in de plus** is een kleine stap: als Zwolle vanaf maand 1 betaalt in plaats van na een
-   gratis pilot, wordt het € +2; het Starter-abonnement van Expo geeft € -90 (`/founder-cfo`). Geen van
-   beide lost het echte vraagstuk op: het salaris van de oprichters.
+2. **Het salaris van de oprichters** is de geldvraag. De prijs per lid bracht de break-even van 16 naar
+   13 clubs; als Zwolle vanaf maand 1 betaalt (jaar 1 € +1.377) of club 11 en verder de normale prijs
+   betalen (break-even 10), helpt dat verder (`/founder-cfo`).
 
 **Waar de board en het panel het over eens waren, en waar niet.** Beide zetten bewijs bij Zwolle
 voorop, en beide zien de moeite van overstappen en "maar twee oprichters" als de twijfels. De board
 stemde "investeren, mits" (5,0 / 10) en zag een verkoopbaar aanbod; het panel kocht niets. De grootste
 angst van de board (leden gebruiken geen clubapp naast GOLF.NL) kwam in het panel minder vaak terug dan
-vertrouwen en timing. Voor 18 en 27+ holes is de prijs niet het probleem; voor 9 holes wel, en daar is
-de normale prijs nu € 199.
+vertrouwen en timing. De prijs was niet het probleem. Na een tweede blik op de waarde voor een
+club (een greenfee kost € 50–74; € 0,65 per lid is per 100 leden minder dan één greenfee van 18 holes
+per maand) ging de prijs omhoog naar € 0,65 per lid (bijlage Casus prijs).
 
 **Het grootste risico** is dat de leden van Zwolle de app niet gebruiken: zonder dat verkoopt niets
 anders. Aanpak: een lanceerpakket (import voor ze gedaan, papieren handleiding, uitnodigingen in
 groepjes, hulplijn op zaterdag), wekelijks tellen hoeveel leden actief zijn, en direct stoppen met
 verkopen als in week 4 minder dan 20% actief is.
 
-**Wat er nodig is om te starten.** Ongeveer **€ 12.200** zonder salaris (pentest € 7.500, jurist
+**Wat er nodig is om te starten.** Ongeveer **€ 11.600** zonder salaris (pentest € 7.500, jurist
 € 2.500, vaste kosten), en **test 1**: Zwolle tekent vóór 13 november een pilotcontract met betaald
 vervolg, plus 2 intentieverklaringen van andere besturen vóór 18 december (`founder/launch.md`).
 
 **Deze week:** ga om tafel met het bestuur van Zwolle. Leg de livedatum, de succescriteria en de
-oprichtersprijs vanaf maand 4 vast in een pilotcontract, en vraag toestemming om hun naam later te
+oprichtersprijs (€ 0,49 per lid) vanaf maand 4 vast in een pilotcontract, en vraag toestemming om hun naam later te
 gebruiken.
 
 _Het panel bestaat uit gesimuleerde kopers en de cijfers zijn prognoses; echte besturen en echte
@@ -413,93 +414,108 @@ Alle 20 kopers gaven de vier prijsantwoorden; zie het hoofdstuk Prijzen.
 ## Prijzen
 
 Bedragen in euro per maand, excl. 21% btw. De antwoorden van kopers zijn gesimuleerd (prijscurves
-hieronder): ze bepalen wat we testen, ze zijn geen bewijs. Marges komen uit de CFO-berekening
+onderaan): ze bepalen wat we testen, ze zijn geen bewijs. Marges komen uit de CFO-berekening
 (`founder/numbers.json`, oprichters onbetaald; `founder/numbers-met-salaris.json`, 2 × € 2.500).
+**Op 8 oktober 2026 omgezet van een prijs per baangrootte naar een prijs per lid**, nadat de oprichters
+vroegen waarom Greenside minder kost dan een paar greenfees per maand. De volledige afweging, met de
+waarde voor de club in greenfees, staat in de bijlage Casus: is Greenside te goedkoop geprijsd?
 
 ### 1. De prijs
 
-| | 9 holes | 18 holes | 27+ holes |
-| --- | ---: | ---: | ---: |
-| **Normale prijs** | **€ 199** (was € 249) | **€ 449** (gelijk) | **€ 599** (gelijk) |
-| **Oprichtersprijs** (eerste tien clubs, twee jaar vast) | **€ 179** (gelijk) | **€ 399** (gelijk) | **€ 499** (was € 399) |
-| Acceptabele bandbreedte volgens kopers | € 75 – 251 | € 151 – 600 | € 152 – 752 |
-| Punt waar "koopje" = "duur" (IPP) | € 151 | € 300 | € 352 |
+**€ 0,65 per lid per maand, minimaal € 249.**
 
-Waarom:
-- **9 holes: normale prijs € 249 → € 199.** € 249 lag precies op de grens van wat vrijwilligersbesturen
-  accepteren (PME € 251); hun mediaan voor "wordt duur" is € 220. € 199 valt binnen de bandbreedte, en
-  het verschil met de oprichtersprijs van € 179 blijft echt. 9-holesclubs zijn 25% van de markt, dus
-  dit kost weinig: gemiddelde normale prijs € 429 → € 416,50.
-- **18 holes: ongewijzigd.** € 449 en € 399 liggen ruim binnen de bandbreedte; 3 van de 22 antwoorden
-  zeggen letterlijk dat de prijs "niet het probleem" of "klein geld" is. De twijfel is vertrouwen, niet
-  prijs.
-- **27+ holes oprichtersprijs € 399 → € 499.** € 399 voor een club met 1.350 leden was 33% korting,
-  meer dan nodig: € 499 ligt nog onder hun mediaan van € 650 voor "wordt duur". Het verhoogt de
-  gemiddelde oprichtersprijs met € 20 (€ 344 → € 364).
-- **Schrap "twee maanden gratis bij jaarbetaling".** Dat is 17% korting waar clubs niet om vroegen.
-  Clubs begroten toch per jaar: factureer jaarlijks vooraf tegen de normale prijs, of per maand.
-- **Houd de migratiekosten voor clubs na de eerste tien** (€ 750 voor 9 holes, € 1.500 voor 18+): die
-  betalen het werk van "wij doen het werk". Oprichtersclubs betalen niets.
+**Oprichtersclubs (de eerste tien, twee jaar vast): € 0,49 per lid per maand, minimaal € 189.**
+
+Leden = het aantal leden in de administratie van de club op 1 januari, één keer per jaar vastgesteld.
+
+| club | leden | normale prijs | oprichtersprijs | normale prijs per jaar |
+| --- | ---: | ---: | ---: | ---: |
+| 9 holes | ~550 | € 358 | € 270 | € 4.290 |
+| 18 holes | ~950 | € 618 | € 466 | € 7.410 |
+| 27+ holes | ~1.350 | € 878 | € 662 | € 10.530 |
+| kleine club | 300 | € 249 (minimum) | € 189 (minimum) | € 2.988 |
+
+Gemiddeld over de markt (25% / 55% / 20%): **oprichters € 455,70, normaal € 604,50** per club per maand
+(was € 364 en € 416,50 met de prijs per baangrootte).
+
+Waarom per lid:
+- **Het volgt de waarde.** Wat Greenside een club oplevert (leden die blijven, gastrondes, extra's, uren
+  aan de balie) groeit met het aantal leden. Een club met 1.350 leden heeft er meer aan dan een club
+  met 550.
+- **Het is klein naast golfgeld.** Voor een 18-holesclub met 950 leden is € 618 per maand € 7.410 per
+  jaar: **100 greenfees van 18 holes (€ 74,23)**, ongeveer **2 gastrondes per week**, of **5,5 leden**
+  die niet opzeggen (€ 1.337 per jaar elk). Dat is 0,6% van de contributie-inkomsten van de club.
+- **Het is makkelijk te zeggen in een bestuursvergadering:** "per 100 leden minder dan één greenfee van
+  18 holes per maand".
+- **Het is eerlijk voor kleine clubs** (het minimum houdt heel kleine clubs haalbaar voor Greenside) en
+  straft grote clubs niet met een sprong tussen grootteklassen.
+
+Wat er veranderde tegenover de oude prijzen, en wat het panel zei:
+- **18 holes: € 449 → € 618 normaal, € 399 → € 466 oprichters.** De grens "te duur" van het panel lag
+  voor 18 holes op € 600 (mediaan "te duur" € 800), dus € 618 zit precies op de rand van wat gesimuleerde
+  kopers accepteren. Dat is bewust: het panel dacht in softwarebudgetten, niet in greenfees.
+- **27+ holes: € 599 → € 878 normaal, € 499 → € 662 oprichters.** Boven de grens "te duur" van het panel
+  (€ 752). Test deze eerst bij echte besturen.
+- **9 holes: € 199 → € 358 normaal, € 179 → € 270 oprichters.** Boven de grens van het panel (€ 251)
+  voor de normale prijs; de oprichtersprijs zit er net boven. Vrijwilligersclubs beslissen via de ALV,
+  dus hier telt de oprichtersprijs het meest.
+- **Blijft**: geen "twee maanden gratis" (jaarlijks vooraf factureren tegen de normale prijs, of per
+  maand); migratiekosten voor clubs na de eerste tien (€ 750 onder 700 leden, € 1.500 vanaf 700); geen
+  commissie.
 
 **Tegenover concurrenten.** Niemand publiceert Nederlandse prijzen, op één datapunt na: Nexxchange
 GolfSuite vermeldt **€ 200 per maand plus € 50 per gelijktijdige gebruiker**, plus eenmalige
 installatiekosten ([Capterra](https://www.capterra.com/p/201943/Nexxchange-GolfSuite/),
 [GetApp](https://www.getapp.com/recreation-wellness-software/a/nexxchange-golfsuite/pricing/),
 [G2](https://www.g2.com/products/nexxchange-golfsuite/pricing); vergelijkingssites, bevestig met een
-offerte). Een 18-holesclub met 3–5 mensen aan de balie, op het secretariaat en bij de financiën betaalt
-dan ongeveer **€ 350–450** (schatting). € 449 is dus de prijs van een *volledig* clubsysteem. Dat is de
-verkooplijn, en ook het risico:
-- Als Greenside het huidige systeem **vervangt**, is € 449 ongeveer dezelfde rekening met een clubapp
-  erbij. Dat is het antwoord op "het komt bovenop wat we betalen" (7 van de 20 antwoorden).
-- Als het **naast** het huidige systeem draait, verdubbelt de softwarerekening, en dan zeggen
-  penningmeesters nee. Zonder NGF-handicapkoppeling en automatische incasso kunnen veel clubs het niet
-  volledig vervangen (Het aanbod, K).
+offerte). Een 18-holesclub betaalt daarvoor ongeveer **€ 350–450** (schatting). € 618 is dus **meer dan
+een volledig clubsysteem**. Dat houdt alleen stand als:
+- Greenside het huidige systeem **vervangt** (die rekening valt weg) en de app de extra bovenop is; of
+- de waarde **gemeten** is (Zwolle) en in elk gesprek wordt getoond.
+Zonder NGF-handicapkoppeling en automatische incasso kunnen veel clubs hun systeem niet volledig
+vervangen (Het aanbod, K). Dat is nu de belangrijkste productvraag voor de prijs.
 
 **De marge** (uitkomst van de rekentool, per club per maand; kosten zoals bijgewerkt bij Operatie):
 
 | prijs | bijdrage | break-even, onbetaald | break-even, 2 × € 2.500 |
 | --- | ---: | ---: | ---: |
-| Gemiddelde oprichtersprijs € 364 | € 318,50 (88%) | 2 clubs | 17 clubs |
-| Gemiddelde normale prijs € 416,50 | € 371 (89%) | 2 clubs | 15 clubs |
-| Oude normale prijs € 429 | € 383,50 (89%) | 2 clubs | 15 clubs |
+| Oprichters, € 0,49 per lid (gem. € 455,70) | € 410,20 (90%) | 1 club | 14 clubs |
+| Normaal, € 0,65 per lid (gem. € 604,50) | € 559 (92%) | 1 club | 10 clubs |
+| Oude oprichtersprijs per grootte (gem. € 364) | € 318,50 (88%) | 2 clubs | 17 clubs |
 
-Alleen tien clubs krijgen de oprichtersprijs, dus de echte route is **10 oprichtersclubs + 6 tegen de
-normale prijs = 16 clubs** om beide oprichters € 2.500 te betalen (5.398 − 10 × 318,50 = 2.213;
-÷ 371 = 6,0 → 6). Dat is 6% van de 263 NGF-clubs, en minder dan de 25 clubs die twee mensen kunnen
-bedienen.
+Alleen tien clubs krijgen de oprichtersprijs, dus de echte route is **10 oprichtersclubs + 3 tegen de
+normale prijs = 13 clubs** om beide oprichters € 2.500 te betalen (5.398 − 10 × 410,20 = 1.296;
+÷ 559 = 2,3 → 3). Dat is 5% van de 263 NGF-clubs. Alle 263 clubs tegen de normale prijs zou ~€ 1,9
+miljoen per jaar zijn (was ~€ 1,3 miljoen).
 
 ### 2. De prijsladder
 
-Clubs kiezen hun grootte niet; ze hebben er één. Dus de ladder is niet "goed / beter / best" maar:
-1. **Naar baangrootte** (9 / 18 / 27+), zie hierboven. De stap omhoog volgt het aantal leden en
-   baliemedewerkers, wat clubs al kennen van de prijs per gebruiker bij Nexxchange.
-2. **Uitbreidingen later, alleen als ze gebouwd zijn en gevraagd worden**: NGF-handicapkoppeling,
-   automatische incasso, een koppeling met de kassa van de horeca (unTill), de ballenautomaat (Xafax).
-   Elk daarvan is een reden voor de club om een ander systeem op te zeggen, dus prijs ze per
-   uitbreiding, niet in de basis. Verkoop ze niet voordat ze bestaan.
+Clubs kiezen hun grootte niet; ze hebben er één. De prijs per lid is de ladder: hij stijgt mee met de
+club. Daarbovenop, later en alleen als ze gebouwd zijn en gevraagd worden: **uitbreidingen**
+(NGF-handicapkoppeling, automatische incasso, een koppeling met de kassa van de horeca (unTill), de
+ballenautomaat (Xafax)). Elk daarvan laat de club een ander systeem opzeggen, dus prijs ze per
+uitbreiding, niet in de basis. Verkoop ze niet voordat ze bestaan.
 
 ### 3. Het openingsaanbod
 
-**Greenside Founding Club**: de eerste tien clubs betalen de oprichtersprijs, twee jaar vast, zonder
-migratiekosten, en krijgen de gratis pilot van drie maanden met schriftelijke succescriteria.
-- **Einddatum:** de oprichtersprijs geldt voor clubs waarvan de pilot **vóór 1 juli 2027** start, of tot
-  er tien clubs getekend hebben, wat het eerst komt. Kies de datum zelf, maar zet een echte datum op
-  papier en houd je eraan.
-- **Na twee jaar** gaat de club naar de dan geldende normale prijs. Zet dat in het contract, zodat de
-  oprichtersprijs een echte, gedateerde afspraak is en geen "van-voor"-prijs.
-- De normale prijzen hierboven zijn wat club 11 en verder echt betaalt, dus de vergelijking is eerlijk.
+**Greenside Founding Club**: de eerste tien clubs betalen **€ 0,49 per lid** (minimaal € 189), twee jaar
+vast, zonder migratiekosten, en krijgen de gratis pilot van drie maanden met schriftelijke
+succescriteria.
+- **Einddatum:** voor clubs waarvan de pilot **vóór 1 juli 2027** start, of tot er tien clubs getekend
+  hebben, wat het eerst komt. Zet een echte datum op papier en houd je eraan.
+- **Na twee jaar** gaat de club naar de dan geldende normale prijs. Zet dat in het contract.
+- De normale prijs is wat club 11 en verder echt betaalt, dus de vergelijking is eerlijk.
 
 ### 4. Wat te testen met echte kopers
 
-Gesimuleerde antwoorden zijn niet genoeg. Test bij echte clubbesturen, te beginnen met de contacten van
-Zwolle en de E-Golf4U-clubs die toch moeten overstappen:
-1. **18 holes: € 399 tegenover € 449 oprichtersprijs.** De helft van de gesprekken krijgt het ene
+1. **Oprichtersprijs € 0,49 tegenover € 0,59 per lid.** De helft van de gesprekken krijgt het ene
    prijsblad, de andere helft het andere (om en om, niet zelf kiezen). Meet hoeveel om een pilot vragen
-   of een intentieverklaring tekenen. Als € 449 even goed werkt, is de oprichterskorting niet nodig.
-2. **9 holes: € 149 tegenover € 179 oprichtersprijs**, op dezelfde manier. € 149 ligt op hun punt waar
-   "koopje" = "duur" (€ 151); test of het de vrijwilligersclubs opent.
-3. Vraag elk bestuur **wat het nu aan de huidige leverancier betaalt** (licentie, per gebruiker,
-   uitbreidingen). Dat getal bepaalt "vervangt, komt er niet bij", en niemand publiceert het.
+   of een intentieverklaring tekenen. Werkt € 0,59 even goed, verhoog dan de oprichtersprijs.
+2. **Laat in elk gesprek de rekensom zien**: wat de club nu aan de huidige leverancier betaalt + wat de
+   app oplevert (gastrondes, behouden leden), naast de prijs van Greenside. Noteer welk deel van de som
+   overtuigt.
+3. Vraag elk bestuur **wat het nu aan de huidige leverancier betaalt**. Dat getal bepaalt "vervangt, komt
+   er niet bij".
 
 ### 5. De prijsbezwaren uit het panel (letterlijk, voor marketing; vertaald)
 
@@ -533,7 +549,9 @@ commerciële 27-holesbaan andere kopers zijn.
 | Mediaan "koopje" | € 120 | € 300 | € 350 |
 | Mediaan "wordt duur" | € 220 | € 550 | € 650 |
 | Mediaan "te duur" | € 300 | € 800 | € 900 |
-| Oude normale prijs | € 249 (op de grens) | € 449 (binnen) | € 599 (binnen) |
+| Oude normale prijs (per grootte) | € 249 (op de grens) | € 449 (binnen) | € 599 (binnen) |
+| Nieuwe normale prijs (€ 0,65 per lid) | € 358 (erboven) | € 618 (op de grens) | € 878 (erboven) |
+| Nieuwe oprichtersprijs (€ 0,49 per lid) | € 270 (net erboven) | € 466 (binnen) | € 662 (binnen) |
 
 ## Het aanbod
 
@@ -590,7 +608,7 @@ vooral tijd van de oprichters).
 | E | **Wij doen de migratie en de lancering bij de leden**: import, uitnodigingen, papieren handleiding voor oudere leden | 13, 14, 17 | 4 | 2 | ✔ bonus |
 | F | **Hulplijn in de eerste vier weken, ook op zaterdagochtend** | 15, 16, 17 | 4 | 3 (tijd van de oprichters in het weekend) | ✔ bonus |
 | G | **Referentiegesprek met het bestuur van Zwolle** vóór de beslissing, zodra Zwolle live is | 1, 3 | 5 | 1 | ✔ (pas waar als Zwolle live is) |
-| H | **Oprichtersprijs 9 holes € 179** (was € 249) | 7 | 4 | 2 (minder omzet) | ✔ testen; Prijzen beslist |
+| H | **Oprichtersprijs 9 holes € 179** (was € 249; sinds 8 okt 2026 vervangen door de prijs per lid, zie Prijzen) | 7 | 4 | 2 (minder omzet) | ✔ testen; Prijzen beslist |
 | I | **Geen migratiekosten voor oprichtersclubs** | 8 | 3 | 2 | ✔ |
 | J | Broncode-escrow bij een derde partij | 2, 19 | 4 | 4 (jaarlijkse kosten, onbekend) | ✘ voorlopig: D dekt het meeste; later met de CFO bekijken |
 | K | NGF-handicapkoppeling en automatische incasso in het product | 9 | 4 | 5 (niet gebouwd; incasso is uit de pilot gehaald) | ✘ niet beloven; productbesluit |
@@ -614,8 +632,8 @@ de hulplijn.
   2. *Wij doen het werk*: import, uitnodigingen, een papieren handleiding voor oudere leden (E). Neemt
      13 en 14 weg.
   3. *Hulplijn op zaterdagochtend* in de eerste vier weken (F). Neemt 15–17 weg.
-- **Urgentie en schaarste (echt):** tien oprichtersclubs tegen de oprichtersprijs, twee jaar vast, geen
-  migratiekosten (H, I). De andere echte urgentie komt van buiten: E-Golf4U stopt, dus veel clubs moeten
+- **Urgentie en schaarste (echt):** tien oprichtersclubs tegen de oprichtersprijs (€ 0,49 per lid, minimaal € 189), twee jaar
+  vast, geen migratiekosten (H, I). De andere echte urgentie komt van buiten: E-Golf4U stopt, dus veel clubs moeten
   nu kiezen.
 - **Bewijs:** een gesprek met het bestuur van Zwolle zodra Zwolle live is (G). Niet eerder; de pitch zegt
   dat ook.
@@ -683,67 +701,67 @@ clubbesturen.
 **Lees dit eerst.** Alle bedragen zijn in **euro, excl. 21% btw**. Eén eenheid = één betalende club
 gedurende één maand; "tegelijk" betekent **clubs die op hetzelfde moment betalen**. Invoer:
 `founder/numbers.json` (oprichters onbetaald, de situatie nu) en `founder/numbers-met-salaris.json`
-(hetzelfde, plus € 2.500 per maand voor elke oprichter, hun eigen doel). Prijzen uit Prijzen; kosten
-gecontroleerd bij Operatie. Bronnen en schattingen: `founder/cfo-sources.md`. Geen financieel, fiscaal
-of juridisch advies: laat een boekhouder de rechtsvorm, loonkosten en btw controleren voordat er geld
-uitgaat.
+(hetzelfde, plus € 2.500 per maand voor elke oprichter, hun eigen doel). Prijzen uit Prijzen (**prijs per
+lid** sinds 8 oktober 2026); kosten gecontroleerd bij Operatie. Bronnen en schattingen:
+`founder/cfo-sources.md`. Geen financieel, fiscaal of juridisch advies: laat een boekhouder de
+rechtsvorm, loonkosten en btw controleren voordat er geld uitgaat.
 
 ### De toelichting van de CFO
 
-**De marge.** Elke betalende club laat **€ 318,50 per maand** (88%) over bij de gemiddelde
-oprichtersprijs van € 364 (€ 179 / € 399 / € 499 naar baangrootte), na overstap, gratis pilot en
-stopgarantie (€ 35) en hosting (€ 10). De club betaalt zelf zijn Apple-ontwikkelaarsaccount (Apple wil
-de app op naam van de club). De vaste kosten zonder salaris zijn **€ 398 per maand**, dus **2 betalende
-clubs dekken ze**. De software is goedkoop in gebruik; daar zit het probleem niet.
+**De marge.** Greenside rekent nu **€ 0,65 per lid per maand** (minimaal € 249); de eerste tien clubs
+betalen **€ 0,49 per lid** (minimaal € 189), twee jaar vast. Voor een gangbare mix (25% 9-holesclubs met
+~550 leden, 55% 18-holes met ~950, 20% 27+ met ~1.350) is de oprichtersprijs gemiddeld **€ 455,70** per
+club per maand. Elke betalende club laat **€ 410,20 per maand** (90%) over, na overstap, gratis pilot en
+stopgarantie (€ 35) en hosting (€ 10). De vaste kosten zonder salaris zijn **€ 398 per maand**, dus
+**1 betalende club dekt ze**.
 
 **De regel om in de gaten te houden: salaris voor de oprichters.** Met € 2.500 elk worden de vaste
-kosten € 5.398 per maand. De break-even wordt dan **17 clubs tegen de oprichtersprijs, 15 tegen de
-normale prijs**. Alleen tien clubs krijgen de oprichtersprijs, dus het echte aantal is **10
-oprichtersclubs + 6 normale = 16 clubs** (6% van de 263 NGF-clubs, en binnen de ~25 die twee mensen
-kunnen bedienen). Elke andere wat-als verschuift jaar 1 met een paar honderd euro; het salaris met
-€ 60.000.
+kosten € 5.398 per maand. De break-even wordt dan **14 clubs tegen de oprichtersprijs, 10 tegen de
+normale prijs** (gemiddeld € 604,50). Alleen tien clubs krijgen de oprichtersprijs, dus het echte aantal
+is **10 oprichtersclubs + 3 normale = 13 clubs** (5% van de 263 NGF-clubs, ruim binnen de ~25 die twee
+mensen kunnen bedienen). Het salaris verschuift jaar 1 nog steeds met € 60.000; de prijs bracht de
+break-even van 16 naar 13 clubs.
 
 **De groei is de tweede regel.** Jaar 1 gaat ervan uit dat Zwolle in maand 1–3 een gratis pilot draait
 en vanaf maand 4 betaalt, en dat de volgende clubs pas tekenen als Zwolle bewijs heeft (maand 11: 2,
 maand 12: 3). Het panel ondersteunt dat: 0 van de 20 kopen nu en 19 van de 20 wachten op Zwolle. Bij die
-groei levert jaar 1 **€ 4.368** op. Zelfs snellere groei (5 clubs in maand 12) geeft maar € 7.280.
+groei levert jaar 1 **€ 5.468** omzet en **€ +146** resultaat op.
 
 **Geld.**
-- Oprichters onbetaald: je hebt **€ 12.174** nodig tot het zichzelf betaalt, vooral de startkosten van
-  € 10.423 (beveiligingstest € 7.500, jurist € 2.500). Bedrijfsresultaat jaar 1: **€ -954**.
-- Oprichters vanaf maand 1 € 2.500 elk: je hebt in jaar 1 **€ 71.377** nodig, en bij 3 clubs verlies je
-  nog steeds ongeveer € 4.400 per maand.
+- Oprichters onbetaald: je hebt **€ 11.617** nodig tot het zichzelf betaalt, bijna helemaal de
+  startkosten van € 10.423 (beveiligingstest € 7.500, jurist € 2.500). Bedrijfsresultaat jaar 1:
+  **€ +146**.
+- Oprichters vanaf maand 1 € 2.500 elk: je hebt in jaar 1 **€ 70.277** nodig, en bij 3 clubs verlies je
+  nog steeds ongeveer € 4.200 per maand.
 - De middenweg: **het salaris groeit mee met de clubs.** Alles boven € 398 per maand gaat naar de
-  oprichters. Bij 3 clubs is dat ongeveer € 560 per maand voor jullie samen; het volle salaris van
-  € 2.500 elk komt bij ongeveer 16 clubs. Bij deze groei is dat jaar 2 à 3, en daarvoor zijn
-  spaargeld, parttime werk of extern geld nodig als overbrugging.
+  oprichters. Bij 3 clubs is dat ongeveer € 830 per maand voor jullie samen; het volle salaris van
+  € 2.500 elk komt bij ongeveer 13 clubs.
 
 **Drie manieren om de marge te verbeteren** (wat-als-berekeningen; onbetaald / € 2.500 elk):
 1. **Zwolle betaalt vanaf maand 1** in plaats van na een gratis pilot (het is de referentieclub, geen
-   prospect): jaar 1 € -954 → **€ +2**.
+   prospect): jaar 1 € +146 → **€ +1.377**; benodigd geld € 10.423.
 2. **Expo Starter (USD 19) in plaats van Production (USD 99) zolang er weinig apps zijn**: vaste kosten
-   –€ 72; jaar 1 € -954 → **€ -90**.
-3. **Normale prijs voor elke club na de eerste tien** (gemiddeld € 416,50): break-even met salaris
-   17 → **15 clubs**; jaar 1 € -954 → € -324 als het vanaf het begin gold.
-Minder clubs die na de gratis pilot stoppen (1 op 10 in plaats van 1 op 3) maakt minder uit nu de
-overstap goedkoper is: jaar 1 € -954 → € -846.
+   –€ 72; jaar 1 € +146 → **€ +1.010**; break-even met salaris 14 → 13.
+3. **Normale prijs (€ 0,65 per lid) voor elke club na de eerste tien**: break-even met salaris
+   14 → **10 clubs**; jaar 1 € +1.932 als het vanaf het begin gold.
+Minder clubs die na de gratis pilot stoppen (1 op 10 in plaats van 1 op 3): jaar 1 € +146 → € +254.
 
 **De geldvoorwaarden van de board:**
 - *Kosten om één club te winnen, kosten om één club te bedienen, clubs voor de break-even:* **beantwoord,
   als schatting.** Een club winnen kost ongeveer € 560 contant (papieren handleiding ~€ 300, reiskosten
-  ~€ 200, drie maanden gratis draaien) plus ~40 uur van de oprichters; als 1 op de 3 pilots stopt is
-  dat ~€ 830 per betalende club. Eén club bedienen kost ~€ 11 per maand contant. Break-even: 2 clubs
-  onbetaald, 16 met € 2.500 elk.
+  ~€ 200, drie maanden gratis draaien) plus ~40 uur van de oprichters; als 1 op de 3 pilots stopt is dat
+  ~€ 830 per betalende club. Eén club bedienen kost ~€ 11 per maand contant. Break-even: 1 club
+  onbetaald, 13 met € 2.500 elk.
 - *Een garantie die het bedrijf kan betalen:* **gehaald voor de stopgarantie** (zit in de € 35). De
-  omzetgarantie (L in Het aanbod) blijft uit: er zijn geen gegevens over hoe vaak er een beroep op
-  gedaan wordt.
+  omzetgarantie (L in Het aanbod) blijft uit: er zijn geen gegevens over hoe vaak er een beroep op gedaan
+  wordt.
 - *Minstens 3 oprichtersclubs getekend voordat er verder gebouwd wordt:* **niet gehaald**; bij deze groei
   op zijn vroegst in maand 12.
 
-**Oordeel.** Elke club is winstgevend en de vaste kosten zijn klein, maar **€ 2.500 elk vraagt ~16
-clubs**, en clubs wachten eerst op Zwolle. Reken op 1,5 tot 3 jaar voordat het volle salaris er is, en
-beslis nu hoe je dat overbrugt (spaargeld, parttime, een lening of extern geld na het seizoen van
-Zwolle).
+**Oordeel.** Elke club is winstgevend, jaar 1 speelt quitte met onbetaalde oprichters, en **€ 2.500 elk
+vraagt ~13 clubs**. Clubs wachten eerst op Zwolle, dus reken op 1,5 tot 2,5 jaar voordat het volle
+salaris er is, en beslis nu hoe je dat overbrugt (spaargeld, parttime, een lening of extern geld na het
+seizoen van Zwolle).
 
 ---
 
@@ -754,12 +772,12 @@ Zwolle).
 
 | regel | per club per maand |
 | --- | ---: |
-| Prijs | € 364,00 |
+| Prijs | € 455,70 |
 | Overstap, gratis pilot en stopgarantie, verdeeld over de oprichtersperiode van 24 maanden (schatting, bijgewerkt bij Operatie: papieren handleiding ~€ 300) | € -35,00 |
 | Hostingaandeel per club: groei database, e-mail boven de bundel, app-builds (schatting) | € -10,00 |
 | Apple-ontwikkelaarsaccount: € 0 voor Greenside, de club meldt zich zelf aan (Apple-richtlijn 4.2.6; zie Operatie) | € -0,00 |
 | Licentie innen via SEPA-incasso (schatting) | € -0,50 |
-| **Bijdrage** (wat elke club per maand overlaat voor de vaste kosten) | **€ 318,50** (88%) |
+| **Bijdrage** (wat elke club per maand overlaat voor de vaste kosten) | **€ 410,20** (90%) |
 
 #### De marge die telt
 
@@ -776,8 +794,8 @@ Vaste kosten: **€ 398 per maand**:
 - Telefoonnummer hulplijn (schatting): € 15
 - Eigen Apple-ontwikkelaarsaccount van Greenside, € 99 per jaar (openbare prijs): € 8
 
-- **Break-even: 2 betalende clubs tegelijk.** Daaronder verlies je elke maand geld.
-- **Winstmarge bij het plan** (10 clubs tegelijk): **77%** van elke verkoop, na alle kosten.
+- **Break-even: 1 betalende club tegelijk.** Daaronder verlies je elke maand geld.
+- **Winstmarge bij het plan** (10 clubs tegelijk): **81%** van elke verkoop, na alle kosten.
 - Capaciteit: 25 clubs tegelijk.
 
 #### Jaar 1, per maand
@@ -787,33 +805,32 @@ Vaste kosten: **€ 398 per maand**:
 | 1 | 0 | € 0 | € -398 | € -10.821 |
 | 2 | 0 | € 0 | € -398 | € -11.219 |
 | 3 | 0 | € 0 | € -398 | € -11.617 |
-| 4 | 1 | € 364 | € -80 | € -11.696 |
-| 5 | 1 | € 364 | € -80 | € -11.776 |
-| 6 | 1 | € 364 | € -80 | € -11.856 |
-| 7 | 1 | € 364 | € -80 | € -11.935 |
-| 8 | 1 | € 364 | € -80 | € -12.014 |
-| 9 | 1 | € 364 | € -80 | € -12.094 |
-| 10 | 1 | € 364 | € -80 | € -12.174 |
-| 11 | 2 | € 728 | € 239 | € -11.934 |
-| 12 | 3 | € 1.092 | € 558 | € -11.377 |
+| 4 | 1 | € 456 | € 12 | € -11.605 |
+| 5 | 1 | € 456 | € 12 | € -11.593 |
+| 6 | 1 | € 456 | € 12 | € -11.580 |
+| 7 | 1 | € 456 | € 12 | € -11.568 |
+| 8 | 1 | € 456 | € 12 | € -11.556 |
+| 9 | 1 | € 456 | € 12 | € -11.544 |
+| 10 | 1 | € 456 | € 12 | € -11.532 |
+| 11 | 2 | € 911 | € 422 | € -11.109 |
+| 12 | 3 | € 1.367 | € 833 | € -10.277 |
 
-- **Bedrijfsresultaat jaar 1: € -954** op € 4.368 omzet.
-- Na de startkosten van € 10.423: € -11.377.
+- **Bedrijfsresultaat jaar 1: € 146** op € 5.468 omzet.
+- Na de startkosten van € 10.423: € -10.277.
 - Startkosten terugverdiend: niet binnen jaar 1.
-- Geld dat je nodig hebt tot het zichzelf betaalt: **€ 12.174**.
+- Geld dat je nodig hebt tot het zichzelf betaalt: **€ 11.617**.
 
 #### Wat als
 
 | scenario | marge bij het plan | break-even (clubs) | resultaat jaar 1 |
 | --- | ---: | ---: | ---: |
-| Basisplan | 77% | 2 | € -954 |
-| Prijs -10% | 74% | 2 | € -1.391 |
-| Volume -20% | 74% | 2 | € -1.718 |
-| Kosten per club +15% | 75% | 2 | € -1.036 |
+| Basisplan | 81% | 1 | € 146 |
+| Prijs -10% | 79% | 2 | € -400 |
+| Volume -20% | 79% | 1 | € -838 |
+| Kosten per club +15% | 80% | 1 | € 64 |
 
 #### Waarschuwingen
 
-- Jaar 1 maakt verlies op de bedrijfsvoering (€ -954).
 - De startkosten worden niet binnen jaar 1 terugverdiend.
 
 ---
@@ -825,12 +842,12 @@ Vaste kosten: **€ 398 per maand**:
 
 | regel | per club per maand |
 | --- | ---: |
-| Prijs | € 364,00 |
+| Prijs | € 455,70 |
 | Overstap, gratis pilot en stopgarantie, verdeeld over de oprichtersperiode van 24 maanden (schatting, bijgewerkt bij Operatie: papieren handleiding ~€ 300) | € -35,00 |
 | Hostingaandeel per club: groei database, e-mail boven de bundel, app-builds (schatting) | € -10,00 |
 | Apple-ontwikkelaarsaccount: € 0 voor Greenside, de club meldt zich zelf aan (Apple-richtlijn 4.2.6; zie Operatie) | € -0,00 |
 | Licentie innen via SEPA-incasso (schatting) | € -0,50 |
-| **Bijdrage** (wat elke club per maand overlaat voor de vaste kosten) | **€ 318,50** (88%) |
+| **Bijdrage** (wat elke club per maand overlaat voor de vaste kosten) | **€ 410,20** (90%) |
 
 #### De marge die telt
 
@@ -847,8 +864,8 @@ Vaste kosten: **€ 5.398 per maand**:
 - Telefoonnummer hulplijn (schatting): € 15
 - Eigen Apple-ontwikkelaarsaccount van Greenside, € 99 per jaar (openbare prijs): € 8
 
-- **Break-even: 17 betalende clubs tegelijk.** Daaronder verlies je elke maand geld.
-- **Winstmarge bij het plan** (10 clubs tegelijk): **-61%** van elke verkoop, na alle kosten.
+- **Break-even: 14 betalende clubs tegelijk.** Daaronder verlies je elke maand geld.
+- **Winstmarge bij het plan** (10 clubs tegelijk): **-28%** van elke verkoop, na alle kosten.
 - Capaciteit: 25 clubs tegelijk.
 
 #### Jaar 1, per maand
@@ -858,33 +875,33 @@ Vaste kosten: **€ 5.398 per maand**:
 | 1 | 0 | € 0 | € -5.398 | € -15.821 |
 | 2 | 0 | € 0 | € -5.398 | € -21.219 |
 | 3 | 0 | € 0 | € -5.398 | € -26.617 |
-| 4 | 1 | € 364 | € -5.080 | € -31.696 |
-| 5 | 1 | € 364 | € -5.080 | € -36.776 |
-| 6 | 1 | € 364 | € -5.080 | € -41.856 |
-| 7 | 1 | € 364 | € -5.080 | € -46.935 |
-| 8 | 1 | € 364 | € -5.080 | € -52.014 |
-| 9 | 1 | € 364 | € -5.080 | € -57.094 |
-| 10 | 1 | € 364 | € -5.080 | € -62.174 |
-| 11 | 2 | € 728 | € -4.761 | € -66.934 |
-| 12 | 3 | € 1.092 | € -4.442 | € -71.377 |
+| 4 | 1 | € 456 | € -4.988 | € -31.605 |
+| 5 | 1 | € 456 | € -4.988 | € -36.593 |
+| 6 | 1 | € 456 | € -4.988 | € -41.580 |
+| 7 | 1 | € 456 | € -4.988 | € -46.568 |
+| 8 | 1 | € 456 | € -4.988 | € -51.556 |
+| 9 | 1 | € 456 | € -4.988 | € -56.544 |
+| 10 | 1 | € 456 | € -4.988 | € -61.532 |
+| 11 | 2 | € 911 | € -4.578 | € -66.109 |
+| 12 | 3 | € 1.367 | € -4.167 | € -70.277 |
 
-- **Bedrijfsresultaat jaar 1: € -60.954** op € 4.368 omzet.
-- Na de startkosten van € 10.423: € -71.377.
+- **Bedrijfsresultaat jaar 1: € -59.854** op € 5.468 omzet.
+- Na de startkosten van € 10.423: € -70.277.
 - Startkosten terugverdiend: niet binnen jaar 1.
-- Geld dat je nodig hebt tot het zichzelf betaalt: **€ 71.377**.
+- Geld dat je nodig hebt tot het zichzelf betaalt: **€ 70.277**.
 
 #### Wat als
 
 | scenario | marge bij het plan | break-even (clubs) | resultaat jaar 1 |
 | --- | ---: | ---: | ---: |
-| Basisplan | -61% | 17 | € -60.954 |
-| Prijs -10% | -79% | 20 | € -61.391 |
-| Volume -20% | -98% | 17 | € -61.718 |
-| Kosten per club +15% | -63% | 18 | € -61.036 |
+| Basisplan | -28% | 14 | € -59.854 |
+| Prijs -10% | -43% | 15 | € -60.400 |
+| Volume -20% | -58% | 14 | € -60.838 |
+| Kosten per club +15% | -30% | 14 | € -59.936 |
 
 #### Waarschuwingen
 
-- Jaar 1 maakt verlies op de bedrijfsvoering (€ -60.954).
+- Jaar 1 maakt verlies op de bedrijfsvoering (€ -59.854).
 - De startkosten worden niet binnen jaar 1 terugverdiend.
 
 ## Marketing
@@ -936,7 +953,7 @@ door P001, P007, P018, P019 (allemaal "moet nu kiezen"; allemaal nee om vertrouw
 > anders dan een systeem dat u zelf moet uitrollen.
 
 Gesteund door de 9 antwoorden over "dubbel werk" en de 9-holesvrijwilligers (P008, P009, P013, P014,
-P017). Maar 9-holesclubs leveren het minste op (€ 179–199) en zijn het meest overstapmoe (timing).
+P017). Maar 9-holesclubs leveren het minste op (~€ 270–358 bij ~550 leden) en zijn het meest overstapmoe (timing).
 
 **C. Verdient geld voor de club**
 > Voor commercieel geëxploiteerde clubs is Greenside de ledenapp die gastrondes, buggy's en extra's
@@ -977,8 +994,8 @@ voorjaarsvergadering voor). Schuif alle data mee als L verschuift. **Vraag het b
 schriftelijk om toestemming** voordat je hun naam, logo of cijfers ergens gebruikt: het is een echte
 club, geen decor.
 
-Het aanbod de hele periode: **Greenside Founding Club** (Prijzen): tien clubs, oprichtersprijs € 179 /
-€ 399 / € 499 twee jaar vast, geen migratiekosten, gratis pilot van drie maanden met schriftelijke
+Het aanbod de hele periode: **Greenside Founding Club** (Prijzen): tien clubs, oprichtersprijs € 0,49
+per lid (minimaal € 189) twee jaar vast, geen migratiekosten, gratis pilot van drie maanden met schriftelijke
 succescriteria; **voor pilots die vóór 1 juli 2027 starten**. Zeg alleen "tien plaatsen" zolang het
 waar is, en noem het aantal dat nog over is alleen als exact getal.
 
@@ -1050,13 +1067,13 @@ Eerste drie maanden, schattingen (nog geen offertes):
 | **Totaal** | **€ 1.600** + NVG |
 
 **Het meeste dat je mag uitgeven om één club te winnen.** Volgens de CFO laat een oprichtersclub
-**€ 318,50 per maand** over, 24 maanden vast → **€ 7.644** over de oprichtersperiode, na zijn eigen
+gemiddeld **€ 410,20 per maand** over, 24 maanden vast → **€ 9.845** over de oprichtersperiode, na zijn eigen
 kosten voor draaien, overstap en pilot. De koopbereidheid in het panel is 0%, dus het geeft geen
 conversie; de grens komt daarom uit de kas. Twee regels:
-- **Geef maximaal 3 maanden bijdrage uit, ongeveer € 955 contant per gewonnen club**, zodat een club
+- **Geef maximaal 3 maanden bijdrage uit, ongeveer € 1.230 contant per gewonnen club**, zodat een club
   zijn eigen werving in het eerste kwartaal na de pilot terugbetaalt.
 - **Geef nooit meer uit dan je hebt**: met onbetaalde oprichters is de totale geldbehoefte ongeveer
-  € 12.200 (De cijfers); deze campagne voegt € 1.600 toe.
+  € 11.600 (De cijfers); deze campagne voegt € 1.600 toe.
 De echte kosten zitten in de tijd van de oprichters: ~40 uur overstapwerk per club, plus verkopen.
 
 ### 5. Drie cijfers om wekelijks te volgen
@@ -1273,7 +1290,8 @@ opnieuw berekend):
 - **Beveiligingstest: € 5.000 → € 7.500 eenmalig.** Pentests van een kleine webapp kosten € 5.000–14.000.
 
 Resultaat: bijdrage € 318,50 per club per maand (was € 290), vaste kosten € 398 (was € 373),
-break-even met € 2.500 salaris per oprichter **16 clubs** (10 oprichters + 6 normaal; was 18).
+break-even met € 2.500 salaris per oprichter **16 clubs** (10 oprichters + 6 normaal; was 18). Na de
+overstap op een prijs per lid (8 oktober 2026): bijdrage € 410,20, break-even **13 clubs**.
 
 ### 1. De dagelijkse cyclus
 
@@ -1317,7 +1335,7 @@ tot vier weken erna (routine 4.2). Daar gaan de meeste uren van de oprichters na
 ### 3. Mensen
 
 Twee oprichters, geen personeel. Salaris: **€ 2.000–2.500 per persoon per maand** is het doel (het eigen
-getal van de oprichters); tot ~16 clubs betalen, groeit het salaris mee met de omzet (De cijfers). Wat
+getal van de oprichters); tot ~13 clubs betalen, groeit het salaris mee met de omzet (De cijfers). Wat
 dat het bedrijf kost hangt af van de rechtsvorm: in een bv moet een directeur-grootaandeelhouder een
 minimaal "gebruikelijk loon" nemen; in een vof of eenmanszaak is er geen loonadministratie en betaal je
 inkomstenbelasting over de winst. **Vraag een boekhouder voordat je kiest**; loonkosten, pensioen en btw
@@ -1348,7 +1366,7 @@ Ongeveer 45 uur per week elk; het meeste is verkopen (B) en de naden van het pro
 | B | support, bellen | overstapgesprekken | bezoeken | overstapgesprekken | facturatie, weekevaluatie | hulplijn als een club in zijn eerste 4 weken zit |
 
 **De supportlast is de grens om te bewaken.** Ga uit van ~2 uur per week per live club na de eerste
-maand (een schatting; meet het bij Zwolle). Bij 10 clubs is dat ~20 uur per week; bij 16 clubs ~32 uur,
+maand (een schatting; meet het bij Zwolle). Bij 10 clubs is dat ~20 uur per week; bij 13 clubs ~26 uur,
 het grootste deel van één oprichter. De capaciteit van "~25 clubs" in de CFO-berekening geldt dus alleen
 als de support per club laag blijft; de eerste drie maanden van Zwolle wijzen het uit.
 
@@ -1512,13 +1530,13 @@ De passende test voor een abonnement dat aan besturen verkocht wordt: **echte be
 een handtekening.**
 
 **Test 1 — vóór de pentest geboekt wordt (12 oktober – 18 december 2026)**
-- Zwolle tekent het pilotcontract: succescriteria op papier, en de oprichtersprijs (€ 399 per maand)
+- Zwolle tekent het pilotcontract: succescriteria op papier, en de oprichtersprijs (€ 0,49 per lid per maand)
   **vanaf maand 4 als de criteria gehaald zijn**.
 - 15 brieven naar clubs die nog op E-Golf4U zitten of in de buurt van Zwolle liggen (marketinghaak 1).
   Geen beweringen over Zwolle.
 - **Succeslijn: Zwolle getekend vóór 13 november, en vóór 18 december minstens 5 gesprekken met besturen
   en 2 getekende intentieverklaringen** ("als Zwolle zijn criteria haalt, starten wij in 2027 een pilot
-  tegen € 399").
+  tegen € 0,49 per lid").
 - Vergelijking met het panel: het panel zegt dat 0 van de 20 nu kopen en 19 van de 20 op Zwolle wachten.
   **Geen harde bestellingen is dus te verwachten**; voorwaardelijke verklaringen zijn de eerlijke maat.
   Minder dan 5 gesprekken uit 15 brieven betekent dat de boodschap of het kanaal niet klopt, niet de
@@ -1624,7 +1642,7 @@ campagne naar buiten (Marketing): alle aandacht naar Zwolle.
 | Supporturen voor Zwolle | eigen logboek | daalt elke week | boven 10 uur per week na week 2 → handleiding of app is onduidelijk; oplossen wat terugkomt |
 | Geboekte gesprekken met besturen | marketinglogboek | 3 per week | twee weken onder 2 per week → brief herschrijven, eerst bellen, Zwolle om een introductie vragen |
 | Pilotaanvragen / intentieverklaringen | marketinglogboek | 3 vóór 30 mei | 0 na 10 gesprekken → terug naar het aanbod |
-| Betalende clubs tegenover break-even | CFO | 0 in de eerste 30 dagen (Zwolle zit in de gratis pilot); break-even 2 clubs onbetaald, 16 met salaris | — de geldtest is test 2, niet de eerste maand |
+| Betalende clubs tegenover break-even | CFO | 0 in de eerste 30 dagen (Zwolle zit in de gratis pilot); break-even 1 club onbetaald, 13 met salaris | — de geldtest is test 2, niet de eerste maand |
 
 **Evaluaties** (A+B, één uur, met notities):
 
@@ -1637,5 +1655,148 @@ campagne naar buiten (Marketing): alle aandacht naar Zwolle.
 - **Dag 30 (wo 31 maart)**: 20% actief? Dalen de supporturen? Wil Zwolle referentiegesprekken voeren, en
   welke cijfers mogen we delen? Moeten we het aanbod, de prijs of het lanceerpakket aanpassen vóór de
   volgende club? De CFO-berekening opnieuw draaien met de echte supporturen.
+
+## Bijlage: casus prijs per lid
+
+Vraag van de oprichters (8 oktober 2026): *"Een greenfee voor 9 holes kost al zo'n € 50. Waarom houden we
+de prijs dan zo laag, ook al gaat het panel maar langs 20 mensen?"*
+
+**Besluit (8 oktober 2026): doorgevoerd.** De oprichters kozen het per-lidmodel uit hoofdstuk 5: € 0,65
+per lid per maand (minimaal € 249), oprichters € 0,49 per lid (minimaal € 189). Prijzen, De cijfers, de
+pitch en het plan zijn bijgewerkt.
+
+Kort antwoord: **de vraag is terecht.** De huidige prijs is gebaseerd op wat gesimuleerde kopers
+"software" vinden kosten, niet op wat Greenside een club oplevert. Gemeten aan de waarde voor de club is
+€ 449 voor 18 holes laag. Maar een hogere prijs lost het echte probleem niet op (vertrouwen: geen club
+live), en hij moet getest worden bij echte besturen. Hieronder de hele afweging, met cijfers.
+
+Bedragen excl. btw. Clubcijfers uit de briefing (NGF/golf.nl 2026, door de oprichters verzameld):
+gemiddelde greenfee 18 holes € 74,23, gemiddelde contributie € 1.337 per jaar, 18-holesclub ±950 leden
+en ±€ 1,8 miljoen omzet. Greenfee 9 holes: € 25–50 volgens openbare bronnen
+([webwoordenboek](https://webwoordenboek.nl/kenniscentrum/hoe-duur-is-golf); voorbeeld Engelenburg:
+€ 42 door de week, [engelenburg.com](https://engelenburg.com/en/golf/guests/)); hieronder gerekend met
+€ 50, het getal van de oprichters.
+
+### 1. Waarom de prijs laag uitkwam
+
+1. **Het panel is gesimuleerd en denkt in softwarebudgetten.** De vier prijsvragen ("te goedkoop",
+   "koopje", "wordt duur", "te duur") zijn beantwoord door 20 taalmodel-personages. Die vergelijken
+   met wat clubsoftware kost, niet met wat de club ermee verdient. Dat is precies het anker dat jullie
+   ter discussie stellen.
+2. **Het panel liet zelf meer ruimte dan we gebruiken.** Voor 18 holes ligt de grens "te duur" (PME)
+   op **€ 600**, de mediaan "te duur" op **€ 800**. € 449 en € 399 zitten ruim daaronder. Voor 27+ holes
+   is de grens € 752 (mediaan € 900); € 599 zit ruim daaronder. Alleen bij 9 holes zat € 249 op de grens
+   (PME € 251).
+3. **Ik heb de 9-holesprijs verlaagd** (€ 249 → € 199) omdat vrijwilligersbesturen in het panel daar
+   afhaakten. Dat was een keuze op basis van gesimuleerde antwoorden, niet op echte.
+4. **Het enige concurrentiepunt is laag.** Nexxchange vermeldt € 200 per maand + € 50 per gebruiker,
+   dus ~€ 350–450 voor een 18-holesclub (schatting). Als Greenside wordt gezien als "nog een
+   clubsysteem", is dat het anker.
+5. **Hogere prijzen zijn nooit getest.** Het panel kreeg alleen € 249 / € 449 / € 599 en de
+   oprichtersprijzen te zien. Niemand heeft gezegd dat € 700 te veel is; het is gewoon niet gevraagd.
+
+### 2. Wat Greenside een club waard is, in golftaal
+
+**18-holesclub (950 leden):**
+
+| prijs per maand | per jaar | = greenfees 18 holes | = greenfees 9 holes (€ 50) | = leden (contributie) | per lid per maand | van de contributie-inkomsten |
+| ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| € 449 (nu) | € 5.388 | 73 | 108 | 4,0 | € 0,47 | 0,42% |
+| € 599 | € 7.188 | 97 | 144 | 5,4 | € 0,63 | 0,57% |
+| € 749 | € 8.988 | 121 | 180 | 6,7 | € 0,79 | 0,71% |
+
+**9-holesclub (550 leden):**
+
+| prijs per maand | per jaar | = greenfees 9 holes (€ 50) | per lid per maand |
+| ---: | ---: | ---: | ---: |
+| € 199 (nu) | € 2.388 | 48 | € 0,36 |
+| € 299 | € 3.588 | 72 | € 0,54 |
+| € 349 | € 4.188 | 84 | € 0,63 |
+
+Lees het zo: **€ 449 per maand is voor een 18-holesclub ongeveer anderhalve gastronde per week, of 4
+leden die niet opzeggen.** Zelfs € 749 is 2,3 gastrondes per week of 7 leden, op een club met 950 leden en
+€ 1,8 miljoen omzet.
+
+**Waar die waarde vandaan moet komen** (per jaar, 18-holesclub; schattingen, nog niet gemeten):
+- **Behoud van leden**: elk lid dat blijft is € 1.337. Clubs verliezen leden per club (briefing).
+- **Gasten en introducés**: elke extra gastronde via de app is ~€ 74 voor de club.
+- **Extra's**: buggy's, lessen, stalling, betaald in de app zonder commissie.
+- **Uren aan de balie en op het secretariaat**: minder telefoon, minder handwerk bij facturen.
+- **Een systeem vervangen**: als Greenside het huidige pakket vervangt, valt die rekening (~€ 4.200–5.400
+  per jaar) weg.
+
+Jullie eigen schatting in de briefing was **€ 19.000–45.000 per jaar** per 18-holesclub (ongemeten; de board noemde dat een risico). Zelfs het
+onderste getal is ruim twee keer € 749 per maand.
+
+### 3. Wat een hogere prijs doet met jullie cijfers
+
+Uitkomst van de CFO-rekentool met dezelfde groei (Zwolle betaalt vanaf maand 4, 3 clubs in maand 12) en
+dezelfde kosten. "Salaris" = € 2.500 per oprichter.
+
+| prijsmodel | gemiddelde prijs per club | bijdrage per club | jaar 1 zonder salaris | break-even met salaris |
+| --- | ---: | ---: | ---: | ---: |
+| **Oud** (per grootte): oprichters € 179 / € 399 / € 499 | € 364 | € 318,50 | € -954 | 17 clubs (16 met de mix) |
+| **Per lid, oprichtersprijs** € 0,49 per lid (gekozen) | € 454 | € 408,50 | € +126 | 14 clubs (13 met de mix) |
+| **Per lid, normale prijs** € 0,65 per lid (gekozen) | € 605 | € 559,50 | € +1.938 | 10 clubs |
+| **Waardeprijs, oprichters** € 249 / € 599 / € 799 | € 551,50 | € 506 | € +1.296 | 11 clubs |
+| **Waardeprijs, normaal** € 299 / € 749 / € 999 | € 686,50 | € 641 | € +2.916 | 9 clubs |
+
+"De mix" = de eerste tien clubs tegen oprichtersprijs, de rest tegen de normale prijs.
+
+**Wat dit laat zien:**
+- **Jaar 1 komt in de plus** bij elke hogere prijs. Dat was één van de twee onvoldoendes in het
+  ondernemingsplan.
+- **Het salaris komt veel eerder in zicht**: van 16 clubs naar 9–13 clubs. Op 263 clubs is dat het
+  verschil tussen 6% en 3,5–5% van de markt.
+- **De markt wordt groter**: alle 263 clubs tegen de huidige normale prijs is ~€ 1,3 miljoen per jaar;
+  tegen het per-lidmodel ~€ 1,9 miljoen; tegen de waardeprijs ~€ 2,2 miljoen. De board noemde de kleine
+  markt een risico; een hogere prijs verkleint dat.
+- **De geldbehoefte verandert nauwelijks** (€ 11.600–12.200 zonder salaris), want die zit in de
+  startkosten, niet in de prijs.
+
+### 4. Waarom je de prijs toch niet zomaar verhoogt
+
+1. **Het probleem is vertrouwen, niet prijs.** 0 van de 20 kochten, en bijna niemand alleen om de prijs. Een
+   hogere prijs maakt "twee oprichters, geen live club" niet beter; een dure onbewezen leverancier is
+   moeilijker te verdedigen bij een ALV dan een goedkope.
+2. **Het Nexxchange-anker.** Een penningmeester die nu ~€ 400 betaalt voor zijn hele systeem, schrikt van
+   € 749 voor "een app". Een hogere prijs werkt alleen als Greenside **het systeem vervangt** (en dus
+   die rekening wegvalt) of als de **waarde gemeten** is (Zwolle).
+3. **De waarde is nog niet gemeten.** € 19.000–45.000 is een schatting, en "pauzeren in plaats van
+   opzeggen" is al uit het product gehaald. Bij Zwolle kun je het meten: actieve leden, gastrondes via
+   de app, extra's, uren aan de balie.
+4. **Vrijwilligersclubs met 9 holes** hebben kleinere begrotingen en beslissen via de ALV. Daar is
+   € 299–349 een groter besluit dan de greenfee-som doet vermoeden.
+
+### 5. Advies
+
+**Ja, verhoog de prijs, maar koppel hem aan de grootte van de club en test hem bij echte besturen.**
+
+1. **Prijs per lid in plaats van per baangrootte**: **€ 0,65 per lid per maand**, minimaal € 249.
+   - 550 leden → € 358, 950 leden → € 618, 1.350 leden → € 878 per maand.
+   - **Oprichtersprijs: € 0,49 per lid** (25% korting), twee jaar vast, eerste tien clubs.
+   - Waarom per lid: het groeit mee met de waarde, het is makkelijk uit te leggen ("per 100 leden minder dan
+     één greenfee van 18 holes per maand"), en het voelt eerlijk voor kleine en grote clubs.
+2. **Verkoop het als "vervangt uw systeem, plus een eigen app"**, niet als losse app. Laat in elk gesprek
+   de som zien: wat de club nu betaalt + wat de app oplevert, naast de prijs van Greenside.
+3. **Bij Zwolle meten wat het oplevert** (gastrondes, extra's, behouden leden, uren), zodat de waarde na
+   het seizoen een feit is in plaats van een schatting. Dan kan de normale prijs omhoog naar de
+   waardeprijs.
+4. **Test met echte besturen** (test 1 in het lanceerplan): de helft van de gesprekken krijgt de huidige
+   prijs, de helft het per-lidmodel. Meet wie een intentieverklaring tekent.
+
+**Wat dit niet verandert:** het oordeel blijft "nog niet" zolang er geen club live is en niemand koopt.
+De eerste stap blijft Zwolle.
+
+### 6. Mogelijke volgende stappen
+
+- Het kooppanel (dezelfde 20 personen) opnieuw draaien met het per-lidmodel en de waarde in golftaal in
+  de pitch, om te zien of de prijsbezwaren veranderen. Simulatie blijft simulatie, maar het laat zien
+  welke formulering werkt.
+- Als jullie het per-lidmodel kiezen: Prijzen, De cijfers, de pitch en het ondernemingsplan bijwerken en
+  de PDF opnieuw maken.
+
+_Gesimuleerde kopers en geprojecteerde cijfers; echte besturen en echte offertes moeten ze bevestigen.
+Geen financieel advies._
 
 _Het panel bestaat uit gesimuleerde kopers en de cijfers zijn prognoses op basis van de invoer. Toets de vraag bij echte klanten en de kosten met echte offertes voordat je geld uitgeeft. Geen financieel, juridisch of fiscaal advies._

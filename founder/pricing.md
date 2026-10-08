@@ -3,87 +3,98 @@
 Amounts in euros per month, excl. 21% VAT. Buyer answers are simulated (`founder/pricing-curve.md`):
 they pick what to test, they are not proof. Margins come from `unit_economics.py` on
 `founder/numbers.json` (founders unpaid) and `founder/numbers-met-salaris.json` (2 × € 2,500).
+**Changed on 8 October 2026 from a price per course size to a price per member**, after the founders
+asked why Greenside costs less than a few green fees a month. The full reasoning, with the club's value
+in green fees, is in `founder/nl/casus-prijs.md`.
 
 ## 1. The price
 
-| | 9 holes | 18 holes | 27+ holes |
-| --- | ---: | ---: | ---: |
-| **List price** | **€ 199** (was € 249) | **€ 449** (same) | **€ 599** (same) |
-| **Founding price** (first ten clubs, fixed two years) | **€ 179** (same) | **€ 399** (same) | **€ 499** (was € 399) |
-| Buyers' acceptable range | € 75 – 251 | € 151 – 600 | € 152 – 752 |
-| Buyers' "bargain = expensive" point (IPP) | € 151 | € 300 | € 352 |
+**€ 0.65 per member per month, minimum € 249.**
 
-Why:
-- **9 holes: list € 249 → € 199.** € 249 sat right on the edge of what volunteer boards accept
-  (PME € 251); their median "getting expensive" is € 220. € 199 is inside the range, and the step
-  to the € 179 founding price stays real. 9-hole clubs are 25% of the market, so this costs little:
-  blended list price € 429 → € 416.50.
-- **18 holes: unchanged.** € 449 and € 399 are well inside the range; 3 of 22 answers say outright
-  that price is "not the problem" or "small money". The doubt is trust, not price.
-- **27+ holes founding € 399 → € 499.** € 399 for a 1,350-member club was a 33% discount, more
-  than needed: € 499 is still below their "getting expensive" median of € 650. It adds € 20 to the
-  blended founding price (€ 344 → € 364).
-- **Drop "two months free when paying a year up front".** That is a 17% discount clubs did not ask
-  for. Clubs budget per year anyway: invoice yearly in advance at the normal price, or monthly.
-- **Keep the migration fee for clubs after the first ten** (€ 750 for 9 holes, € 1,500 for 18+): it
-  pays for the work in "We do the work". Founding clubs pay none.
+**Founding clubs (the first ten, fixed two years): € 0.49 per member per month, minimum € 189.**
+
+Members = the members in the club's administration on 1 January, set once a year.
+
+| club | members | list price | founding price | list price per year |
+| --- | ---: | ---: | ---: | ---: |
+| 9 holes | ~550 | € 358 | € 270 | € 4,290 |
+| 18 holes | ~950 | € 618 | € 466 | € 7,410 |
+| 27+ holes | ~1,350 | € 878 | € 662 | € 10,530 |
+| small club | 300 | € 249 (minimum) | € 189 (minimum) | € 2,988 |
+
+Averages for the market mix (25% / 55% / 20%): **founding € 455.70, list € 604.50** a club-month (was
+€ 364 and € 416.50 with the price per course size).
+
+Why per member:
+- **It follows the value.** What Greenside earns a club (members who stay, guest rounds, extras, desk
+  hours) grows with the number of members. A 1,350-member club gets more out of it than a 550-member one.
+- **It is small next to golf money.** For an 18-hole club with 950 members, € 618 a month is € 7,410 a
+  year: **100 green fees of 18 holes (€ 74.23)**, about **2 guest rounds a week**, or **5.5 members** who
+  don't leave (€ 1,337 a year each). That is 0.6% of the club's membership income.
+- **It is easy to say in a board meeting:** "per 100 members, less than one 18-hole green fee a month".
+- **It is fair to small clubs** (the minimum keeps very small clubs viable for Greenside) and does not
+  punish big ones with a jump between size classes.
+
+What changed against the old prices, and what the panel said:
+- **18 holes: € 449 → € 618 list, € 399 → € 466 founding.** The panel's "too expensive" point for 18
+  holes was € 600 (median "too expensive" € 800), so € 618 sits right at the edge of what simulated
+  buyers accept. That is deliberate: the panel thought in software budgets, not in green fees.
+- **27+ holes: € 599 → € 878 list, € 499 → € 662 founding.** Above the panel's "too expensive" point
+  (€ 752). Test this one first with real boards.
+- **9 holes: € 199 → € 358 list, € 179 → € 270 founding.** Above the panel's point (€ 251) for list;
+  the founding price is just above it. Volunteer clubs decide via the members' meeting, so the
+  founding price matters most here.
+- **Keep**: no "two months free" (invoice yearly in advance at the normal price, or monthly); migration
+  fee for clubs after the first ten (€ 750 under 700 members, € 1,500 from 700); no commission.
 
 **Against competitors.** No one publishes Dutch prices, except one data point: Nexxchange GolfSuite
 lists **€ 200 a month plus € 50 per simultaneous user**, plus a one-off installation fee
 ([Capterra](https://www.capterra.com/p/201943/Nexxchange-GolfSuite/),
 [GetApp](https://www.getapp.com/recreation-wellness-software/a/nexxchange-golfsuite/pricing/),
 [G2](https://www.g2.com/products/nexxchange-golfsuite/pricing); aggregator sites, confirm with a
-quote). An 18-hole club with 3–5 people at the desk, secretariat and finance would pay about
-**€ 350–450** (estimate). So € 449 is the price of a *whole* club system. That is the sales line,
-and also the risk:
-- If Greenside **replaces** the current system, € 449 is roughly the same bill with a club app on
-  top. That is the answer to "it comes on top of what we pay" (7 of 20 answers).
-- If it runs **next to** the current system, it doubles the software bill, and treasurers say no.
-  Without the NGF handicap link and direct debit, many clubs cannot fully replace it (`founder/offer.md`, K).
+quote). An 18-hole club pays about **€ 350–450** for that (estimate). So € 618 is **more than a whole
+club system**. That only holds if:
+- Greenside **replaces** the current system (its bill disappears), and the app is the extra on top; or
+- the value is **measured** (Zwolle) and shown in every conversation.
+Without the NGF handicap link and direct debit, many clubs cannot fully replace their system
+(`founder/offer.md`, K). That is now the most important product question for the price.
 
 **The margin** (tool output, per club-month; costs as updated by `/founder-ops`):
 
 | price | contribution | break-even, unpaid | break-even, 2 × € 2,500 |
 | --- | ---: | ---: | ---: |
-| Founding mix € 364 | € 318.50 (88%) | 2 clubs | 17 clubs |
-| List mix € 416.50 | € 371 (89%) | 2 clubs | 15 clubs |
-| Old list mix € 429 | € 383.50 (89%) | 2 clubs | 15 clubs |
+| Founding, € 0.49 per member (avg € 455.70) | € 410.20 (90%) | 1 club | 14 clubs |
+| List, € 0.65 per member (avg € 604.50) | € 559 (92%) | 1 club | 10 clubs |
+| Old founding per size (avg € 364) | € 318.50 (88%) | 2 clubs | 17 clubs |
 
-Only ten clubs get the founding price, so the real path is **10 founding clubs + 6 at list price =
-16 clubs** to pay both founders € 2,500 (5,398 − 10 × 318.50 = 2,213; ÷ 371 = 6.0 → 6).
-That is 6% of the 263 NGF clubs, and below the 25 clubs two people can serve.
+Only ten clubs get the founding price, so the real path is **10 founding clubs + 3 at list price =
+13 clubs** to pay both founders € 2,500 (5,398 − 10 × 410.20 = 1,296; ÷ 559 = 2.3 → 3). That is 5% of
+the 263 NGF clubs. All 263 clubs at list price would be ~€ 1.9 million a year (was ~€ 1.3 million).
 
 ## 2. The ladder
 
-Clubs don't choose a size; they have one. So the ladder is not "good / better / best" but:
-1. **By course size** (9 / 18 / 27+), above. The step up follows the number of members and
-   desk staff, which is what clubs already expect from Nexxchange's per-user pricing.
-2. **Add-ons later, only when built and wanted**: NGF handicap link, direct debit, a link to the
-   bar's cash register (unTill), the ball machine (Xafax). Each one is a reason the club can drop
-   another system, so price them per add-on, not in the base. Do not sell them before they exist.
+Clubs don't choose a size; they have one. The price per member is the ladder: it rises with the club.
+On top of that, later and only when built and wanted: **add-ons** (NGF handicap link, direct debit, a
+link to the bar's cash register (unTill), the ball machine (Xafax)). Each one lets the club drop another
+system, so price them per add-on, not in the base. Do not sell them before they exist.
 
 ## 3. The opening offer
 
-**Greenside Founding Club**: the first ten clubs pay the founding price, fixed for two years, no
-migration fee, and get the free three-month pilot with written success criteria.
-- **End date:** the founding price applies to clubs whose pilot starts **before 1 July 2027**, or
-  until ten clubs have signed, whichever comes first. Pick the date yourselves, but put a real one
-  in writing and keep it.
-- **After two years** the club moves to the list price at that time. Write this in the contract,
-  so the founding price is a real, dated deal and not a "was" price.
-- The list prices above are what club 11 onward actually pays, so the comparison is honest.
+**Greenside Founding Club**: the first ten clubs pay **€ 0.49 per member** (minimum € 189), fixed for two
+years, no migration fee, and get the free three-month pilot with written success criteria.
+- **End date:** for clubs whose pilot starts **before 1 July 2027**, or until ten clubs have signed,
+  whichever comes first. Put a real date in writing and keep it.
+- **After two years** the club moves to the list price at that time. Write this in the contract.
+- The list price is what club 11 onward actually pays, so the comparison is honest.
 
 ## 4. What to test with real buyers
 
-Simulated answers are not enough. Test with real club boards, starting with Zwolle's contacts and
-the E-Golf4U clubs that have to switch anyway:
-1. **18 holes: € 399 vs. € 449 founding price.** Half the board conversations get one price sheet,
+1. **Founding price € 0.49 vs. € 0.59 per member.** Half the board conversations get one price sheet,
    half the other (alternate, don't choose). Measure: how many ask for a pilot or sign a letter of
-   intent. If € 449 converts as well, the founding discount is not needed.
-2. **9 holes: € 149 vs. € 179 founding price**, same method. € 149 sits at their "bargain =
-   expensive" point (€ 151); test whether it opens the volunteer clubs.
-3. Ask every board **what they pay their current vendor today** (licence, per user, add-ons). That
-   is the number that decides "replace, not add", and nobody publishes it.
+   intent. If € 0.59 converts as well, raise the founding price.
+2. **Show the sum in every conversation**: what the club pays its current vendor today + what the app
+   brings in (guest rounds, members kept) next to Greenside's price. Note which part of the sum convinces.
+3. Ask every board **what they pay their current vendor today**. That number decides "replace, not add".
 
 ## 5. The panel's price objections (verbatim, for marketing)
 

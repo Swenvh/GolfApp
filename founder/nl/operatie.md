@@ -17,7 +17,8 @@ opnieuw berekend):
 - **Beveiligingstest: € 5.000 → € 7.500 eenmalig.** Pentests van een kleine webapp kosten € 5.000–14.000.
 
 Resultaat: bijdrage € 318,50 per club per maand (was € 290), vaste kosten € 398 (was € 373),
-break-even met € 2.500 salaris per oprichter **16 clubs** (10 oprichters + 6 normaal; was 18).
+break-even met € 2.500 salaris per oprichter **16 clubs** (10 oprichters + 6 normaal; was 18). Na de
+overstap op een prijs per lid (8 oktober 2026): bijdrage € 410,20, break-even **13 clubs**.
 
 ## 1. De dagelijkse cyclus
 
@@ -61,7 +62,7 @@ tot vier weken erna (routine 4.2). Daar gaan de meeste uren van de oprichters na
 ## 3. Mensen
 
 Twee oprichters, geen personeel. Salaris: **€ 2.000–2.500 per persoon per maand** is het doel (het eigen
-getal van de oprichters); tot ~16 clubs betalen, groeit het salaris mee met de omzet (De cijfers). Wat
+getal van de oprichters); tot ~13 clubs betalen, groeit het salaris mee met de omzet (De cijfers). Wat
 dat het bedrijf kost hangt af van de rechtsvorm: in een bv moet een directeur-grootaandeelhouder een
 minimaal "gebruikelijk loon" nemen; in een vof of eenmanszaak is er geen loonadministratie en betaal je
 inkomstenbelasting over de winst. **Vraag een boekhouder voordat je kiest**; loonkosten, pensioen en btw
@@ -92,7 +93,7 @@ Ongeveer 45 uur per week elk; het meeste is verkopen (B) en de naden van het pro
 | B | support, bellen | overstapgesprekken | bezoeken | overstapgesprekken | facturatie, weekevaluatie | hulplijn als een club in zijn eerste 4 weken zit |
 
 **De supportlast is de grens om te bewaken.** Ga uit van ~2 uur per week per live club na de eerste
-maand (een schatting; meet het bij Zwolle). Bij 10 clubs is dat ~20 uur per week; bij 16 clubs ~32 uur,
+maand (een schatting; meet het bij Zwolle). Bij 10 clubs is dat ~20 uur per week; bij 13 clubs ~26 uur,
 het grootste deel van één oprichter. De capaciteit van "~25 clubs" in de CFO-berekening geldt dus alleen
 als de support per club laag blijft; de eerste drie maanden van Zwolle wijzen het uit.
 

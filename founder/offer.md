@@ -52,7 +52,7 @@ Value to the buyer 1–5 (from how often the panel raised it). Cost to deliver 1
 | E | **We do the migration and member launch**: import, invitations, printed guide for older members | 13, 14, 17 | 4 | 2 | ✔ bonus |
 | F | **Helpline in the first four weeks, Saturday mornings included** | 15, 16, 17 | 4 | 3 (founder time on weekends) | ✔ bonus |
 | G | **Reference call with Zwolle's board** before deciding, once Zwolle is live | 1, 3 | 5 | 1 | ✔ (true only after Zwolle is live) |
-| H | **9-hole founding price € 179** (was € 249) | 7 | 4 | 2 (lower revenue) | ✔ test; `/founder-pricing` decides |
+| H | **9-hole founding price € 179** (was € 249; since 8 Oct 2026 replaced by the price per member, see `founder/pricing.md`) | 7 | 4 | 2 (lower revenue) | ✔ test; `/founder-pricing` decides |
 | I | **No migration fee for founding clubs** | 8 | 3 | 2 | ✔ |
 | J | Source-code escrow with a third party | 2, 19 | 4 | 4 (yearly fee, unknown) | ✘ for now: D covers most of it; revisit with CFO |
 | K | NGF handicap link and direct debit in the product | 9 | 4 | 5 (not built; direct debit removed from the pilot) | ✘ not promised; product decision |
@@ -76,7 +76,7 @@ and a helpline arrangement.
   2. *We do the work*: import, invitations, a printed guide for older members (E). Kills
      13 and 14.
   3. *Saturday-morning helpline* for the first four weeks (F). Kills 15–17.
-- **Urgency and scarcity (real):** ten founding clubs at € 179 (9 holes) or € 399 (18+),
+- **Urgency and scarcity (real):** ten founding clubs at € 0.49 per member (minimum € 189; was € 179 / € 399 per course size),
   fixed for two years, no migration fee (H, I). The other real urgency is external:
   E-Golf4U is being retired, so many clubs must choose now.
 - **Proof:** a call with Zwolle's board once Zwolle is live (G). Not before; the pitch

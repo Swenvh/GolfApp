@@ -5,10 +5,13 @@ USD prices converted at about € 0.90 per USD (an estimate; check the rate on t
 All amounts excl. VAT.
 
 ## Price
-- **€ 364 per club-month**: blended founding price from `founder/pricing.md` (€ 179 for 9 holes,
-  € 399 for 18 holes, € 499 for 27+ holes) weighted by the segment shares in
-  `founder/customer.json` (25% / 55% / 20%). Was € 344 before `/founder-pricing`.
-- List-price what-if **€ 416.50**: 0.25 × 199 + 0.55 × 449 + 0.20 × 599 (was € 429 with € 249 for 9 holes).
+- **€ 455.70 per club-month** (since 8 October 2026): founding price **€ 0.49 per member per month**
+  (minimum € 189) for a typical club per segment (`founder/customer.json`: 25% 9 holes with ~550 members,
+  55% 18 holes with ~950, 20% 27+ holes with ~1,350): 0.25 × 269.50 + 0.55 × 465.50 + 0.20 × 661.50.
+  Before: € 344 (first price per size) and € 364 (after `/founder-pricing`).
+- List-price what-if **€ 604.50**: € 0.65 per member (minimum € 249), same mix.
+- Member counts per segment are the panel's segment descriptions, not measured; a club's real count
+  sets its real price.
 
 ## Public prices (check before paying)
 | item | price | source |

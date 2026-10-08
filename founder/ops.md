@@ -17,7 +17,8 @@ re-run):
 - **Security test: € 5,000 → € 7,500 once.** Pentests of a small web app cost € 5,000–14,000.
 
 Result: contribution € 318.50 per club-month (was € 290), fixed costs € 398 (was € 373),
-break-even with € 2,500 pay for each founder **16 clubs** (10 founding + 6 list; was 18).
+break-even with € 2,500 pay for each founder **16 clubs** (10 founding + 6 list; was 18). After the
+switch to a price per member (8 October 2026): contribution € 410.20, break-even **13 clubs**.
 
 ## 1. The daily cycle
 
@@ -61,7 +62,7 @@ to four weeks after (routine 4.2). That is where most founder hours go (~40 per 
 ## 3. People
 
 Two founders, no staff. Pay: **€ 2,000–2,500 each a month** is the target (the founders' own
-number); until ~16 clubs pay, pay grows with revenue (`founder/cfo.md`). What that costs the company
+number); until ~13 clubs pay, pay grows with revenue (`founder/cfo.md`). What that costs the company
 depends on the legal form: in a BV a director-shareholder must take a minimum "customary" salary,
 in a VOF or sole proprietorship there is no payroll and you pay income tax on the profit. **Ask an
 accountant before choosing**; payroll costs, pension and VAT are not in these numbers.
@@ -90,7 +91,7 @@ About 45 hours a week each; most of it is selling (B) and finishing the product 
 | B | support, calls | onboarding meetings | visits | onboarding meetings | invoicing, week review | helpline if a club is in its first 4 weeks |
 
 **Support load is the limit to watch.** Assume ~2 hours a week per live club after its first month
-(an estimate; measure it at Zwolle). At 10 clubs that is ~20 hours a week; at 16 clubs ~32 hours,
+(an estimate; measure it at Zwolle). At 10 clubs that is ~20 hours a week; at 13 clubs ~26 hours,
 most of one founder. So the "~25 clubs" capacity in the CFO only holds if support per club stays
 low; Zwolle's first three months tell you.
 

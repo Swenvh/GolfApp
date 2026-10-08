@@ -1,7 +1,7 @@
 {
   "business": "Greenside (licence for Dutch golf clubs; one unit = one paying club for one month; 'per day' in this report means 'clubs at once')",
   "unit": "club-month",
-  "price": 364,
+  "price": 455.7,
   "variable": [
     {
       "label": "Onboarding, free pilot and walk-away guarantee, spread over the 24-month founding term (estimate, updated by /founder-ops: printed guide ~EUR 300)",
