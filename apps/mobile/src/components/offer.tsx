@@ -16,6 +16,8 @@ export function OfferCard({ eyebrow, title, subtitle, price, icon, onPress, tone
   const dark = tone === 'pine';
   return (
     <Pressable
+      accessibilityRole="button"
+      accessibilityLabel={[eyebrow, title, subtitle, price].filter(Boolean).join(', ')}
       onPress={() => { haptic.tap(); onPress(); }}
       style={({ pressed }) => [styles.card, dark && styles.cardDark, pressed && { transform: [{ scale: 0.98 }], opacity: 0.9 }]}
     >
@@ -23,14 +25,14 @@ export function OfferCard({ eyebrow, title, subtitle, price, icon, onPress, tone
         <Icon name={icon} size={22} color={dark ? colors.brassLight : colors.pine700} />
       </View>
       <View style={{ gap: 3, flex: 1 }}>
-        <Text style={[styles.eyebrow, dark && { color: colors.brassLight }]}>{eyebrow}</Text>
-        <Text style={[styles.title, dark && { color: colors.onDark }]} numberOfLines={2}>{title}</Text>
-        {subtitle && <Text style={[styles.subtitle, dark && { color: colors.onDarkMuted }]} numberOfLines={2}>{subtitle}</Text>}
+        <Text maxFontSizeMultiplier={1.4} style={[styles.eyebrow, dark && { color: colors.brassLight }]}>{eyebrow}</Text>
+        <Text maxFontSizeMultiplier={1.4} style={[styles.title, dark && { color: colors.onDark }]} numberOfLines={3}>{title}</Text>
+        {subtitle && <Text maxFontSizeMultiplier={1.4} style={[styles.subtitle, dark && { color: colors.onDarkMuted }]} numberOfLines={3}>{subtitle}</Text>}
       </View>
       <View style={styles.footer}>
         {price ? <Text style={[styles.price, dark && { color: colors.onDark }]}>{price}</Text> : <View />}
         <View style={[styles.go, dark && { backgroundColor: colors.brass }]}>
-          <Ionicons name="arrow-forward" size={16} color={dark ? colors.pine950 : colors.onDark} />
+          <Ionicons name="arrow-forward" size={20} color={dark ? colors.pine950 : colors.onDark} />
         </View>
       </View>
     </Pressable>
@@ -73,17 +75,17 @@ export function AddOnRow({ product, quantity, onChange, remaining, max = 4, lock
       ) : (
         <View style={styles.stepper}>
           {active && (
-            <Pressable accessibilityRole="button" accessibilityLabel={`${product.name} minder`} hitSlop={6}
+            <Pressable accessibilityRole="button" accessibilityLabel={`${product.name} minder`} hitSlop={4}
               onPress={() => { haptic.tap(); onChange(quantity - 1); }} style={styles.step}>
-              <Ionicons name="remove" size={16} color={colors.pine800} />
+              <Ionicons name="remove" size={20} color={colors.pine800} />
             </Pressable>
           )}
           {active && <Text style={styles.qty}>{quantity}</Text>}
-          <Pressable accessibilityRole="button" accessibilityLabel={`${product.name} toevoegen`} hitSlop={6}
+          <Pressable accessibilityRole="button" accessibilityLabel={`${product.name} toevoegen`} hitSlop={4}
             disabled={soldOut || quantity >= limit}
             onPress={() => { haptic.tap(); onChange(quantity + 1); }}
             style={[styles.step, !active && styles.stepAdd, (soldOut || quantity >= limit) && { opacity: 0.35 }]}>
-            <Ionicons name="add" size={16} color={active ? colors.pine800 : colors.onDark} />
+            <Ionicons name="add" size={20} color={active ? colors.pine800 : colors.onDark} />
           </Pressable>
         </View>
       )}
@@ -93,29 +95,29 @@ export function AddOnRow({ product, quantity, onChange, remaining, max = 4, lock
 
 const styles = StyleSheet.create({
   card: {
-    width: 212, minHeight: 196, padding: space.lg, gap: space.md, borderRadius: radius.lg,
+    width: 236, minHeight: 220, padding: space.lg, gap: space.md, borderRadius: radius.lg,
     backgroundColor: colors.paper, borderWidth: StyleSheet.hairlineWidth, borderColor: colors.line,
   },
   cardDark: { backgroundColor: colors.pine800, borderColor: colors.pine800 },
   iconWrap: { width: 42, height: 42, borderRadius: 21, backgroundColor: colors.pine50, alignItems: 'center', justifyContent: 'center' },
-  eyebrow: { fontFamily: fonts.bodyHeavy, fontSize: 11, letterSpacing: 1.3, textTransform: 'uppercase', color: colors.brassText },
-  title: { fontFamily: fonts.display, fontSize: 17, lineHeight: 21, color: colors.ink },
-  subtitle: { fontFamily: fonts.body, fontSize: 12.5, lineHeight: 17, color: colors.slate },
+  eyebrow: { fontFamily: fonts.bodyHeavy, fontSize: 13, letterSpacing: 1, textTransform: 'uppercase', color: colors.brassText },
+  title: { fontFamily: fonts.display, fontSize: 19, lineHeight: 24, color: colors.ink },
+  subtitle: { fontFamily: fonts.body, fontSize: 14.5, lineHeight: 20, color: colors.slate },
   footer: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
-  price: { fontFamily: fonts.display, fontSize: 18, color: colors.ink },
-  go: { width: 30, height: 30, borderRadius: 15, backgroundColor: colors.pine700, alignItems: 'center', justifyContent: 'center' },
+  price: { fontFamily: fonts.display, fontSize: 20, color: colors.ink },
+  go: { width: 40, height: 40, borderRadius: 20, backgroundColor: colors.pine700, alignItems: 'center', justifyContent: 'center' },
   addOn: {
     flexDirection: 'row', alignItems: 'center', gap: space.md, padding: space.md, borderRadius: radius.md,
     backgroundColor: colors.paper, borderWidth: 1, borderColor: colors.line,
   },
   addOnActive: { borderColor: colors.pine600, backgroundColor: colors.pine50 },
   addOnIcon: { width: 40, height: 40, borderRadius: 12, backgroundColor: colors.pine50, alignItems: 'center', justifyContent: 'center' },
-  addOnTitle: { fontFamily: fonts.bodyBold, fontSize: 14.5, color: colors.ink },
-  addOnMeta: { fontFamily: fonts.body, fontSize: 12.5, color: colors.slate },
+  addOnTitle: { fontFamily: fonts.bodyBold, fontSize: 17, color: colors.ink },
+  addOnMeta: { fontFamily: fonts.body, fontSize: 15, color: colors.slate },
   stepper: { flexDirection: 'row', alignItems: 'center', gap: 10 },
-  step: { width: 44, height: 44, borderRadius: 22, borderWidth: 1, borderColor: colors.lineStrong, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.paper },
+  step: { width: 48, height: 48, borderRadius: 24, borderWidth: 1, borderColor: colors.lineStrong, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.paper },
   stepAdd: { backgroundColor: colors.pine700, borderColor: colors.pine700 },
-  qty: { fontFamily: fonts.display, fontSize: 18, color: colors.ink, minWidth: 14, textAlign: 'center' },
+  qty: { fontFamily: fonts.display, fontSize: 20, color: colors.ink, minWidth: 14, textAlign: 'center' },
   strike: { textDecorationLine: 'line-through', color: colors.mist },
   special: { fontFamily: fonts.bodyBold, color: colors.pine700 },
 });

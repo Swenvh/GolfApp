@@ -56,7 +56,7 @@ export default function Introduceren() {
       <Input label="Telefoon (optioneel)" value={form.phone} onChangeText={(v) => setForm({ ...form, phone: v })} keyboardType="phone-pad" />
       <Input label="Iets wat de club moet weten?" value={form.note} onChangeText={(v) => setForm({ ...form, note: v })} placeholder="Bijv. heeft al een GVB, speelt handicap 20" multiline />
       <Row gap={space.sm}>
-        <Ionicons name="lock-closed-outline" size={14} color={colors.mist} />
+        <Ionicons name="lock-closed-outline" size={16} color={colors.mist} />
         <T variant="small" color={colors.mist} style={{ flex: 1 }}>We gebruiken deze gegevens alleen om je vriend één keer uit te nodigen.</T>
       </Row>
       <ErrorText message={error} />

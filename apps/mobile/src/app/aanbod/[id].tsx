@@ -72,8 +72,8 @@ export default function Aanbod() {
   const header = (
     <View style={[styles.hero, { paddingTop: insets.top + space.md }]}>
       <Contours seed={product.name.length} />
-      <Pressable hitSlop={12} onPress={() => router.back()} style={styles.back}>
-        <Ionicons name="close" size={20} color={colors.onDark} />
+      <Pressable hitSlop={8} onPress={() => router.back()} style={styles.back} accessibilityRole="button" accessibilityLabel="Sluiten">
+        <Ionicons name="close" size={24} color={colors.onDark} />
       </Pressable>
       <View style={styles.bigIcon}><Icon name={productIcon(product)} size={34} color={colors.brassLight} /></View>
       {context && <Eyebrow color={colors.brassLight}>{context}</Eyebrow>}
@@ -124,11 +124,11 @@ export default function Aanbod() {
       {max > 1 && !soldOut && (
         <Row style={styles.qtyRow}>
           <T variant="bodyStrong" style={{ flex: 1 }}>Aantal</T>
-          <Pressable accessibilityLabel="Minder" style={styles.step} disabled={qty <= 1} onPress={() => { haptic.tap(); setQty(qty - 1); }}>
+          <Pressable accessibilityRole="button" accessibilityLabel="Minder" style={styles.step} disabled={qty <= 1} onPress={() => { haptic.tap(); setQty(qty - 1); }}>
             <Ionicons name="remove" size={18} color={colors.pine800} />
           </Pressable>
           <Text style={styles.qty}>{qty}</Text>
-          <Pressable accessibilityLabel="Meer" style={styles.step} disabled={qty >= max} onPress={() => { haptic.tap(); setQty(qty + 1); }}>
+          <Pressable accessibilityRole="button" accessibilityLabel="Meer" style={styles.step} disabled={qty >= max} onPress={() => { haptic.tap(); setQty(qty + 1); }}>
             <Ionicons name="add" size={18} color={colors.pine800} />
           </Pressable>
         </Row>
@@ -147,12 +147,12 @@ function formatISO(d: Date) {
 
 const styles = StyleSheet.create({
   hero: { backgroundColor: colors.pine900, paddingHorizontal: space.xl, paddingBottom: space.xxl, gap: 6 },
-  back: { width: 44, height: 44, borderRadius: 22, backgroundColor: colors.onDarkLine, alignItems: 'center', justifyContent: 'center', alignSelf: 'flex-end' },
+  back: { width: 48, height: 48, borderRadius: 24, backgroundColor: colors.onDarkLine, alignItems: 'center', justifyContent: 'center', alignSelf: 'flex-end' },
   bigIcon: { width: 68, height: 68, borderRadius: 34, backgroundColor: colors.onDarkLine, alignItems: 'center', justifyContent: 'center', marginBottom: space.md },
   title: { fontFamily: fonts.display, fontSize: 32, lineHeight: 36, color: colors.onDark, letterSpacing: -0.5 },
   price: { fontFamily: fonts.display, fontSize: 22, color: colors.brassLight },
   qtyRow: { backgroundColor: colors.paper, borderRadius: radius.lg, padding: space.lg, borderWidth: StyleSheet.hairlineWidth, borderColor: colors.line, gap: space.md },
-  step: { width: 44, height: 44, borderRadius: 22, borderWidth: 1, borderColor: colors.lineStrong, alignItems: 'center', justifyContent: 'center' },
+  step: { width: 48, height: 48, borderRadius: 24, borderWidth: 1, borderColor: colors.lineStrong, alignItems: 'center', justifyContent: 'center' },
   qty: { fontFamily: fonts.display, fontSize: 22, minWidth: 24, textAlign: 'center', color: colors.ink },
   done: { alignItems: 'center', gap: space.sm, paddingVertical: space.xl },
   check: { width: 64, height: 64, borderRadius: 32, backgroundColor: colors.pine700, alignItems: 'center', justifyContent: 'center', marginBottom: space.sm },

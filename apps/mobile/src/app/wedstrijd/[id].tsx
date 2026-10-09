@@ -86,11 +86,11 @@ export default function WedstrijdDetail() {
   const header = (
     <View style={[styles.hero, { paddingTop: insets.top + space.md }]}>
       <Contours seed={comp.name.length} />
-      <Pressable hitSlop={12} onPress={() => router.back()} style={styles.back}>
-        <Ionicons name="chevron-back" size={20} color={colors.onDark} />
+      <Pressable hitSlop={8} onPress={() => router.back()} style={styles.back} accessibilityRole="button" accessibilityLabel="Terug">
+        <Ionicons name="chevron-back" size={24} color={colors.onDark} />
       </Pressable>
-      <Eyebrow color={colors.brassLight} style={{ marginTop: space.xl }}>{competitionFormatLabel[comp.format]}{comp.qualifying ? ' · Qualifying' : ''}</Eyebrow>
-      <Text style={styles.title}>{comp.name}</Text>
+      <Eyebrow color={colors.brassLight} style={{ marginTop: space.xl }}>{competitionFormatLabel[comp.format]}{comp.qualifying ? ' · Telt mee voor je handicap' : ''}</Eyebrow>
+      <Text maxFontSizeMultiplier={1.3} accessibilityRole="header" style={styles.title}>{comp.name}</Text>
       <View style={styles.facts}>
         <Fact label="Datum" value={formatDate(comp.starts_at, { weekday: 'short', day: 'numeric', month: 'short' })} />
         <Fact label="Eerste start" value={localTime(comp.starts_at)} />
@@ -174,7 +174,7 @@ export default function WedstrijdDetail() {
 function Fact({ label, value }: { label: string; value: string }) {
   return (
     <View style={{ width: '50%', paddingVertical: space.sm, gap: 2 }}>
-      <Text style={styles.factLabel}>{label}</Text>
+      <Text maxFontSizeMultiplier={1.3} style={styles.factLabel}>{label}</Text>
       <Text style={styles.factValue}>{value}</Text>
     </View>
   );
@@ -182,16 +182,16 @@ function Fact({ label, value }: { label: string; value: string }) {
 
 const styles = StyleSheet.create({
   hero: { backgroundColor: colors.pine900, paddingHorizontal: space.xl, paddingBottom: space.xl },
-  back: { width: 44, height: 44, borderRadius: 22, backgroundColor: colors.onDarkLine, alignItems: 'center', justifyContent: 'center' },
+  back: { width: 48, height: 48, borderRadius: 24, backgroundColor: colors.onDarkLine, alignItems: 'center', justifyContent: 'center' },
   title: { fontFamily: fonts.display, fontSize: 32, lineHeight: 36, color: colors.onDark, letterSpacing: -0.6, marginTop: 6 },
   facts: { flexDirection: 'row', flexWrap: 'wrap', marginTop: space.lg, paddingTop: space.sm, borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: colors.onDarkLine },
-  factLabel: { fontFamily: fonts.bodyHeavy, fontSize: 11, letterSpacing: 1.3, textTransform: 'uppercase', color: colors.onDarkMuted },
-  factValue: { fontFamily: fonts.display, fontSize: 19, color: colors.onDark },
+  factLabel: { fontFamily: fonts.bodyHeavy, fontSize: 13, letterSpacing: 0.8, textTransform: 'uppercase', color: colors.onDarkMuted },
+  factValue: { fontFamily: fonts.display, fontSize: 20, color: colors.onDark },
   joined: { backgroundColor: colors.pine50, borderRadius: 14, padding: space.md },
   row: { paddingHorizontal: space.lg, paddingVertical: 12 },
   rowDivider: { borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: colors.line },
   pos: { width: 34, height: 34, borderRadius: 17, backgroundColor: colors.chalk, alignItems: 'center', justifyContent: 'center' },
-  posText: { fontFamily: fonts.display, fontSize: 16, color: colors.ink },
+  posText: { fontFamily: fonts.display, fontSize: 18, color: colors.ink },
   score: { fontFamily: fonts.display, fontSize: 22, color: colors.ink },
-  scoreUnit: { fontFamily: fonts.body, fontSize: 12, color: colors.slate },
+  scoreUnit: { fontFamily: fonts.body, fontSize: 14, color: colors.slate },
 });

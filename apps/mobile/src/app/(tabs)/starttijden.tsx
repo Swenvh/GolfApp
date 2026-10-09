@@ -15,6 +15,7 @@ import { unwrap, useQuery } from '@/lib/useQuery';
 
 const weekday = new Intl.DateTimeFormat('nl-NL', { weekday: 'short', timeZone: 'UTC' });
 const monthFmt = new Intl.DateTimeFormat('nl-NL', { month: 'long', timeZone: 'UTC' });
+const fullDate = new Intl.DateTimeFormat('nl-NL', { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'UTC' });
 
 export default function Starttijden() {
   const member = useMember();
@@ -125,9 +126,11 @@ export default function Starttijden() {
             const active = d === day;
             const date = new Date(`${d}T12:00:00Z`);
             return (
-              <Pressable key={d} onPress={() => { haptic.tap(); setDay(d); }} style={[styles.date, active && styles.dateActive]}>
-                <Text style={[styles.dateDay, active && { color: colors.brassLight }]}>{d === today ? 'Vandaag' : weekday.format(date).replace('.', '')}</Text>
-                <Text style={[styles.dateNum, active && { color: colors.onDark }]}>{date.getUTCDate()}</Text>
+              <Pressable key={d} onPress={() => { haptic.tap(); setDay(d); }} style={[styles.date, active && styles.dateActive]}
+                accessibilityRole="button" accessibilityState={{ selected: active }}
+                accessibilityLabel={`${d === today ? 'Vandaag, ' : ''}${fullDate.format(date)}`}>
+                <Text maxFontSizeMultiplier={1.3} style={[styles.dateDay, active && { color: colors.brassLight }]}>{d === today ? 'Vandaag' : weekday.format(date).replace('.', '')}</Text>
+                <Text maxFontSizeMultiplier={1.3} style={[styles.dateNum, active && { color: colors.onDark }]}>{date.getUTCDate()}</Text>
               </Pressable>
             );
           })}
@@ -145,25 +148,25 @@ export default function Starttijden() {
           <Card tone="pine" style={{ padding: space.xl, gap: space.md, marginTop: space.sm }}>
             <Contours seed={12} opacity={0.06} />
             <Eyebrow color={colors.brassLight}>{membership.data?.name}</Eyebrow>
-            <T variant="heading" color={colors.onDark} style={{ fontSize: 24, lineHeight: 29 }}>Ook in het weekend de baan op?</T>
+            <T variant="heading" color={colors.onDark} style={{ fontSize: 25, lineHeight: 31 }}>Ook in het weekend de baan op?</T>
             <T color={colors.onDarkMuted}>Met je huidige lidmaatschap speel je doordeweeks. Koop een losse weekendronde of een weekendpas, of kijk wat een upgrade kost.</T>
             {weekendRights.data?.products.map((p) => (
-              <Pressable key={p.id} onPress={() => { haptic.tap(); router.push({ pathname: '/aanbod/[id]', params: { id: p.id, context: 'Weekend spelen' } }); }}
+              <Pressable key={p.id} accessibilityRole="button" onPress={() => { haptic.tap(); router.push({ pathname: '/aanbod/[id]', params: { id: p.id, context: 'Weekend spelen' } }); }}
                 style={({ pressed }) => [styles.weekendOption, pressed && { opacity: 0.85 }]}>
                 <View style={{ flex: 1 }}>
                   <Text style={styles.weekendName}>{p.name}</Text>
                   <Text style={styles.weekendMeta}>{p.grants_uses === 1 ? 'Eén ronde, een jaar geldig' : `Alle weekenden, ${p.grants_days} dagen geldig`}</Text>
                 </View>
                 <Text style={styles.weekendPrice}>{formatEuro(priceInclVat(p.price_cents, Number(p.vat_rate))).replace(',00', '')}</Text>
-                <Ionicons name="chevron-forward" size={18} color={colors.brassLight} />
+                <Ionicons name="chevron-forward" size={20} color={colors.brassLight} />
               </Pressable>
             ))}
             <Button title="Bekijk upgrade" variant="accent" icon="arrow-up-circle-outline" onPress={() => router.push('/upgrade')} />
           </Card>
         ) : weekdayOnly && (weekendEnts.length > 0 || playingThisDay) && (
           <Row gap={space.sm} style={styles.weekendBanner}>
-            <Ionicons name="sunny-outline" size={18} color={colors.pine700} />
-            <T variant="small" style={{ flex: 1 }}>
+            <Ionicons name="sunny-outline" size={20} color={colors.pine700} />
+            <T style={{ flex: 1 }}>
               {weekendEnts.length === 0 ? 'Je weekendronde is gebruikt voor je starttijd van deze dag'
                 : weekendLeft == null ? `Weekendpas geldig t/m ${formatDate(weekendEnts[weekendEnts.length - 1]!.valid_until)}` : `Je hebt nog ${weekendLeft} ${weekendLeft === 1 ? 'weekendronde' : 'weekendrondes'}`}
             </T>
@@ -191,11 +194,14 @@ export default function Starttijden() {
               return (
                 <Pressable
                   key={slot.time}
+                  accessibilityRole="button"
+                  accessibilityState={{ disabled: !onPress }}
+                  accessibilityLabel={`${slot.time}: ${mine ? 'jij speelt mee, tik om je af te melden' : full ? 'vol' : players.length === 0 ? 'helemaal vrij, tik om te boeken' : `${players.length} ${players.length === 1 ? 'speler' : 'spelers'}, nog ${free} ${free === 1 ? 'plek' : 'plekken'} vrij, tik om aan te sluiten`}${nine ? ', 9 holes' : ''}`}
                   disabled={!onPress}
                   onPress={() => { haptic.tap(); onPress?.(); }}
                   style={({ pressed }) => [styles.slot, mine && styles.slotMine, full && !mine && styles.slotFull, pressed && { transform: [{ scale: 0.985 }] }]}
                 >
-                  <Text style={[styles.time, mine && { color: colors.onDark }, full && !mine && { color: colors.mist }]}>{slot.time}</Text>
+                  <Text maxFontSizeMultiplier={1.3} style={[styles.time, mine && { color: colors.onDark }, full && !mine && { color: colors.mist }]}>{slot.time}</Text>
                   <View style={{ flex: 1, gap: 6 }}>
                     {players.length === 0 ? (
                       <T variant="bodyStrong" color={colors.pine600}>Vrij</T>
@@ -203,20 +209,21 @@ export default function Starttijden() {
                       <Row gap={6} style={{ flexWrap: 'wrap' }}>
                         {players.map((p) => (
                           <Row key={p.player_id} gap={5} style={[styles.player, mine && { backgroundColor: colors.onDarkLine }]}>
-                            <Avatar name={p.player_name ?? ''} size={20} tone={p.member_id === member.id ? 'brass' : p.member_id ? 'pine' : 'brass'} />
-                            <Text numberOfLines={1} style={[styles.playerName, mine && { color: colors.onDark }]}>
+                            <Avatar name={p.player_name ?? ''} size={24} tone={p.member_id === member.id ? 'brass' : p.member_id ? 'pine' : 'brass'} />
+                            <Text numberOfLines={1} maxFontSizeMultiplier={1.4} style={[styles.playerName, mine && { color: colors.onDark }]}>
                               {p.member_id === member.id ? 'Jij' : (p.player_name ?? '').replace(' (gast)', '').split(' ')[0]}
                             </Text>
                           </Row>
                         ))}
                       </Row>
                     )}
+                    {players.length > 0 && !mine && !full && <T variant="small" color={colors.pine600}>Nog {free} {free === 1 ? 'plek' : 'plekken'} vrij</T>}
                     {nine && <T variant="small" color={mine ? colors.onDarkMuted : colors.slate}>9 holes</T>}
                     {mine && <T variant="small" color={colors.onDarkMuted}>Tik om je af te melden</T>}
                   </View>
                   <View style={{ alignItems: 'flex-end', gap: 6 }}>
                     <Pegs taken={players.length} max={course.max_players} dark={!!mine} />
-                    {!mine && !full && <View style={styles.add}><Ionicons name="add" size={16} color={colors.pine700} /></View>}
+                    {!mine && !full && <View style={styles.add}><Ionicons name="add" size={22} color={colors.pine700} /></View>}
                     {full && !mine && <T variant="small" color={colors.mist}>Vol</T>}
                   </View>
                 </Pressable>
@@ -246,28 +253,28 @@ function Pegs({ taken, max, dark }: { taken: number; max: number; dark: boolean 
 const styles = StyleSheet.create({
   dates: { gap: space.sm, paddingHorizontal: space.lg },
   date: {
-    width: 62, paddingVertical: 10, borderRadius: radius.md, alignItems: 'center', gap: 2,
+    width: 72, paddingVertical: 12, borderRadius: radius.md, alignItems: 'center', gap: 2,
     backgroundColor: colors.paper, borderWidth: StyleSheet.hairlineWidth, borderColor: colors.line,
   },
   dateActive: { backgroundColor: colors.pine800, borderColor: colors.pine800 },
-  dateDay: { fontFamily: fonts.bodyHeavy, fontSize: 11, letterSpacing: 1, textTransform: 'uppercase', color: colors.slate },
-  dateNum: { fontFamily: fonts.display, fontSize: 22, color: colors.ink },
+  dateDay: { fontFamily: fonts.bodyBold, fontSize: 14, color: colors.slate },
+  dateNum: { fontFamily: fonts.display, fontSize: 24, color: colors.ink },
   slot: {
-    flexDirection: 'row', alignItems: 'center', gap: space.md, paddingHorizontal: space.lg, paddingVertical: 14,
+    flexDirection: 'row', alignItems: 'center', gap: space.md, paddingHorizontal: space.lg, paddingVertical: 16, minHeight: 72,
     backgroundColor: colors.paper, borderRadius: radius.md, borderWidth: StyleSheet.hairlineWidth, borderColor: colors.line,
   },
   slotMine: { backgroundColor: colors.pine800, borderColor: colors.pine800 },
   slotFull: { backgroundColor: 'transparent' },
-  time: { fontFamily: fonts.display, fontSize: 21, color: colors.ink, width: 62, fontVariant: ['tabular-nums'] },
-  add: { width: 26, height: 26, borderRadius: 13, backgroundColor: colors.pine50, alignItems: 'center', justifyContent: 'center' },
-  player: { backgroundColor: colors.chalk, borderRadius: radius.pill, paddingRight: 9, paddingLeft: 2, paddingVertical: 2 },
+  time: { fontFamily: fonts.display, fontSize: 23, color: colors.ink, width: 70, fontVariant: ['tabular-nums'] },
+  add: { width: 36, height: 36, borderRadius: 18, backgroundColor: colors.pine50, alignItems: 'center', justifyContent: 'center' },
+  player: { backgroundColor: colors.chalk, borderRadius: radius.pill, paddingRight: 10, paddingLeft: 2, paddingVertical: 2 },
   weekendOption: {
     flexDirection: 'row', alignItems: 'center', gap: space.md, padding: space.md, borderRadius: radius.md,
     backgroundColor: colors.onDarkLine,
   },
-  weekendName: { fontFamily: fonts.bodyBold, fontSize: 15, color: colors.onDark },
-  weekendMeta: { fontFamily: fonts.body, fontSize: 12.5, color: colors.onDarkMuted },
+  weekendName: { fontFamily: fonts.bodyBold, fontSize: 17, color: colors.onDark },
+  weekendMeta: { fontFamily: fonts.body, fontSize: 14.5, color: colors.onDarkMuted },
   weekendPrice: { fontFamily: fonts.display, fontSize: 20, color: colors.onDark },
   weekendBanner: { backgroundColor: colors.pine50, borderRadius: radius.md, padding: space.md },
-  playerName: { fontFamily: fonts.bodySemibold, fontSize: 12.5, color: colors.ink, maxWidth: 90 },
+  playerName: { fontFamily: fonts.bodySemibold, fontSize: 15, color: colors.ink, maxWidth: 110 },
 });

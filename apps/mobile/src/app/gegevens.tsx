@@ -61,7 +61,7 @@ export default function Gegevens() {
       <T variant="heading" style={{ marginTop: space.md }}>Bankrekening</T>
       <Input label="IBAN" value={form.iban} onChangeText={set('iban')} autoCapitalize="characters" autoCorrect={false} placeholder="NL00 BANK 0123 4567 89" />
       <Row gap={space.sm}>
-        <Ionicons name="lock-closed-outline" size={14} color={colors.mist} />
+        <Ionicons name="lock-closed-outline" size={16} color={colors.mist} />
         <T variant="small" color={colors.mist} style={{ flex: 1 }}>Voor de automatische incasso van de contributie. Alleen jij en de ledenadministratie zien dit.</T>
       </Row>
       <T variant="heading" style={{ marginTop: space.md }}>Privacy</T>

@@ -44,15 +44,15 @@ export default function Wedstrijden() {
           <Card key={c.id} onPress={() => router.push({ pathname: '/wedstrijd/[id]', params: { id: c.id } })}>
             <Row gap={space.lg} style={{ alignItems: 'flex-start' }}>
               <View style={[styles.date, joined && { backgroundColor: colors.pine800 }]}>
-                <Text style={[styles.dateMon, joined && { color: colors.brassLight }]}>{monFmt.format(d).replace('.', '')}</Text>
-                <Text style={[styles.dateDay, joined && { color: colors.onDark }]}>{dayFmt.format(d)}</Text>
+                <Text maxFontSizeMultiplier={1.3} style={[styles.dateMon, joined && { color: colors.brassLight }]}>{monFmt.format(d).replace('.', '')}</Text>
+                <Text maxFontSizeMultiplier={1.3} style={[styles.dateDay, joined && { color: colors.onDark }]}>{dayFmt.format(d)}</Text>
               </View>
               <View style={{ flex: 1, gap: 4 }}>
                 <T variant="small" color={colors.slate}>{capitalize(wdFmt.format(d))} · {localTime(c.starts_at)}</T>
-                <T variant="subheading" style={{ fontFamily: fonts.display, fontSize: 18, lineHeight: 23 }}>{c.name}</T>
+                <T variant="subheading" style={{ fontFamily: fonts.display, fontSize: 20, lineHeight: 25 }}>{c.name}</T>
                 <Row gap={6} style={{ flexWrap: 'wrap', marginTop: 4 }}>
                   <Pill label={competitionFormatLabel[c.format]} tone="pine" />
-                  {c.qualifying && <Pill label="Qualifying" tone="neutral" />}
+                  {c.qualifying && <Pill label="Telt voor handicap" tone="neutral" />}
                   {joined ? <Pill label="Ingeschreven" tone="brass" icon="checkmark" />
                     : spots !== null && spots <= 5 && spots > 0 ? <Pill label={`Nog ${spots} plekken`} tone="flag" /> : null}
                 </Row>
@@ -67,6 +67,6 @@ export default function Wedstrijden() {
 
 const styles = StyleSheet.create({
   date: { width: 58, paddingVertical: 10, borderRadius: radius.md, backgroundColor: colors.pine50, alignItems: 'center' },
-  dateMon: { fontFamily: fonts.bodyHeavy, fontSize: 11, letterSpacing: 1.2, textTransform: 'uppercase', color: colors.pine600 },
+  dateMon: { fontFamily: fonts.bodyHeavy, fontSize: 13, letterSpacing: 0.8, textTransform: 'uppercase', color: colors.pine600 },
   dateDay: { fontFamily: fonts.display, fontSize: 26, lineHeight: 30, color: colors.pine900 },
 });

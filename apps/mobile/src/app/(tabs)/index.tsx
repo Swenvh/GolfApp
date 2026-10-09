@@ -8,7 +8,7 @@ import { OfferCard, productIcon } from '@/components/offer';
 import { Contours, LogoMark } from '@/components/brand';
 import { TeeTicket } from '@/components/ticket';
 import { QrCode, rangeCode } from '@/components/qr';
-import { Card, Empty, ErrorText, Eyebrow, Icon, Row, Section, T, type IconName } from '@/components/ui';
+import { Button, Card, Empty, ErrorText, Eyebrow, Icon, Row, Section, T, type IconName } from '@/components/ui';
 import { formatDate, formatHandicap } from '@/lib/format';
 import { haptic } from '@/lib/haptics';
 import { fetchEntitlements, usesLeft } from '@/lib/offers';
@@ -151,12 +151,12 @@ export default function Clubhuis() {
           <Pressable hitSlop={12} onPress={() => { haptic.tap(); setQrOpen(true); }} style={styles.qrChip}
             accessibilityRole="button" accessibilityLabel="QR-code voor de driving range">
             <QrCode value={rangeCode(member)} size={26} />
-            <Text style={styles.qrChipText}>Range</Text>
+            <Text maxFontSizeMultiplier={1.3} style={styles.qrChipText}>Ballen</Text>
           </Pressable>
         </Row>
         <View style={{ gap: 2, marginTop: space.xxl }}>
           <T color={colors.onDarkMuted}>{greeting()},</T>
-          <Text style={styles.name}>{member.first_name}</Text>
+          <Text maxFontSizeMultiplier={1.2} accessibilityRole="header" style={styles.name}>{member.first_name}</Text>
         </View>
         <Row style={styles.stats} gap={0}>
           <HeroStat label="Handicap" value={formatHandicap(member.handicap_index)} onPress={() => router.push('/(tabs)/scores')} />
@@ -192,8 +192,10 @@ export default function Clubhuis() {
           </Card>
         )}
 
-        <Row gap={space.sm} style={{ marginTop: space.xs }}>
-          <Quick icon="add-circle-outline" label="Boeken" onPress={() => router.push('/(tabs)/starttijden')} />
+        {/* De hoofdtaak van de app: één grote knop */}
+        <Button title="Starttijd boeken" icon="calendar-outline" onPress={() => router.push('/(tabs)/starttijden')} style={{ marginTop: space.xs }} />
+
+        <Row gap={space.sm}>
           <Quick icon="create-outline" label="Scorekaart" onPress={() => router.push('/scorekaart')} />
           <Quick icon="school-outline" label="Golfles" onPress={() => router.push('/lessen')} />
           <Quick icon="people-outline" label="Leden" onPress={() => router.push('/ledenlijst')} />
@@ -209,7 +211,7 @@ export default function Clubhuis() {
         )}
 
         {sponsor && (
-          <Pressable onPress={() => {
+          <Pressable accessibilityRole="link" accessibilityLabel={`Partner van de club: ${sponsor.name}`} onPress={() => {
             haptic.tap();
             void supabase.rpc('sponsor_click', { p_sponsor: sponsor.id });
             openWebUrl(sponsor.url);
@@ -232,14 +234,14 @@ export default function Clubhuis() {
                 <Eyebrow color={colors.brassLight}>{featured.pinned ? 'Uitgelicht' : 'Laatste nieuws'}</Eyebrow>
                 <T variant="small" color={colors.onDarkMuted}>{featured.published_at ? formatDate(featured.published_at) : ''}</T>
               </Row>
-              <T variant="heading" color={colors.onDark} style={{ fontSize: 24, lineHeight: 29 }}>{featured.title}</T>
+              <T variant="heading" color={colors.onDark} style={{ fontSize: 25, lineHeight: 31 }}>{featured.title}</T>
               <T color={colors.onDarkMuted}>{featured.body}</T>
             </Card>
           )}
           {rest.map((n) => (
             <Card key={n.id} style={{ gap: 6 }}>
               <T variant="small" color={colors.mist}>{n.published_at ? formatDate(n.published_at, { day: 'numeric', month: 'long' }) : ''}</T>
-              <T variant="subheading" style={{ fontFamily: fonts.display, fontSize: 18 }}>{n.title}</T>
+              <T variant="subheading" style={{ fontFamily: fonts.display, fontSize: 20, lineHeight: 26 }}>{n.title}</T>
               <T color={colors.slate} numberOfLines={3}>{n.body}</T>
             </Card>
           ))}
@@ -271,18 +273,20 @@ function RangeQr({ open, onClose }: { open: boolean; onClose: () => void }) {
 
 function HeroStat({ label, value, onPress, highlight }: { label: string; value: string; onPress: () => void; highlight?: boolean }) {
   return (
-    <Pressable style={{ flex: 1, gap: 4 }} onPress={() => { haptic.tap(); onPress(); }}>
-      <Text style={styles.statLabel}>{label}</Text>
-      <Text style={[styles.statValue, highlight && { color: colors.brassLight }]}>{value}</Text>
+    <Pressable style={{ flex: 1, gap: 4, minHeight: 48 }} onPress={() => { haptic.tap(); onPress(); }}
+      accessibilityRole="button" accessibilityLabel={`${label}: ${value}`}>
+      <Text maxFontSizeMultiplier={1.4} style={styles.statLabel}>{label}</Text>
+      <Text maxFontSizeMultiplier={1.3} style={[styles.statValue, highlight && { color: colors.brassLight }]}>{value}</Text>
     </Pressable>
   );
 }
 
 function Quick({ icon, label, onPress }: { icon: IconName; label: string; onPress: () => void }) {
   return (
-    <Pressable onPress={() => { haptic.tap(); onPress(); }} style={({ pressed }) => [styles.quick, pressed && { opacity: 0.7 }]}>
-      <Icon name={icon} size={22} color={colors.pine700} />
-      <Text style={styles.quickLabel}>{label}</Text>
+    <Pressable accessibilityRole="button" accessibilityLabel={label} onPress={() => { haptic.tap(); onPress(); }}
+      style={({ pressed }) => [styles.quick, pressed && { opacity: 0.7 }]}>
+      <Icon name={icon} size={26} color={colors.pine700} />
+      <Text maxFontSizeMultiplier={1.4} numberOfLines={1} style={styles.quickLabel}>{label}</Text>
     </Pressable>
   );
 }
@@ -290,28 +294,28 @@ function Quick({ icon, label, onPress }: { icon: IconName; label: string; onPres
 const styles = StyleSheet.create({
   hero: { backgroundColor: colors.pine900, paddingHorizontal: space.xl, paddingBottom: space.xxxl + space.xxl },
   qrChip: {
-    flexDirection: 'row', alignItems: 'center', gap: 8, minHeight: 44, paddingLeft: 6, paddingRight: 12,
+    flexDirection: 'row', alignItems: 'center', gap: 8, minHeight: 48, paddingLeft: 6, paddingRight: 14,
     borderWidth: 1, borderColor: colors.onDarkLine, borderRadius: radius.md,
   },
-  qrChipText: { fontFamily: fonts.bodyBold, fontSize: 12, color: colors.onDark, letterSpacing: 0.5 },
+  qrChipText: { fontFamily: fonts.bodyBold, fontSize: 15, color: colors.onDark, letterSpacing: 0.2 },
   qrBackdrop: { flex: 1, backgroundColor: colors.scrim, alignItems: 'center', justifyContent: 'center', padding: space.xl },
   qrSheet: { backgroundColor: colors.paper, borderRadius: radius.xl, padding: space.xl, alignItems: 'center', gap: space.md, maxWidth: 360, width: '100%' },
-  qrClose: { fontFamily: fonts.bodyBold, fontSize: 13, color: colors.pine700, marginTop: space.xs },
+  qrClose: { fontFamily: fonts.bodyBold, fontSize: 16, color: colors.pine700, marginTop: space.xs },
   name: { fontFamily: fonts.display, fontSize: 44, lineHeight: 48, color: colors.onDark, letterSpacing: -1 },
   stats: { marginTop: space.xl, paddingTop: space.lg, borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: colors.onDarkLine },
   statDivider: { width: StyleSheet.hairlineWidth, alignSelf: 'stretch', backgroundColor: colors.onDarkLine, marginHorizontal: space.md },
-  statLabel: { fontFamily: fonts.bodyHeavy, fontSize: 11, letterSpacing: 1.4, textTransform: 'uppercase', color: colors.onDarkMuted },
-  statValue: { fontFamily: fonts.display, fontSize: 24, color: colors.onDark, fontVariant: ['tabular-nums'] },
+  statLabel: { fontFamily: fonts.bodyHeavy, fontSize: 13, letterSpacing: 1, textTransform: 'uppercase', color: colors.onDarkMuted },
+  statValue: { fontFamily: fonts.display, fontSize: 26, color: colors.onDark, fontVariant: ['tabular-nums'] },
   bigIcon: { width: 46, height: 46, borderRadius: 23, backgroundColor: colors.brassSoft, alignItems: 'center', justifyContent: 'center' },
   quick: {
-    flex: 1, alignItems: 'center', gap: 6, paddingVertical: 14, borderRadius: radius.lg,
+    flex: 1, alignItems: 'center', gap: 6, paddingVertical: 16, minHeight: 80, justifyContent: 'center', borderRadius: radius.lg,
     backgroundColor: colors.paper, borderWidth: StyleSheet.hairlineWidth, borderColor: colors.line,
   },
   sponsor: {
     flexDirection: 'row', alignItems: 'center', gap: space.md, padding: space.lg, borderRadius: radius.lg,
     borderWidth: 1, borderColor: colors.brassSoft, backgroundColor: colors.paper,
   },
-  sponsorEyebrow: { fontFamily: fonts.bodyHeavy, fontSize: 11, letterSpacing: 1.3, textTransform: 'uppercase', color: colors.mist },
-  sponsorName: { fontFamily: fonts.display, fontSize: 18, color: colors.ink },
-  quickLabel: { fontFamily: fonts.bodyBold, fontSize: 11.5, color: colors.ink },
+  sponsorEyebrow: { fontFamily: fonts.bodyHeavy, fontSize: 13, letterSpacing: 1, textTransform: 'uppercase', color: colors.mist },
+  sponsorName: { fontFamily: fonts.display, fontSize: 20, color: colors.ink },
+  quickLabel: { fontFamily: fonts.bodyBold, fontSize: 15, color: colors.ink },
 });

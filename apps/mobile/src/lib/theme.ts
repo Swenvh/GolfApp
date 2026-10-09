@@ -58,14 +58,15 @@ export const space = { xs: 4, sm: 8, md: 12, lg: 16, xl: 20, xxl: 28, xxxl: 40 }
 export const radius = { sm: 8, md: 14, lg: 20, xl: 28, pill: 999 } as const;
 
 export const type = {
-  hero: { fontFamily: fonts.display, fontSize: 40, lineHeight: 44, letterSpacing: -0.8 },
-  title: { fontFamily: fonts.display, fontSize: 30, lineHeight: 34, letterSpacing: -0.5 },
-  heading: { fontFamily: fonts.display, fontSize: 21, lineHeight: 26, letterSpacing: -0.2 },
-  subheading: { fontFamily: fonts.bodyBold, fontSize: 16, lineHeight: 22 },
-  body: { fontFamily: fonts.bodyRegular, fontSize: 15, lineHeight: 22 },
-  bodyStrong: { fontFamily: fonts.bodySemibold, fontSize: 15, lineHeight: 22 },
-  small: { fontFamily: fonts.body, fontSize: 13, lineHeight: 18 },
-  eyebrow: { fontFamily: fonts.bodyHeavy, fontSize: 11, lineHeight: 14, letterSpacing: 1.6, textTransform: 'uppercase' as const },
+  // Leesbaar voor elke golfer: lopende tekst 17 pt, niets kleiner dan 13 pt (zie ook maxScale in ui.tsx)
+  hero: { fontFamily: fonts.display, fontSize: 40, lineHeight: 46, letterSpacing: -0.8 },
+  title: { fontFamily: fonts.display, fontSize: 32, lineHeight: 37, letterSpacing: -0.5 },
+  heading: { fontFamily: fonts.display, fontSize: 23, lineHeight: 29, letterSpacing: -0.2 },
+  subheading: { fontFamily: fonts.bodyBold, fontSize: 18, lineHeight: 24 },
+  body: { fontFamily: fonts.body, fontSize: 17, lineHeight: 25 },
+  bodyStrong: { fontFamily: fonts.bodyBold, fontSize: 17, lineHeight: 25 },
+  small: { fontFamily: fonts.body, fontSize: 15, lineHeight: 21 },
+  eyebrow: { fontFamily: fonts.bodyHeavy, fontSize: 13, lineHeight: 17, letterSpacing: 1, textTransform: 'uppercase' as const },
   number: { fontFamily: fonts.display, fontVariant: ['tabular-nums' as const] },
 } as const;
 

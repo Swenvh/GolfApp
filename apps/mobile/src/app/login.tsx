@@ -69,7 +69,7 @@ export default function Login() {
         <Contours seed={7} opacity={0.09} />
         <Wordmark />
         <View style={{ gap: space.md }}>
-          <Text style={styles.headline}>
+          <Text maxFontSizeMultiplier={1.2} accessibilityRole="header" style={styles.headline}>
             Welkom op{'\n'}de <Text style={styles.headlineAccent}>club.</Text>
           </Text>
           <T color={colors.onDarkMuted} style={{ maxWidth: 300 }}>
@@ -83,7 +83,7 @@ export default function Login() {
           <>
             <View style={{ gap: 4 }}>
               <T variant="heading">Inloggen</T>
-              <T variant="small" color={colors.slate}>Gebruik het e-mailadres dat bij je club bekend is. We sturen je een code.</T>
+              <T color={colors.slate}>Gebruik het e-mailadres dat bij je club bekend is. We sturen je een code.</T>
             </View>
             <Input
               label="E-mailadres"
@@ -103,7 +103,7 @@ export default function Login() {
           <>
             <View style={{ gap: 4 }}>
               <T variant="heading">Wachtwoord</T>
-              <T variant="small" color={colors.slate}>Vul het wachtwoord van dit account in.</T>
+              <T color={colors.slate}>Vul het wachtwoord van dit account in.</T>
             </View>
             <Input label="Wachtwoord" value={password} onChangeText={setPassword} secureTextEntry autoCapitalize="none"
               autoComplete="password" textContentType="password" onSubmitEditing={signInWithPassword} />
@@ -114,8 +114,9 @@ export default function Login() {
         ) : (
           <>
             <View style={{ gap: 4 }}>
-              <T variant="heading">Check je mail</T>
-              <T variant="small" color={colors.slate}>We hebben een code van 6 cijfers gestuurd naar {email}.</T>
+              <T variant="heading">Kijk in je e-mail</T>
+              <T color={colors.slate}>We hebben een code van 6 cijfers gestuurd naar {email}.</T>
+              {Platform.OS === 'ios' && <T variant="small" color={colors.slate}>Tip: de code verschijnt vaak boven je toetsenbord. Tik erop, dan vult hij zich vanzelf in.</T>}
             </View>
             <CodeInput value={code} onChange={(v) => { setCode(v); if (v.length === 6) verify(v); }} />
             <ErrorText message={error} />
@@ -132,12 +133,12 @@ export default function Login() {
 function CodeInput({ value, onChange }: { value: string; onChange: (v: string) => void }) {
   const ref = useRef<TextInput>(null);
   return (
-    <Pressable onPress={() => ref.current?.focus()} style={styles.codeRow}>
+    <Pressable onPress={() => ref.current?.focus()} style={styles.codeRow} accessibilityLabel={`Inlogcode, ${value.length} van 6 cijfers ingevuld`}>
       {Array.from({ length: 6 }, (_, i) => {
         const active = i === Math.min(value.length, 5);
         return (
           <View key={i} style={[styles.codeCell, active && styles.codeCellActive, !!value[i] && styles.codeCellFilled]}>
-            <Text style={styles.codeDigit}>{value[i] ?? ''}</Text>
+            <Text maxFontSizeMultiplier={1.2} style={styles.codeDigit}>{value[i] ?? ''}</Text>
           </View>
         );
       })}
@@ -173,6 +174,6 @@ const styles = StyleSheet.create({
   },
   codeCellActive: { borderColor: colors.pine700 },
   codeCellFilled: { borderColor: colors.pine400 },
-  codeDigit: { fontFamily: fonts.display, fontSize: 26, color: colors.ink },
+  codeDigit: { fontFamily: fonts.display, fontSize: 28, color: colors.ink },
   codeHidden: { position: 'absolute', opacity: 0, width: '100%', height: '100%' },
 });

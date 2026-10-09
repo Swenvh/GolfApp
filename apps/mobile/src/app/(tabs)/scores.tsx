@@ -44,19 +44,19 @@ export default function Scores() {
         <Row style={{ alignItems: 'flex-end', justifyContent: 'space-between' }}>
           <View>
             <Eyebrow color={colors.brassLight}>Handicap-index · NGF</Eyebrow>
-            <Text style={styles.hcp}>{formatHandicap(member.handicap_index)}</Text>
+            <Text maxFontSizeMultiplier={1.2} style={styles.hcp}>{formatHandicap(member.handicap_index)}</Text>
           </View>
           <View style={{ alignItems: 'flex-end', paddingBottom: 10 }}>
-            <Text style={styles.sideLabel}>Indicatie app</Text>
-            <Text style={styles.sideValue}>{indication == null ? '—' : formatHandicap(indication)}</Text>
-            <Text style={styles.sideSub}>{differentials.length} qualifying {differentials.length === 1 ? 'kaart' : 'kaarten'}</Text>
+            <Text maxFontSizeMultiplier={1.3} style={styles.sideLabel}>Volgens de app</Text>
+            <Text maxFontSizeMultiplier={1.3} style={styles.sideValue}>{indication == null ? '—' : formatHandicap(indication)}</Text>
+            <Text maxFontSizeMultiplier={1.3} style={styles.sideSub}>uit {differentials.length} {differentials.length === 1 ? 'kaart' : 'kaarten'} die meetellen</Text>
           </View>
         </Row>
         {points.length >= 2 && (
           <View style={{ gap: 6 }}>
             <Row style={{ justifyContent: 'space-between' }}>
-              <Text style={styles.sideLabel}>Stablefordpunten, laatste {points.length}</Text>
-              <Text style={styles.sideLabel}>Beste {best}</Text>
+              <Text maxFontSizeMultiplier={1.3} style={styles.sideLabel}>Punten, laatste {points.length} rondes</Text>
+              <Text maxFontSizeMultiplier={1.3} style={styles.sideLabel}>Beste {best}</Text>
             </Row>
             <Spark values={points} />
           </View>
@@ -92,8 +92,8 @@ export default function Scores() {
           {rounds.map((r, i) => (
             <Row key={r.id} gap={space.md} style={[styles.round, i < rounds.length - 1 && styles.divider]}>
               <View style={styles.dateBox}>
-                <Text style={styles.dateDay}>{formatDate(r.played_on, { day: 'numeric' })}</Text>
-                <Text style={styles.dateMon}>{formatDate(r.played_on, { month: 'short' }).replace('.', '')}</Text>
+                <Text maxFontSizeMultiplier={1.3} style={styles.dateDay}>{formatDate(r.played_on, { day: 'numeric' })}</Text>
+                <Text maxFontSizeMultiplier={1.3} style={styles.dateMon}>{formatDate(r.played_on, { month: 'short' }).replace('.', '')}</Text>
               </View>
               <View style={{ flex: 1, gap: 2 }}>
                 <T variant="bodyStrong">{r.tee?.course.name ?? 'Onbekende baan'}</T>
@@ -102,15 +102,15 @@ export default function Scores() {
                 </T>
               </View>
               <View style={{ alignItems: 'flex-end' }}>
-                <Text style={styles.pts}>{r.stableford_points ?? '–'}</Text>
-                <Text style={styles.ptsUnit}>punten</Text>
+                <Text maxFontSizeMultiplier={1.3} style={styles.pts}>{r.stableford_points ?? '–'}</Text>
+                <Text maxFontSizeMultiplier={1.3} style={styles.ptsUnit}>punten</Text>
               </View>
             </Row>
           ))}
         </Group>
       )}
       <Row gap={space.sm} style={{ marginTop: space.sm, paddingHorizontal: space.xs }}>
-        <Ionicons name="information-circle-outline" size={16} color={colors.mist} />
+        <Ionicons name="information-circle-outline" size={20} color={colors.mist} />
         <T variant="small" color={colors.mist} style={{ flex: 1 }}>
           Je officiële handicap beheert de NGF. Qualifying kaarten stuurt de club door.
         </T>
@@ -141,14 +141,14 @@ function Spark({ values }: { values: number[] }) {
 const styles = StyleSheet.create({
   proIcon: { width: 44, height: 44, borderRadius: 22, backgroundColor: colors.brassSoft, alignItems: 'center', justifyContent: 'center' },
   hcp: { fontFamily: fonts.display, fontSize: 72, lineHeight: 76, color: colors.onDark, letterSpacing: -2, fontVariant: ['tabular-nums'] },
-  sideLabel: { fontFamily: fonts.bodyHeavy, fontSize: 11, letterSpacing: 1.2, textTransform: 'uppercase', color: colors.onDarkMuted },
+  sideLabel: { fontFamily: fonts.bodyHeavy, fontSize: 13, letterSpacing: 0.8, textTransform: 'uppercase', color: colors.onDarkMuted },
   sideValue: { fontFamily: fonts.display, fontSize: 28, color: colors.brassLight },
-  sideSub: { fontFamily: fonts.body, fontSize: 12, color: colors.onDarkMuted },
+  sideSub: { fontFamily: fonts.body, fontSize: 14, color: colors.onDarkMuted },
   round: { paddingHorizontal: space.lg, paddingVertical: 12 },
   divider: { borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: colors.line },
   dateBox: { width: 46, paddingVertical: 6, borderRadius: radius.sm, backgroundColor: colors.chalk, alignItems: 'center' },
-  dateDay: { fontFamily: fonts.display, fontSize: 18, lineHeight: 20, color: colors.ink },
-  dateMon: { fontFamily: fonts.bodyHeavy, fontSize: 10.5, letterSpacing: 1, textTransform: 'uppercase', color: colors.slate },
+  dateDay: { fontFamily: fonts.display, fontSize: 20, lineHeight: 23, color: colors.ink },
+  dateMon: { fontFamily: fonts.bodyHeavy, fontSize: 13, letterSpacing: 0.6, textTransform: 'uppercase', color: colors.slate },
   pts: { fontFamily: fonts.display, fontSize: 26, lineHeight: 28, color: colors.pine700 },
-  ptsUnit: { fontFamily: fonts.body, fontSize: 11, color: colors.slate },
+  ptsUnit: { fontFamily: fonts.body, fontSize: 13, color: colors.slate },
 });
