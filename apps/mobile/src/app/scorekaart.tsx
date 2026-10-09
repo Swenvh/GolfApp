@@ -6,7 +6,7 @@ import {
   courseHandicap, frontNine, localDate, playingHandicap, scoreDifferential, scoreRound,
   type Course, type CourseHole, type CourseTee, type Sponsor,
 } from '@golfapp/shared';
-import { Button, Empty, ErrorText, Eyebrow, Loading, Row, Screen, Segmented, T } from '@/components/ui';
+import { Button, Empty, ErrorText, Loading, Row, Screen, Segmented, T } from '@/components/ui';
 import { haptic } from '@/lib/haptics';
 import { useMember } from '@/lib/session';
 import { supabase } from '@/lib/supabase';
@@ -107,8 +107,8 @@ export default function Scorekaart() {
     <Screen footer={
       <View style={{ gap: space.md }}>
         <Row style={{ justifyContent: 'space-between' }}>
-          <T variant="bodyStrong">Qualifying kaart (met marker)</T>
-          <Switch accessibilityLabel="Qualifying kaart (met marker)" value={qualifying} onValueChange={setQualifying} trackColor={{ true: colors.pine700, false: colors.lineStrong }} thumbColor={colors.paper} />
+          <T variant="bodyStrong">Telt mee voor handicap (met marker)</T>
+          <Switch accessibilityLabel="Telt mee voor handicap (met marker)" value={qualifying} onValueChange={setQualifying} trackColor={{ true: colors.pine700, false: colors.lineStrong }} thumbColor={colors.paper} />
         </Row>
         <Button title={complete ? `Kaart opslaan · ${result.stableford} punten` : `Nog ${holes.length - done} holes invullen`} onPress={save} loading={saving} disabled={!complete} />
       </View>
@@ -246,7 +246,7 @@ function Step({ icon, label, onPress }: { icon: 'add' | 'remove'; label: string;
 function Summary({ label, value, accent }: { label: string; value: string; accent?: boolean }) {
   return (
     <View style={{ flex: 1, alignItems: 'center', gap: 2 }}>
-      <Eyebrow color={accent ? colors.brassLight : colors.onDarkMuted}>{label}</Eyebrow>
+      <Text maxFontSizeMultiplier={1.25} numberOfLines={1} style={[styles.summaryLabel, accent && { color: colors.brassLight }]}>{label}</Text>
       <Text maxFontSizeMultiplier={1.3} style={[styles.summaryValue, accent && { color: colors.brassLight }]}>{value}</Text>
     </View>
   );
@@ -263,13 +263,14 @@ const styles = StyleSheet.create({
   teeMeta: { fontFamily: fonts.body, fontSize: 14, color: colors.slate },
   summary: { flexDirection: 'row', backgroundColor: colors.pine900, borderRadius: radius.lg, paddingVertical: space.lg },
   summaryDivider: { width: StyleSheet.hairlineWidth, backgroundColor: colors.onDarkLine },
+  summaryLabel: { fontFamily: fonts.bodyBold, fontSize: 14, color: colors.onDarkMuted },
   summaryValue: { fontFamily: fonts.display, fontSize: 30, color: colors.onDark, fontVariant: ['tabular-nums'] },
   card: { backgroundColor: colors.paper, borderRadius: radius.lg, borderWidth: StyleSheet.hairlineWidth, borderColor: colors.line, overflow: 'hidden' },
   cardHead: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: space.md, paddingVertical: 10, backgroundColor: colors.pine50 },
   headText: { fontFamily: fonts.bodyHeavy, fontSize: 13, letterSpacing: 0.6, textTransform: 'uppercase', color: colors.pine600 },
   colHole: { width: 44 },
-  colPar: { width: 30, textAlign: 'center' },
-  colSi: { width: 34, alignItems: 'center', gap: 3 },
+  colPar: { width: 36, textAlign: 'center' },
+  colSi: { width: 36, alignItems: 'center', gap: 3 },
   colPts: { width: 34, textAlign: 'right' },
   sponsor: { paddingHorizontal: space.md, paddingBottom: 8, marginTop: -4 },
   sponsorText: { fontFamily: fonts.body, fontSize: 13, color: colors.mist, textAlign: 'center' },
