@@ -122,3 +122,38 @@ besturen. Zet de vraag aan de NGF deze week uit; het antwoord bepaalt of 1 maart
 "vervangt uw systeem" kloppen.
 
 _Schattingen van bouwtijd zijn indicaties; de koppelingen hangen af van derden. Geen juridisch advies._
+
+## 6. Komen boekingen uit GOLF.NL in de app van de club? (aanvulling 9 oktober)
+
+**Hoe GOLF.NL werkt:** de app GOLF.NL heeft geen eigen starttijdenlijst. Via de channel manager vraagt hij
+het starttijdensysteem van de club welke tijden vrij zijn, en schrijft hij de boeking terug in dát systeem
+([NVG](https://www.nvg-golf.nl/initiatieven/golfgo), [NGF](https://www.ngf.nl/caddie/baanmanagement/golfgo)).
+Een boeking via GOLF.NL komt dus terecht in het systeem dat aan de channel manager hangt.
+
+| situatie | komen GOLF.NL-boekingen in de clubapp? | dubbele boekingen? |
+| --- | --- | --- |
+| **Route A:** Greenside is het starttijdensysteem en hangt aan de channel manager | **ja, direct**: er is één starttijdenlijst, in Greenside | nee, mits de koppeling live in beide richtingen werkt |
+| **Route B:** het oude systeem is het starttijdensysteem; Greenside leest en schrijft daarin | ja, als Greenside live met de API van dat systeem praat | nee, mits die koppeling live is |
+| **Geen koppeling:** twee losse starttijdenlijsten | **nee** | **ja, gegarandeerd** |
+
+**Conclusie:** zonder koppeling geen livegang met starttijden in Greenside. De tijdelijke "brug" uit hoofdstuk 3
+(vaste ledentijden in Greenside, gasttijden in het oude systeem) valt af: te foutgevoelig.
+
+**Wat er nu al in Greenside zit tegen dubbele boekingen:** één boeking per baan per starttijd (database-
+regel), een maximum aantal spelers per flight, en vergrendeling zodat twee gelijktijdige boekingen netjes na
+elkaar worden afgehandeld (`supabase/migrations/20260925000001_core.sql`,
+`20260926000005_booking_rules.sql`). Dat werkt voor alles wat via Greenside binnenkomt.
+
+**Wat er voor route A bij moet** (onze kant, zodra de specificatie bekend is; schatting 3–6 weken):
+1. Beschikbaarheid naar buiten: welke tijden open zijn voor gasten, met prijs (leden- en gasttijden apart
+   instelbaar).
+2. Boekingen en annuleringen van buiten ontvangen, met bron, extern kenmerk, gegevens van de gast en
+   betaalstatus (betalen bij boeken in GOLF.NL).
+3. Een tijdelijke reservering ("hold") tijdens het afrekenen in GOLF.NL, zodat niemand anders die plek
+   intussen boekt; vervalt automatisch.
+4. Wijzigingen terugsturen: club annuleert, marshal sluit de baan, flight wordt gewijzigd.
+5. Betrouwbaarheid: elke boeking maar één keer verwerken, opnieuw proberen bij storing, en elke nacht een
+   controle of beide kanten hetzelfde zien.
+
+**Wat we van de NGF moeten weten:** de technische specificatie van de channel manager, of er een testomgeving
+is, of er een keuring of contract nodig is (en met wie: NGF of IntoGolf), kosten, en doorlooptijd.
