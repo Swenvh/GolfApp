@@ -8,7 +8,9 @@ Greenside heeft één vast thema: dennengroen, messing en krijtwit, met Fraunces
 
 ## UI/UX-skill
 
-`.claude/skills/ui-ux-pro-max` gebruiken we voor controles op toegankelijkheid, interactie en lay-out (contrast ≥ 4,5:1, tikdoelen ≥ 44 pt, labels, tekstgrootte). Stijl, kleuren en lettertypes uit de skill (`--design-system`) nemen we niet over: het merk hierboven gaat voor.
+`.claude/skills/ui-ux-pro-max` gebruiken we voor controles op toegankelijkheid, interactie en lay-out (contrast ≥ 4,5:1, tikdoelen ≥ 48 pt, labels, tekstgrootte). Stijl, kleuren en lettertypes uit de skill (`--design-system`) nemen we niet over: het merk hierboven gaat voor.
+
+De ledenapp is er voor golfers van alle leeftijden, ook wie slecht ziet of weinig met apps doet: lopende tekst 17 pt en niets kleiner dan 13 pt (de schaal in `theme.ts`), tikdoelen minstens 48 pt, een label en rol voor de schermlezer op alles wat je kunt aantikken, gewone Nederlandse woorden in plaats van Engels of jargon, en één duidelijke hoofdtaak per scherm. Grote koppen en cijfers krijgen een `maxFontSizeMultiplier`, zodat schermen ook met grote systeemtekst blijven werken.
 
 ## Controleren
 
