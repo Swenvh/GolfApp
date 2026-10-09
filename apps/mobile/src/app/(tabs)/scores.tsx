@@ -47,9 +47,9 @@ export default function Scores() {
             <Text maxFontSizeMultiplier={1.2} style={styles.hcp}>{formatHandicap(member.handicap_index)}</Text>
           </View>
           <View style={{ alignItems: 'flex-end', paddingBottom: 10 }}>
-            <Text maxFontSizeMultiplier={1.3} style={styles.sideLabel}>Volgens de app</Text>
+            <Text maxFontSizeMultiplier={1.3} style={styles.sideLabel}>Volgens app</Text>
             <Text maxFontSizeMultiplier={1.3} style={styles.sideValue}>{indication == null ? '—' : formatHandicap(indication)}</Text>
-            <Text maxFontSizeMultiplier={1.3} style={styles.sideSub}>uit {differentials.length} {differentials.length === 1 ? 'kaart' : 'kaarten'} die meetellen</Text>
+            <Text maxFontSizeMultiplier={1.3} style={styles.sideSub}>uit {differentials.length} {differentials.length === 1 ? 'kaart' : 'kaarten'}</Text>
           </View>
         </Row>
         {points.length >= 2 && (
@@ -98,7 +98,7 @@ export default function Scores() {
               <View style={{ flex: 1, gap: 2 }}>
                 <T variant="bodyStrong">{r.tee?.course.name ?? 'Onbekende baan'}</T>
                 <T variant="small" color={colors.slate}>
-                  {r.tee ? `Tee ${r.tee.name} · ` : ''}{r.gross_score} slagen{r.qualifying ? ' · qualifying' : ''}
+                  {r.tee ? `Tee ${r.tee.name} · ` : ''}{r.gross_score} slagen{r.qualifying ? ' · telt mee' : ''}
                 </T>
               </View>
               <View style={{ alignItems: 'flex-end' }}>
@@ -112,7 +112,7 @@ export default function Scores() {
       <Row gap={space.sm} style={{ marginTop: space.sm, paddingHorizontal: space.xs }}>
         <Ionicons name="information-circle-outline" size={20} color={colors.mist} />
         <T variant="small" color={colors.mist} style={{ flex: 1 }}>
-          Je officiële handicap beheert de NGF. Qualifying kaarten stuurt de club door.
+          Je officiële handicap beheert de NGF. Kaarten die meetellen voor je handicap stuurt de club door.
         </T>
       </Row>
     </Screen>

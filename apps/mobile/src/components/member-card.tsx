@@ -31,7 +31,7 @@ export function MemberCard({ member }: { member: Membership }) {
           <View style={styles.fields}>
             <Field label="Lidnummer" value={member.member_number} />
             <Field label="NGF" value={member.ngf_number ?? '—'} />
-            <Field label="Handicap" value={formatHandicap(member.handicap_index)} />
+            <Field label="Hcp" value={formatHandicap(member.handicap_index)} />
             <Field label="Lid sinds" value={formatDate(member.join_date, { year: 'numeric' })} />
           </View>
         </View>
