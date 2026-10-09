@@ -23,7 +23,7 @@ export function TeeTicket({ startsAt, courseName, players, maxPlayers = 4, onPre
     <Card elevated onPress={onPress} style={{ padding: 0, gap: 0 }}>
       <Row style={{ padding: space.lg, paddingBottom: space.md, alignItems: 'flex-end' }} gap={space.lg}>
         <View style={{ gap: 2 }}>
-          <Eyebrow>Tee-off</Eyebrow>
+          <Eyebrow>Je starttijd</Eyebrow>
           <T variant="hero" style={{ fontVariant: ['tabular-nums'], fontSize: 44, lineHeight: 46 }}>{localTime(startsAt)}</T>
         </View>
         <View style={{ flex: 1, gap: 2, paddingBottom: 4 }}>
@@ -36,17 +36,18 @@ export function TeeTicket({ startsAt, courseName, players, maxPlayers = 4, onPre
         <Row gap={-8}>
           {players.map((p, i) => (
             <View key={i} style={{ borderRadius: 20, borderWidth: 2, borderColor: colors.paper }}>
-              <Avatar name={p.name} size={32} tone={p.me ? 'dark' : p.guest ? 'brass' : 'pine'} />
+              <Avatar name={p.name} size={36} tone={p.me ? 'dark' : p.guest ? 'brass' : 'pine'} />
             </View>
           ))}
         </Row>
         <T variant="small" color={colors.slate} style={{ fontFamily: fonts.bodySemibold }}>
-          {players.length === 1 ? 'Alleen jij' : `Flight van ${players.length}`} · {maxPlayers - players.length} vrij
+          {players.length === 1 ? 'Alleen jij' : `${players.length} spelers`}
+          {maxPlayers > players.length ? ` · nog ${maxPlayers - players.length} ${maxPlayers - players.length === 1 ? 'plek' : 'plekken'} vrij` : ' · vol'}
         </T>
       </Row>
       {extras.length > 0 && (
         <Row gap={8} style={{ paddingHorizontal: space.lg, paddingBottom: space.lg, marginTop: -4, flexWrap: 'wrap' }}>
-          <Ionicons name="checkmark-circle" size={16} color={colors.pine600} />
+          <Ionicons name="checkmark-circle" size={20} color={colors.pine600} />
           <T variant="small" color={colors.pine700} style={{ fontFamily: fonts.bodySemibold, flex: 1 }}>Geregeld: {extras.join(' · ')}</T>
         </Row>
       )}

@@ -15,7 +15,7 @@ export default function TabsLayout() {
   const icon = (name: TabIcon, active: TabIcon) =>
     ({ color, focused }: { color: ColorValue; focused: boolean }) => (
       <View style={{ alignItems: 'center', gap: 4 }}>
-        <Ionicons name={focused ? active : name} size={23} color={color} />
+        <Ionicons name={focused ? active : name} size={26} color={color} />
         <View style={{ width: 4, height: 4, borderRadius: 2, backgroundColor: focused ? colors.brass : 'transparent' }} />
       </View>
     );
@@ -28,7 +28,8 @@ export default function TabsLayout() {
         tabBarActiveTintColor: colors.pine800,
         tabBarInactiveTintColor: colors.mist,
         tabBarStyle: { backgroundColor: colors.paper, borderTopColor: colors.line, height: 88, paddingTop: 8 },
-        tabBarLabelStyle: { fontFamily: fonts.bodyBold, fontSize: 11, letterSpacing: 0.2 },
+        tabBarLabelStyle: { fontFamily: fonts.bodyBold, fontSize: 13, letterSpacing: 0 },
+        tabBarAllowFontScaling: false,
       }}
     >
       <Tabs.Screen name="index" options={{ title: 'Clubhuis', tabBarIcon: icon('home-outline', 'home') }} />

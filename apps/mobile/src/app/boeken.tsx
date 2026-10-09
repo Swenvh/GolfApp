@@ -147,8 +147,8 @@ export default function Boeken() {
       <Contours seed={5} />
       <Row style={{ justifyContent: 'space-between' }}>
         <Eyebrow color={colors.brassLight}>Starttijd boeken</Eyebrow>
-        <Pressable hitSlop={12} onPress={() => router.back()} style={styles.close}>
-          <Ionicons name="close" size={20} color={colors.onDark} />
+        <Pressable hitSlop={8} onPress={() => router.back()} style={styles.close} accessibilityRole="button" accessibilityLabel="Sluiten">
+          <Ionicons name="close" size={24} color={colors.onDark} />
         </Pressable>
       </Row>
       <Text style={styles.time}>{localTime(startsAt)}</Text>
@@ -190,7 +190,7 @@ export default function Boeken() {
                 {i > 0 && (
                   <Pressable hitSlop={10} accessibilityRole="button" accessibilityLabel={`Verwijder ${p.label}`}
                     onPress={() => { haptic.tap(); setError(undefined); setPlayers(players.filter((_, j) => j !== i)); }}>
-                    <Ionicons name="remove-circle-outline" size={22} color={colors.flag} />
+                    <Ionicons name="remove-circle-outline" size={28} color={colors.flag} />
                   </Pressable>
                 )}
               </Row>
@@ -206,7 +206,7 @@ export default function Boeken() {
           {matches.length > 0 && (
             <Group>
               {matches.map((d, i) => (
-                <Pressable key={d.id} onPress={() => { haptic.tap(); setPlayers([...players, { memberId: d.id, label: fullName(d), hcp: d.handicap_index }]); setSearch(''); }}>
+                <Pressable key={d.id} accessibilityRole="button" accessibilityLabel={`${fullName(d)} toevoegen aan je flight`} onPress={() => { haptic.tap(); setPlayers([...players, { memberId: d.id, label: fullName(d), hcp: d.handicap_index }]); setSearch(''); }}>
                   <Row style={[styles.match, i < matches.length - 1 && styles.matchDivider]} gap={space.md}>
                     <Avatar name={fullName(d)} size={34} />
                     <View style={{ flex: 1 }}>
@@ -255,13 +255,13 @@ export default function Boeken() {
             <AddOnRow product={regularGreenfee} quantity={regularGuests} onChange={() => {}} locked="introductielimiet bereikt" />
           )}
           {introCard && greenfee && guestCount > 0 && introLeft === 0 && (
-            <Pressable onPress={() => { haptic.tap(); router.push({ pathname: '/aanbod/[id]', params: { id: introCard.id, context: 'Vaker een gast mee?' } }); }}>
+            <Pressable accessibilityRole="button" onPress={() => { haptic.tap(); router.push({ pathname: '/aanbod/[id]', params: { id: introCard.id, context: 'Vaker een gast mee?' } }); }}>
               <Row gap={space.sm} style={styles.tip}>
                 <Ionicons name="ticket-outline" size={18} color={colors.pine700} />
                 <T variant="small" style={{ flex: 1 }}>
                   Vaker een gast mee? Met de {introCard.name.toLowerCase()} betaal je {formatEuro(Math.round(priceInclVat(introCard.price_cents, Number(introCard.vat_rate)) / (introCard.grants_uses ?? 1)))} per introducé in plaats van {formatEuro(priceInclVat(greenfee.price_cents, Number(greenfee.vat_rate)))}.
                 </T>
-                <Ionicons name="chevron-forward" size={16} color={colors.pine700} />
+                <Ionicons name="chevron-forward" size={20} color={colors.pine700} />
               </Row>
             </Pressable>
           )}
@@ -274,7 +274,7 @@ export default function Boeken() {
 
 const styles = StyleSheet.create({
   header: { backgroundColor: colors.pine900, paddingHorizontal: space.xl, paddingBottom: space.xxl, gap: 4 },
-  close: { width: 44, height: 44, borderRadius: 22, backgroundColor: colors.onDarkLine, alignItems: 'center', justifyContent: 'center' },
+  close: { width: 48, height: 48, borderRadius: 24, backgroundColor: colors.onDarkLine, alignItems: 'center', justifyContent: 'center' },
   time: { fontFamily: fonts.display, fontSize: 64, lineHeight: 70, color: colors.onDark, letterSpacing: -2, marginTop: space.md, fontVariant: ['tabular-nums'] },
   match: { paddingHorizontal: space.lg, paddingVertical: 12 },
   tip: { backgroundColor: colors.pine50, borderRadius: 12, padding: space.md },

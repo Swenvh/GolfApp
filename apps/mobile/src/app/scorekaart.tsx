@@ -124,17 +124,18 @@ export default function Scorekaart() {
         {tees.map((x) => {
           const active = x.id === tee.id;
           return (
-            <Pressable key={x.id} onPress={() => { haptic.tap(); setTeeId(x.id); }} style={[styles.tee, active && styles.teeActive]}>
+            <Pressable key={x.id} accessibilityRole="button" accessibilityState={{ selected: active }} accessibilityLabel={`Tee ${x.name}`}
+              onPress={() => { haptic.tap(); setTeeId(x.id); }} style={[styles.tee, active && styles.teeActive]}>
               <View style={[styles.teeDot, { backgroundColor: teeColor[x.name.toLowerCase()] ?? colors.mist }]} />
-              <Text style={[styles.teeText, active && { color: colors.onDark }]}>{x.name}</Text>
-              <Text style={[styles.teeMeta, active && { color: colors.onDarkMuted }]}>{Number(x.course_rating).toFixed(1)}/{x.slope_rating}</Text>
+              <Text maxFontSizeMultiplier={1.25} style={[styles.teeText, active && { color: colors.onDark }]}>{x.name}</Text>
+              <Text maxFontSizeMultiplier={1.25} style={[styles.teeMeta, active && { color: colors.onDarkMuted }]}>{Number(x.course_rating).toFixed(1)}/{x.slope_rating}</Text>
             </Pressable>
           );
         })}
       </ScrollView>
 
       <View style={styles.summary}>
-        <Summary label="Playing hcp" value={String(ph)} />
+        <Summary label="Speelhandicap" value={String(ph)} />
         <View style={styles.summaryDivider} />
         <Summary label="Slagen" value={done ? String(result.gross) : '–'} />
         <View style={styles.summaryDivider} />
@@ -153,11 +154,11 @@ export default function Scorekaart() {
         return (
           <View key={nine.label} style={styles.card}>
             <View style={styles.cardHead}>
-              <Text style={[styles.colHole, styles.headText]}>Hole</Text>
-              <Text style={[styles.colPar, styles.headText]}>Par</Text>
-              <Text style={[styles.colSi, styles.headText]}>SI</Text>
-              <Text style={[{ flex: 1, textAlign: 'center' }, styles.headText]}>Slagen</Text>
-              <Text style={[styles.colPts, styles.headText]}>Pnt</Text>
+              <Text maxFontSizeMultiplier={1.25} style={[styles.colHole, styles.headText]}>Hole</Text>
+              <Text maxFontSizeMultiplier={1.25} style={[styles.colPar, styles.headText]}>Par</Text>
+              <Text maxFontSizeMultiplier={1.25} style={[styles.colSi, styles.headText]} accessibilityLabel="Slagindex">SI</Text>
+              <Text maxFontSizeMultiplier={1.25} style={[{ flex: 1, textAlign: 'center' }, styles.headText]}>Slagen</Text>
+              <Text maxFontSizeMultiplier={1.25} style={[styles.colPts, styles.headText]} accessibilityLabel="Punten">Pnt</Text>
             </View>
             {part.map((h, k) => {
               const i = nine.from + k;
@@ -166,10 +167,10 @@ export default function Scorekaart() {
               return (
                 <View key={h.hole} style={k < part.length - 1 && styles.holeDivider}>
                 <View style={styles.hole}>
-                  <View style={styles.colHole}><View style={styles.holeNo}><Text style={styles.holeNoText}>{h.hole}</Text></View></View>
-                  <Text style={[styles.colPar, styles.cell]}>{hole.par}</Text>
+                  <View style={styles.colHole}><View style={styles.holeNo}><Text maxFontSizeMultiplier={1.25} style={styles.holeNoText}>{h.hole}</Text></View></View>
+                  <Text maxFontSizeMultiplier={1.25} style={[styles.colPar, styles.cell]}>{hole.par}</Text>
                   <View style={styles.colSi}>
-                    <Text style={styles.cellMuted}>{hole.strokeIndex}</Text>
+                    <Text maxFontSizeMultiplier={1.25} style={styles.cellMuted}>{hole.strokeIndex}</Text>
                     <Row gap={2}>{Array.from({ length: Math.max(0, h.strokes) }, (_, d) => <View key={d} style={styles.strokeDot} />)}</Row>
                   </View>
                   <Row style={{ flex: 1, justifyContent: 'center' }} gap={space.sm}>
@@ -177,39 +178,39 @@ export default function Scorekaart() {
                     <ScoreMark gross={h.gross} par={hole.par} />
                     <Step icon="add" label={`Hole ${h.hole} een slag meer`} onPress={() => setScore(i, +1)} />
                   </Row>
-                  <Text style={[styles.colPts, styles.points, h.gross == null && { color: colors.lineStrong }]}>{h.gross == null ? '·' : h.points}</Text>
+                  <Text maxFontSizeMultiplier={1.25} style={[styles.colPts, styles.points, h.gross == null && { color: colors.lineStrong }]}>{h.gross == null ? '·' : h.points}</Text>
                 </View>
                 {sponsor && (
-                  <Pressable onPress={() => {
+                  <Pressable accessibilityRole="link" onPress={() => {
                     haptic.tap();
                     void supabase.rpc('sponsor_click', { p_sponsor: sponsor.id });
                     openWebUrl(sponsor.url);
                   }} style={styles.sponsor}>
-                    <Text style={styles.sponsorText} numberOfLines={1}>Hole {h.hole} aangeboden door <Text style={styles.sponsorName}>{sponsor.name}</Text></Text>
+                    <Text maxFontSizeMultiplier={1.25} style={styles.sponsorText} numberOfLines={1}>Hole {h.hole} aangeboden door <Text maxFontSizeMultiplier={1.25} style={styles.sponsorName}>{sponsor.name}</Text></Text>
                   </Pressable>
                 )}
                 </View>
               );
             })}
             <View style={styles.subtotal}>
-              <Text style={[styles.colHole, styles.subLabel]}>{nine.label}</Text>
-              <Text style={[styles.colPar, styles.subValue]}>{holes.slice(nine.from, nine.to).reduce((s, x) => s + x.par, 0)}</Text>
+              <Text maxFontSizeMultiplier={1.25} style={[styles.colHole, styles.subLabel]}>{nine.label}</Text>
+              <Text maxFontSizeMultiplier={1.25} style={[styles.colPar, styles.subValue]}>{holes.slice(nine.from, nine.to).reduce((s, x) => s + x.par, 0)}</Text>
               <View style={styles.colSi} />
-              <Text style={[{ flex: 1, textAlign: 'center' }, styles.subValue]}>{part.reduce((s, x) => s + (x.gross ?? 0), 0) || '–'}</Text>
-              <Text style={[styles.colPts, styles.subValue, { color: colors.brassLight }]}>{part.reduce((s, x) => s + x.points, 0)}</Text>
+              <Text maxFontSizeMultiplier={1.25} style={[{ flex: 1, textAlign: 'center' }, styles.subValue]}>{part.reduce((s, x) => s + (x.gross ?? 0), 0) || '–'}</Text>
+              <Text maxFontSizeMultiplier={1.25} style={[styles.colPts, styles.subValue, { color: colors.brassLight }]}>{part.reduce((s, x) => s + x.points, 0)}</Text>
             </View>
           </View>
         );
       })}
       <ErrorText message={error} />
-      <T variant="small" color={colors.mist} style={{ textAlign: 'center' }}>Eerste tik zet de hole op par · handicapallowance 95%</T>
+      <T variant="small" color={colors.mist} style={{ textAlign: 'center' }}>Eerste tik zet de hole op par · je speelhandicap telt voor 95%</T>
     </Screen>
   );
 }
 
 /** Klassieke scorekaart-notatie: cirkel(s) onder par, vierkant(en) boven par. */
 function ScoreMark({ gross, par }: { gross: number | null; par: number }) {
-  if (gross == null) return <View style={styles.mark}><Text style={[styles.markText, { color: colors.lineStrong }]}>{par}</Text></View>;
+  if (gross == null) return <View style={styles.mark}><Text maxFontSizeMultiplier={1.25} style={[styles.markText, { color: colors.lineStrong }]}>{par}</Text></View>;
   const diff = gross - par;
   const shape = diff <= -1 ? 'circle' : diff >= 1 ? 'square' : 'plain';
   const double = Math.abs(diff) >= 2;
@@ -219,7 +220,7 @@ function ScoreMark({ gross, par }: { gross: number | null; par: number }) {
   return (
     <View style={[styles.mark, outer]}>
       <View style={[styles.markInner, inner]}>
-        <Text style={[styles.markText, { color }]}>{gross}</Text>
+        <Text maxFontSizeMultiplier={1.25} style={[styles.markText, { color }]}>{gross}</Text>
       </View>
     </View>
   );
@@ -236,8 +237,8 @@ function Legend({ shape, label }: { shape: 'circle' | 'square' | 'plain'; label:
 
 function Step({ icon, label, onPress }: { icon: 'add' | 'remove'; label: string; onPress: () => void }) {
   return (
-    <Pressable onPress={onPress} hitSlop={6} accessibilityRole="button" accessibilityLabel={label} style={({ pressed }) => [styles.step, pressed && { backgroundColor: colors.pine100 }]}>
-      <Ionicons name={icon} size={18} color={colors.pine800} />
+    <Pressable onPress={onPress} hitSlop={4} accessibilityRole="button" accessibilityLabel={label} style={({ pressed }) => [styles.step, pressed && { backgroundColor: colors.pine100 }]}>
+      <Ionicons name={icon} size={22} color={colors.pine800} />
     </Pressable>
   );
 }
@@ -246,46 +247,46 @@ function Summary({ label, value, accent }: { label: string; value: string; accen
   return (
     <View style={{ flex: 1, alignItems: 'center', gap: 2 }}>
       <Eyebrow color={accent ? colors.brassLight : colors.onDarkMuted}>{label}</Eyebrow>
-      <Text style={[styles.summaryValue, accent && { color: colors.brassLight }]}>{value}</Text>
+      <Text maxFontSizeMultiplier={1.3} style={[styles.summaryValue, accent && { color: colors.brassLight }]}>{value}</Text>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   tee: {
-    flexDirection: 'row', alignItems: 'center', gap: 8, paddingHorizontal: 14, paddingVertical: 10,
+    flexDirection: 'row', alignItems: 'center', gap: 8, paddingHorizontal: 16, paddingVertical: 12, minHeight: 48,
     borderRadius: radius.pill, backgroundColor: colors.paper, borderWidth: StyleSheet.hairlineWidth, borderColor: colors.line,
   },
   teeActive: { backgroundColor: colors.pine800, borderColor: colors.pine800 },
   teeDot: { width: 12, height: 12, borderRadius: 6, borderWidth: 1, borderColor: 'rgba(0,0,0,0.15)' },
-  teeText: { fontFamily: fonts.bodyBold, fontSize: 14, color: colors.ink },
-  teeMeta: { fontFamily: fonts.body, fontSize: 12, color: colors.slate },
+  teeText: { fontFamily: fonts.bodyBold, fontSize: 16, color: colors.ink },
+  teeMeta: { fontFamily: fonts.body, fontSize: 14, color: colors.slate },
   summary: { flexDirection: 'row', backgroundColor: colors.pine900, borderRadius: radius.lg, paddingVertical: space.lg },
   summaryDivider: { width: StyleSheet.hairlineWidth, backgroundColor: colors.onDarkLine },
   summaryValue: { fontFamily: fonts.display, fontSize: 30, color: colors.onDark, fontVariant: ['tabular-nums'] },
   card: { backgroundColor: colors.paper, borderRadius: radius.lg, borderWidth: StyleSheet.hairlineWidth, borderColor: colors.line, overflow: 'hidden' },
   cardHead: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: space.md, paddingVertical: 10, backgroundColor: colors.pine50 },
-  headText: { fontFamily: fonts.bodyHeavy, fontSize: 11, letterSpacing: 1.2, textTransform: 'uppercase', color: colors.pine600 },
+  headText: { fontFamily: fonts.bodyHeavy, fontSize: 13, letterSpacing: 0.6, textTransform: 'uppercase', color: colors.pine600 },
   colHole: { width: 44 },
   colPar: { width: 30, textAlign: 'center' },
   colSi: { width: 34, alignItems: 'center', gap: 3 },
   colPts: { width: 34, textAlign: 'right' },
   sponsor: { paddingHorizontal: space.md, paddingBottom: 8, marginTop: -4 },
-  sponsorText: { fontFamily: fonts.body, fontSize: 11, color: colors.mist, textAlign: 'center' },
+  sponsorText: { fontFamily: fonts.body, fontSize: 13, color: colors.mist, textAlign: 'center' },
   sponsorName: { fontFamily: fonts.bodyBold, color: colors.brassText },
   hole: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: space.md, paddingVertical: 9 },
   holeDivider: { borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: colors.line },
-  holeNo: { width: 30, height: 30, borderRadius: 15, backgroundColor: colors.pine800, alignItems: 'center', justifyContent: 'center' },
-  holeNoText: { fontFamily: fonts.bodyHeavy, fontSize: 13, color: colors.onDark },
-  cell: { fontFamily: fonts.bodyBold, fontSize: 15, color: colors.ink },
-  cellMuted: { fontFamily: fonts.body, fontSize: 13, color: colors.slate, textAlign: 'center' },
+  holeNo: { width: 32, height: 32, borderRadius: 16, backgroundColor: colors.pine800, alignItems: 'center', justifyContent: 'center' },
+  holeNoText: { fontFamily: fonts.bodyHeavy, fontSize: 15, color: colors.onDark },
+  cell: { fontFamily: fonts.bodyBold, fontSize: 17, color: colors.ink },
+  cellMuted: { fontFamily: fonts.body, fontSize: 15, color: colors.slate, textAlign: 'center' },
   strokeDot: { width: 5, height: 5, borderRadius: 3, backgroundColor: colors.brass },
-  step: { width: 40, height: 40, borderRadius: 20, borderWidth: 1, borderColor: colors.line, alignItems: 'center', justifyContent: 'center' },
+  step: { width: 48, height: 48, borderRadius: 24, borderWidth: 1, borderColor: colors.lineStrong, alignItems: 'center', justifyContent: 'center' },
   mark: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center' },
   markInner: { width: 34, height: 34, alignItems: 'center', justifyContent: 'center' },
-  markText: { fontFamily: fonts.display, fontSize: 21, fontVariant: ['tabular-nums'] },
-  points: { fontFamily: fonts.display, fontSize: 18, color: colors.pine700 },
+  markText: { fontFamily: fonts.display, fontSize: 23, fontVariant: ['tabular-nums'] },
+  points: { fontFamily: fonts.display, fontSize: 20, color: colors.pine700 },
   subtotal: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: space.md, paddingVertical: 12, backgroundColor: colors.pine800 },
-  subLabel: { fontFamily: fonts.bodyHeavy, fontSize: 11, letterSpacing: 1.2, textTransform: 'uppercase', color: colors.brassLight },
-  subValue: { fontFamily: fonts.display, fontSize: 17, color: colors.onDark },
+  subLabel: { fontFamily: fonts.bodyHeavy, fontSize: 13, letterSpacing: 0.8, textTransform: 'uppercase', color: colors.brassLight },
+  subValue: { fontFamily: fonts.display, fontSize: 19, color: colors.onDark },
 });

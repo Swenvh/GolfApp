@@ -74,8 +74,8 @@ export default function Upgrade() {
             <Row style={{ justifyContent: 'space-between', alignItems: 'flex-start' }}>
               <View style={{ flex: 1, gap: 4 }}>
                 <T variant="subheading" style={{ fontFamily: fonts.display, fontSize: 20 }}>{o.name}</T>
-                {o.can_book_weekend && <Row gap={6}><Ionicons name="checkmark-circle" size={16} color={colors.pine600} /><T variant="small">Ook in het weekend spelen</T></Row>}
-                <Row gap={6}><Ionicons name="checkmark-circle" size={16} color={colors.pine600} /><T variant="small">Alle wedstrijden en clubactiviteiten</T></Row>
+                {o.can_book_weekend && <Row gap={6}><Ionicons name="checkmark-circle" size={20} color={colors.pine600} /><T variant="small">Ook in het weekend spelen</T></Row>}
+                <Row gap={6}><Ionicons name="checkmark-circle" size={20} color={colors.pine600} /><T variant="small">Alle wedstrijden en clubactiviteiten</T></Row>
               </View>
               <View style={{ alignItems: 'flex-end' }}>
                 <T variant="heading">+{formatEuro(Math.round(diff / 12)).replace(',00', '')}</T>

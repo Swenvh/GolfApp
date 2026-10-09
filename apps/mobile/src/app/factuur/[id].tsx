@@ -104,7 +104,7 @@ export default function Factuur() {
           {payments.map((p) => (
             <Row key={p.id} style={{ justifyContent: 'space-between' }}>
               <Row gap={6}>
-                <Ionicons name="checkmark-circle" size={16} color={colors.pine600} />
+                <Ionicons name="checkmark-circle" size={20} color={colors.pine600} />
                 <T variant="small" color={colors.slate}>{paymentMethodLabel[p.method]} · {formatDate(p.paid_on, { day: 'numeric', month: 'short' })}</T>
               </Row>
               <T variant="small" color={colors.pine700}>− {formatEuro(p.amount_cents)}</T>

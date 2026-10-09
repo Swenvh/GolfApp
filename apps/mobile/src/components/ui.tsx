@@ -24,10 +24,18 @@ export function Icon({ name, size, color }: { name: IconName; size: number; colo
 // ---------------------------------------------------------------------------
 type Variant = keyof typeof type;
 
+/** Hoe ver grote koppen en cijfers meegroeien met de systeemtekstgrootte; lopende tekst groeit vrij mee. */
+const maxScale: Partial<Record<Variant, number>> = { hero: 1.3, title: 1.4, heading: 1.6 };
+
 export function T({ variant = 'body', color = colors.ink, style, children, numberOfLines, onPress }: {
   variant?: Variant; color?: string; style?: StyleProp<TextStyle>; children: ReactNode; numberOfLines?: number; onPress?: () => void;
 }) {
-  return <Text onPress={onPress} numberOfLines={numberOfLines} style={[type[variant] as TextStyle, { color }, style]}>{children}</Text>;
+  return (
+    <Text onPress={onPress} accessibilityRole={onPress ? 'link' : variant === 'title' || variant === 'hero' ? 'header' : undefined}
+      numberOfLines={numberOfLines} maxFontSizeMultiplier={maxScale[variant]} style={[type[variant] as TextStyle, { color }, style]}>
+      {children}
+    </Text>
+  );
 }
 
 export function Eyebrow({ children, color = colors.brassText, style }: { children: ReactNode; color?: string; style?: StyleProp<TextStyle> }) {
@@ -79,7 +87,7 @@ export function Section({ title, action, children }: { title: string; action?: R
 
 export function TextLink({ label, onPress }: { label: string; onPress: () => void }) {
   return (
-    <Pressable onPress={onPress} hitSlop={10}>
+    <Pressable onPress={onPress} hitSlop={14} accessibilityRole="button" accessibilityLabel={label}>
       <T variant="small" color={colors.pine600} style={{ fontFamily: fonts.bodyBold }}>{label}</T>
     </Pressable>
   );
@@ -96,7 +104,7 @@ export function Card({ children, style, onPress, tone = 'paper', elevated = fals
   const base = [styles.card, { backgroundColor: bg }, tone === 'paper' && styles.cardBorder, elevated && shadow, style];
   if (!onPress) return <View style={base}>{children}</View>;
   return (
-    <Pressable onPress={() => { haptic.tap(); onPress(); }} style={({ pressed }) => [base, pressed && styles.pressed]}>
+    <Pressable accessibilityRole="button" onPress={() => { haptic.tap(); onPress(); }} style={({ pressed }) => [base, pressed && styles.pressed]}>
       {children}
     </Pressable>
   );
@@ -114,19 +122,24 @@ export function ListRow({ icon, title, subtitle, right, onPress, last, destructi
     <View style={[styles.row, !last && styles.rowDivider]}>
       {icon && (
         <View style={[styles.rowIcon, destructive && { backgroundColor: colors.flagSoft }]}>
-          <Icon name={icon} size={18} color={destructive ? colors.flag : colors.pine700} />
+          <Icon name={icon} size={20} color={destructive ? colors.flag : colors.pine700} />
         </View>
       )}
-      <View style={{ flex: 1, gap: 1 }}>
+      <View style={{ flex: 1, gap: 2 }}>
         <T variant="bodyStrong" color={destructive ? colors.flag : colors.ink}>{title}</T>
         {subtitle && <T variant="small" color={colors.slate}>{subtitle}</T>}
       </View>
       {right}
-      {onPress && !right && <Ionicons name="chevron-forward" size={18} color={colors.mist} />}
+      {onPress && !right && <Ionicons name="chevron-forward" size={20} color={colors.mist} />}
     </View>
   );
   if (!onPress) return content;
-  return <Pressable onPress={() => { haptic.tap(); onPress(); }} style={({ pressed }) => pressed && { backgroundColor: colors.pine50 }}>{content}</Pressable>;
+  return (
+    <Pressable accessibilityRole="button" accessibilityLabel={subtitle ? `${title}, ${subtitle}` : title}
+      onPress={() => { haptic.tap(); onPress(); }} style={({ pressed }) => pressed && { backgroundColor: colors.pine50 }}>
+      {content}
+    </Pressable>
+  );
 }
 
 // ---------------------------------------------------------------------------
@@ -151,6 +164,8 @@ export function Button({ title, onPress, variant = 'primary', icon, disabled, lo
   return (
     <Pressable
       accessibilityRole="button"
+      accessibilityLabel={title}
+      accessibilityState={{ disabled: !!(disabled || loading), busy: !!loading }}
       disabled={disabled || loading}
       onPress={() => { haptic.tap(); onPress(); }}
       style={({ pressed }) => [
@@ -161,8 +176,8 @@ export function Button({ title, onPress, variant = 'primary', icon, disabled, lo
     >
       {loading ? <ActivityIndicator color={c.fg} /> : (
         <>
-          {icon && <Icon name={icon} size={compact ? 16 : 18} color={c.fg} />}
-          <Text style={[styles.buttonText, compact && { fontSize: 14 }, { color: c.fg }]}>{title}</Text>
+          {icon && <Icon name={icon} size={compact ? 18 : 20} color={c.fg} />}
+          <Text maxFontSizeMultiplier={1.5} style={[styles.buttonText, compact && { fontSize: 16 }, { color: c.fg }]}>{title}</Text>
         </>
       )}
     </Pressable>
@@ -182,13 +197,14 @@ export function Segmented<K extends string>({ options, value, onChange, dark }: 
   options: { key: K; label: string }[]; value: K; onChange: (k: K) => void; dark?: boolean;
 }) {
   return (
-    <View style={[styles.segmented, dark && { backgroundColor: colors.onDarkLine }]}>
+    <View accessibilityRole="tablist" style={[styles.segmented, dark && { backgroundColor: colors.onDarkLine }]}>
       {options.map((o) => {
         const active = o.key === value;
         return (
-          <Pressable key={o.key} onPress={() => { haptic.tap(); onChange(o.key); }}
+          <Pressable key={o.key} accessibilityRole="tab" accessibilityLabel={o.label} accessibilityState={{ selected: active }}
+            onPress={() => { haptic.tap(); onChange(o.key); }}
             style={[styles.segment, active && (dark ? { backgroundColor: colors.onDark } : styles.segmentActive)]}>
-            <Text numberOfLines={1} style={[styles.segmentText, { color: active ? colors.pine900 : dark ? colors.onDarkMuted : colors.slate }]}>{o.label}</Text>
+            <Text numberOfLines={1} maxFontSizeMultiplier={1.4} style={[styles.segmentText, { color: active ? colors.pine900 : dark ? colors.onDarkMuted : colors.slate }]}>{o.label}</Text>
           </Pressable>
         );
       })}
@@ -211,8 +227,8 @@ export function Pill({ label, tone = 'neutral', icon, style }: { label: string; 
   const c = pillTones[tone];
   return (
     <View style={[styles.pill, { backgroundColor: c.bg }, style]}>
-      {icon && <Icon name={icon} size={12} color={c.fg} />}
-      <Text style={[styles.pillText, { color: c.fg }]}>{label}</Text>
+      {icon && <Icon name={icon} size={14} color={c.fg} />}
+      <Text maxFontSizeMultiplier={1.5} style={[styles.pillText, { color: c.fg }]}>{label}</Text>
     </View>
   );
 }
@@ -224,7 +240,7 @@ export function Avatar({ name, size = 36, tone = 'pine' }: { name: string; size?
   const fg = tone === 'brass' ? colors.brassInk : tone === 'dark' ? colors.onDark : colors.pine800;
   return (
     <View style={{ width: size, height: size, borderRadius: size / 2, backgroundColor: bg, alignItems: 'center', justifyContent: 'center' }}>
-      <Text style={{ fontFamily: fonts.bodyBold, fontSize: size * 0.36, color: fg, letterSpacing: 0.3 }}>{initials}</Text>
+      <Text maxFontSizeMultiplier={1} style={{ fontFamily: fonts.bodyBold, fontSize: size * 0.36, color: fg, letterSpacing: 0.3 }}>{initials}</Text>
     </View>
   );
 }
@@ -256,10 +272,10 @@ export function Loading() {
 export function ErrorText({ message }: { message?: string }) {
   if (!message) return null;
   return (
-    <Row style={{ backgroundColor: colors.flagSoft, borderRadius: radius.md, padding: space.md }}>
-      <Ionicons name="alert-circle" size={18} color={colors.flag} />
-      <T variant="small" color={colors.flag} style={{ flex: 1 }}>{message}</T>
-    </Row>
+    <View accessibilityRole="alert" style={{ flexDirection: 'row', alignItems: 'center', gap: space.sm, backgroundColor: colors.flagSoft, borderRadius: radius.md, padding: space.md }}>
+      <Ionicons name="alert-circle" size={20} color={colors.flag} />
+      <T variant="body" color={colors.flag} style={{ flex: 1 }}>{message}</T>
+    </View>
   );
 }
 
@@ -286,23 +302,23 @@ const styles = StyleSheet.create({
   cardBorder: { borderWidth: StyleSheet.hairlineWidth, borderColor: colors.line },
   pressed: { opacity: 0.85, transform: [{ scale: 0.985 }] },
   group: { backgroundColor: colors.paper, borderRadius: radius.lg, borderWidth: StyleSheet.hairlineWidth, borderColor: colors.line, overflow: 'hidden' },
-  row: { flexDirection: 'row', alignItems: 'center', gap: space.md, paddingHorizontal: space.lg, paddingVertical: 14 },
+  row: { flexDirection: 'row', alignItems: 'center', gap: space.md, paddingHorizontal: space.lg, paddingVertical: 16, minHeight: 60 },
   rowDivider: { borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: colors.line },
-  rowIcon: { width: 34, height: 34, borderRadius: 10, backgroundColor: colors.pine50, alignItems: 'center', justifyContent: 'center' },
+  rowIcon: { width: 40, height: 40, borderRadius: 12, backgroundColor: colors.pine50, alignItems: 'center', justifyContent: 'center' },
   button: {
     flexDirection: 'row', gap: space.sm, alignItems: 'center', justifyContent: 'center',
-    borderRadius: radius.pill, borderWidth: 1.5, paddingVertical: 15, paddingHorizontal: space.xl,
+    borderRadius: radius.pill, borderWidth: 1.5, paddingVertical: 17, paddingHorizontal: space.xl, minHeight: 56,
   },
-  buttonCompact: { paddingVertical: 11, paddingHorizontal: 14, minHeight: 44 },
-  buttonText: { fontFamily: fonts.bodyBold, fontSize: 16, letterSpacing: 0.2 },
+  buttonCompact: { paddingVertical: 12, paddingHorizontal: 16, minHeight: 48 },
+  buttonText: { fontFamily: fonts.bodyBold, fontSize: 18, letterSpacing: 0.2 },
   input: {
     backgroundColor: colors.paper, borderWidth: 1, borderColor: colors.line, borderRadius: radius.md,
-    paddingHorizontal: 14, paddingVertical: 13, fontSize: 16, fontFamily: fonts.body, color: colors.ink,
+    paddingHorizontal: 16, paddingVertical: 14, minHeight: 56, fontSize: 18, fontFamily: fonts.body, color: colors.ink,
   },
   segmented: { flexDirection: 'row', backgroundColor: colors.pine50, borderRadius: radius.pill, padding: 4 },
-  segment: { flex: 1, paddingVertical: 9, paddingHorizontal: 10, borderRadius: radius.pill, alignItems: 'center' },
+  segment: { flex: 1, paddingVertical: 12, paddingHorizontal: 10, minHeight: 48, justifyContent: 'center', borderRadius: radius.pill, alignItems: 'center' },
   segmentActive: { backgroundColor: colors.paper, ...(shadow as object) },
-  segmentText: { fontFamily: fonts.bodyBold, fontSize: 13.5 },
-  pill: { flexDirection: 'row', alignItems: 'center', gap: 4, borderRadius: radius.pill, paddingHorizontal: 9, paddingVertical: 4, alignSelf: 'flex-start' },
-  pillText: { fontFamily: fonts.bodyBold, fontSize: 11.5, letterSpacing: 0.3 },
+  segmentText: { fontFamily: fonts.bodyBold, fontSize: 15.5 },
+  pill: { flexDirection: 'row', alignItems: 'center', gap: 5, borderRadius: radius.pill, paddingHorizontal: 10, paddingVertical: 5, alignSelf: 'flex-start' },
+  pillText: { fontFamily: fonts.bodyBold, fontSize: 13.5, letterSpacing: 0.2 },
 });

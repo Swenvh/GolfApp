@@ -45,7 +45,7 @@ export default function Facturen() {
           {shown.map((i, k) => {
             const overdue = i.status === 'open' && i.due_date < today;
             return (
-              <Pressable key={i.id} onPress={() => router.push({ pathname: '/factuur/[id]', params: { id: i.id } })}
+              <Pressable key={i.id} accessibilityRole="button" onPress={() => router.push({ pathname: '/factuur/[id]', params: { id: i.id } })}
                 style={({ pressed }) => [styles.row, k < shown.length - 1 && styles.divider, pressed && { backgroundColor: colors.pine50 }]}>
                 <View style={{ flex: 1, gap: 4 }}>
                   <T variant="bodyStrong" numberOfLines={1}>{i.description}</T>
