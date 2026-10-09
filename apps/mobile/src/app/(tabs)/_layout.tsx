@@ -28,8 +28,8 @@ export default function TabsLayout() {
         tabBarActiveTintColor: colors.pine800,
         tabBarInactiveTintColor: colors.mist,
         tabBarStyle: { backgroundColor: colors.paper, borderTopColor: colors.line, height: 88, paddingTop: 8 },
-        // 12,5 pt past bij vijf tabs ('Wedstrijden') op een smalle telefoon; iOS zelf gebruikt 10 pt
-        tabBarLabelStyle: { fontFamily: fonts.bodyBold, fontSize: 12.5, letterSpacing: -0.1 },
+        // Uitzondering op 'niets onder 13 pt': zo past 'Wedstrijden' in vijf tabs op een smalle telefoon (iOS zelf: 10 pt)
+        tabBarLabelStyle: { fontFamily: fonts.bodyBold, fontSize: 12, letterSpacing: 0 },
         tabBarItemStyle: { paddingHorizontal: 0 },
         tabBarAllowFontScaling: false,
       }}
