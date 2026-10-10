@@ -11,3 +11,6 @@ supabase/.temp/
 next-env.d.ts
 .demo/
 __pycache__/
+
+# Uitvoer van lokale Strix-pentestruns (niet in de repo)
+strix_runs/
