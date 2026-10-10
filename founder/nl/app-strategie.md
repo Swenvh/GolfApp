@@ -1,116 +1,122 @@
 # Greenside · App-strategie, prijsmodellen en SLA's
 
-_Casus, 10 oktober 2026. Hoe presenteren we de app het slimst gegeven dat App Store-goedkeuring
-het grootste risico is — en welk prijsmodel en welke SLA's horen daarbij._
+_Casus, 10 oktober 2026. Eén algemene app, prijs realistisch gehouden zodat een bestuur niet na een
+paar jaar tienduizenden euro's kwijt is._
 
 ## Kern
 
-Apple weigert bijna-identieke "white-label" apps. "Elke club een eigen app, door ons ingediend" botst
-op twee regels en is op schaal onhoudbaar. Slimste route: **één Greenside-app die bij het inloggen de
-huisstijl van de club laadt** (de code kan dit al), met een **eigen app in de store als betaalde premium**
-voor wie dat wil. Prijs: een basismodel plus een **high-ticket koopvariant** (eenmalig bedrag + kleine
-hosting) die de krappe cashflow vroeg oplost.
+Apple weigert bijna-identieke "white-label" apps, dus **geen eigen app per club in de store**. In plaats
+daarvan **één algemene app**: een golfer downloadt 'm, kiest of volgt zijn club(s), en zodra hij in zijn
+club zit is alles volledig in de huisstijl van die club. De code kan dit al (`brand.ts`). Dat maakt onze
+kostprijs per club laag — en laat toe wat jij wilt: een **eenmalig bedrag + kleine maandlasten**, geen
+maandabonnement dat oploopt tot tienduizenden euro's.
 
-## 1. De App Store-grens
+## 1. Het product: één app, per club een eigen omgeving
 
-Controleer de actuele tekst op
-[developer.apple.com/.../guidelines](https://developer.apple.com/app-store/review/guidelines) — handhaving wisselt.
+- Eén app in de store (Apple + Google), neutrale naam (bijv. "Golfen" of "Clubhuis").
+- Lid selecteert/volgt zijn club; de hele omgeving — kleuren, logo, naam, nieuws, starttijden — is
+  dan die van de club.
+- Clubbeheer (leden, starttijden, facturen, incasso) blijft het systeem erachter. Het is dus méér dan
+  een ledenapp: het kan het clubsysteem vervangen, maar de verkoop hoeft niet zwaar op dat verhaal te
+  leunen.
+- **App Store-voordeel:** één inzending, één review, triviale updates, geen spamrisico (richtlijn
+  4.2.6 / 4.3). Wil een club tóch een eigen icoon in de store, dan kan dat als betaalde premium onder
+  háár eigen Apple-account.
 
-- **4.2.6:** template-/generator-apps worden geweigerd **tenzij de contenteigenaar ze zelf indient** —
-  dus elke club onder haar **eigen** Apple-account, niet wij
-  ([appinstitute](https://appinstitute.com/apple-app-store-guidelines/), [apptooltester](https://apptooltester.com/app-store-rejecting-app-maker-apps-guideline-4-2-6/)).
-- **4.3(a) spam:** zelfs dan worden apps die alleen in logo/naam verschillen geweigerd
-  ([Apple-forum](https://developer.apple.com/forums/thread/712614)). Wél toegestaan: één "picker"-app die alle clubs host.
-- **Google Play:** soepeler, zelden de bottleneck.
+## 2. Wat mag het kosten — eenmalig
 
-Gevolg: het aantal store-inzendingen is de grootste kostenpost en het grootste tijdrisico. 15 eigen apps = 15 reviews per update.
+Verkoop het als een bureau een website verkoopt: een eenmalig bedrag voor bouw/inrichting, daarna
+kleine vaste lasten. Onze echte kost per club is laag (import + branding + livegang + training ≈ 1–2
+dagen werk, ~€ 500–1.000), dus hier zit marge die meteen de krappe cashflow dicht.
 
-## 2. Distributiemodellen
+| clubgrootte | eenmalig | dekt |
+| --- | ---: | --- |
+| 9 holes (~550 leden) | € 1.750 | inrichting in clubstijl, import ledenlijst, livegang, training, eerste support |
+| 18 holes (~950 leden) | € 2.500 | idem |
+| 27+ holes (~1.350 leden) | € 3.500 | idem |
 
-| Model | Inzendingen | Goedkeuringsrisico | Update-last | "Eigen app" | Oordeel |
-|---|---|---|---|---|---|
-| A — eigen app per club, **door ons** | 1 p/club | **Hoog** (4.2.6) | Zeer hoog | Max | ✗ |
-| A′ — eigen app per club, **door de club** | 1 p/club | Midden (4.3) | Hoog | Max | △ premium |
-| B — **één app**, club bij inloggen | 1 totaal | **Laag** | Laag | Beperkt | ✓ basis |
-| C — PWA/webapp | 0 | Geen | Direct | Zwak | △ vangnet |
-| **D — hybride (B + A′)** | 1 + enkele | Laag | Laag | Schaalbaar | ✓✓ |
+Richtprijs **€ 2.500**. Vijf clubs vooraf = € 12.500 — dat dekt bijna de hele benodigde € 11.181 uit
+de CFO. Een bestuur keurt een eenmalig projectbedrag makkelijker goed (één ALV-besluit) dan een
+doorlopende rekening.
 
-**Aanbevolen: D.** Lanceer met één Greenside-app in volle clubhuisstijl (B), PWA als vangnet (C), en de
-eigen app in de store (A′, onder het account van de club) als betaalde premium. Nieuwe kernbelofte:
-*"uw club in uw huisstijl, in één veilige app — en een eigen store-app wanneer u dat wilt."*
+## 3. Recurring — klein gehouden
 
-## 3. Prijsmodellen
+### Basis (hosting/platform)
 
-Klant = vereniging met jaarbegroting en ALV; voorkeur voor vaste, voorspelbare bedragen. Bedragen excl. btw.
+| clubgrootte | per maand | per jaar | dekt |
+| --- | ---: | ---: | --- |
+| 9 holes | € 59 | € 708 | hosting, onderhoud, updates, store-review, basissupport, back-ups, maandexport |
+| 18 holes | € 99 | € 1.188 | idem |
+| 27+ holes | € 149 | € 1.788 | idem |
 
-| Model | Kort | Past? |
-|---|---|---|
-| **1. Per lid/maand, vast jaarbedrag** (huidig) | prijs × NGF-leden, gestaffeld | ✓✓ voorspelbaar, schaalt |
-| 2. Vaste prijs per club | één bedrag ongeacht grootte | △ oneerlijk aan de randen |
-| 3. Staffel S/M/L | prijsbanden per ledenschijf | ✓ simpel + eerlijk |
-| **4. High-ticket: eenmalig + hosting** | ~€2.500 eenmalig + kleine maandfee (als een website) | ✓✓ cash nú |
-| 5. "Vervang uw systeem" | prijs ≈ huidig clubsysteem, app erbovenop | ✓✓ sterkste verhaal |
-| 6. Eigen-app-premium | meerprijs voor model A′ | ✓ past bij hybride |
-| 7. Jaarlijks vooruit, −10% | prepay = korting | ✓ cashflow |
-| Freemium / transactie / commissie / per actief lid / modules | — | ✗/△ variabel, clubs willen dat niet |
+### Upsells (opt-in, per maand) — hier zit de terugkerende winst
 
-### Het high-ticket-model uitgewerkt (nieuw)
+De club bepaalt zelf wat het erbij neemt, dus de rekening loopt nooit ongemerkt op.
 
-Verkoop de app zoals een bureau een website verkoopt: **een eenmalig bedrag vooraf, plus een kleine
-maandfee voor hosting en support.**
+| upsell | per maand | waarvoor |
+| --- | ---: | --- |
+| Incasso / SEPA (contributie automatisch innen) | € 39 | bespaart de penningmeester handwerk |
+| Wedstrijdmodule (inschrijven, flights, uitslagen) | € 29 | voor clubs met veel wedstrijden |
+| Horeca op rekening / barintegratie | € 29 | bar en keuken op de ledenpas |
+| Betalen in de app (iDEAL) | ~1,2% of € 0,25/transactie | doorbelast + kleine marge |
+| Sponsors/advertenties in de clubomgeving | € 19 of omzetdeling | levert de club zelf geld op |
+| Pushcampagnes / nieuwsbrief-plus | € 19 | ledenbinding |
+| Premium SLA (99,9%, snellere reactie) | € 49 | zie SLA |
+| Eigen app in de store (onder club-account) | € 79 | prestige, extra werk voor ons |
 
-- **Eenmalig: € 2.500** — bouw/inrichting in clubstijl, import, livegang, training.
-- **Maandelijks: € 49** — hosting, onderhoud, support, store-updates (staffel € 25 klein / € 49 / € 75 groot).
+Een typische 18-holesclub landt op **€ 99 basis + 2–3 upsells (~€ 100) = ~€ 200/mnd**.
 
-| | Jaar 1 | 3 jaar totaal |
-|---|---:|---:|
-| **High-ticket** (€2.500 + €49/mnd) | € 3.088 | € 4.264 |
-| Per lid/maand (18-holes, oprichter €466/mnd) | € 5.592 | € 16.776 |
+## 4. Wat voelt een bestuur — totale kosten over de jaren
 
-**Afweging.** High-ticket geeft **meteen cash** (5 clubs × €2.500 = €12.500 — dekt bijna de hele
-benodigde €11.181 uit de CFO), en is een makkelijke "ja" voor een club die in projecten/capex denkt: de
-ALV keurt het één keer goed. Nadeel: veel lagere terugkerende omzet en lagere lifetime value. De maandfee
-móét hosting + support + store-resubmissions dekken, anders verdampt de marge.
+Dit is de kern van je punt: een maandabonnement tikt hard aan.
 
-**Slimste combinatie:** bied **beide** aan. Per lid/maand als hoofdmodel (terugkerend, hoge LTV), én de
-high-ticket koopvariant als alternatief voor wie liever koopt dan abonneert — vooral vroeg ingezet om het
-cashgat te dichten. Houd de staffelprijzen voor de abonnementsvariant:
+| model | jaar 1 | 3 jaar | 5 jaar |
+| --- | ---: | ---: | ---: |
+| **Koop + basis** (€ 2.500 + € 99/mnd) | € 3.688 | € 6.064 | € 8.440 |
+| **Koop + basis + 2–3 upsells** (€ 2.500 + € 200/mnd) | € 4.900 | € 9.700 | € 14.500 |
+| Per lid/maand (18-holes oprichter, € 466/mnd) | € 5.592 | € 16.776 | € 27.960 |
 
-| laag | per lid | min / max p/mnd | vast |
-| --- | ---: | --- | --- |
-| Pionier | € 0,39 | € 169 / € 539 | 3 jaar |
-| Oprichter | € 0,49 | € 189 / € 679 | 2 jaar |
-| Normaal | € 0,65 | € 249 / € 899 | — |
+De koopvariant houdt de 5-jaarskosten op € 8–15k in plaats van ~€ 28k — en de club stuurt zelf op de
+upsells. Precies de "niet onrealistisch"-prijs die je zoekt.
 
-Plus: eigen app in de store +€49–99/mnd; 10% korting bij jaarlijks vooruit.
+## 5. Eerlijke keerzijde (voor ons)
 
-## 4. SLA's
+Lage maandlasten = minder terugkerende omzet. De eenmalige € 2.500 dicht de cash, maar betaalt geen
+salaris. Doorgerekend op de vaste kosten mét salaris (€ 5.533/mnd voor twee oprichters):
 
-Bind de niveaus aan de prijslagen; de zaterdagochtend (boekingspiek) mag niet haperen.
+- Marge per club ≈ € 99 basis + ~€ 100 upsells − ~€ 20 serve-kosten = **~€ 180/mnd**.
+- Voor vol salaris: € 5.533 / € 180 ≈ **31 clubs** — tegenover 15 in het per-lid-model. Ongeveer dubbel.
+- Zonder salaris (jaar 1) is elke club al vanaf de eerste maand winstgevend; het salaris vraagt alleen
+  meer clubs.
 
-| Afspraak | Basis | Premium |
+**Keuzes om dat te verzachten:** upsell-attach omhoog (meer €/club), basis iets hoger (€ 149), of
+**per-lid als optie aanbieden aan grote clubs** die de kosten liever spreiden en het kunnen dragen —
+prijsdifferentiatie: klein koopt, groot abonneert.
+
+## 6. SLA's (gekoppeld aan de prijslagen)
+
+| afspraak | basis | premium (+€ 49/mnd) |
 | --- | --- | --- |
-| Beschikbaarheid (zakelijke meting) | 99,5% | 99,9% |
+| Beschikbaarheid | 99,5% | 99,9% |
 | Reactie P1 (boeken/inloggen plat) | < 1 u, 7 dgn | < 30 min |
 | Reactie P2 / P3 | < 4 werkuren / < 1 werkdag | < 2 werkuren / < 4 werkuren |
-| Zaterdaghulplijn 7–12 u | ✓ | ✓ prioriteit |
-| Store-update doorlooptijd | ≤ 5 werkdagen | idem, wij regelen review |
+| Zaterdaghulplijn 7–12 u (boekingspiek) | ✓ | ✓ prioriteit |
 | Datalek-melding (AVG) | < 72 u | < 24 u |
 | Back-up herstel (RPO / RTO) | 24 u / 8 u | 1 u / 2 u |
 | Export + opzeg (12 mnd, gratis export) | ✓ | ✓ |
-| Escrow + IT-partner (continuïteit) | vanaf 3e club | ✓ |
 
-- **Controleerbaar:** een statuspagina met de werkelijke beschikbaarheid.
-- **Milde boete:** mis je de beschikbaarheid, dan die maand (deels) terug (bijv. 99,0–99,5% = 10%, < 99,0% = 25%), lager dan de maandprijs — vertrouwen, geen verzekering.
-- **Onderhoud:** releases ma–do ná 17:00, nooit in een lanceerweek; gepland onderhoud telt niet mee mits aangekondigd. 99,9% = ~43 min/mnd: alleen in premium beloven en eerlijk meten.
+Controleerbare statuspagina; milde boete bij gemiste beschikbaarheid (99,0–99,5% = 10%, < 99,0% = 25%
+van die maand, lager dan de maandprijs). Releases ma–do ná 17:00, nooit in een lanceerweek.
 
-## 5. Samengevat
+## 7. Aanbeveling
 
-- **Distributie:** hybride (D) — één app in clubstijl (basis), PWA (vangnet), eigen store-app (premium).
-- **Prijs:** per lid/maand gestaffeld als hoofdmodel, **én** een high-ticket koopvariant (€2.500 eenmalig
-  + €49/mnd) voor cash en voor capex-denkers; eigen app +€49–99/mnd; −10% bij jaarlijks vooruit.
-- **SLA:** twee niveaus, zaterdagpiek en AVG-meldplicht hard, statuspagina + milde boete.
+- **Product:** één algemene app, club selecteren/volgen, per club volledig branded. Eigen store-app
+  alleen als premium.
+- **Prijs:** **€ 2.500 eenmalig** (staffel € 1.750–3.500) + **€ 99/mnd basis** + opt-in upsells.
+  Houdt de 5-jaarskosten rond € 8–15k. Per-lid blijft een optie voor grote clubs.
+- **Besef:** dit vraagt ~2× zoveel clubs voor vol salaris als het per-lid-model; stuur daarom op
+  upsell-attach en op een paar grote clubs.
 
-_Grenzen: Apple-regels wisselen — verifieer vóór livegang en laat een jurist naar SLA/boete kijken. De
-premium-meerprijs en de high-ticket-fees zijn voorstellen om tegen echte offertes en een echt bestuur te
-toetsen. Geen juridisch of fiscaal advies._
+_Grenzen: Apple-regels wisselen — verifieer vóór livegang. Alle bedragen zijn voorstellen om tegen
+echte offertes en een echt bestuur te toetsen (het kooppanel accepteerde tot ~€ 0,75/lid/mnd). Geen
+juridisch of fiscaal advies._
