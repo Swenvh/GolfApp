@@ -1,5 +1,11 @@
 # Aanbod: Greenside Founding Club
 
+> **Model herzien op 12 oktober 2026.** Dit document bevat nog het oude model (eigen app per club,
+> prijs per lid). Het actuele plan is: **één algemene app** (club selecteren, per club branded) met
+> **flinke onboarding fee + maandabonnement + betaalmarge**. Zie `prijzen.md`, `definitief.md`,
+> `app-strategie.md`, `prijs-realiteit.md` en `cijfers-saas.md`. Een volledige herschrijving van dit
+> document volgt op akkoord.
+
 Methode: het Aanbodperspectief van de board, een samenvatting van een gepubliceerd raamwerk, toegepast
 op wat de board, het concurrentieoverzicht en het kooppanel vonden. Toen dit aanbod werd gemaakt waren
 er nog geen CFO-cijfers, dus elke kostenscore hieronder is een **schatting**; de kosten zijn later

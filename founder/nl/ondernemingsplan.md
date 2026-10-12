@@ -1,5 +1,11 @@
 # Greenside · Ondernemingsplan
 
+> **Model herzien op 12 oktober 2026.** Dit document bevat nog het oude model (eigen app per club,
+> prijs per lid). Het actuele plan is: **één algemene app** (club selecteren, per club branded) met
+> **flinke onboarding fee + maandabonnement + betaalmarge**. Zie `prijzen.md`, `definitief.md`,
+> `app-strategie.md`, `prijs-realiteit.md` en `cijfers-saas.md`. Een volledige herschrijving van dit
+> document volgt op akkoord.
+
 **Oordeel: Nog niet**
 
 - ✓ Elke club levert per maand € 250,20 op vóór vaste kosten (69% bijdrage, pioniersprijs).

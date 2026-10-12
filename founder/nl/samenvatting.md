@@ -1,5 +1,11 @@
 # Samenvatting
 
+> **Model herzien op 12 oktober 2026.** Dit document bevat nog het oude model (eigen app per club,
+> prijs per lid). Het actuele plan is: **één algemene app** (club selecteren, per club branded) met
+> **flinke onboarding fee + maandabonnement + betaalmarge**. Zie `prijzen.md`, `definitief.md`,
+> `app-strategie.md`, `prijs-realiteit.md` en `cijfers-saas.md`. Een volledige herschrijving van dit
+> document volgt op akkoord.
+
 **Wat het is.** Greenside geeft een Nederlandse golfclub een eigen ledenapp in de App Store en Google
 Play, plus de clubbeheersoftware erachter, en doet de overstap voor de club. Het is voor de besturen
 van de 263 NGF-clubs, eerst de clubs die van E-Golf4U af moeten.
