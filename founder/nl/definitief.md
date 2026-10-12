@@ -1,34 +1,33 @@
 # Greenside · Het plan
 
 _Herzien 12 oktober 2026: één algemene app (geen eigen app per club in de store) en een SaaS-prijsmodel —
-flinke onboarding fee + maandabonnement + marge op het betaalverkeer. Zie `app-strategie.md`,
+flinke onboarding fee + maandabonnement, geen marge op het betaalverkeer. Zie `app-strategie.md`,
 `prijs-realiteit.md` en `cijfers-saas.md` voor de onderbouwing._
 
 ## Oordeel en kerncijfers
 
 **Oordeel: Nog niet.** De economie is met dit model sterk — elke club is winstgevend, jaar 1 draait
-positief op de onboarding fees, en break-even voor salaris ligt op ~17 clubs. Wat ontbreekt is **bewijs**:
+positief op de onboarding fees, en break-even voor salaris ligt op ~21 clubs. Wat ontbreekt is **bewijs**:
 er is nog geen club live, en in het (gesimuleerde) kooppanel koopt nog niemand. De eerste stap is Golfclub
 Zwolle live en meetbaar.
 
 | toets | uitkomst |
 | --- | --- |
-| Verdient elke club geld vóór vaste kosten? | ✓ € 166 (zonder) tot € 326 (met betaalmarge) per maand |
-| Winst in jaar 1? | ✓ € +32.829 (op de onboarding fees) |
-| Break-even binnen de capaciteit? | ✓ 17 clubs (met betaalmarge), 33 zonder |
+| Verdient elke club geld vóór vaste kosten? | ✓ € 258 per maand |
+| Winst in jaar 1? | ✓ € +49.424 (op de onboarding fees) |
+| Break-even binnen de capaciteit? | ✓ 21 clubs (~8% van de markt) |
 | Koopt minstens 25% van het panel? | ✗ 0 van 20 — nog geen bewijs |
 
 | kerncijfer | |
 | --- | ---: |
-| Onboarding (eenmalig, blended) | € 1.975 per club |
-| Abonnement (blended) | € 202 per club per maand |
-| Betaalmarge (volle adoptie) | ~€ 160 per club per maand |
-| Omzet jaar 1 | € 39.191 |
-| Resultaat jaar 1 (oprichters onbetaald) | € +32.829 |
+| Onboarding (eenmalig, blended) | € 3.550 per club |
+| Abonnement (blended) | € 294 per club per maand |
+| Omzet jaar 1 | € 55.786 |
+| Resultaat jaar 1 (oprichters onbetaald) | € +49.424 |
 | Benodigd geld (alleen startkosten) | € 10.423 |
-| Clubs nodig voor € 2.500 salaris per oprichter | 17 (met betaalmarge) |
-| CLV per club | ~€ 18.100 zonder / ~€ 31.200 met betaalmarge |
-| Hele markt (263 clubs) | groot; betaalmarge is de meegroeiende motor |
+| Clubs nodig voor € 2.500 salaris per oprichter | 21 |
+| CLV per club | ~€ 27.000 (LTV:CAC 27:1) |
+| Hele markt (263 clubs) | ~€ 1,9 miljoen per jaar tegen normale prijs |
 
 ## Het product
 
@@ -90,32 +89,30 @@ prijscurves laten zien dat tot ~€ 550–650/mnd (18 holes) als "wordt duur" ge
 
 | | klein (9 holes) | midden (18 holes) | groot (27+ holes) |
 | --- | ---: | ---: | ---: |
-| **Onboarding (eenmalig)** | € 1.500 | € 2.000 | € 2.500 |
-| **Abonnement per maand** | € 129 | € 199 | € 299 |
-| **Betaalverkeer** | ~1% (netto ~0,6%) | idem | idem |
+| **Onboarding (eenmalig)** | € 2.500 | € 3.500 | € 5.000 |
+| **Abonnement per maand** | € 199 | € 299 | € 399 |
 
 - **Pionier (3 plaatsen, vóór 1 juni 2027):** onboarding gratis, eerste 3 maanden gratis, 3 jaar vast.
 - **Oprichter (club 4–10, vóór 1 juli 2027):** onboarding −50%, eerste maand gratis, 2 jaar vast.
-- **Onder de concurrent:** € 199/mnd < Lightspeed € 289, < Club Caddie € 299, < Nexxchange € 200 +
-  € 50/gebruiker. Verkooplijn: **"voor minder dan u nu betaalt — en de app zit erbij"**, getoond met de
-  eigen factuur. Over 5 jaar ~€ 13.000 abonnement + betaalmarge, minder dan de ~€ 20.000–30.000 van nu.
+- **Geen cut op betaalverkeer:** leden boeken en betalen vrij in de app (een greenfee is voor een lid
+  gratis). De waarde zit in de onboarding en het abonnement. € 299/mnd (18 holes, test € 249–299) zit rond
+  Club Caddie (€ 299) en onder een volledig clubsysteem (~€ 350–450), met een complete eigen clubapp erbij.
+  Verkooplijn: **"ongeveer wat u nu betaalt — met een echte app erbij"**, getoond met de eigen factuur.
 
 ## De cijfers
 
 | per club per maand | bedrag |
 | --- | ---: |
-| Blended abonnement | € 202 |
-| Betaalmarge (volle adoptie) | € 160 |
+| Blended abonnement | € 294 |
 | Variabele kosten | − € 35,50 |
-| **Bijdrage (met betaalmarge)** | **€ 326** |
+| **Bijdrage** | **€ 258** |
 
-**Jaar 1** (oprichters onbetaald): omzet € 39.191, resultaat **+€ 32.829**. Benodigd geld **€ 10.423** —
+**Jaar 1** (oprichters onbetaald): omzet € 55.786, resultaat **+€ 49.424**. Benodigd geld **€ 10.423** —
 alleen startkosten (beveiligingstest € 7.500, jurist € 2.500); de onboarding fees dekken de operationele
 verliezen, de cash is positief vanaf maand 5.
 
-**Salaris:** € 2.500 per oprichter maakt de vaste kosten € 5.398/mnd. Daarvoor zijn **17 clubs** nodig
-(met betaalmarge), ~6,5% van de markt. Zonder enige betaalmarge: 33 clubs, en jaar 1 draait sowieso op de
-onboarding.
+**Salaris:** € 2.500 per oprichter maakt de vaste kosten € 5.398/mnd. Daarvoor zijn **21 clubs** nodig
+(~8% van de markt), en jaar 1 draait sowieso ruim positief op de onboarding.
 
 ## Marketing
 

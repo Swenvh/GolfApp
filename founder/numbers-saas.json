@@ -1,43 +1,32 @@
 {
-  "model": "Greenside vertical SaaS: flinke onboarding fee + maandabonnement (gebruik/onderhoud) + betaalmarge. Eenheid = betalende club per maand. Alle bedragen in euro's.",
+  "model": "Greenside vertical SaaS: flinke onboarding fee + maandabonnement. GEEN marge op betaalverkeer (greenfees e.d. zijn voor een lid gratis). Eenheid = betalende club per maand. Bedragen in euro's.",
   "segments": { "9h": 0.25, "18h": 0.55, "27h": 0.20 },
-  "subscription_per_month": { "9h": 129, "18h": 199, "27h": 299, "blended": 202 },
-  "onboarding_once": { "9h": 1500, "18h": 2000, "27h": 2500, "blended": 1975 },
-  "payment_margin": {
-    "rate_net": 0.006,
-    "note": "1% geheven minus ~0,4% PSP; op het betaalverkeer dat door de app loopt (greenfees, bar, lesgeld, contributie-incasso)",
-    "annual_flow_per_club": { "9h": 180000, "18h": 320000, "27h": 500000 },
-    "blended_per_month_full_adoption": 160
-  },
+  "subscription_per_month": { "9h": 199, "18h": 299, "27h": 399, "blended": 294, "test_18h": 249 },
+  "onboarding_once": { "9h": 2500, "18h": 3500, "27h": 5000, "blended": 3550 },
+  "payment_margin": { "rate_net": 0, "note": "Bewuste keuze: geen marge op betaalverkeer. Een greenfee boeken is voor een lid gratis; daar valt niets te pakken. Daarom staat de waarde in de onboarding en het abonnement." },
   "variable_cost_per_club_month": { "hosting": 12, "support": 18, "sepa": 0.5, "pilot_reserve": 5, "total": 35.5 },
-  "contribution_per_club_month": { "without_payments": 166, "with_payments": 326 },
+  "contribution_per_club_month": 258,
   "fixed_monthly": { "year1_no_salary": 326, "with_salary_2x2500": 5398 },
-  "break_even_clubs": {
-    "no_salary": { "without_payments": 2.0, "with_payments": 1.0 },
-    "with_salary": { "without_payments": 32.5, "with_payments": 16.5 }
-  },
-  "clv_8yr_85pct_margin": { "without_payments": 18121, "with_payments": 31218 },
-  "ltv_cac_at_cac_1000": { "without_payments": 18.1, "with_payments": 31.2 },
+  "break_even_clubs": { "no_salary": 1.3, "with_salary": 20.9 },
+  "clv_8yr_85pct_margin": 27008,
+  "ltv_cac_at_cac_1000": 27.0,
   "year1_no_salary": {
     "ramp_new_clubs": [1,1,1,1,1,1,0,1,1,0,1,1],
     "clubs_end": 10,
-    "revenue_subscription": 13904,
-    "revenue_onboarding": 19750,
-    "revenue_payments_half_adoption": 5537,
-    "revenue_total": 39191,
-    "result": 32829,
+    "revenue_subscription": 20286,
+    "revenue_onboarding": 35500,
+    "revenue_total": 55786,
+    "result": 49424,
     "cash_trough": -10423,
     "cash_need": 10423,
-    "cash_end": 22406
+    "cash_end": 39002
   },
   "startup_costs": { "lawyer": 2500, "pentest": 7500, "guide": 300, "google_play": 23, "kvk": 100, "total": 10423 },
-  "clubs_for_full_salary": { "without_payments": 33, "with_payments": 17 },
+  "clubs_for_full_salary": 21,
   "sensitivity_breakeven_clubs_with_salary": {
-    "base_with_payments": 16.5,
-    "subscription_minus_20pct": 18.9,
-    "payment_margin_halved": 21.9,
-    "no_payment_margin": 32.5,
-    "subscription_plus_25pct": 14.3
+    "base": 20.9,
+    "subscription_18h_at_249": 23.4,
+    "subscription_minus_15pct": 25.2
   },
-  "assumptions_and_limits": "Betaalverkeer en adoptie zijn schattingen (jaar 1 op halve adoptie gezet); 8-jaars levensduur en 85% brutomarge zijn aannames; churn niet apart gemodelleerd; CAC EUR 1.000 geschat. LTV:CAC van 18-31:1 is hoog en suggereert ruimte om hoger te prijzen. Toetsen met echte offertes, een echt bestuur en de werkelijke betaalstromen."
+  "assumptions_and_limits": "Geen betaalmarge (bewuste keuze). 8-jaars levensduur en 85% brutomarge zijn aannames; churn niet apart gemodelleerd; CAC EUR 1.000 geschat. LTV:CAC 27:1 is hoog en laat ruimte om hoger te prijzen. Abonnement 18 holes tussen EUR 249 en EUR 299 te testen. Toetsen met echte offertes en een echt bestuur."
 }

@@ -1,23 +1,22 @@
 # Greenside · Ondernemingsplan
 
 
-**Oordeel: Nog niet** _(SaaS-model: flinke onboarding + maandabonnement + betaalmarge; herzien 12 oktober 2026)_
+**Oordeel: Nog niet** _(SaaS-model: flinke onboarding + maandabonnement, geen betaalmarge; herzien 12 oktober 2026)_
 
-- ✓ Elke club levert per maand € 166 (zonder) tot € 326 (met betaalmarge) op vóór vaste kosten.
-- ✓ Bedrijfsresultaat jaar 1: WINST van € 32.829 (oprichters onbetaald, op de onboarding fees).
-- ✓ Break-even ligt bij 17 clubs met salaris (met betaalmarge), 33 zonder — binnen de capaciteit.
+- ✓ Elke club levert per maand € 258 op vóór vaste kosten.
+- ✓ Bedrijfsresultaat jaar 1: WINST van € 49.424 (oprichters onbetaald, op de onboarding fees).
+- ✓ Break-even ligt bij 21 clubs met salaris — binnen de capaciteit.
 - ✗ 0 van de 20 gesimuleerde kopers kopen (0%, de lat ligt op 25%) — nog geen bewijs.
 
 | kerncijfer | |
 | --- | ---: |
-| Onboarding | € 1.975 per club (blended, eenmalig) |
-| Abonnement | € 202 per club per maand (blended) |
-| Betaalmarge | ~€ 160 per club per maand (volle adoptie) |
-| Bedrijfsresultaat jaar 1 | € +32.829 |
+| Onboarding | € 3.550 per club (blended, eenmalig) |
+| Abonnement | € 294 per club per maand (blended) |
+| Bedrijfsresultaat jaar 1 | € +49.424 |
 | Startkosten | € 10.423 |
 | Benodigd geld tot het zichzelf betaalt | € 10.423 |
-| Clubs voor € 2.500 salaris p.p. | 17 (met betaalmarge) |
-| CLV per club | ~€ 31.200 (met betaalmarge) |
+| Clubs voor € 2.500 salaris p.p. | 21 |
+| CLV per club | ~€ 27.000 (LTV:CAC 27:1) |
 | Kooppanel | 0 kopen · 20 niet |
 
 ## Het idee
@@ -29,10 +28,10 @@
   bestuur koopt; het secretariaat, de financiële vrijwilliger en de marshal werken er dagelijks mee. De
   leden gebruiken de app.
 - **Wat het verkoopt, tegen welke prijs** (zie het hoofdstuk Prijzen): een **flinke onboarding fee** om de
-  club op het platform te krijgen (€ 1.500 / 2.000 / 2.500 naar grootte), een **maandabonnement** voor
-  gebruik, onderhoud, updates, support en SLA (€ 129 / 199 / 299), en een **marge op het betaalverkeer**
-  (~1%) dat toch al door de club loopt. Pionier- en oprichterskorting op de onboarding voor de eerste tien
-  clubs. Geen commissie op wat leden los in de app kopen.
+  club op het platform te krijgen (€ 2.500 / 3.500 / 5.000 naar grootte) en een **maandabonnement** voor
+  gebruik, onderhoud, updates, support en SLA (€ 199 / 299 / 399; 18 holes test € 249–299). **Geen marge op
+  het betaalverkeer** — een greenfee is voor een lid gratis, daar valt niets te pakken; de waarde zit in de
+  onboarding en het abonnement. Pionier- en oprichterskorting op de onboarding voor de eerste tien clubs.
 - **Waar en hoe:** Nederland. De oprichters verkopen direct aan clubs (demo, pilot, contract). Geleverd
   als één iOS/Android-app (uit één codebase) plus een webapplicatie voor clubbeheer; leden worden
   geïmporteerd uit het huidige systeem en per e-mail uitgenodigd met een inlogcode.
@@ -49,11 +48,11 @@ club kiest en meteen in zijn eigen clubomgeving zit, plus de clubbeheersoftware 
 Het is voor de besturen van de 263 NGF-clubs, eerst de clubs die van E-Golf4U af moeten.
 
 **Oordeel: Nog niet.** De economie is met het SaaS-model (flinke onboarding + maandabonnement +
-betaalmarge) sterk; wat ontbreekt is bewijs. Drie van de vier toetsen slagen, één niet:
-- ✓ **Marge**: elke betalende club laat **€ 166 (zonder) tot € 326 (met betaalmarge) per maand** over.
-- ✓ **Jaar 1**: **+€ 32.829** (oprichters onbetaald), gedragen door de onboarding fees; de cash is
+geen betaalmarge) sterk; wat ontbreekt is bewijs. Drie van de vier toetsen slagen, één niet:
+- ✓ **Marge**: elke betalende club laat **€ 258 per maand** over.
+- ✓ **Jaar 1**: **+€ 49.424** (oprichters onbetaald), gedragen door de onboarding fees; de cash is
   positief vanaf maand 5.
-- ✓ **Break-even**: **17 clubs** voor vol salaris (met betaalmarge), 33 zonder — binnen de capaciteit.
+- ✓ **Break-even**: **21 clubs** voor vol salaris — binnen de capaciteit.
 - ✗ **Kopers**: **0 van de 20** gesimuleerde kopers kopen zonder bewijs (de lat ligt op 25%).
 
 **Wat er moet veranderen, en welke stap dat doet.**
@@ -399,46 +398,44 @@ Alle 20 kopers gaven de vier prijsantwoorden; zie het hoofdstuk Prijzen.
 
 ## Prijzen
 
-Bedragen in euro, excl. 21% btw. **Op 12 oktober 2026 herzien** naar het SaaS-model: één algemene app
-(geen eigen app per club in de store, vanwege Apple-richtlijn 4.2.6/4.3), een **flinke onboarding fee** om
-de club op het platform te krijgen, een **maandabonnement** voor gebruik, onderhoud, updates, support en
-SLA, en een **marge op het betaalverkeer**. De onderbouwing staat in `founder/nl/app-strategie.md`
-(distributie), `founder/nl/prijs-realiteit.md` (marktbenchmarks en CLV) en `founder/nl/cijfers-saas.md`
-(doorgerekend; `founder/numbers-saas.json`). De eerdere per-lid-prijs is vervangen; de prijscurves van het
-panel staan onderaan als toets.
+Bedragen in euro, excl. 21% btw. **Herzien 12 oktober 2026** naar het SaaS-model: één algemene app (geen
+eigen app per club in de store, vanwege Apple-richtlijn 4.2.6/4.3), een **flinke onboarding fee** om de
+club op het platform te krijgen, en een **maandabonnement** voor gebruik, onderhoud, updates, support en
+SLA. **Geen marge op het betaalverkeer** — een greenfee boeken is voor een lid gratis, daar valt niets te
+pakken; de waarde zit bewust in de onboarding en het abonnement. Onderbouwing: `app-strategie.md`,
+`prijs-realiteit.md`, `cijfers-saas.md` (`numbers-saas.json`).
 
 ### 1. Het product en waarom dit model
 
-Eén app in de App Store en Google Play (neutrale naam). Een golfer kiest/volgt zijn club; zodra hij erin
-zit is alles volledig in de huisstijl van die club. Dat is veilig in de store (één inzending, één review)
-én goedkoop voor ons per club. Daardoor kunnen we een laag totaalbedrag vragen zonder een abonnement dat
-na jaren tot tienduizenden oploopt — en toch gezonde klantwaarde houden via de betaalmarge.
+Eén complete app in de App Store en Google Play (neutrale naam). Een golfer downloadt 'm, kiest zijn club,
+en zit meteen in zijn eigen clubomgeving in volle huisstijl. Dat is een echt product — geen webpagina op
+het beginscherm — en het is veilig in de store (één inzending, één review). De waarde (de app, het
+clubbeheer, de overstap die wij doen) rechtvaardigt een stevige onboarding en een gezond abonnement.
 
 ### 2. De prijs
 
 | | klein (9 holes, ~550 leden) | midden (18 holes, ~950) | groot (27+ holes, ~1.350) |
 | --- | ---: | ---: | ---: |
-| **Onboarding (eenmalig)** — op het platform krijgen | € 1.500 | € 2.000 | € 2.500 |
-| **Abonnement per maand** — gebruik, onderhoud, updates, support, SLA | € 129 | € 199 | € 299 |
-| **Betaalverkeer** — op greenfees, bar, lesgeld, incasso | ~1% (netto ~0,6% na PSP) | idem | idem |
+| **Onboarding (eenmalig)** — op het platform krijgen | € 2.500 | € 3.500 | € 5.000 |
+| **Abonnement per maand** — gebruik, onderhoud, updates, support, SLA | € 199 | € 299 | € 399 |
 
-Blended over de markt (9h 25% / 18h 55% / 27+ 20%): onboarding **~€ 1.975**, abonnement **~€ 202/mnd**,
-betaalmarge **~€ 160/mnd** bij volle adoptie.
+Het 18-holesabonnement testen we tussen **€ 249 en € 299**. Blended over de markt (9h 25% / 18h 55% /
+27+ 20%): onboarding **~€ 3.550**, abonnement **~€ 294/mnd**. Geen betaalmarge, geen commissie.
 
 - **Onboarding = flink en vooraf.** De club betaalt dit om op het platform te komen (inrichting in
   clubstijl, ledenimport, livegang, training, eerste support). Het dicht onze cash en bindt de club.
 - **Abonnement = om erop te blijven.** Vast per maand, jaarlijks of maandelijks gefactureerd, past in de
   begroting die de ALV vaststelt.
-- **Betaalmarge = de meegroeiende motor.** Een cent op de euro die toch al door de club stroomt; de club
-  voelt het niet als vaste last, en het groeit mee met de activiteit.
+- **Geen cut op betaalverkeer.** Leden boeken en betalen vrij in de app; wij pakken daar niets van. Dat
+  voorkomt het bezwaar "u verdient aan elke boeking" en past bij een complete app die een lid vrij gebruikt.
 
 ### 3. Pionier en Oprichter (openingsaanbod)
 
 Geef de eerste clubs korting op de **onboarding** of de eerste maanden, niet op de structuur:
 
-- **Pionier (3 plaatsen, tekenen vóór de Zwolle-resultaten, vóór 1 juni 2027):** onboarding gratis, eerste
-  3 maanden abonnement gratis, abonnementsprijs 3 jaar vast.
-- **Oprichter (club 4–10, pilot vóór 1 juli 2027):** onboarding −50%, eerste maand gratis, prijs 2 jaar vast.
+- **Pionier (3 plaatsen, tekenen vóór 1 juni 2027):** onboarding −50%, eerste 3 maanden abonnement gratis,
+  abonnementsprijs 3 jaar vast.
+- **Oprichter (club 4–10, pilot vóór 1 juli 2027):** onboarding −25%, eerste maand gratis, 2 jaar vast.
 - Beide: de gratis pilot van drie maanden met schriftelijke succescriteria en alle garanties hieronder.
 
 ### 4. De garanties (ze kosten geld; zie de marge)
@@ -446,8 +443,7 @@ Geef de eerste clubs korting op de **onboarding** of de eerste maanden, niet op 
 - **Geen dubbele rekening:** het abonnement start pas als de club het oude systeem opzegt (uiterlijk 6
   maanden na de pilot); de eerste factuur valt in het volgende begrotingsjaar.
 - **Geen dubbel werk:** tijdens de pilot zetten wij elke week de ledenlijst over (CSV-export volstaat).
-- **Vangnet E-Golf4U:** mislukt de pilot, dan zetten wij de gegevens kosteloos over naar Nexxchange of
-  IntoGolf.
+- **Vangnet E-Golf4U:** mislukt de pilot, dan zetten wij de gegevens kosteloos over naar Nexxchange of IntoGolf.
 - **Continuïteit:** maandelijkse export naar opslag van de club, broncode in escrow + IT-partner (vóór de
   derde club), 12 maanden opzegtermijn.
 - **Stoppen na de pilot = niets betalen.**
@@ -459,60 +455,43 @@ Golfclubsoftware is op offertebasis; openbare prijzen elders: Lightspeed Golf �
 ~€ 299 ([joinit](https://joinit.com/blog/best-country-club-management-software)), foreUP vanaf ~€ 120 +
 modules. NL: Nexxchange **€ 200/mnd + € 50 per gebruiker**
 ([Capterra](https://www.capterra.com/p/201943/Nexxchange-GolfSuite/)); een volledig clubsysteem ~€ 350–450.
-**€ 199/mnd zit daar ruim onder** — een eerlijke, makkelijke overstap: *"voor minder dan u nu betaalt — en
-de app zit erbij"*, in elk gesprek getoond met de eigen factuur van de club. Over 5 jaar is dat ~€ 13.000
-abonnement + betaalmarge, tegenover de ~€ 20.000–30.000 die de club nu aan zijn systeem kwijt is.
+Ons 18-holesabonnement (€ 299) zit daar nog onder of gelijk, maar levert een **complete eigen clubapp**
+erbij — het gat in de markt (de enige eigen clubapp scoort ~2/5). De verkooplijn blijft: *"ongeveer wat u
+nu betaalt — met een echte app erbij."*
 
 ### 6. De marge en break-even (uit `cijfers-saas.md`)
 
 | per club per maand | bedrag |
 | --- | ---: |
-| Blended abonnement | € 202 |
-| Betaalmarge (volle adoptie) | € 160 |
+| Blended abonnement | € 294 |
 | Variabele kosten | − € 35,50 |
-| **Bijdrage — zonder betalingen** | **€ 166** |
-| **Bijdrage — met betalingen** | **€ 326** |
+| **Bijdrage** | **€ 258** |
 
-- **Break-even voor vol salaris** (€ 5.398/mnd, 2 × € 2.500): **17 clubs** met betaalmarge, 33 zonder.
-- **Jaar 1 (oprichters onbetaald):** omzet € 39.191, resultaat **+€ 32.829**, benodigd geld **€ 10.423**
-  (alleen startkosten; onboarding dekt de verliezen, cash positief vanaf maand 5).
-- **CLV per club:** ~€ 18.100 zonder / **~€ 31.200 met** betaalmarge; LTV:CAC 18–31:1 (gezond is 3–5:1 —
-  er is dus ruimte om hoger te prijzen).
+- **Break-even voor vol salaris** (€ 5.398/mnd, 2 × € 2.500): **21 clubs** (~8% van de markt).
+- **Jaar 1 (oprichters onbetaald):** omzet € 55.786 (abonnement € 20.286 + onboarding € 35.500), resultaat
+  **+€ 49.424**, benodigd geld **€ 10.423** (alleen startkosten; cash positief vanaf maand 1).
+- **CLV per club:** ~€ 27.000; LTV:CAC 27:1 (gezond is 3–5:1 — er is dus ruimte om hoger te prijzen).
 
 ### 7. De prijsladder
 
-De basis is onboarding + abonnement + betaalmarge. Daarbovenop, later en alleen als ze gebouwd en gevraagd
-zijn: **uitbreidingen per maand** — incasso/SEPA, wedstrijdmodule, horeca op rekening (unTill),
-ballenautomaat (Xafax), sponsors/advertenties, pushcampagnes, premium SLA, en de eigen app in de store
-(onder het Apple-account van de club) als premium. Elk laat de club een ander systeem opzeggen, dus prijs
-ze per uitbreiding, niet in de basis. Verkoop ze niet voordat ze bestaan.
+De basis is onboarding + abonnement. Daarbovenop, later en alleen als ze gebouwd en gevraagd zijn:
+**uitbreidingen per maand** — wedstrijdmodule, horeca op rekening (unTill), ballenautomaat (Xafax),
+sponsors/advertenties, pushcampagnes, premium SLA, en de eigen app in de store (onder het Apple-account van
+de club) als premium. Prijs ze per uitbreiding, niet in de basis. Verkoop ze niet voordat ze bestaan.
 
 ### 8. Wat te testen met echte kopers
 
-1. **Accepteert een bestuur een flinke onboarding fee?** Bied € 2.000 + € 199/mnd aan en tel handtekeningen.
-2. **Werkt het "minder dan u nu betaalt"-verhaal** met de eigen factuur van de club? Noteer wat overtuigt.
-3. **Betaalmarge:** mogen wij de betalingen verzorgen, en tegen welk percentage vinden clubs dat redelijk?
-4. **Onboarding € 2.000 vs € 2.500**, en abonnement € 199 vs € 249 voor midden-clubs.
+1. **Accepteert een bestuur een onboarding van € 2.500–5.000?** Bied € 3.500 + € 299/mnd aan voor 18 holes en tel handtekeningen.
+2. **18-holesabonnement € 249 vs € 299** — waar kantelt de "ja"?
+3. **Het "complete app, ongeveer wat u nu betaalt"-verhaal** met de eigen factuur van de club.
 
-### Bijlage: prijscurves (Van Westendorp) per baangrootte
+_Gesimuleerde kopers zijn geen bewijs. Bedragen zijn voorstellen om te toetsen met echte offertes en een
+echt bestuur. Geen financieel advies._
 
-De prijscurves zijn gemeten op het oude per-maand-abonnement. Ze blijven een nuttige bovengrens: het panel
-vond tot ~€ 550–650/mnd (18 holes) "wordt duur". Het nieuwe abonnement (€ 199) plus betaalmarge zit daar
-ruim onder, dus de prijs is eerder voorzichtig dan agressief.
-
-| | 9 holes (n=10) | 18 holes (n=22) | 27+ holes (n=8) |
-| --- | ---: | ---: | ---: |
-| Mediaan "koopje" | € 120 | € 300 | € 350 |
-| Mediaan "wordt duur" | € 220 | € 550 | € 650 |
-| Mediaan "te duur" | € 300 | € 800 | € 900 |
-| Nieuw abonnement | € 129 (koopje) | € 199 (ruim onder "duur") | € 299 (onder "duur") |
-
-_Gesimuleerde kopers zijn geen bewijs. Bedragen en betaalstromen zijn schattingen om te toetsen met echte
-offertes en een echt bestuur. Geen financieel advies._
 ## Het aanbod
 
-**Greenside Pionier en Oprichter.** De kern: de club in zijn eigen huisstijl in één app, met het
-clubbeheer erachter en de betalingen erin.
+**Greenside Pionier en Oprichter.** De kern: de club in zijn eigen huisstijl in één complete app, met het
+clubbeheer erachter.
 
 ### 1. Het pakket
 - **Wij doen het werk:** import, wekelijkse overzet tijdens de pilot, uitnodigingen, papieren handleiding,
@@ -528,34 +507,34 @@ clubbeheer erachter en de betalingen erin.
 - **Garantie:** succescriteria vooraf op papier; stoppen na de pilot = niets betalen.
 
 ### 2. De prijsstructuur
-- **Onboarding (eenmalig, flink):** € 1.500 / 2.000 / 2.500 — om de club op het platform te krijgen.
-- **Abonnement (maandelijks):** € 129 / 199 / 299 — om erop te blijven (gebruik, onderhoud, support, SLA).
-- **Betaalverkeer:** ~1% op greenfees, bar, lesgeld en incasso — de meegroeiende motor.
-- **Pionier (3 plaatsen, vóór 1 juni 2027):** onboarding gratis, eerste 3 maanden gratis, 3 jaar vast.
-- **Oprichter (club 4–10, vóór 1 juli 2027):** onboarding −50%, eerste maand gratis, 2 jaar vast.
+- **Onboarding (eenmalig, flink):** € 2.500 / 3.500 / 5.000 — om de club op het platform te krijgen.
+- **Abonnement (maandelijks):** € 199 / 299 / 399 (18 holes test € 249–299) — om erop te blijven.
+- **Geen cut op betaalverkeer:** leden boeken en betalen vrij in de app (een greenfee is voor een lid gratis).
+- **Pionier (3 plaatsen, vóór 1 juni 2027):** onboarding −50%, eerste 3 maanden gratis, 3 jaar vast.
+- **Oprichter (club 4–10, vóór 1 juli 2027):** onboarding −25%, eerste maand gratis, 2 jaar vast.
 
 ### 3. Waarom dit nee zeggen moeilijk maakt
-- **Goedkoper dan nu:** € 199/mnd zit onder Lightspeed (€ 289), Club Caddie (€ 299) en Nexxchange
-  (€ 200 + € 50/gebruiker). Verkooplijn: "voor minder dan u nu betaalt — en de app zit erbij", getoond met
-  de eigen factuur.
+- **Ongeveer wat u nu betaalt, met een echte app erbij:** € 299/mnd (18 holes) zit rond Club Caddie (€ 299)
+  en onder een volledig clubsysteem (~€ 350–450). Verkooplijn: "ongeveer wat u nu betaalt — met een echte app
+  erbij", getoond met de eigen factuur.
 - **Geen risico:** gratis pilot met succescriteria, stoppen = niets betalen, en een vangnet als het misgaat.
 - **De betalingen voelen niet als last:** een cent op de euro die toch al door de club stroomt.
 ## De cijfers (CFO)
 
 _Doorgerekend, 12 oktober 2026. Model: een **flinke onboarding fee** om de club op het platform te
-krijgen, een **maandabonnement** voor gebruik, onderhoud, updates, support en SLA om erop te blijven, en
-een **marge op het betaalverkeer** dat toch al door de app loopt. Bedragen in euro's, excl. btw._
+krijgen, en een **maandabonnement** voor gebruik, onderhoud, updates, support en SLA. **Geen marge op het
+betaalverkeer** — een greenfee boeken is voor een lid gratis, daar valt niets te pakken; de waarde zit in
+de onboarding en het abonnement. Bedragen in euro's, excl. btw._
 
 ### Het prijsmodel
 
 | | klein (9 holes) | midden (18 holes) | groot (27+ holes) |
 | --- | ---: | ---: | ---: |
-| **Onboarding (eenmalig)** — op het platform krijgen | € 1.500 | € 2.000 | € 2.500 |
-| **Abonnement per maand** — gebruik, onderhoud, updates, support, SLA | € 129 | € 199 | € 299 |
-| **Betaalverkeer** — op greenfees, bar, lesgeld, incasso | ~1% (netto ~0,6% na PSP) | idem | idem |
+| **Onboarding (eenmalig)** — op het platform krijgen | € 2.500 | € 3.500 | € 5.000 |
+| **Abonnement per maand** — gebruik, onderhoud, updates, support, SLA | € 199 | € 299 | € 399 |
 
-Blended over de marktverdeling (9h 25% / 18h 55% / 27+ 20%): **onboarding ~€ 1.975**, **abonnement
-~€ 202/mnd**, **betaalmarge ~€ 160/mnd** bij volle adoptie.
+Het abonnement voor 18 holes testen we tussen **€ 249 en € 299**. Blended over de markt
+(9h 25% / 18h 55% / 27+ 20%): onboarding **~€ 3.550**, abonnement **~€ 294/mnd**.
 
 ### Kosten per club
 
@@ -567,86 +546,63 @@ Blended over de marktverdeling (9h 25% / 18h 55% / 27+ 20%): **onboarding ~€ 1
 | Pilot-/overlapreserve | € 5 |
 | **Variabel totaal** | **€ 35,50** |
 
-**Bijdrage per club per maand:** € 166 zonder betaalmarge, **€ 326 met betaalmarge**.
+**Bijdrage per club per maand: € 258.**
 
-Vaste kosten: **€ 326/mnd** in jaar 1 (oprichters onbetaald), **€ 5.398/mnd** met twee salarissen van
-€ 2.500 (uit `numbers.json`).
+Vaste kosten: **€ 326/mnd** in jaar 1 (oprichters onbetaald), **€ 5.398/mnd** met twee salarissen van € 2.500.
 
 ### Break-even
 
-| | zonder betaalmarge | met betaalmarge |
-| --- | ---: | ---: |
-| Geen salaris (jaar 1) | 2 clubs | 1 club |
-| Met vol salaris | 33 clubs | **17 clubs** |
-
-De betaalmarge halveert het aantal clubs dat je nodig hebt voor vol salaris: van 33 naar 17. Dat is ~6,5%
-van de 263 clubs in de markt.
+| | clubs nodig |
+| --- | ---: |
+| Geen salaris (jaar 1) | ~1 club |
+| Met vol salaris (€ 5.398/mnd) | **21 clubs** (~8% van de markt) |
 
 ### Jaar 1, maand voor maand (oprichters onbetaald, conservatieve aanloop ~1 club/mnd → 10 eind jaar 1)
 
-| mnd | clubs | abonnement | onboarding | betaalmarge* | kosten | resultaat | cash** |
-| ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| 1 | 1 | 202 | 1.975 | 80 | 362 | 1.895 | −8.528 |
-| 2 | 2 | 403 | 1.975 | 160 | 397 | 2.142 | −6.386 |
-| 3 | 3 | 604 | 1.975 | 241 | 432 | 2.388 | −3.998 |
-| 4 | 4 | 806 | 1.975 | 321 | 468 | 2.634 | −1.364 |
-| 5 | 5 | 1.008 | 1.975 | 401 | 504 | 2.880 | **+1.516** |
-| 6 | 6 | 1.209 | 1.975 | 482 | 539 | 3.126 | 4.642 |
-| 7 | 6 | 1.209 | 0 | 482 | 539 | 1.152 | 5.794 |
-| 8 | 7 | 1.410 | 1.975 | 562 | 574 | 3.373 | 9.166 |
-| 9 | 8 | 1.612 | 1.975 | 642 | 610 | 3.619 | 12.786 |
-| 10 | 8 | 1.612 | 0 | 642 | 610 | 1.644 | 14.430 |
-| 11 | 9 | 1.814 | 1.975 | 722 | 646 | 3.865 | 18.295 |
-| 12 | 10 | 2.015 | 1.975 | 802 | 681 | 4.112 | **22.406** |
-
-\* betaalmarge op halve adoptie in jaar 1. \** cash start op −€ 10.423 (startkosten).
-
-- **Omzet jaar 1:** abonnement € 13.904 + onboarding € 19.750 + betaalmarge € 5.537 = **€ 39.191**.
-- **Resultaat jaar 1 (geen salaris):** **+€ 32.829**.
+- **Omzet jaar 1:** abonnement € 20.286 + onboarding € 35.500 = **€ 55.786**.
+- **Resultaat jaar 1 (geen salaris):** **+€ 49.424**.
 - **Benodigd geld:** **€ 10.423** — alléén de startkosten (jurist € 2.500, pentest € 7.500, rest). De
-  onboarding fees dekken alle operationele verliezen; de cash gaat al in maand 5 positief.
+  onboarding fees dekken alle operationele verliezen; de cash gaat al in maand 1 positief en eindigt op
+  ~€ 39.000.
 
-Dit is een scherpe verbetering t.o.v. het oude per-lid-model (jaar 1 −€ 159, benodigd geld € 11.181,
-15 clubs voor salaris): de onboarding fee lost de cash op, de betaalmarge lost de lange-termijnwinst op.
+De flinke onboarding fees maken jaar 1 ruim positief; het abonnement draagt de lange termijn.
 
 ### Klantwaarde (CLV)
 
 Bij 85% brutomarge en een geschatte levensduur van 8 jaar (golfclubs zijn zeer plakkerig):
 
-| | zonder betaalmarge | met betaalmarge |
-| --- | ---: | ---: |
-| CLV per club | ~€ 18.100 | ~€ 31.200 |
-| LTV : CAC (CAC € 1.000) | 18 : 1 | 31 : 1 |
+| | per club |
+| --- | ---: |
+| CLV | ~€ 27.000 |
+| LTV : CAC (CAC € 1.000) | 27 : 1 |
 
-Een gezonde SaaS-ratio is 3:1 à 5:1. 18–31:1 betekent: **er is nog ruimte om hoger te prijzen** en toch
-onder de concurrent te blijven. De bedragen hierboven zijn dus eerder voorzichtig dan agressief.
+Een gezonde SaaS-ratio is 3:1 à 5:1. 27:1 betekent: er is nog ruimte om hoger te prijzen en toch onder de
+concurrent te blijven. De prijzen zijn dus eerder voorzichtig dan agressief.
 
-### Gevoeligheid (break-even clubs met vol salaris, met betaalmarge)
+### Gevoeligheid (break-even clubs met vol salaris)
 
 | scenario | bijdrage/club | clubs nodig |
 | --- | ---: | ---: |
-| Basis | € 326 | 16,5 |
-| Abonnement −20% | € 286 | 18,9 |
-| Betaalmarge halveren | € 246 | 21,9 |
-| **Geen betaalmarge** (ondergrens) | € 166 | 32,5 |
-| Abonnement +25% | € 377 | 14,3 |
+| Basis (18h € 299) | € 258 | 21 |
+| 18 holes op € 249 | € 231 | 23 |
+| Abonnement −15% | € 214 | 25 |
 
-Zelfs in het slechtste geval (geen enkele betaalmarge) is het bedrijf levensvatbaar bij ~33 clubs, en
-jaar 1 draait sowieso op de onboarding fees.
+Zelfs in het slechtste geval is het bedrijf levensvatbaar bij ~25 clubs, en jaar 1 draait sowieso ruim
+positief op de onboarding fees.
 
 ### Aanbeveling
 
-- **Prijs:** flinke onboarding (€ 1.500–2.500) + abonnement (€ 129–299/mnd) + ~1% betaalverkeer.
-- **Waarom het werkt:** onboarding dicht de cash (jaar 1 positief, geld nodig = alleen startkosten);
-  abonnement + betaalmarge geven hoge, meegroeiende CLV; break-even voor salaris daalt naar ~17 clubs.
-- **Positionering:** nog steeds onder de concurrent (Lightspeed € 289–325, Club Caddie € 299,
-  Nexxchange € 200 + € 50/gebruiker), dus een eerlijke, makkelijke overstap — "voor minder dan u nu
-  betaalt, en de app zit erbij".
-- **Pilot/pionier:** geef de eerste clubs korting op de onboarding of maand 1–3, niet op de structuur.
+- **Prijs:** onboarding € 2.500–5.000 + abonnement € 199–399/mnd, geen betaalmarge.
+- **Waarom het werkt:** de flinke onboarding dicht de cash (jaar 1 +€ 49.424, geld nodig = alleen
+  startkosten); het abonnement geeft een hoge, stabiele CLV (~€ 27.000); break-even voor salaris ~21 clubs.
+- **Schoner verhaal:** geen cut op betaalverkeer dat voor een lid gratis is — dat voorkomt het bezwaar en
+  past bij een complete app die een lid vrij gebruikt.
+- **Pilot/pionier:** geef de eerste clubs korting op de onboarding of de eerste maanden, niet op de structuur.
 
-_Grenzen: betaalverkeer en adoptie zijn schattingen (jaar 1 op halve adoptie); levensduur 8 jaar en marge
-85% zijn aannames; churn niet apart gemodelleerd; CAC € 1.000 geschat. Toets met echte offertes, een echt
-bestuur en de werkelijke betaalstromen. Geen financieel advies._
+_Grenzen: geen betaalmarge (bewuste keuze); levensduur 8 jaar en marge 85% zijn aannames; churn niet apart
+gemodelleerd; CAC € 1.000 geschat; 18-holesabonnement € 249–299 te testen. Toets met echte offertes en een
+echt bestuur. Geen financieel advies._
+
 ## Marketing
 
 Gebruikt bewijs: kooppanel ronde 1 en 2 (gesimuleerde kopers), concurrentieoverzicht, aanbod, prijzen en
@@ -810,10 +766,9 @@ Eerste drie maanden, schattingen (nog geen offertes):
 | NVG: nog na te gaan | ? |
 | **Totaal** | **€ 1.600** + NVG |
 
-**Het meeste dat je mag uitgeven om één club te winnen.** Volgens de CFO laat een club **€ 166 (zonder) tot
-€ 326 (met betaalmarge) per maand** over, plus een eenmalige onboarding van ~€ 1.975 bij de start. De
-koopbereidheid in het panel is 0%, dus het geeft geen conversie; de grens komt daarom uit de kas en de
-CLV (~€ 31.200 met betaalmarge, LTV:CAC 18–31:1). Twee regels:
+**Het meeste dat je mag uitgeven om één club te winnen.** Volgens de CFO laat een club **€ 258 per maand**
+over, plus een eenmalige onboarding van ~€ 3.550 bij de start. De koopbereidheid in het panel is 0%, dus het
+geeft geen conversie; de grens komt daarom uit de kas en de CLV (~€ 27.000, LTV:CAC 27:1). Twee regels:
 - **Geef maximaal de onboarding-opbrengst uit per gewonnen club (~€ 1.000–2.000)**, zodat een club zich
   in het eerste jaar terugbetaalt.
 - **Geef nooit meer uit dan je hebt**: met onbetaalde oprichters is de totale geldbehoefte ongeveer
@@ -1036,8 +991,8 @@ opnieuw berekend):
 Resultaat: bijdrage € 318,50 per club per maand (was € 290), vaste kosten € 398 (was € 373),
 break-even met € 2.500 salaris per oprichter **16 clubs** (10 oprichters + 6 normaal; was 18). Na de
 overstap op een prijs per lid (8 oktober 2026) was dat 15 clubs. Na de herziening naar het SaaS-model
-(flinke onboarding + abonnement + betaalmarge, 12 oktober 2026): break-even met salaris **17 clubs** met
-betaalmarge (33 zonder), en jaar 1 draait positief op de onboarding fees. Zie De cijfers (CFO).
+(flinke onboarding + abonnement, geen betaalmarge, 12 oktober 2026): break-even met salaris **21 clubs**,
+en jaar 1 draait ruim positief op de onboarding fees. Zie De cijfers (CFO).
 
 ### 1. De dagelijkse cyclus
 
@@ -1081,7 +1036,7 @@ tot vier weken erna (routine 4.2). Daar gaan de meeste uren van de oprichters na
 ### 3. Mensen
 
 Twee oprichters, geen personeel. Salaris: **€ 2.000–2.500 per persoon per maand** is het doel (het eigen
-getal van de oprichters); tot ~17 clubs betalen, groeit het salaris mee met de omzet (De cijfers). Wat
+getal van de oprichters); tot ~21 clubs betalen, groeit het salaris mee met de omzet (De cijfers). Wat
 dat het bedrijf kost hangt af van de rechtsvorm: in een bv moet een directeur-grootaandeelhouder een
 minimaal "gebruikelijk loon" nemen; in een vof of eenmanszaak is er geen loonadministratie en betaal je
 inkomstenbelasting over de winst. **Vraag een boekhouder voordat je kiest**; loonkosten, pensioen en btw
@@ -1419,7 +1374,7 @@ campagne naar buiten (Marketing): alle aandacht naar Zwolle.
 | Supporturen voor Zwolle | eigen logboek | daalt elke week | boven 10 uur per week na week 2 → handleiding of app is onduidelijk; oplossen wat terugkomt |
 | Geboekte gesprekken met besturen | marketinglogboek | 3 per week | twee weken onder 2 per week → brief herschrijven, eerst bellen, Zwolle om een introductie vragen |
 | Pilotaanvragen / intentieverklaringen | marketinglogboek | 3 vóór 30 mei | 0 na 10 gesprekken → terug naar het aanbod |
-| Betalende clubs tegenover break-even | CFO | 1 (Zwolle betaalt vanaf maand 1); break-even 1 club onbetaald, 17 clubs met salaris | — de geldtest is test 2, niet de eerste maand |
+| Betalende clubs tegenover break-even | CFO | 1 (Zwolle betaalt vanaf maand 1); break-even 1 club onbetaald, 21 clubs met salaris | — de geldtest is test 2, niet de eerste maand |
 
 **Evaluaties** (A+B, één uur, met notities):
 
@@ -1451,9 +1406,9 @@ Voor een losse ledenapp zou "tienduizenden over 5 jaar" te veel zijn. Maar voor 
 draait is het de marktnorm: Lightspeed Golf € 89–289/mnd, Club Caddie ~€ 299, foreUP vanaf ~€ 120 + modules,
 NL ~€ 350–450/mnd. Clubs betalen dat nú al. Een eenmalig "koop"-model zou juist klantwaarde weggeven; SaaS
 leeft van terugkerende omzet en uitbreiding. De slimste prijs onderbiedt de concurrent op het abonnement,
-vraagt een flinke onboarding fee voor cash en commitment, en verdient op het betaalverkeer.
+en vraagt een flinke onboarding fee voor cash en commitment. Op het betaalverkeer pakken we bewust geen marge — een greenfee is voor een lid gratis.
 
 ### Klantwaarde
-Bij 85% brutomarge en ~8 jaar levensduur: CLV ~€ 18.100 zonder betaalmarge, ~€ 31.200 met. LTV:CAC 18–31:1
-(gezond is 3–5:1) — er is dus eerder ruimte om hoger te prijzen dan om te zakken. De betaalmarge halveert
-het aantal clubs dat nodig is voor vol salaris, van 33 naar 17.
+Bij 85% brutomarge en ~8 jaar levensduur: CLV ~€ 27.000 per club, LTV:CAC 27:1 (gezond is 3–5:1) — er is dus
+eerder ruimte om hoger te prijzen dan om te zakken. Voor vol salaris zijn ~21 clubs nodig; de flinke
+onboarding fees maken jaar 1 ruim positief.

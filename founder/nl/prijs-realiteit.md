@@ -1,5 +1,11 @@
 # Greenside · Is de prijs realistisch? Markt, CLV en toetreding
 
+> **Bijgewerkt 12 oktober 2026:** we pakken **geen marge op het betaalverkeer** (een greenfee is voor een
+> lid gratis). De waarde zit in een **hogere onboarding** (€ 2.500 / 3.500 / 5.000) en **hoger abonnement**
+> (€ 199 / 299 / 399). Passages hieronder die de betaalmarge als motor noemen, zijn vervangen door dit
+> model; de actuele cijfers staan in `cijfers-saas.md` en `numbers-saas.json`.
+
+
 _Analyse, 10 oktober 2026. Je vraag: is het gek dat een club in 5 jaar tienduizenden euro's aan een
 app betaalt — of ben ik juist te goedkoop (CLV weggeven)? Antwoord met marktcijfers uit golf én andere
 sectoren, plus de slimste prijs om deze markt binnen te komen._
