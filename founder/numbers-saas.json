@@ -1,0 +1,43 @@
+{
+  "model": "Greenside vertical SaaS: flinke onboarding fee + maandabonnement (gebruik/onderhoud) + betaalmarge. Eenheid = betalende club per maand. Alle bedragen in euro's.",
+  "segments": { "9h": 0.25, "18h": 0.55, "27h": 0.20 },
+  "subscription_per_month": { "9h": 129, "18h": 199, "27h": 299, "blended": 202 },
+  "onboarding_once": { "9h": 1500, "18h": 2000, "27h": 2500, "blended": 1975 },
+  "payment_margin": {
+    "rate_net": 0.006,
+    "note": "1% geheven minus ~0,4% PSP; op het betaalverkeer dat door de app loopt (greenfees, bar, lesgeld, contributie-incasso)",
+    "annual_flow_per_club": { "9h": 180000, "18h": 320000, "27h": 500000 },
+    "blended_per_month_full_adoption": 160
+  },
+  "variable_cost_per_club_month": { "hosting": 12, "support": 18, "sepa": 0.5, "pilot_reserve": 5, "total": 35.5 },
+  "contribution_per_club_month": { "without_payments": 166, "with_payments": 326 },
+  "fixed_monthly": { "year1_no_salary": 326, "with_salary_2x2500": 5398 },
+  "break_even_clubs": {
+    "no_salary": { "without_payments": 2.0, "with_payments": 1.0 },
+    "with_salary": { "without_payments": 32.5, "with_payments": 16.5 }
+  },
+  "clv_8yr_85pct_margin": { "without_payments": 18121, "with_payments": 31218 },
+  "ltv_cac_at_cac_1000": { "without_payments": 18.1, "with_payments": 31.2 },
+  "year1_no_salary": {
+    "ramp_new_clubs": [1,1,1,1,1,1,0,1,1,0,1,1],
+    "clubs_end": 10,
+    "revenue_subscription": 13904,
+    "revenue_onboarding": 19750,
+    "revenue_payments_half_adoption": 5537,
+    "revenue_total": 39191,
+    "result": 32829,
+    "cash_trough": -10423,
+    "cash_need": 10423,
+    "cash_end": 22406
+  },
+  "startup_costs": { "lawyer": 2500, "pentest": 7500, "guide": 300, "google_play": 23, "kvk": 100, "total": 10423 },
+  "clubs_for_full_salary": { "without_payments": 33, "with_payments": 17 },
+  "sensitivity_breakeven_clubs_with_salary": {
+    "base_with_payments": 16.5,
+    "subscription_minus_20pct": 18.9,
+    "payment_margin_halved": 21.9,
+    "no_payment_margin": 32.5,
+    "subscription_plus_25pct": 14.3
+  },
+  "assumptions_and_limits": "Betaalverkeer en adoptie zijn schattingen (jaar 1 op halve adoptie gezet); 8-jaars levensduur en 85% brutomarge zijn aannames; churn niet apart gemodelleerd; CAC EUR 1.000 geschat. LTV:CAC van 18-31:1 is hoog en suggereert ruimte om hoger te prijzen. Toetsen met echte offertes, een echt bestuur en de werkelijke betaalstromen."
+}
