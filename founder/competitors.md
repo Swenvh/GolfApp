@@ -147,3 +147,38 @@ administration that is moving anyway.**
 - Will members install a club app next to GOLF.NL? (`/founder-consumer`)
 - Replace the administration, or be the member app on top of it? (`/founder-offer`,
   `/founder-cfo`)
+
+---
+
+## Update 12 oktober 2026 — Golf Dashboard (Golfspot) nader onderzocht
+
+Aanleiding: Golfclub Zwolle (onze pilotclub) meldde dat zij Golf Dashboard gebruiken, en veel andere
+clubs ook. Volledige strategische uitwerking in `founder/nl/strategie-golfdashboard.md`.
+
+**Bedrijf.** Golf Dashboard is "powered by Golfspot": **Golfspot** (ledenadministratie/CDP, de hub) +
+**TeeControl** (starttijden) + **Parrow** (wedstrijden) + unTill/Xafax (betalen) + NGF (handicap).
+Golfspot: Rotterdam, opgericht 2021, ~7–10 medewerkers, **geen externe financiering** (bootstrapped),
+oprichter Menno Liebregts ([Dealroom](https://app.dealroom.co/companies/golfspot_1),
+[Tracxn](https://tracxn.com/d/companies/golfspot/__TT8D8Wc_wYojHguqTGZMMMROAw8WpLTmirbA41LSzVs)).
+
+**Schaal.** Geen openbaar totaal; TeeControl noemt ~3 dozijn clubs op de site, Golfspot zegt "steeds meer,
+ook internationaal". Een klein bedrijf dat hard groeit.
+
+**Momentum.** Snelst groeiende E-Golf4U-opvolger, late 2025 – begin 2026: De Hooge Rotterdamsche (okt 2025),
+Amelisweerd, Golfmiddenbrabant (jan 2026), Golfhorst, Broekpolder (mrt 2026), Nieuwkerk, Prise d'Eau,
+Heelsum, Veendam (~1.500 leden), Olympus/De Hoge Dijk, De Lage Vuursche, Het Woold.
+
+**Twee feiten die onze strategie bepalen.**
+1. **Web-app, geen echte app, en versnipperd.** Niet in de stores; snelkoppeling op het beginscherm. Losse
+   TeeControl-app (alleen starttijden, onvolledig) + aparte Parrow-app voor wedstrijden
+   ([Het Woold](https://golfbaanhetwoold.nl/faq-golfdashboard/),
+   [De Hooge Rotterdamsche](https://www.dehoogerotterdamsche.nl/golfdashboard/)). → ons gat: één echte,
+   gebrande native app.
+2. **Open koppel-hub, geen muur.** Golfspot wordt "compatibel met 100+ apps die clubs al gebruiken";
+   TeeControl is "volledig open om te koppelen" ([golfspot.io](https://golfspot.io/),
+   [teecontrol.com](https://www.teecontrol.com/en)). → maakt "route B: app-laag bovenop" mogelijk (mits
+   echte API-toegang; te verifiëren).
+
+**Positie-verschuiving.** Golf Dashboard is tegelijk (a) directe concurrent voor Greenside-als-volledig-
+systeem (route A) én (b) mogelijke onderlaag/partner voor Greenside-als-app-laag (route B). Het venster
+"clubs moeten nu kiezen" sluit sneller dan aangenomen.

@@ -1,8 +1,9 @@
 # Greenside · Het plan
 
 _Herzien 12 oktober 2026: één algemene app (geen eigen app per club in de store) en een SaaS-prijsmodel —
-flinke onboarding fee + maandabonnement, geen marge op het betaalverkeer. Zie `app-strategie.md`,
-`prijs-realiteit.md` en `cijfers-saas.md` voor de onderbouwing._
+flinke onboarding fee + maandabonnement, geen marge op het betaalverkeer. Sinds Golf Dashboard (12 okt)
+ook een **dubbele route**: vervangen óf als app-laag bovenop een bestaand systeem — zie
+`strategie-golfdashboard.md`. Onderbouwing: `app-strategie.md`, `prijs-realiteit.md`, `cijfers-saas.md`._
 
 ## Oordeel en kerncijfers
 
@@ -54,9 +55,13 @@ kleine markt (263 clubs).
 - **Gevestigd:** Nexxchange (nam E-Golf4U over), IntoGolf, Golfspot/TeeControl/Parrow, GolfBox. Prijzen op
   offerte; Nexxchange noemt € 200/mnd + € 50 per gebruiker. Openbaar elders: Lightspeed Golf € 89–289/mnd,
   Club Caddie ~€ 299.
-- **Het gat:** de meeste leden krijgen een webapp of portaal; de enige leverancier met eigen clubapps
-  (IntoGolf) scoort ~2 uit 5. Niemand combineert een goede app met de prijs eronder.
-- **Het venster:** **E-Golf4U stopt**; die clubs moeten nu kiezen.
+- **Golf Dashboard (Golfspot/TeeControl/Parrow)** is de snelst groeiende E-Golf4U-opvolger (Zwolle zit er
+  al op). Het is een **web-app, geen echte app, en versnipperd** (web + losse TeeControl- en Parrow-apps),
+  en Golfspot is een **open koppel-hub** ("compatibel met 100+ apps"). Dus tegelijk concurrent én mogelijke
+  onderlaag — zie `strategie-golfdashboard.md`.
+- **Het gat:** de meeste leden krijgen een webapp of portaal; niemand geeft ze één echte, gebrande app.
+- **Het venster:** E-Golf4U stopt, maar veel clubs kozen al (Golf Dashboard/Nexxchange/IntoGolf); het
+  venster sluit sneller dan gedacht.
 - **De dreiging:** GOLF.NL is gratis en boekt al starttijden met betaling. Greenside staat ernaast
   (clubrekening, extra's, clubleven), niet ertegenover.
 
@@ -71,6 +76,8 @@ prijscurves laten zien dat tot ~€ 550–650/mnd (18 holes) als "wordt duur" ge
 (€ 199) zit daar ruim onder.
 
 ## Het aanbod: Greenside Pionier en Oprichter
+
+**Twee routes (sinds Golf Dashboard):** **A — volledig systeem** voor clubs die nog niet kozen of ontevreden zijn; **B — de app-laag bovenop** het bestaande systeem (incl. Golf Dashboard) voor clubs die net kozen, zoals Zwolle: *"houd uw systeem, wij geven uw leden één echte app."* Route B vereist een koppeling met TeeControl/Golfspot (kritieke onzekerheid, net als GOLF.NL). Zie `strategie-golfdashboard.md`.
 
 - **Kern:** de club in zijn eigen huisstijl in één app, met clubbeheer erachter en de betalingen erin.
 - **Wij doen het werk:** import, wekelijkse overzet tijdens de pilot, uitnodigingen, papieren handleiding,
@@ -132,9 +139,10 @@ pilot, datalek binnen 72 uur melden. **Livegang Zwolle: maandag 1 maart 2027** (
 
 ## Deze week
 
-Ga om tafel met het bestuur van Zwolle. Leg vast: de livedatum, de succescriteria, de pionierskorting
-(onboarding gratis, eerste maanden gratis, abonnement 3 jaar vast) **vanaf maand 1**, dat Greenside de
-betalingen verzorgt, en toestemming om hun naam en cijfers later te gebruiken.
+Mail Zwolle terug met twee vragen die de route bepalen: **zitten ze vast aan een contract bij Golf
+Dashboard, en wat missen hun leden eraan?** Ga daarna om tafel: livedatum, succescriteria, de pionierskorting
+vanaf maand 1, en toestemming om hun naam en cijfers later te gebruiken. Zoek technisch uit of
+TeeControl/Golfspot een open API bieden (route B staat of valt daarmee).
 
 _Gesimuleerde kopers en geprojecteerde cijfers; echte besturen en echte offertes moeten ze bevestigen. De
 Apple-regels wisselen — verifieer vóór livegang. Geen financieel, juridisch of fiscaal advies._
